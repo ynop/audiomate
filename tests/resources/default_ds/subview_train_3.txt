@@ -1,0 +1,6 @@
+utterance_idx_patterns .*-4
+speaker_idx_patterns
+utterance_idx_not_patterns
+speaker_idx_not_patterns
+filtered_speaker_ids
+filtered_utt_ids utt-2 utt-4

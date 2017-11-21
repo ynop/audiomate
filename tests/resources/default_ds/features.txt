@@ -1,0 +1,2 @@
+mfcc features/mfcc
+fbank features/fbank

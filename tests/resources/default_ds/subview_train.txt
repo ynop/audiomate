@@ -1,0 +1,2 @@
+filtered_speaker_ids
+filtered_utt_ids utt-2 utt-4
