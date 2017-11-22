@@ -2,10 +2,10 @@ import collections
 import glob
 import os
 
-from . import base
-from pingu.corpus import Corpus
-from pingu import assets
+import pingu
+from pingu.corpus import assets
 from pingu.utils import textfile
+from . import base
 
 FILES_FILE_NAME = 'files.txt'
 UTTERANCE_FILE_NAME = 'utterances.txt'
@@ -16,6 +16,9 @@ FEAT_CONTAINER_FILE_NAME = 'features.txt'
 
 
 class DefaultLoader(base.CorpusLoader):
+    """
+    This is the corpus loader which is used by default.
+    """
     @classmethod
     def type(cls):
         return 'default'
@@ -33,7 +36,7 @@ class DefaultLoader(base.CorpusLoader):
         return missing_files or None
 
     def _load(self, path):
-        corpus = Corpus(path=path, loader=self)
+        corpus = pingu.Corpus(path=path, loader=self)
 
         # Read files
         file_path = os.path.join(path, FILES_FILE_NAME)

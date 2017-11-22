@@ -1,3 +1,8 @@
+"""
+This module contains functions for working with names.
+For example to generate identifiers or find an identifier which not already exists in a given list.
+"""
+
 import random
 import string
 
@@ -7,10 +12,13 @@ def index_name_if_in_list(name, name_list, suffix='', prefix=''):
     Find a unique name by adding an index to the name so it is unique within the given list.
 
     Parameters:
-        name: Name
-        name_list: List of names that the new name must differ from.
-        suffix: The suffix to append after the index.
-        prefix: The prefix to append in front of the index.
+        name (str): Name
+        name_list (list): List of names that the new name must differ from.
+        suffix (str): The suffix to append after the index.
+        prefix (str): The prefix to append in front of the index.
+
+    Returns:
+        str: A unique name within the given list.
     """
     new_name = '{}'.format(name)
     index = 1
@@ -27,8 +35,11 @@ def generate_name(length=15, not_in=None):
     Generates a random string of lowercase letters with the given length.
 
     Parameters:
-        length: Length of the string to output.
-        not_in: Only return a string not in the given iterator.
+        length (int): Length of the string to output.
+        not_in (list): Only return a string not in the given iterator.
+
+    Returns:
+        str: A new name thats not in the given list.
     """
     value = ''.join(random.choice(string.ascii_lowercase) for i in range(length))
 

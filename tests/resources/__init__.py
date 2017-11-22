@@ -2,7 +2,7 @@ import os
 import tempfile
 
 import pingu
-from pingu import assets
+from pingu.corpus import assets
 
 
 def dummy_wav_path_and_name():

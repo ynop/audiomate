@@ -3,14 +3,14 @@ import unittest
 import tempfile
 import shutil
 
-from pingu import corpus
+from pingu.corpus import io
 
 from tests import resources
 
 
 class DefaultCorpusLoaderTest(unittest.TestCase):
     def setUp(self):
-        self.loader = corpus.DefaultLoader()
+        self.loader = io.DefaultLoader()
         self.test_path = resources.sample_default_ds_path()
 
     def tearDown(self):

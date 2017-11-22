@@ -1,11 +1,10 @@
 import os
 import shutil
-import unittest
 import tempfile
+import unittest
 
 import pingu
-from pingu import assets
-
+from pingu.corpus import assets
 from .. import resources
 
 

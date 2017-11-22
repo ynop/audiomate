@@ -1,15 +1,25 @@
 import os
 import shutil
 
-from . import base
-from pingu import assets
+from pingu.corpus import assets
 from pingu.utils import naming
+from . import base
 
 DEFAULT_FILE_SUBDIR = 'files'
 DEFAULT_FEAT_SUBDIR = 'features'
 
 
 class Corpus(base.CorpusView):
+    """
+    The Corpus class represents a single corpus.
+    It extends :py:class:`pingu.corpus.CorpusView` with the functionality for loading and saving.
+    Furthermore it provides the functionality for adding/modifying assets of the corpus like files and utterances.
+
+    Args:
+        path (str): Path where the corpus is stored. (Optional)
+        loader (CorpusLoader): A loader to use for loading/saving. (By default the DefaultLoader is used)
+    """
+
     def __init__(self, path=None, loader=None):
         super(Corpus, self).__init__()
 
@@ -37,7 +47,7 @@ class Corpus(base.CorpusView):
 
     def save(self):
         """
-        If self.path is defined, it tries to save the dataset at the given path.
+        If self.path is defined, it tries to save the corpus at the given path.
         """
 
         if self.path is None:
@@ -47,15 +57,15 @@ class Corpus(base.CorpusView):
 
     def save_at(self, path, loader=None):
         """
-        Save this dataset at the given path. If the path differs from the current path set, the path gets updated.
+        Save this corpus at the given path. If the path differs from the current path set, the path gets updated.
 
         Parameters:
-            path: Path to save the dataset to.
-            loader: If you want to use another loader (e.g. to export to another format). Otherwise it uses the loader associated with this dataset.
+            path (str): Path to save the dataset to.
+            loader (str, CorpusLoader): If you want to use another loader (e.g. to export to another format). Otherwise it uses the loader associated with this dataset.
         """
 
         if loader is None:
-            # If not loader given, use the one associated with the dataset
+            # If not loader given, use the one associated with the corpus
             self.loader.save(self, path)
 
         elif type(loader) == str:
@@ -73,7 +83,14 @@ class Corpus(base.CorpusView):
     @classmethod
     def load(cls, path, loader=None):
         """
-        Loads the dataset from the given path, using the given loader. If no loader is given the default loader is used.
+        Loads the corpus from the given path, using the given loader. If no loader is given the default loader is used.
+
+        Args:
+            path (str): Path to load the corpus from.
+            loader (str, CorpusLoader): The loader or the name of the loader to use.
+
+        Returns:
+            Corpus: The loaded corpus.
         """
 
         if loader is None:
@@ -95,9 +112,12 @@ class Corpus(base.CorpusView):
         Adds a new file to the dataset with the given data.
 
         Parameters:
-            path: Path of the file to add.
-            file_idx: The id to associate the file with.
-            copy_file: If True the file is copied to the dataset folder, otherwise the given path is used directly.
+            path (str): Path of the file to add.
+            file_idx (str): The id to associate the file with.
+            copy_file (bool): If True the file is copied to the dataset folder, otherwise the given path is used directly.
+
+        Returns:
+            File: The newly added File.
         """
 
         new_file_idx = file_idx
@@ -134,11 +154,14 @@ class Corpus(base.CorpusView):
         Add a new utterance to the dataset with the given data.
 
         Parameters:
-            file_idx: The file id the utterance is in.
-            utterance_idx: The id to associate with the utterance. If None or already exists, one is generated.
-            issuer_idx: The issuer id to associate with the utterance.
-            start: Start of the utterance within the file [seconds].
-            end: End of the utterance within the file [seconds]. -1 equals the end of the file.
+            file_idx (str): The file id the utterance is in.
+            utterance_idx (str): The id to associate with the utterance. If None or already exists, one is generated.
+            issuer_idx (str): The issuer id to associate with the utterance.
+            start (float): Start of the utterance within the file [seconds].
+            end (float): End of the utterance within the file [seconds]. -1 equals the end of the file.
+
+        Returns:
+            Utterance: The newly added utterance.
         """
 
         new_utt_idx = utterance_idx
@@ -165,8 +188,11 @@ class Corpus(base.CorpusView):
         Add a new issuer to the dataset with the given data.
 
         Parameters:
-            issuer_idx: The id to associate the issuer with. If None or already exists, one is generated.
-            info: Additional info of the issuer.
+            issuer_idx (str): The id to associate the issuer with. If None or already exists, one is generated.
+            info (dict, list): Additional info of the issuer.
+
+        Returns:
+            Issuer: The newly added issuer.
         """
 
         new_issuer_idx = issuer_idx
@@ -189,9 +215,12 @@ class Corpus(base.CorpusView):
         Add a new label-list with the given data.
 
         Parameters:
-            utterance_idx: Utterance id the label-list is associated with.
-            idx: An identifier this label-list is associated with.
-            labels: Labels to add to the new label-list.
+            utterance_idx (str): Utterance id the label-list is associated with.
+            idx (str): An identifier this label-list is associated with.
+            labels (list): Labels to add to the new label-list.
+
+        Returns:
+            LabelList: The newly added label-list.
         """
 
         new_label_list_idx = idx
@@ -219,8 +248,11 @@ class Corpus(base.CorpusView):
         Add a new feature container with the given data.
 
         Parameters:
-            idx: An unique identifier within the dataset.
-            path: The path to store the feature file. If None a default path is used.
+            idx (str): An unique identifier within the dataset.
+            path (str): The path to store the feature file. If None a default path is used.
+
+        Returns:
+            FeatureContainer: The newly added feature-container.
         """
 
         new_feature_idx = idx

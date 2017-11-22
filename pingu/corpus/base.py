@@ -5,9 +5,17 @@ import abc
 class CorpusView(metaclass=abc.ABCMeta):
     """
     This class defines the basic interface of a corpus. It is not meant to be instantiated directly.
+    It only describes the methods for accessing data of the corpus.
+
+    Notes:
+        All paths to files should be held as absolute paths in memory.
 
     Attributes:
-        files: A dictionary containing file-identifiers (keys) and file-paths (values). The file-paths are absolute paths when loaded in a dataset.
+        files (dict): A dictionary containing :py:class:`pingu.corpus.assets.File` objects with the file-idx as key.
+        utterances (dict): A dictionary containing :py:class:`pingu.corpus.assets.Utterance` objects with the utterance-idx as key.
+        issuers (dict): A dictionary containing :py:class:`pingu.corpus.assets.Issuer` objects with the issuer-idx as key.
+        label_lists (dict): A dictionary containing utterance-idx/label_list dictionaries with the label-list-idx as key.
+        feature_containers (dict): A dictionary containing :py:class:`pingu.corpus.assets.FeatureContainer` objects with the feature-idx as key.
     """
 
     def __init__(self):

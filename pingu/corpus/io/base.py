@@ -3,11 +3,19 @@ import abc
 
 class CorpusLoader(metaclass=abc.ABCMeta):
     """
-    A loader defines functionality to load and save a dataset from/to a given path.
+    A loader defines functionality to load and save a corpus from/to a given path.
     """
 
     def load(self, path):
-        """ Load and return the dataset from the given path. """
+        """
+        Load and return the corpus from the given path.
+
+        Args:
+            path (str): Path to the dataset to load.
+
+        Returns:
+            Corpus: The loaded corpus.
+        """
 
         # Check for missing files
         missing_files = self._check_for_missing_files(path)
@@ -17,9 +25,15 @@ class CorpusLoader(metaclass=abc.ABCMeta):
 
         return self._load(path)
 
-    def save(self, dataset, path):
-        """ Save the dataset at the given path. """
-        self._save(dataset, path)
+    def save(self, corpus, path):
+        """
+        Save the dataset at the given path.
+
+        Args:
+            corpus (Corpus): The corpus to save.
+            path (str): Path to save the corpus to.
+        """
+        self._save(corpus, path)
 
     @classmethod
     @abc.abstractmethod

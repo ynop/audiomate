@@ -4,10 +4,19 @@ import h5py
 class FeatureContainer(object):
     """
     A feature-container holds matrix-like data. The data is stored as HDF5 file.
-    The data is stored per utterance.
+    The feature-container provides functionality to access this data. For each utterance a hdf5 dataset is created within the file, if there is feature-data for a given utterance.
 
-    Arguments:
-        path: Path to where the HDF5 file is stored.
+    Args:
+        path (str): Path to where the HDF5 file is stored. If the file doesn't exist, one is created.
+
+    Examples::
+
+        >>> fc = FeatureContainer('/path/to/hdf5file')
+
+        >>> with fc:
+        >>>     fc.set('utt-1', np.array([1,2,3,4]))
+        >>>     data = fc.get('utt-1')
+        array([1, 2, 3, 4])
     """
 
     def __init__(self, path):
@@ -36,11 +45,16 @@ class FeatureContainer(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
 
-    def add(self, utterance_idx, features):
+    def set(self, utterance_idx, features):
         """
         Add the given feature matrix to the feature container for the utterance with the given id.
+        Any existing features of the utterance in this container are discarded/overwritten.
 
-        Notes:
+        Args:
+            utterance_idx (str): The ID of the utterance to store the features for.
+            features (numpy.ndarray): A np.ndarray with the features.
+
+        Note:
             The feature container has to be opened in advance.
         """
         if self._file is None:
@@ -55,7 +69,10 @@ class FeatureContainer(object):
         """
         Remove the features stored for the given utterance-id.
 
-        Notes:
+        Args:
+            utterance_idx (str): ID of the utterance.
+
+        Note:
             The feature container has to be opened in advance.
         """
         if self._file is None:
@@ -68,8 +85,14 @@ class FeatureContainer(object):
         """
         Read and return the features stored for the given utterance-id.
 
-        Notes:
+        Args:
+            utterance_idx: The ID of the utterance to get the feature-matrix from.
+
+        Note:
             The feature container has to be opened in advance.
+
+        Returns:
+            numpy.ndarray: The stored data.
         """
         if self._file is None:
             raise ValueError("The feature container is not opened!")

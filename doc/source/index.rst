@@ -20,7 +20,10 @@ Welcome to pingu's documentation!
     :maxdepth: 2
     :caption: Package Reference
 
+    reference/corpus
     reference/assets
+    reference/io
+    reference/utils
 
 Indices and tables
 ==================

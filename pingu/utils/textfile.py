@@ -1,3 +1,7 @@
+"""
+The textfile module contains functions for reading and writing textfiles.
+"""
+
 import os
 
 from pingu.utils import text
@@ -8,12 +12,12 @@ def read_separated_lines(path, separator=' ', max_columns=-1):
     Reads a text file where each line represents a record with some separated columns.
 
     Parameters:
-        path: Path to the file to read.
-        separator: Separator that is used to split the columns.
-        max_columns: Number of max columns (if the separator occurs within the last column).
+        path (str): Path to the file to read.
+        separator (str): Separator that is used to split the columns.
+        max_columns (int): Number of max columns (if the separator occurs within the last column).
 
     Returns:
-        A list containing a list for each line read.
+        list: A list containing a list for each line read.
     """
 
     gen = read_separated_lines_generator(path, separator, max_columns)
@@ -22,12 +26,15 @@ def read_separated_lines(path, separator=' ', max_columns=-1):
 
 def read_separated_lines_with_first_key(path, separator=' ', max_columns=-1):
     """
-    Reads the separated lines of a file and returns a dictionary with the first column as keys, value is a list with the rest of the columns.
+    Reads the separated lines of a file and return a dictionary with the first column as keys, value is a list with the rest of the columns.
 
     Parameters:
-        path: Path to the file to read.
-        separator: Separator that is used to split the columns.
-        max_columns: Number of max columns (if the separator occurs within the last column).
+        path (str): Path to the file to read.
+        separator (str): Separator that is used to split the columns.
+        max_columns (str): Number of max columns (if the separator occurs within the last column).
+
+    Returns:
+        dict: Dictionary with list of column values and first column value as key.
     """
     gen = read_separated_lines_generator(path, separator, max_columns)
 
@@ -45,9 +52,12 @@ def read_key_value_lines(path, separator=' ', default_value=''):
     Reads lines of a text file with two columns as key/value dictionary.
 
     Parameters:
-        path: Path to the file.
-        separator: Separator that is used to split key and value.
-        default_value: If no value is given this value is used.
+        path (str): Path to the file.
+        separator (str): Separator that is used to split key and value.
+        default_value (str): If no value is given this value is used.
+
+    Returns:
+        dict: A dictionary with first column as key and second as value.
     """
     gen = read_separated_lines_generator(path, separator, 2)
 
@@ -67,10 +77,10 @@ def write_separated_lines(path, values, separator=' ', sort_by_column=0):
     Writes list or dict to file line by line. Dict can have list as value then they written separated on the line.
 
     Parameters:
-        path: Path to write file to.
-        values: Dict or list
-        separator: Separator to use between columns.
-        sort_by_column: if >= 0, sorts the list by the given index, if its 0 or 1 and its a dictionary it sorts it by either the key (0) or value (1). By default 0, meaning sorted by the first column or the key.
+        path (str): Path to write file to.
+        values (dict, list): A dictionary or a list to write to the file.
+        separator (str): Separator to use between columns.
+        sort_by_column (int): if >= 0, sorts the list by the given index, if its 0 or 1 and its a dictionary it sorts it by either the key (0) or value (1). By default 0, meaning sorted by the first column or the key.
     """
     f = open(path, 'w', encoding='utf-8')
 
