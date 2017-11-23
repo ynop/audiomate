@@ -23,6 +23,7 @@ Welcome to pingu's documentation!
     reference/corpus
     reference/assets
     reference/io
+    reference/formats
     reference/utils
 
 Indices and tables

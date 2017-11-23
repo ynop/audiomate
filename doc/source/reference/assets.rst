@@ -40,7 +40,7 @@ LabelList
    :inherited-members:
 
 FeatureContainer
-=================
+================
 .. autoclass:: FeatureContainer
    :members:
    :inherited-members:
