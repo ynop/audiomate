@@ -1,8 +1,7 @@
-import collections
-import glob
 import os
 
 import pingu
+from pingu.formats import audacity
 from pingu.corpus import assets
 from pingu.utils import textfile
 from . import base
@@ -10,17 +9,18 @@ from . import base
 FILES_FILE_NAME = 'files.txt'
 UTTERANCE_FILE_NAME = 'utterances.txt'
 UTT_ISSUER_FILE_NAME = 'utt_issuers.txt'
-LABEL_FILE_PREFIX = 'labels'
+LABEL_FILE = 'labels.txt'
 FEAT_CONTAINER_FILE_NAME = 'features.txt'
 
 
-class DefaultLoader(base.CorpusLoader):
+class BroadcastLoader(base.CorpusLoader):
     """
-    This is the corpus loader which is used by default.
+    This is the corpus loader which is used for corpora where a separate label file per utterance exists.
     """
+
     @classmethod
     def type(cls):
-        return 'default'
+        return 'broadcast'
 
     def _check_for_missing_files(self, path):
         necessary_files = [FILES_FILE_NAME, UTTERANCE_FILE_NAME]
@@ -70,17 +70,21 @@ class DefaultLoader(base.CorpusLoader):
             corpus.new_utterance(utterance_idx, utt_info[0], issuer_idx=issuer_idx, start=start, end=end)
 
         # Read labels
-        for label_file in glob.glob(os.path.join(path, '{}_*.txt'.format(LABEL_FILE_PREFIX))):
-            file_name = os.path.basename(label_file)
-            key = file_name[len('{}_'.format(LABEL_FILE_PREFIX)):len(file_name) - len('.txt')]
+        label_reference_file = os.path.join(path, LABEL_FILE)
+        label_references = textfile.read_separated_lines(label_reference_file, separator=' ', max_columns=3)
 
-            utterance_labels = collections.defaultdict(list)
+        for record in label_references:
+            utt_idx = record[0]
+            label_path = os.path.join(path, record[1])
+            label_idx = None
 
-            for record in textfile.read_separated_lines_generator(label_file, separator=' ', max_columns=4):
-                utterance_labels[record[0]].append(assets.Label(record[3], float(record[1]), float(record[2])))
+            if len(record) > 2:
+                label_idx = record[2]
 
-            for utterance_idx, labels in utterance_labels.items():
-                corpus.new_label_list(utterance_idx, key, labels)
+            entries = audacity.read_label_file(label_path)
+            labels = [assets.Label(x[2], x[0], x[1]) for x in entries]
+
+            corpus.new_label_list(utt_idx, idx=label_idx, labels=labels)
 
         # Read features
         feat_path = os.path.join(path, FEAT_CONTAINER_FILE_NAME)
@@ -92,34 +96,4 @@ class DefaultLoader(base.CorpusLoader):
         return corpus
 
     def _save(self, corpus, path):
-        # Write files
-        file_path = os.path.join(path, FILES_FILE_NAME)
-        file_records = [[file.idx, os.path.relpath(file.path, corpus.path)] for file in corpus.files.values()]
-        textfile.write_separated_lines(file_path, file_records, separator=' ', sort_by_column=0)
-
-        # Write utterances
-        utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
-        utterance_records = {utterance.idx: [utterance.file_idx, utterance.start, utterance.end] for utterance in corpus.utterances.values()}
-        textfile.write_separated_lines(utterance_path, utterance_records, separator=' ', sort_by_column=0)
-
-        # Write utt_issuers
-        utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
-        utt_issuer_records = {utterance.idx: utterance.issuer_idx for utterance in corpus.utterances.values()}
-        textfile.write_separated_lines(utt_issuer_path, utt_issuer_records, separator=' ', sort_by_column=0)
-
-        # Write labels
-        for label_list_idx, label_lists in corpus.label_lists.items():
-            file_path = os.path.join(path, '{}_{}.txt'.format(LABEL_FILE_PREFIX, label_list_idx))
-            records = []
-
-            for utterance_idx in sorted(label_lists.keys()):
-                label_list = label_lists[utterance_idx]
-                records.extend([(utterance_idx, l.start, l.end, l.value) for l in label_list])
-
-            textfile.write_separated_lines(file_path, records, separator=' ')
-
-
-
-
-
-
+        raise NotImplementedError("There is no implementation for saving in broadcast format.")

@@ -6,6 +6,7 @@ All loader implementations base on :py:class:`pingu.corpus.io.CorpusLoader`.
 
 from .base import CorpusLoader
 from .default import DefaultLoader
+from .broadcast import BroadcastLoader
 
 
 def available_loaders():
@@ -24,7 +25,8 @@ def available_loaders():
         }
     """
     return {
-        DefaultLoader.type(): DefaultLoader
+        DefaultLoader.type(): DefaultLoader,
+        BroadcastLoader.type(): BroadcastLoader
     }
 
 

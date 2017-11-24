@@ -13,6 +13,8 @@ def dummy_wav_path_and_name():
 def sample_default_ds_path():
     return os.path.join(os.path.dirname(__file__), 'default_ds')
 
+def sample_default_broadcast_path():
+    return os.path.join(os.path.dirname(__file__), 'broadcast_ds')
 
 def get_wav_file_path(name):
     return os.path.join(os.path.dirname(__file__), 'wav_files', name)

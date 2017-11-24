@@ -1,26 +1,26 @@
 pingu.utils
 -----------
 
-pingu.utils.jsonfile
-====================
+JSON File
+=========
 
 .. automodule:: pingu.utils.jsonfile
     :members:
 
-pingu.utils.naming
-==================
+Naming
+======
 
 .. automodule:: pingu.utils.naming
     :members:
 
-pingu.utils.text
-================
+Text
+====
 
 .. automodule:: pingu.utils.text
     :members:
 
-pingu.utils.textfile
-====================
+Text File
+=========
 
 .. automodule:: pingu.utils.textfile
     :members:

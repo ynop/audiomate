@@ -1,0 +1,5 @@
+utt-1 speaker-1
+utt-2 speaker-1
+utt-3 speaker-2
+utt-4 speaker-2
+utt-5 speaker-3
