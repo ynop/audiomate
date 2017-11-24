@@ -7,16 +7,21 @@ Welcome to pingu's documentation!
 =================================
 
 .. toctree::
+    :hidden:
     :maxdepth: 1
     :caption: Notes
 
     notes/installation
 
 .. toctree::
+    :hidden:
     :maxdepth: 2
-    :caption: Usage Guide
+    :caption: Documentation
+
+    documentation/formats
 
 .. toctree::
+    :hidden:
     :maxdepth: 2
     :caption: Package Reference
 

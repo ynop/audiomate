@@ -1,3 +1,6 @@
+import heapq
+
+
 class Label(object):
     """
     Represents a label that describes some part of an utterance.
@@ -58,6 +61,58 @@ class LabelList(object):
             labels (list): Labels to add.
         """
         self.labels.extend(labels)
+
+    def ranges(self, yield_ranges_without_labels=False):
+        """
+        Generate all ranges of the label-list. A range is defined as a part of the label-list for which the same labels are defined.
+
+        Args:
+            yield_ranges_without_labels (bool): If True also yields ranges for which no labels are defined.
+
+        Returns:
+            generator: A generator which yields one range (tuple start/end/list-of-labels) at a time.
+
+        Example:
+            >>> ll = assets.LabelList(labels=[
+            >>>     assets.Label('a', 3.2, 4.5),
+            >>>     assets.Label('b', 5.1, 8.9),
+            >>>     assets.Label('c', 7.2, 10.5),
+            >>>     assets.Label('d', 10.5, 14)
+            >>> ])
+            >>> ranges = ll.ranges()
+            >>> next(ranges)
+            (3.2, 4.5, [<pingu.corpus.assets.label.Label at 0x1090527c8>])
+            >>> next(ranges)
+            (4.5, 5.1, [])
+            >>> next(ranges)
+            (5.1, 7.2, [<pingu.corpus.assets.label.Label at 0x1090484c8>])
+        """
+
+        # all label start events
+        events = [(l.start, 1, l) for l in sorted(self.labels, key=lambda x: x.start)]
+        heapq.heapify(events)
+
+        current_range_labels = []
+        current_range_start = -123
+
+        while len(events) > 0:
+            next_event = heapq.heappop(events)
+            label = next_event[2]
+
+            # Return current range if its not the first event and not the same time as the previous event
+            if -1 < current_range_start < next_event[0] > current_range_start:
+                
+                if len(current_range_labels) > 0 or yield_ranges_without_labels:
+                    yield (current_range_start, next_event[0], list(current_range_labels))
+
+            # Update labels and add the "end" event
+            if next_event[1] == 1:
+                current_range_labels.append(label)
+                heapq.heappush(events, (label.end, -1, label))
+            else:
+                current_range_labels.remove(label)
+
+            current_range_start = next_event[0]
 
     def __getitem__(self, item):
         return self.labels.__getitem__(item)

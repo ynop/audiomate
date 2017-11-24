@@ -95,7 +95,7 @@ class Corpus(base.CorpusView):
 
         if loader is None:
             from . import io
-            loader = io.DefaultLoader
+            loader = io.DefaultLoader()
 
         elif type(loader) == str:
             from . import io

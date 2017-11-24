@@ -16,6 +16,7 @@ FEAT_CONTAINER_FILE_NAME = 'features.txt'
 class BroadcastLoader(base.CorpusLoader):
     """
     This is the corpus loader which is used for corpora where a separate label file per utterance exists.
+    This especially is useful for corpora where the utterances are very long (e.g. broadcast recordings).
     """
 
     @classmethod
@@ -44,6 +45,8 @@ class BroadcastLoader(base.CorpusLoader):
 
         # Read utt to issuer mapping
         utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
+        utt_issuers = {}
+
         if os.path.isfile(utt_issuer_path):
             utt_issuers = textfile.read_key_value_lines(utt_issuer_path, separator=' ')
 

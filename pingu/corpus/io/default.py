@@ -18,6 +18,7 @@ class DefaultLoader(base.CorpusLoader):
     """
     This is the corpus loader which is used by default.
     """
+
     @classmethod
     def type(cls):
         return 'default'
@@ -44,6 +45,8 @@ class DefaultLoader(base.CorpusLoader):
 
         # Read utt to issuer mapping
         utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
+        utt_issuers = {}
+
         if os.path.isfile(utt_issuer_path):
             utt_issuers = textfile.read_key_value_lines(utt_issuer_path, separator=' ')
 
@@ -117,9 +120,3 @@ class DefaultLoader(base.CorpusLoader):
                 records.extend([(utterance_idx, l.start, l.end, l.value) for l in label_list])
 
             textfile.write_separated_lines(file_path, records, separator=' ')
-
-
-
-
-
-
