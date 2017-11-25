@@ -3,6 +3,7 @@ import struct
 
 import numpy as np
 
+import pingu
 from . import base
 from pingu.corpus import assets
 from pingu.utils import textfile
@@ -16,6 +17,13 @@ FEATS_FILE_NAME = 'feats'
 
 
 class KaldiLoader(base.CorpusLoader):
+    """
+    This loader is used to load/save data sets with the kaldi data format according to http://kaldi-asr.org/doc/data_prep.html.
+    """
+
+    def __init__(self, main_label_list_idx='default', main_feature_idx='default'):
+        self.main_label_list_idx = main_label_list_idx
+        self.main_feature_idx = main_feature_idx
 
     @classmethod
     def type(cls):
@@ -33,58 +41,65 @@ class KaldiLoader(base.CorpusLoader):
 
         return missing_files or None
 
-    def _load(self, corpus):
+    def _load(self, path):
+        corpus = pingu.Corpus(path=path, loader=self)
+
         # load wavs
-        wav_file_path = os.path.join(corpus.path, WAV_FILE_NAME)
+        wav_file_path = os.path.join(path, WAV_FILE_NAME)
         for file_idx, file_path in textfile.read_key_value_lines(wav_file_path, separator=' ').items():
-            corpus.add_file(file_path, file_idx=file_idx)
+            if not os.path.isabs(file_path):
+                file_path = os.path.join(path, file_path)
+
+            corpus.new_file(file_path, file_idx)
 
         # load utterances
-        utt2spk_path = os.path.join(corpus.path, UTT2SPK_FILE_NAME)
+        utt2spk_path = os.path.join(path, UTT2SPK_FILE_NAME)
         utt2spk = {}
 
         if os.path.isfile(utt2spk_path):
             utt2spk = textfile.read_key_value_lines(utt2spk_path, separator=' ')
 
-        segments_path = os.path.join(corpus.path, SEGMENTS_FILE_NAME)
+        segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
 
         if os.path.isfile(segments_path):
             for utt_id, utt_info in textfile.read_separated_lines_with_first_key(segments_path, separator=' ', max_columns=4).items():
-                start = None
-                end = None
+                start = 0
+                end = -1
 
                 if len(utt_info) > 1:
-                    start = utt_info[1]
+                    start = float(utt_info[1])
 
                 if len(utt_info) > 2:
-                    end = utt_info[2]
+                    end = float(utt_info[2])
 
                 speaker_idx = None
 
                 if utt_id in utt2spk.keys():
                     speaker_idx = utt2spk[utt_id]
-                    if speaker_idx not in corpus.speakers.keys():
-                        corpus.add_speaker(speaker_idx=speaker_idx)
+                    if speaker_idx not in corpus.issuers.keys():
+                        corpus.new_issuer(speaker_idx)
 
-                corpus.add_utterance(utt_info[0], utterance_idx=utt_id, speaker_idx=speaker_idx, start=start, end=end)
+                corpus.new_utterance(utt_id, utt_info[0], issuer_idx=speaker_idx, start=start, end=end)
         else:
             for file_idx in corpus.files.keys():
                 speaker_idx = None
 
                 if file_idx in utt2spk.keys():
                     speaker_idx = utt2spk[file_idx]
-                    if speaker_idx not in corpus.speakers.keys():
-                        corpus.add_speaker(speaker_idx=speaker_idx)
+                    if speaker_idx not in corpus.issuers.keys():
+                        corpus.new_issuer(speaker_idx)
 
-                corpus.add_utterance(file_idx, utterance_idx=file_idx, speaker_idx=speaker_idx)
+                corpus.new_utterance(file_idx, file_idx, issuer_idx=speaker_idx)
 
         # load transcriptions
-        text_path = os.path.join(corpus.path, TRANSCRIPTION_FILE_NAME)
+        text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
         for utt_id, transcription in textfile.read_key_value_lines(text_path, separator=' ').items():
-            corpus.add_segmentation(utt_id, segments=transcription)
+            corpus.new_label_list(utt_id, labels=[assets.Label(transcription)])
+
+        return corpus
 
     def _save(self, corpus, path):
-        kaldi_files = {f.idx: os.path.abspath(os.path.join(path, f.path)) for f in corpus.files.values()}
+        kaldi_files = {f.idx: f.path for f in corpus.files.values()}
 
         # Write files
         file_path = os.path.join(path, WAV_FILE_NAME)
@@ -97,27 +112,22 @@ class KaldiLoader(base.CorpusLoader):
 
         # Write utt2spk
         utt2spk_path = os.path.join(path, UTT2SPK_FILE_NAME)
-        utt2spk_records = {utterance.idx: utterance.speaker_idx for utterance in corpus.utterances.values()}
+        utt2spk_records = {utterance.idx: utterance.issuer_idx for utterance in corpus.utterances.values()}
         textfile.write_separated_lines(utt2spk_path, utt2spk_records, separator=' ', sort_by_column=0)
 
-        # Write speakers
-        gender_path = os.path.join(path, SPK2GENDER_FILE_NAME)
-        speaker_data = {spk.idx: spk.gender.value for spk in corpus.speakers.values()}
-        textfile.write_separated_lines(gender_path, speaker_data, separator=' ', sort_by_column=0)
-
-        # Write segmentations
+        # Write label-list
         transcriptions = {}
 
-        for utterance_idx, utt_segmentations in corpus.segmentations.items():
-            if data.Segmentation.TEXT_SEGMENTATION in utt_segmentations.keys():
-                transcriptions[utterance_idx] = utt_segmentations[data.Segmentation.TEXT_SEGMENTATION].to_text()
+        if self.main_label_list_idx in corpus.label_lists.keys():
+            for utt_idx, label_list in corpus.label_lists[self.main_label_list_idx].items():
+                transcriptions[utt_idx] = ' '.join([l.value for l in label_list])
 
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
         textfile.write_separated_lines(text_path, transcriptions, separator=' ', sort_by_column=0)
 
         # Write features
-        if self.main_features is not None:
-            fc = corpus.features[self.main_features]
+        if self.main_feature_idx in corpus.feature_containers.keys():
+            fc = corpus.features_containers[self.main_feature_idx]
             fc.open()
             matrices = {}
 

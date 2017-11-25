@@ -7,6 +7,7 @@ All loader implementations base on :py:class:`pingu.corpus.io.CorpusLoader`.
 from .base import CorpusLoader
 from .default import DefaultLoader
 from .broadcast import BroadcastLoader
+from .kaldi import KaldiLoader
 
 
 def available_loaders():

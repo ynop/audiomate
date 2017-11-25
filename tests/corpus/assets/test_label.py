@@ -4,7 +4,6 @@ from pingu.corpus import assets
 
 
 class CorpusTest(unittest.TestCase):
-
     def test_ranges(self):
         ll = assets.LabelList(labels=[
             assets.Label('a', 3.2, 4.5),
@@ -40,7 +39,6 @@ class CorpusTest(unittest.TestCase):
         self.assertEqual(10.5, r[0])
         self.assertEqual(14, r[1])
         self.assertIn(ll[3], r[2])
-
 
     def test_ranges_with_empty(self):
         ll = assets.LabelList(labels=[
@@ -82,4 +80,3 @@ class CorpusTest(unittest.TestCase):
         self.assertEqual(10.5, r[0])
         self.assertEqual(14, r[1])
         self.assertIn(ll[3], r[2])
-

@@ -58,8 +58,8 @@ class BroadcastLoader(base.CorpusLoader):
         utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
         for utterance_idx, utt_info in textfile.read_separated_lines_with_first_key(utterance_path, separator=' ', max_columns=4).items():
             issuer_idx = None
-            start = None
-            end = None
+            start = 0
+            end = -1
 
             if len(utt_info) > 1:
                 start = float(utt_info[1])

@@ -47,7 +47,7 @@ class CorpusLoader(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def _save(self, dataset, path):
+    def _save(self, corpus, path):
         """ The loader specific save function. """
         pass
 

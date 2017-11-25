@@ -37,14 +37,14 @@ class DefaultCorpusLoaderTest(unittest.TestCase):
         self.assertEqual('utt-1', ds.utterances['utt-1'].idx)
         self.assertEqual('file-1', ds.utterances['utt-1'].file_idx)
         self.assertEqual('speaker-1', ds.utterances['utt-1'].issuer_idx)
-        self.assertEqual(None, ds.utterances['utt-1'].start)
-        self.assertEqual(None, ds.utterances['utt-1'].end)
+        self.assertEqual(0, ds.utterances['utt-1'].start)
+        self.assertEqual(-1, ds.utterances['utt-1'].end)
 
         self.assertEqual('utt-2', ds.utterances['utt-2'].idx)
         self.assertEqual('file-2', ds.utterances['utt-2'].file_idx)
         self.assertEqual('speaker-1', ds.utterances['utt-2'].issuer_idx)
-        self.assertEqual(None, ds.utterances['utt-2'].start)
-        self.assertEqual(None, ds.utterances['utt-2'].end)
+        self.assertEqual(0, ds.utterances['utt-2'].start)
+        self.assertEqual(-1, ds.utterances['utt-2'].end)
 
         self.assertEqual('utt-3', ds.utterances['utt-3'].idx)
         self.assertEqual('file-3', ds.utterances['utt-3'].file_idx)
@@ -61,8 +61,8 @@ class DefaultCorpusLoaderTest(unittest.TestCase):
         self.assertEqual('utt-5', ds.utterances['utt-5'].idx)
         self.assertEqual('file-4', ds.utterances['utt-5'].file_idx)
         self.assertEqual('speaker-3', ds.utterances['utt-5'].issuer_idx)
-        self.assertEqual(None, ds.utterances['utt-5'].start)
-        self.assertEqual(None, ds.utterances['utt-5'].end)
+        self.assertEqual(0, ds.utterances['utt-5'].start)
+        self.assertEqual(-1, ds.utterances['utt-5'].end)
 
     def test_load_label_lists(self):
         ds = self.loader.load(self.test_path)
