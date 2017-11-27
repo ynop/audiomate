@@ -17,9 +17,12 @@ Loader implementations
 
 Default
 ^^^^^^^
-
 .. autoclass:: DefaultLoader
 
 Broadcast
 ^^^^^^^^^
+.. autoclass:: BroadcastLoader
+
+Kaldi
+^^^^^
 .. autoclass:: BroadcastLoader

@@ -101,7 +101,7 @@ class LabelList(object):
 
             # Return current range if its not the first event and not the same time as the previous event
             if -1 < current_range_start < next_event[0] > current_range_start:
-                
+
                 if len(current_range_labels) > 0 or yield_ranges_without_labels:
                     yield (current_range_start, next_event[0], list(current_range_labels))
 
@@ -113,6 +113,28 @@ class LabelList(object):
                 current_range_labels.remove(label)
 
             current_range_start = next_event[0]
+
+    def label_values(self):
+        """
+        Return a list of all occuring label values.
+
+        Returns:
+            list: Lexicographically sorted list (str) of label values.
+
+        Example:
+            >>> ll = assets.LabelList(labels=[
+            >>>     assets.Label('a', 3.2, 4.5),
+            >>>     assets.Label('b', 5.1, 8.9),
+            >>>     assets.Label('c', 7.2, 10.5),
+            >>>     assets.Label('d', 10.5, 14),
+            >>>     assets.Label('d', 15, 18)
+            >>> ])
+            >>> ll.label_values()
+            ['a', 'b', 'c', 'd']
+        """
+
+        all_labels = set([l.value for l in self])
+        return sorted(all_labels)
 
     def __getitem__(self, item):
         return self.labels.__getitem__(item)

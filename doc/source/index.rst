@@ -28,6 +28,7 @@ Welcome to pingu's documentation!
     reference/corpus
     reference/assets
     reference/io
+    reference/grabber
     reference/formats
     reference/utils
 
