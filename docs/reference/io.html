@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pingu.corpus.io &mdash; pingu 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="pingu 0.1 documentation" href="../index.html"/>
+        <link rel="next" title="pingu.corpus.grabber" href="grabber.html"/>
+        <link rel="prev" title="pingu.corpus.assets" href="assets.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pingu
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notes/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../documentation/formats.html">Corpus Formats</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="corpus.html">pingu.corpus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assets.html">pingu.corpus.assets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pingu.corpus.io</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#base-loader">Base loader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loader-implementations">Loader implementations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#default">Default</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#broadcast">Broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaldi">Kaldi</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="grabber.html">pingu.corpus.grabber</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">pingu.formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">pingu.utils</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pingu</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>pingu.corpus.io</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/io.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pingu.corpus.io">
+<span id="pingu-corpus-io"></span><h1>pingu.corpus.io<a class="headerlink" href="#module-pingu.corpus.io" title="Permalink to this headline">¶</a></h1>
+<p>The io module contains the loaders which provide functionality to load corpora from the filesystem.</p>
+<p>All loader implementations base on <a class="reference internal" href="#pingu.corpus.io.CorpusLoader" title="pingu.corpus.io.CorpusLoader"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.io.CorpusLoader</span></code></a>.</p>
+<dl class="function">
+<dt id="pingu.corpus.io.available_loaders">
+<code class="descclassname">pingu.corpus.io.</code><code class="descname">available_loaders</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/io.html#available_loaders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.io.available_loaders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a mapping of all available loaders.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with loader classes with the name of these loaders as key.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">available_loaders</span><span class="p">()</span>
+<span class="go">{</span>
+<span class="go">    &quot;default&quot; : pingu.corpus.io.DefaultLoader,</span>
+<span class="go">    &quot;kaldi&quot; : pingu.corpus.io.KaldiLoader</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pingu.corpus.io.create_loader_of_type">
+<code class="descclassname">pingu.corpus.io.</code><code class="descname">create_loader_of_type</code><span class="sig-paren">(</span><em>type_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/io.html#create_loader_of_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.io.create_loader_of_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of the loader with the given name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type_name</strong> – The name of a loader.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An instance of the loader with the given type.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="section" id="base-loader">
+<h2>Base loader<a class="headerlink" href="#base-loader" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pingu.corpus.io.CorpusLoader">
+<em class="property">class </em><code class="descclassname">pingu.corpus.io.</code><code class="descname">CorpusLoader</code><a class="reference internal" href="../_modules/pingu/corpus/io/base.html#CorpusLoader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.io.CorpusLoader" title="Permalink to this definition">¶</a></dt>
+<dd><p>A loader defines functionality to load and save a corpus from/to a given path.</p>
+<dl class="method">
+<dt id="pingu.corpus.io.CorpusLoader.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/io/base.html#CorpusLoader.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.io.CorpusLoader.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and return the corpus from the given path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – Path to the dataset to load.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The loaded corpus.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="corpus.html#pingu.corpus.Corpus" title="pingu.corpus.Corpus">Corpus</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pingu.corpus.io.CorpusLoader.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>corpus</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/io/base.html#CorpusLoader.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.io.CorpusLoader.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the dataset at the given path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>corpus</strong> (<a class="reference internal" href="corpus.html#pingu.corpus.Corpus" title="pingu.corpus.Corpus"><em>Corpus</em></a>) – The corpus to save.</li>
+<li><strong>path</strong> (<em>str</em>) – Path to save the corpus to.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="pingu.corpus.io.CorpusLoader.type">
+<em class="property">classmethod </em><code class="descname">type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/io/base.html#CorpusLoader.type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.io.CorpusLoader.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the type of the loader (e.g. kaldi, TIMIT, …).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="loader-implementations">
+<h2>Loader implementations<a class="headerlink" href="#loader-implementations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="default">
+<h3>Default<a class="headerlink" href="#default" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pingu.corpus.io.DefaultLoader">
+<em class="property">class </em><code class="descclassname">pingu.corpus.io.</code><code class="descname">DefaultLoader</code><a class="reference internal" href="../_modules/pingu/corpus/io/default.html#DefaultLoader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.io.DefaultLoader" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the corpus loader which is used by default.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="broadcast">
+<h3>Broadcast<a class="headerlink" href="#broadcast" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pingu.corpus.io.BroadcastLoader">
+<em class="property">class </em><code class="descclassname">pingu.corpus.io.</code><code class="descname">BroadcastLoader</code><a class="reference internal" href="../_modules/pingu/corpus/io/broadcast.html#BroadcastLoader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.io.BroadcastLoader" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the corpus loader which is used for corpora where a separate label file per utterance exists.
+This especially is useful for corpora where the utterances are very long (e.g. broadcast recordings).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="kaldi">
+<h3>Kaldi<a class="headerlink" href="#kaldi" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="descclassname">pingu.corpus.io.</code><code class="descname">BroadcastLoader</code><a class="reference internal" href="../_modules/pingu/corpus/io/broadcast.html#BroadcastLoader"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>This is the corpus loader which is used for corpora where a separate label file per utterance exists.
+This especially is useful for corpora where the utterances are very long (e.g. broadcast recordings).</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="grabber.html" class="btn btn-neutral float-right" title="pingu.corpus.grabber" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="assets.html" class="btn btn-neutral" title="pingu.corpus.assets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, buec.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

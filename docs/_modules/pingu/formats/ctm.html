@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pingu.formats.ctm &mdash; pingu 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="pingu 0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pingu
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation/formats.html">Corpus Formats</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/corpus.html">pingu.corpus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/assets.html">pingu.corpus.assets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/io.html">pingu.corpus.io</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/grabber.html">pingu.corpus.grabber</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/formats.html">pingu.formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/utils.html">pingu.utils</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pingu</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pingu.formats.ctm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pingu.formats.ctm</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">collections</span>
+
+<span class="kn">from</span> <span class="nn">pingu.utils</span> <span class="k">import</span> <span class="n">textfile</span>
+
+
+<div class="viewcode-block" id="write_file"><a class="viewcode-back" href="../../../reference/formats.html#pingu.formats.ctm.write_file">[docs]</a><span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Writes a ctm file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): Path to write the file to.</span>
+<span class="sd">        entries (list): List with entries to write. (entries -&gt; wave-file, channel, start (seconds), duration (seconds), label)</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; data = [</span>
+<span class="sd">        &gt;&gt;&gt;     [&quot;wave-ab&quot;, &#39;1&#39;, 0.0, 0.82, &quot;duda&quot;],</span>
+<span class="sd">        &gt;&gt;&gt;     [&quot;wave-xy&quot;, &#39;1&#39;, 0.82, 0.57, &quot;Jacques&quot;],</span>
+<span class="sd">        &gt;&gt;&gt; ]</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; write_file(&#39;/path/to/file.txt&#39;, data)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">textfile</span><span class="o">.</span><span class="n">write_separated_lines</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="read_file"><a class="viewcode-back" href="../../../reference/formats.html#pingu.formats.ctm.read_file">[docs]</a><span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads a ctm file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): Path to the file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (dict): Dictionary with entries.</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; read_file(&#39;/path/to/file.txt&#39;)</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;wave-ab&#39;: [</span>
+<span class="sd">                [&#39;1&#39;, 0.00, 0.07, &#39;HI&#39;, 1],</span>
+<span class="sd">                [&#39;1&#39;, 0.09, 0.08, &#39;AH&#39;, 1]</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;wave-xy&#39;: [</span>
+<span class="sd">                [&#39;1&#39;, 0.00, 0.07, &#39;HI&#39;, 1],</span>
+<span class="sd">                [&#39;1&#39;, 0.09, 0.08, &#39;AH&#39;, 1]</span>
+<span class="sd">            ]</span>
+<span class="sd">        }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gen</span> <span class="o">=</span> <span class="n">textfile</span><span class="o">.</span><span class="n">read_separated_lines_generator</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">max_columns</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">ignore_lines_starting_with</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;;;&#39;</span><span class="p">])</span>
+
+    <span class="n">utterances</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">gen</span><span class="p">:</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">record</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="n">utterances</span><span class="p">[</span><span class="n">record</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">utterances</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, buec.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

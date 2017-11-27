@@ -1,0 +1,513 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pingu.corpus.corpus &mdash; pingu 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="pingu 0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pingu
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation/formats.html">Corpus Formats</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/corpus.html">pingu.corpus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/assets.html">pingu.corpus.assets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/io.html">pingu.corpus.io</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/grabber.html">pingu.corpus.grabber</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/formats.html">pingu.formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/utils.html">pingu.utils</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pingu</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pingu.corpus.corpus</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pingu.corpus.corpus</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="kn">from</span> <span class="nn">pingu.corpus</span> <span class="k">import</span> <span class="n">assets</span>
+<span class="kn">from</span> <span class="nn">pingu.utils</span> <span class="k">import</span> <span class="n">naming</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">base</span>
+
+<span class="n">DEFAULT_FILE_SUBDIR</span> <span class="o">=</span> <span class="s1">&#39;files&#39;</span>
+<span class="n">DEFAULT_FEAT_SUBDIR</span> <span class="o">=</span> <span class="s1">&#39;features&#39;</span>
+
+
+<div class="viewcode-block" id="Corpus"><a class="viewcode-back" href="../../../reference/corpus.html#pingu.corpus.Corpus">[docs]</a><span class="k">class</span> <span class="nc">Corpus</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">CorpusView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Corpus class represents a single corpus.</span>
+<span class="sd">    It extends :py:class:`pingu.corpus.CorpusView` with the functionality for loading and saving.</span>
+<span class="sd">    Furthermore it provides the functionality for adding/modifying assets of the corpus like files and utterances.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): Path where the corpus is stored. (Optional)</span>
+<span class="sd">        loader (CorpusLoader): A loader to use for loading/saving. (By default the DefaultLoader is used)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">loader</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Corpus</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+
+        <span class="c1"># Set default loader of none is given</span>
+        <span class="k">if</span> <span class="n">loader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">io</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loader</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">DefaultLoader</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loader</span> <span class="o">=</span> <span class="n">loader</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">subviews</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;undefined&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+
+    <span class="c1">#</span>
+    <span class="c1">#   IO</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Corpus.save"><a class="viewcode-back" href="../../../reference/corpus.html#pingu.corpus.Corpus.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If self.path is defined, it tries to save the corpus at the given path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No path given to save the dataset.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Corpus.save_at"><a class="viewcode-back" href="../../../reference/corpus.html#pingu.corpus.Corpus.save_at">[docs]</a>    <span class="k">def</span> <span class="nf">save_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">loader</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save this corpus at the given path. If the path differs from the current path set, the path gets updated.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            path (str): Path to save the dataset to.</span>
+<span class="sd">            loader (str, CorpusLoader): If you want to use another loader (e.g. to export to another format). Otherwise it uses the loader associated with this dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">loader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># If not loader given, use the one associated with the corpus</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="c1"># If a loader is given as string, try to create such a loader.</span>
+            <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">io</span>
+            <span class="n">loader</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">create_loader_of_type</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+            <span class="n">loader</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Use the given loader</span>
+            <span class="n">loader</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span></div>
+
+<div class="viewcode-block" id="Corpus.load"><a class="viewcode-back" href="../../../reference/corpus.html#pingu.corpus.Corpus.load">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">loader</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the corpus from the given path, using the given loader. If no loader is given the default loader is used.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path (str): Path to load the corpus from.</span>
+<span class="sd">            loader (str, CorpusLoader): The loader or the name of the loader to use.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Corpus: The loaded corpus.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">loader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">io</span>
+            <span class="n">loader</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">DefaultLoader</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">io</span>
+            <span class="n">loader</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">create_loader_of_type</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">loader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1"># File</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Corpus.new_file"><a class="viewcode-back" href="../../../reference/corpus.html#pingu.corpus.Corpus.new_file">[docs]</a>    <span class="k">def</span> <span class="nf">new_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">file_idx</span><span class="p">,</span> <span class="n">copy_file</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a new file to the dataset with the given data.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            path (str): Path of the file to add.</span>
+<span class="sd">            file_idx (str): The id to associate the file with.</span>
+<span class="sd">            copy_file (bool): If True the file is copied to the dataset folder, otherwise the given path is used directly.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            File: The newly added File.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">new_file_idx</span> <span class="o">=</span> <span class="n">file_idx</span>
+        <span class="n">new_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># Add index to idx if already existing</span>
+        <span class="k">if</span> <span class="n">new_file_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">new_file_idx</span> <span class="o">=</span> <span class="n">naming</span><span class="o">.</span><span class="n">index_name_if_in_list</span><span class="p">(</span><span class="n">new_file_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># Copy file to default file dir</span>
+        <span class="k">if</span> <span class="n">copy_file</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;To copy file the dataset needs to have a path.&#39;</span><span class="p">)</span>
+
+            <span class="n">__</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+            <span class="n">new_file_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">DEFAULT_FILE_SUBDIR</span><span class="p">)</span>
+            <span class="n">new_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_file_folder</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_file_idx</span><span class="p">,</span> <span class="n">ext</span><span class="p">))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">new_file_folder</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">new_file_path</span><span class="p">)</span>
+
+        <span class="c1"># Create file obj</span>
+        <span class="n">new_file</span> <span class="o">=</span> <span class="n">assets</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">new_file_idx</span><span class="p">,</span> <span class="n">new_file_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">new_file_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_file</span>
+
+        <span class="k">return</span> <span class="n">new_file</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1">#   Utterances</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Corpus.new_utterance"><a class="viewcode-back" href="../../../reference/corpus.html#pingu.corpus.Corpus.new_utterance">[docs]</a>    <span class="k">def</span> <span class="nf">new_utterance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">utterance_idx</span><span class="p">,</span> <span class="n">file_idx</span><span class="p">,</span> <span class="n">issuer_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a new utterance to the dataset with the given data.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            file_idx (str): The file id the utterance is in.</span>
+<span class="sd">            utterance_idx (str): The id to associate with the utterance. If None or already exists, one is generated.</span>
+<span class="sd">            issuer_idx (str): The issuer id to associate with the utterance.</span>
+<span class="sd">            start (float): Start of the utterance within the file [seconds].</span>
+<span class="sd">            end (float): End of the utterance within the file [seconds]. -1 equals the end of the file.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Utterance: The newly added utterance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">new_utt_idx</span> <span class="o">=</span> <span class="n">utterance_idx</span>
+
+        <span class="c1"># Check if there is a file with the given idx</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">file_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No file in dataset with id </span><span class="si">{}</span><span class="s1"> to add utterance.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_idx</span><span class="p">))</span>
+
+        <span class="c1"># Add index to idx if already existing</span>
+        <span class="k">if</span> <span class="n">new_utt_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utterances</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">new_utt_idx</span> <span class="o">=</span> <span class="n">naming</span><span class="o">.</span><span class="n">index_name_if_in_list</span><span class="p">(</span><span class="n">new_utt_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">utterances</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="n">new_utt</span> <span class="o">=</span> <span class="n">assets</span><span class="o">.</span><span class="n">Utterance</span><span class="p">(</span><span class="n">new_utt_idx</span><span class="p">,</span> <span class="n">file_idx</span><span class="p">,</span> <span class="n">issuer_idx</span><span class="o">=</span><span class="n">issuer_idx</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utterances</span><span class="p">[</span><span class="n">new_utt_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_utt</span>
+
+        <span class="k">return</span> <span class="n">new_utt</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1">#   Issuer</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Corpus.new_issuer"><a class="viewcode-back" href="../../../reference/corpus.html#pingu.corpus.Corpus.new_issuer">[docs]</a>    <span class="k">def</span> <span class="nf">new_issuer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">issuer_idx</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a new issuer to the dataset with the given data.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            issuer_idx (str): The id to associate the issuer with. If None or already exists, one is generated.</span>
+<span class="sd">            info (dict, list): Additional info of the issuer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Issuer: The newly added issuer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">new_issuer_idx</span> <span class="o">=</span> <span class="n">issuer_idx</span>
+
+        <span class="c1"># Add index to idx if already existing</span>
+        <span class="k">if</span> <span class="n">new_issuer_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">issuers</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">new_issuer_idx</span> <span class="o">=</span> <span class="n">naming</span><span class="o">.</span><span class="n">index_name_if_in_list</span><span class="p">(</span><span class="n">new_issuer_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">issuers</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="n">new_issuer</span> <span class="o">=</span> <span class="n">assets</span><span class="o">.</span><span class="n">Issuer</span><span class="p">(</span><span class="n">new_issuer_idx</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issuers</span><span class="p">[</span><span class="n">new_issuer_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_issuer</span>
+
+        <span class="k">return</span> <span class="n">new_issuer</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1">#   Labeling</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Corpus.new_label_list"><a class="viewcode-back" href="../../../reference/corpus.html#pingu.corpus.Corpus.new_label_list">[docs]</a>    <span class="k">def</span> <span class="nf">new_label_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">utterance_idx</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a new label-list with the given data.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            utterance_idx (str): Utterance id the label-list is associated with.</span>
+<span class="sd">            idx (str): An identifier this label-list is associated with.</span>
+<span class="sd">            labels (list): Labels to add to the new label-list.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            LabelList: The newly added label-list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">new_label_list_idx</span> <span class="o">=</span> <span class="n">idx</span>
+
+        <span class="k">if</span> <span class="n">new_label_list_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_label_list_idx</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span>
+
+        <span class="n">new_label_list</span> <span class="o">=</span> <span class="n">assets</span><span class="o">.</span><span class="n">LabelList</span><span class="p">(</span><span class="n">idx</span><span class="o">=</span><span class="n">new_label_list_idx</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">assets</span><span class="o">.</span><span class="n">Label</span><span class="p">):</span>
+            <span class="n">new_label_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">new_label_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">label_lists</span><span class="p">[</span><span class="n">new_label_list</span><span class="o">.</span><span class="n">idx</span><span class="p">][</span><span class="n">utterance_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_label_list</span>
+
+        <span class="k">return</span> <span class="n">new_label_list</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1">#   FEATURES</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Corpus.new_feature_container"><a class="viewcode-back" href="../../../reference/corpus.html#pingu.corpus.Corpus.new_feature_container">[docs]</a>    <span class="k">def</span> <span class="nf">new_feature_container</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a new feature container with the given data.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            idx (str): An unique identifier within the dataset.</span>
+<span class="sd">            path (str): The path to store the feature file. If None a default path is used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            FeatureContainer: The newly added feature-container.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">new_feature_idx</span> <span class="o">=</span> <span class="n">idx</span>
+        <span class="n">new_feature_path</span> <span class="o">=</span> <span class="n">path</span>
+
+        <span class="c1"># Add index to idx if already existing</span>
+        <span class="k">if</span> <span class="n">new_feature_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_containers</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">new_feature_idx</span> <span class="o">=</span> <span class="n">naming</span><span class="o">.</span><span class="n">index_name_if_in_list</span><span class="p">(</span><span class="n">new_feature_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_containers</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># Set default path if none given</span>
+        <span class="k">if</span> <span class="n">new_feature_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;To copy file the dataset needs to have a path.&#39;</span><span class="p">)</span>
+
+            <span class="n">new_feature_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">DEFAULT_FEAT_SUBDIR</span><span class="p">,</span> <span class="n">new_feature_idx</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_feature_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">new_feature_path</span><span class="p">)</span>
+
+        <span class="n">container</span> <span class="o">=</span> <span class="n">assets</span><span class="o">.</span><span class="n">FeatureContainer</span><span class="p">(</span><span class="n">new_feature_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_containers</span><span class="p">[</span><span class="n">new_feature_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">container</span>
+
+        <span class="k">return</span> <span class="n">container</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, buec.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

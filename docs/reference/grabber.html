@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pingu.corpus.grabber &mdash; pingu 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="pingu 0.1 documentation" href="../index.html"/>
+        <link rel="next" title="pingu.formats" href="formats.html"/>
+        <link rel="prev" title="pingu.corpus.io" href="io.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pingu
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notes/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../documentation/formats.html">Corpus Formats</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="corpus.html">pingu.corpus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assets.html">pingu.corpus.assets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">pingu.corpus.io</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pingu.corpus.grabber</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#framedsignalgrabber">FramedSignalGrabber</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">pingu.formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">pingu.utils</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pingu</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>pingu.corpus.grabber</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/grabber.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pingu.corpus.grabber">
+<span id="pingu-corpus-grabber"></span><h1>pingu.corpus.grabber<a class="headerlink" href="#module-pingu.corpus.grabber" title="Permalink to this headline">¶</a></h1>
+<p>This module contains classes for easy access/iterate the data in the corpus.</p>
+<p>A grabber should implement the methods <code class="docutils literal"><span class="pre">__len__</span></code> and <code class="docutils literal"><span class="pre">__getitem__</span></code>, so the data can be access by indexed access or iteration.</p>
+<div class="section" id="framedsignalgrabber">
+<h2>FramedSignalGrabber<a class="headerlink" href="#framedsignalgrabber" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pingu.corpus.grabber.FramedSignalGrabber">
+<em class="property">class </em><code class="descclassname">pingu.corpus.grabber.</code><code class="descname">FramedSignalGrabber</code><span class="sig-paren">(</span><em>corpus</em>, <em>label_list_idx='default'</em>, <em>frame_length=400</em>, <em>hop_size=160</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/grabber/signal.html#FramedSignalGrabber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.grabber.FramedSignalGrabber" title="Permalink to this definition">¶</a></dt>
+<dd><p>The FramedSignalGrabber provides access to the samples of the audio data in frames.
+The whole dataset is split into ranges. One range is a section with the same labels.
+Only ranges are considered that have labels from the given label-list. Ranges are padded with zeros, if the frame-length doesn’t match.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>corpus</strong> (<a class="reference internal" href="corpus.html#pingu.corpus.Corpus" title="pingu.corpus.Corpus"><em>Corpus</em></a>) – The corpus to get the data from.</li>
+<li><strong>label_list_idx</strong> (<em>str</em>) – Only label-lists with this id will be considered.</li>
+<li><strong>frame_length</strong> (<em>int</em>) – Number of audio samples per frame.</li>
+<li><strong>hop_size</strong> (<em>int</em>) – Number of audio samples from one to the next frame.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><p class="first last"><strong>labels</strong> (<em>list</em>) – List of all labels occuring in the output of the grabber.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="formats.html" class="btn btn-neutral float-right" title="pingu.formats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="io.html" class="btn btn-neutral" title="pingu.corpus.io" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, buec.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

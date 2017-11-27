@@ -1,0 +1,507 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pingu.corpus &mdash; pingu 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="pingu 0.1 documentation" href="../index.html"/>
+        <link rel="next" title="pingu.corpus.assets" href="assets.html"/>
+        <link rel="prev" title="Broadcast Format" href="../documentation/broadcast_format.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pingu
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notes/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../documentation/formats.html">Corpus Formats</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pingu.corpus</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#corpusview">CorpusView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#corpus">Corpus</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="assets.html">pingu.corpus.assets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">pingu.corpus.io</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grabber.html">pingu.corpus.grabber</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">pingu.formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">pingu.utils</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pingu</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>pingu.corpus</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/corpus.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pingu.corpus">
+<span id="pingu-corpus"></span><h1>pingu.corpus<a class="headerlink" href="#module-pingu.corpus" title="Permalink to this headline">¶</a></h1>
+<p>This module contains all parts needed for using a corpus. Aside the main corpus class <code class="xref py py-class docutils literal"><span class="pre">pingu.Corpus</span></code>,
+there are different loaders in the <a class="reference internal" href="io.html#module-pingu.corpus.io" title="pingu.corpus.io"><code class="xref py py-mod docutils literal"><span class="pre">pingu.corpus.io</span></code></a> and the assets used in a corpus in <a class="reference internal" href="assets.html#module-pingu.corpus.assets" title="pingu.corpus.assets"><code class="xref py py-mod docutils literal"><span class="pre">pingu.corpus.assets</span></code></a>.</p>
+<div class="section" id="corpusview">
+<h2>CorpusView<a class="headerlink" href="#corpusview" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pingu.corpus.CorpusView">
+<em class="property">class </em><code class="descclassname">pingu.corpus.</code><code class="descname">CorpusView</code><a class="reference internal" href="../_modules/pingu/corpus/base.html#CorpusView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.CorpusView" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class defines the basic interface of a corpus. It is not meant to be instantiated directly.
+It only describes the methods for accessing data of the corpus.</p>
+<p class="rubric">Notes</p>
+<p>All paths to files should be held as absolute paths in memory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>files</strong> (<em>dict</em>) – A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.File" title="pingu.corpus.assets.File"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.File</span></code></a> objects with the file-idx as key.</li>
+<li><strong>utterances</strong> (<em>dict</em>) – A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.Utterance" title="pingu.corpus.assets.Utterance"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.Utterance</span></code></a> objects with the utterance-idx as key.</li>
+<li><strong>issuers</strong> (<em>dict</em>) – A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.Issuer" title="pingu.corpus.assets.Issuer"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.Issuer</span></code></a> objects with the issuer-idx as key.</li>
+<li><strong>label_lists</strong> (<em>dict</em>) – A dictionary containing utterance-idx/label_list dictionaries with the label-list-idx as key.</li>
+<li><strong>feature_containers</strong> (<em>dict</em>) – A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.FeatureContainer" title="pingu.corpus.assets.FeatureContainer"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.FeatureContainer</span></code></a> objects with the feature-idx as key.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="pingu.corpus.CorpusView.name">
+<code class="descname">name</code><a class="headerlink" href="#pingu.corpus.CorpusView.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the dataset (Equals basename of the path, if not None).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pingu.corpus.CorpusView.num_feature_containers">
+<code class="descname">num_feature_containers</code><a class="headerlink" href="#pingu.corpus.CorpusView.num_feature_containers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of feature-containers in the dataset.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pingu.corpus.CorpusView.num_files">
+<code class="descname">num_files</code><a class="headerlink" href="#pingu.corpus.CorpusView.num_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of files.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pingu.corpus.CorpusView.num_issuers">
+<code class="descname">num_issuers</code><a class="headerlink" href="#pingu.corpus.CorpusView.num_issuers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of issuers in the dataset.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pingu.corpus.CorpusView.num_utterances">
+<code class="descname">num_utterances</code><a class="headerlink" href="#pingu.corpus.CorpusView.num_utterances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of utterances.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="corpus">
+<h2>Corpus<a class="headerlink" href="#corpus" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pingu.corpus.Corpus">
+<em class="property">class </em><code class="descclassname">pingu.corpus.</code><code class="descname">Corpus</code><span class="sig-paren">(</span><em>path=None</em>, <em>loader=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/corpus.html#Corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.Corpus" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Corpus class represents a single corpus.
+It extends <a class="reference internal" href="#pingu.corpus.CorpusView" title="pingu.corpus.CorpusView"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.CorpusView</span></code></a> with the functionality for loading and saving.
+Furthermore it provides the functionality for adding/modifying assets of the corpus like files and utterances.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) – Path where the corpus is stored. (Optional)</li>
+<li><strong>loader</strong> (<a class="reference internal" href="io.html#pingu.corpus.io.CorpusLoader" title="pingu.corpus.io.CorpusLoader"><em>CorpusLoader</em></a>) – A loader to use for loading/saving. (By default the DefaultLoader is used)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="classmethod">
+<dt id="pingu.corpus.Corpus.load">
+<em class="property">classmethod </em><code class="descname">load</code><span class="sig-paren">(</span><em>path</em>, <em>loader=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/corpus.html#Corpus.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.Corpus.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the corpus from the given path, using the given loader. If no loader is given the default loader is used.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) – Path to load the corpus from.</li>
+<li><strong>loader</strong> (<em>str</em><em>, </em><a class="reference internal" href="io.html#pingu.corpus.io.CorpusLoader" title="pingu.corpus.io.CorpusLoader"><em>CorpusLoader</em></a>) – The loader or the name of the loader to use.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The loaded corpus.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#pingu.corpus.Corpus" title="pingu.corpus.Corpus">Corpus</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pingu.corpus.Corpus.new_feature_container">
+<code class="descname">new_feature_container</code><span class="sig-paren">(</span><em>idx</em>, <em>path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/corpus.html#Corpus.new_feature_container"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.Corpus.new_feature_container" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new feature container with the given data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>idx</strong> (<em>str</em>) – An unique identifier within the dataset.</li>
+<li><strong>path</strong> (<em>str</em>) – The path to store the feature file. If None a default path is used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The newly added feature-container.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="assets.html#pingu.corpus.assets.FeatureContainer" title="pingu.corpus.assets.FeatureContainer">FeatureContainer</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pingu.corpus.Corpus.new_file">
+<code class="descname">new_file</code><span class="sig-paren">(</span><em>path</em>, <em>file_idx</em>, <em>copy_file=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/corpus.html#Corpus.new_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.Corpus.new_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new file to the dataset with the given data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) – Path of the file to add.</li>
+<li><strong>file_idx</strong> (<em>str</em>) – The id to associate the file with.</li>
+<li><strong>copy_file</strong> (<em>bool</em>) – If True the file is copied to the dataset folder, otherwise the given path is used directly.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The newly added File.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="assets.html#pingu.corpus.assets.File" title="pingu.corpus.assets.File">File</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pingu.corpus.Corpus.new_issuer">
+<code class="descname">new_issuer</code><span class="sig-paren">(</span><em>issuer_idx</em>, <em>info=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/corpus.html#Corpus.new_issuer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.Corpus.new_issuer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new issuer to the dataset with the given data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>issuer_idx</strong> (<em>str</em>) – The id to associate the issuer with. If None or already exists, one is generated.</li>
+<li><strong>info</strong> (<em>dict</em><em>, </em><em>list</em>) – Additional info of the issuer.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The newly added issuer.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="assets.html#pingu.corpus.assets.Issuer" title="pingu.corpus.assets.Issuer">Issuer</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pingu.corpus.Corpus.new_label_list">
+<code class="descname">new_label_list</code><span class="sig-paren">(</span><em>utterance_idx</em>, <em>idx=None</em>, <em>labels=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/corpus.html#Corpus.new_label_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.Corpus.new_label_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new label-list with the given data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>utterance_idx</strong> (<em>str</em>) – Utterance id the label-list is associated with.</li>
+<li><strong>idx</strong> (<em>str</em>) – An identifier this label-list is associated with.</li>
+<li><strong>labels</strong> (<em>list</em>) – Labels to add to the new label-list.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The newly added label-list.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="assets.html#pingu.corpus.assets.LabelList" title="pingu.corpus.assets.LabelList">LabelList</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pingu.corpus.Corpus.new_utterance">
+<code class="descname">new_utterance</code><span class="sig-paren">(</span><em>utterance_idx</em>, <em>file_idx</em>, <em>issuer_idx=None</em>, <em>start=0</em>, <em>end=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/corpus.html#Corpus.new_utterance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.Corpus.new_utterance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new utterance to the dataset with the given data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file_idx</strong> (<em>str</em>) – The file id the utterance is in.</li>
+<li><strong>utterance_idx</strong> (<em>str</em>) – The id to associate with the utterance. If None or already exists, one is generated.</li>
+<li><strong>issuer_idx</strong> (<em>str</em>) – The issuer id to associate with the utterance.</li>
+<li><strong>start</strong> (<em>float</em>) – Start of the utterance within the file [seconds].</li>
+<li><strong>end</strong> (<em>float</em>) – End of the utterance within the file [seconds]. -1 equals the end of the file.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The newly added utterance.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="assets.html#pingu.corpus.assets.Utterance" title="pingu.corpus.assets.Utterance">Utterance</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pingu.corpus.Corpus.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/corpus.html#Corpus.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.Corpus.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>If self.path is defined, it tries to save the corpus at the given path.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pingu.corpus.Corpus.save_at">
+<code class="descname">save_at</code><span class="sig-paren">(</span><em>path</em>, <em>loader=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/corpus.html#Corpus.save_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.Corpus.save_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save this corpus at the given path. If the path differs from the current path set, the path gets updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) – Path to save the dataset to.</li>
+<li><strong>loader</strong> (<em>str</em><em>, </em><a class="reference internal" href="io.html#pingu.corpus.io.CorpusLoader" title="pingu.corpus.io.CorpusLoader"><em>CorpusLoader</em></a>) – If you want to use another loader (e.g. to export to another format). Otherwise it uses the loader associated with this dataset.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="assets.html" class="btn btn-neutral float-right" title="pingu.corpus.assets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../documentation/broadcast_format.html" class="btn btn-neutral" title="Broadcast Format" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, buec.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
