@@ -50,7 +50,7 @@ class FramedSignalGrabber(object):
         frame = np.array(range[4][sample_start:sample_end])
         max_value = np.iinfo(frame.dtype).max
 
-        frame = frame.astype(np.float32) / max_value
+        frame = frame.astype(np.float) / max_value
 
         if sample_pad:
             frame = np.pad(frame, (0, sample_pad), mode='constant', constant_values=0)
@@ -152,7 +152,7 @@ class FramedSignalGrabber(object):
 
         ('a', 'b', 'd') --> [1,1,0,1]
         """
-        vec = np.zeros(len(self.labels)).astype(np.float32)
+        vec = np.zeros(len(self.labels)).astype(np.float)
 
         for label in labels:
             index = self.labels.index(label.value)

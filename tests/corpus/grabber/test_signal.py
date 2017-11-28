@@ -19,8 +19,11 @@ class FramedSignalGrabberTest(unittest.TestCase):
         shutil.rmtree(self.temp_path, ignore_errors=True)
 
     def test_items(self):
-        file_a_data = np.array([0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1])
-        file_b_data = np.array([0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1])
+        file_a_data = np.array([0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1]).astype(np.int16)
+        file_b_data = np.array([0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1]).astype(np.int16)
+
+        file_a_data *= np.iinfo(np.int16).max
+        file_b_data *= np.iinfo(np.int16).max
 
         file_a_path = os.path.join(self.temp_path, 'a.wav')
         file_b_path = os.path.join(self.temp_path, 'b.wav')
@@ -56,27 +59,27 @@ class FramedSignalGrabberTest(unittest.TestCase):
 
         # a1
         frame, label_vec = gr[0]
-        self.assertTrue(np.array_equal([0, 1, 0, 0], frame))
-        self.assertTrue(np.array_equal([0, 1], label_vec))
+        self.assertTrue(np.allclose(np.array([0, 1, 0, 0], np.float), frame))
+        self.assertTrue(np.allclose([0, 1], label_vec))
 
         frame, label_vec = gr[1]
-        self.assertTrue(np.array_equal([0, 0, 0, 0], frame))
-        self.assertTrue(np.array_equal([0, 1], label_vec))
+        self.assertTrue(np.allclose([0, 0, 0, 0], frame))
+        self.assertTrue(np.allclose([0, 1], label_vec))
 
         frame, label_vec = gr[2]
-        self.assertTrue(np.array_equal([0, 0, 0, 0], frame))
-        self.assertTrue(np.array_equal([1, 0], label_vec))
+        self.assertTrue(np.allclose([0, 0, 0, 0], frame))
+        self.assertTrue(np.allclose([1, 0], label_vec))
 
         # a2
         frame, label_vec = gr[3]
-        self.assertTrue(np.array_equal([1, 0, 1, 0], frame))
-        self.assertTrue(np.array_equal([1, 0], label_vec))
+        self.assertTrue(np.allclose([1, 0, 1, 0], frame))
+        self.assertTrue(np.allclose([1, 0], label_vec))
 
         frame, label_vec = gr[4]
-        self.assertTrue(np.array_equal([1, 0, 0, 0], frame))
-        self.assertTrue(np.array_equal([1, 0], label_vec))
+        self.assertTrue(np.allclose([1, 0, 0, 0], frame))
+        self.assertTrue(np.allclose([1, 0], label_vec))
 
         # b1
         frame, label_vec = gr[5]
-        self.assertTrue(np.array_equal([1, 0, 0, 0], frame))
-        self.assertTrue(np.array_equal([0, 1], label_vec))
+        self.assertTrue(np.allclose([1, 0, 0, 0], frame))
+        self.assertTrue(np.allclose([0, 1], label_vec))
