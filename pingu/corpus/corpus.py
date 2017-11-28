@@ -1,4 +1,5 @@
 import os
+import collections
 import shutil
 
 from pingu.corpus import assets
@@ -32,7 +33,11 @@ class Corpus(base.CorpusView):
         else:
             self.loader = loader
 
-        self.subviews = {}
+        self._files = {}
+        self._utterances = {}
+        self._issuers = {}
+        self._label_lists = collections.defaultdict(dict)
+        self._feature_containers = {}
 
     @property
     def name(self):
@@ -40,6 +45,26 @@ class Corpus(base.CorpusView):
             return "undefined"
         else:
             return os.path.basename(os.path.abspath(self.path))
+
+    @property
+    def files(self):
+        return self._files
+
+    @property
+    def utterances(self):
+        return self._utterances
+
+    @property
+    def issuers(self):
+        return self._issuers
+
+    @property
+    def label_lists(self):
+        return self._label_lists
+
+    @property
+    def feature_containers(self):
+        return self._feature_containers
 
     #
     #   IO
@@ -124,8 +149,8 @@ class Corpus(base.CorpusView):
         new_file_path = os.path.abspath(path)
 
         # Add index to idx if already existing
-        if new_file_idx in self.files.keys():
-            new_file_idx = naming.index_name_if_in_list(new_file_idx, self.files.keys())
+        if new_file_idx in self._files.keys():
+            new_file_idx = naming.index_name_if_in_list(new_file_idx, self._files.keys())
 
         # Copy file to default file dir
         if copy_file:
@@ -141,7 +166,7 @@ class Corpus(base.CorpusView):
 
         # Create file obj
         new_file = assets.File(new_file_idx, new_file_path)
-        self.files[new_file_idx] = new_file
+        self._files[new_file_idx] = new_file
 
         return new_file
 
@@ -167,15 +192,15 @@ class Corpus(base.CorpusView):
         new_utt_idx = utterance_idx
 
         # Check if there is a file with the given idx
-        if not file_idx in self.files.keys():
+        if not file_idx in self._files.keys():
             raise ValueError('No file in dataset with id {} to add utterance.'.format(file_idx))
 
         # Add index to idx if already existing
-        if new_utt_idx in self.utterances.keys():
-            new_utt_idx = naming.index_name_if_in_list(new_utt_idx, self.utterances.keys())
+        if new_utt_idx in self._utterances.keys():
+            new_utt_idx = naming.index_name_if_in_list(new_utt_idx, self._utterances.keys())
 
         new_utt = assets.Utterance(new_utt_idx, file_idx, issuer_idx=issuer_idx, start=start, end=end)
-        self.utterances[new_utt_idx] = new_utt
+        self._utterances[new_utt_idx] = new_utt
 
         return new_utt
 
@@ -198,11 +223,11 @@ class Corpus(base.CorpusView):
         new_issuer_idx = issuer_idx
 
         # Add index to idx if already existing
-        if new_issuer_idx in self.issuers.keys():
-            new_issuer_idx = naming.index_name_if_in_list(new_issuer_idx, self.issuers.keys())
+        if new_issuer_idx in self._issuers.keys():
+            new_issuer_idx = naming.index_name_if_in_list(new_issuer_idx, self._issuers.keys())
 
         new_issuer = assets.Issuer(new_issuer_idx, info=info)
-        self.issuers[new_issuer_idx] = new_issuer
+        self._issuers[new_issuer_idx] = new_issuer
 
         return new_issuer
 
@@ -235,7 +260,7 @@ class Corpus(base.CorpusView):
         elif isinstance(labels, list):
             new_label_list.extend(labels)
 
-        self.label_lists[new_label_list.idx][utterance_idx] = new_label_list
+        self._label_lists[new_label_list.idx][utterance_idx] = new_label_list
 
         return new_label_list
 
@@ -259,8 +284,8 @@ class Corpus(base.CorpusView):
         new_feature_path = path
 
         # Add index to idx if already existing
-        if new_feature_idx in self.feature_containers.keys():
-            new_feature_idx = naming.index_name_if_in_list(new_feature_idx, self.feature_containers.keys())
+        if new_feature_idx in self._feature_containers.keys():
+            new_feature_idx = naming.index_name_if_in_list(new_feature_idx, self._feature_containers.keys())
 
         # Set default path if none given
         if new_feature_path is None:
@@ -272,6 +297,6 @@ class Corpus(base.CorpusView):
             new_feature_path = os.path.abspath(new_feature_path)
 
         container = assets.FeatureContainer(new_feature_path)
-        self.feature_containers[new_feature_idx] = container
+        self._feature_containers[new_feature_idx] = container
 
         return container

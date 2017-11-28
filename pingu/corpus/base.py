@@ -9,21 +9,7 @@ class CorpusView(metaclass=abc.ABCMeta):
 
     Notes:
         All paths to files should be held as absolute paths in memory.
-
-    Attributes:
-        files (dict): A dictionary containing :py:class:`pingu.corpus.assets.File` objects with the file-idx as key.
-        utterances (dict): A dictionary containing :py:class:`pingu.corpus.assets.Utterance` objects with the utterance-idx as key.
-        issuers (dict): A dictionary containing :py:class:`pingu.corpus.assets.Issuer` objects with the issuer-idx as key.
-        label_lists (dict): A dictionary containing utterance-idx/label_list dictionaries with the label-list-idx as key.
-        feature_containers (dict): A dictionary containing :py:class:`pingu.corpus.assets.FeatureContainer` objects with the feature-idx as key.
     """
-
-    def __init__(self):
-        self.files = {}
-        self.utterances = {}
-        self.issuers = {}
-        self.label_lists = collections.defaultdict(dict)
-        self.feature_containers = {}
 
     @property
     @abc.abstractmethod
@@ -36,6 +22,17 @@ class CorpusView(metaclass=abc.ABCMeta):
     #
 
     @property
+    @abc.abstractmethod
+    def files(self):
+        """
+        Return the files in the corpus.
+
+        Returns:
+            dict: A dictionary containing :py:class:`pingu.corpus.assets.File` objects with the file-idx as key.
+        """
+        return {}
+
+    @property
     def num_files(self):
         """ Return number of files. """
         return len(self.files)
@@ -43,6 +40,17 @@ class CorpusView(metaclass=abc.ABCMeta):
     #
     #   Utterances
     #
+
+    @property
+    @abc.abstractmethod
+    def utterances(self):
+        """
+        Return the utterances in the corpus.
+
+        Returns:
+            dict: A dictionary containing :py:class:`pingu.corpus.assets.Utterance` objects with the utterance-idx as key.
+        """
+        return {}
 
     @property
     def num_utterances(self):
@@ -54,13 +62,50 @@ class CorpusView(metaclass=abc.ABCMeta):
     #
 
     @property
+    @abc.abstractmethod
+    def issuers(self):
+        """
+        Return the issuers in the corpus.
+
+        Returns:
+            dict: A dictionary containing :py:class:`pingu.corpus.assets.Issuer` objects with the issuer-idx as key.
+        """
+        return {}
+
+    @property
     def num_issuers(self):
         """ Return the number of issuers in the dataset. """
         return len(self.issuers)
 
     #
+    #   Label List
+    #
+
+    @property
+    @abc.abstractmethod
+    def label_lists(self):
+        """
+        Return the label-lists in the corpus.
+
+        Returns:
+            dict: A dictionary containing utterance-idx/label_list dictionaries with the label-list-idx as key.
+        """
+        return collections.defaultdict(dict)
+
+    #
     #   Feature Container
     #
+
+    @property
+    @abc.abstractmethod
+    def feature_containers(self):
+        """
+        Return the feature-containers in the corpus.
+
+        Returns:
+            dict: A dictionary containing :py:class:`pingu.corpus.assets.FeatureContainer` objects with the feature-idx as key.
+        """
+        return {}
 
     @property
     def num_feature_containers(self):
