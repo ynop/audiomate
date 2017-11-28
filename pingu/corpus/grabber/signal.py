@@ -21,6 +21,7 @@ class FramedSignalGrabber(object):
     Attributes:
         labels (list): List of all labels occuring in the output of the grabber.
     """
+
     def __init__(self, corpus, label_list_idx='default', frame_length=400, hop_size=160):
         self.corpus = corpus
         self.label_list_idx = label_list_idx
@@ -46,7 +47,10 @@ class FramedSignalGrabber(object):
         else:
             sample_pad = sample_start + self.frame_length - sample_end
 
-        frame = range[4][sample_start:sample_end]
+        frame = np.array(range[4][sample_start:sample_end])
+        max_value = np.iinfo(frame.dtype).max
+
+        frame = frame.astype(np.float32) / max_value
 
         if sample_pad:
             frame = np.pad(frame, (0, sample_pad), mode='constant', constant_values=0)
@@ -148,7 +152,7 @@ class FramedSignalGrabber(object):
 
         ('a', 'b', 'd') --> [1,1,0,1]
         """
-        vec = np.zeros(len(self.labels))
+        vec = np.zeros(len(self.labels)).astype(np.float32)
 
         for label in labels:
             index = self.labels.index(label.value)
