@@ -178,6 +178,33 @@
             
   <div class="section" id="broadcast-format">
 <h1>Broadcast Format<a class="headerlink" href="#broadcast-format" title="Permalink to this headline">¶</a></h1>
+<p>The broadcast format is basically the same as <a class="reference internal" href="default_format.html#section-default-format"><span class="std std-ref">Default Format</span></a>, except it uses another format to store labels.
+This format is meant for data where not many utterances are given, but with a lot of labels. So instead to have all labels per label-list in one file,
+a label-file per utterance is used.</p>
+<p><strong>labels.txt</strong></p>
+<p>This files defines where to find the effective label files. It stores the label-file path per utterance. Additionaly a label-list-id can be given, if there are multiple label-lists per utterance.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>&lt;utt-id&gt; &lt;label-file-path&gt; &lt;label-list-idx&gt;
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>utt-1 files/a/labels.txt
+utt-2 files/b/music.txt music
+utt-2 files/b/jingles.txt jingles
+utt-3 files/c/trailers.txt
+</pre></div>
+</div>
+<p><strong>[label-file].txt</strong></p>
+<p>The label files reference by the <em>labels.txt</em> are in the following format. It contains the start and end in seconds.
+The values are <strong>Tab-separated</strong>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>&lt;start&gt; &lt;end&gt;   &lt;value&gt;
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="m">0</span>   <span class="m">40</span>  hallo
+<span class="m">40</span>.5    <span class="m">100</span> velo
+<span class="m">102</span>.4   <span class="m">109</span>.2   auto
+</pre></div>
+</div>
 </div>
 
 

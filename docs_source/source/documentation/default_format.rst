@@ -1,3 +1,5 @@
+.. _section_default_format:
+
 Default Format
 ==============
 
