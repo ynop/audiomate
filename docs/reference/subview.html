@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pingu.corpus.subview &mdash; pingu 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="pingu 0.1 documentation" href="../index.html"/>
+        <link rel="next" title="pingu.formats" href="formats.html"/>
+        <link rel="prev" title="pingu.corpus.grabber" href="grabber.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pingu
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notes/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../documentation/formats.html">Corpus Formats</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="corpus.html">pingu.corpus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assets.html">pingu.corpus.assets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">pingu.corpus.io</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grabber.html">pingu.corpus.grabber</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pingu.corpus.subview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subview">Subview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filter">Filter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#matchingutteranceidxfilter">MatchingUtteranceIdxFilter</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">pingu.formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">pingu.utils</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pingu</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>pingu.corpus.subview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/subview.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pingu.corpus.subview">
+<span id="pingu-corpus-subview"></span><h1>pingu.corpus.subview<a class="headerlink" href="#module-pingu.corpus.subview" title="Permalink to this headline">¶</a></h1>
+<p>This module provides class for handling subviews.
+This includes the subview class itself and also the FilterCriterion classes, which are used to define the data contained in a subview.</p>
+<div class="section" id="subview">
+<h2>Subview<a class="headerlink" href="#subview" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pingu.corpus.subview.Subview">
+<em class="property">class </em><code class="descclassname">pingu.corpus.subview.</code><code class="descname">Subview</code><span class="sig-paren">(</span><em>corpus</em>, <em>filter_criteria=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/subview.html#Subview"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.subview.Subview" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subview is a readonly layer representing some subset of a corpus.
+The assets the subview contains are defined by filter criteria.
+Only if an utterance passes all filter criteria it is contained in the subview.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>corpus</strong> (<a class="reference internal" href="corpus.html#pingu.corpus.CorpusView" title="pingu.corpus.CorpusView"><em>CorpusView</em></a>) – The corpus this subview is based on.</li>
+<li><strong>filter_criteria</strong> (<em>list</em>) – List of <a class="reference internal" href="#pingu.corpus.subview.FilterCriterion" title="pingu.corpus.subview.FilterCriterion"><code class="xref py py-class docutils literal"><span class="pre">FilterCriterion</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">filter</span> <span class="o">=</span> <span class="n">subview</span><span class="o">.</span><span class="n">MatchingUtteranceIdxFilter</span><span class="p">(</span><span class="n">utterance_idxs</span><span class="o">=</span><span class="p">([</span><span class="s1">&#39;utt-1&#39;</span><span class="p">,</span> <span class="s1">&#39;utt-3&#39;</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">pingu</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;path/to/corpus&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">num_utterances</span>
+<span class="go">14</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subset</span> <span class="o">=</span> <span class="n">subview</span><span class="o">.</span><span class="n">Subview</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="n">filter_criteria</span><span class="o">=</span><span class="p">[</span><span class="nb">filter</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subset</span><span class="o">.</span><span class="n">num_utterances</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="pingu.corpus.subview.Subview.num_feature_containers">
+<code class="descname">num_feature_containers</code><a class="headerlink" href="#pingu.corpus.subview.Subview.num_feature_containers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of feature-containers in the dataset.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pingu.corpus.subview.Subview.num_files">
+<code class="descname">num_files</code><a class="headerlink" href="#pingu.corpus.subview.Subview.num_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of files.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pingu.corpus.subview.Subview.num_issuers">
+<code class="descname">num_issuers</code><a class="headerlink" href="#pingu.corpus.subview.Subview.num_issuers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of issuers in the dataset.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pingu.corpus.subview.Subview.num_utterances">
+<code class="descname">num_utterances</code><a class="headerlink" href="#pingu.corpus.subview.Subview.num_utterances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of utterances.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="filter">
+<h2>Filter<a class="headerlink" href="#filter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pingu.corpus.subview.FilterCriterion">
+<em class="property">class </em><code class="descclassname">pingu.corpus.subview.</code><code class="descname">FilterCriterion</code><a class="reference internal" href="../_modules/pingu/corpus/subview.html#FilterCriterion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.subview.FilterCriterion" title="Permalink to this definition">¶</a></dt>
+<dd><p>A filter criterion decides wheter a given utterance contained in a given corpus matches the filter.</p>
+<dl class="method">
+<dt id="pingu.corpus.subview.FilterCriterion.match">
+<code class="descname">match</code><span class="sig-paren">(</span><em>utterance</em>, <em>corpus</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/subview.html#FilterCriterion.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.subview.FilterCriterion.match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the utterance matches the filter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>utterance</strong> (<a class="reference internal" href="assets.html#pingu.corpus.assets.Utterance" title="pingu.corpus.assets.Utterance"><em>Utterance</em></a>) – The utterance to match.</li>
+<li><strong>corpus</strong> (<a class="reference internal" href="corpus.html#pingu.corpus.CorpusView" title="pingu.corpus.CorpusView"><em>CorpusView</em></a>) – The corpus that contains the utterance.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the filter matches the utterance, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="matchingutteranceidxfilter">
+<h3>MatchingUtteranceIdxFilter<a class="headerlink" href="#matchingutteranceidxfilter" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pingu.corpus.subview.MatchingUtteranceIdxFilter">
+<em class="property">class </em><code class="descclassname">pingu.corpus.subview.</code><code class="descname">MatchingUtteranceIdxFilter</code><span class="sig-paren">(</span><em>utterance_idxs=set()</em>, <em>inverse=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pingu/corpus/subview.html#MatchingUtteranceIdxFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pingu.corpus.subview.MatchingUtteranceIdxFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>A filter criterion that matches utterances based on utterance-ids.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>utterance_idxs</strong> (<em>list</em>) – A list of utterance-ids. Only utterances in the list will pass the filter</li>
+<li><strong>inverse</strong> (<em>bool</em>) – If True only utterance not in the list pass the filter.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="formats.html" class="btn btn-neutral float-right" title="pingu.formats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="grabber.html" class="btn btn-neutral" title="pingu.corpus.grabber" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, buec.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

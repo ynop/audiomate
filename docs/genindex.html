@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="reference/assets.html">pingu.corpus.assets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/io.html">pingu.corpus.io</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/grabber.html">pingu.corpus.grabber</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/subview.html">pingu.corpus.subview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/formats.html">pingu.formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/utils.html">pingu.utils</a></li>
 </ul>
@@ -179,6 +180,7 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
@@ -246,11 +248,17 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/corpus.html#pingu.corpus.CorpusView.feature_containers">feature_containers (pingu.corpus.CorpusView attribute)</a>
+</li>
       <li><a href="reference/assets.html#pingu.corpus.assets.FeatureContainer">FeatureContainer (class in pingu.corpus.assets)</a>
+</li>
+      <li><a href="reference/assets.html#pingu.corpus.assets.File">File (class in pingu.corpus.assets)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/assets.html#pingu.corpus.assets.File">File (class in pingu.corpus.assets)</a>
+      <li><a href="reference/corpus.html#pingu.corpus.CorpusView.files">files (pingu.corpus.CorpusView attribute)</a>
+</li>
+      <li><a href="reference/subview.html#pingu.corpus.subview.FilterCriterion">FilterCriterion (class in pingu.corpus.subview)</a>
 </li>
       <li><a href="reference/grabber.html#pingu.corpus.grabber.FramedSignalGrabber">FramedSignalGrabber (class in pingu.corpus.grabber)</a>
 </li>
@@ -278,6 +286,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/assets.html#pingu.corpus.assets.Issuer">Issuer (class in pingu.corpus.assets)</a>
 </li>
+      <li><a href="reference/corpus.html#pingu.corpus.CorpusView.issuers">issuers (pingu.corpus.CorpusView attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -285,6 +295,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/assets.html#pingu.corpus.assets.Label">Label (class in pingu.corpus.assets)</a>
+</li>
+      <li><a href="reference/corpus.html#pingu.corpus.CorpusView.label_lists">label_lists (pingu.corpus.CorpusView attribute)</a>
 </li>
       <li><a href="reference/assets.html#pingu.corpus.assets.LabelList.label_values">label_values() (pingu.corpus.assets.LabelList method)</a>
 </li>
@@ -301,6 +313,18 @@
   </ul></td>
 </tr></table>
 
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/subview.html#pingu.corpus.subview.FilterCriterion.match">match() (pingu.corpus.subview.FilterCriterion method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/subview.html#pingu.corpus.subview.MatchingUtteranceIdxFilter">MatchingUtteranceIdxFilter (class in pingu.corpus.subview)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -314,18 +338,34 @@
 </li>
       <li><a href="reference/corpus.html#pingu.corpus.Corpus.new_label_list">new_label_list() (pingu.corpus.Corpus method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/corpus.html#pingu.corpus.Corpus.new_utterance">new_utterance() (pingu.corpus.Corpus method)</a>
 </li>
       <li><a href="reference/corpus.html#pingu.corpus.CorpusView.num_feature_containers">num_feature_containers (pingu.corpus.CorpusView attribute)</a>
+
+      <ul>
+        <li><a href="reference/subview.html#pingu.corpus.subview.Subview.num_feature_containers">(pingu.corpus.subview.Subview attribute)</a>
 </li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/corpus.html#pingu.corpus.CorpusView.num_files">num_files (pingu.corpus.CorpusView attribute)</a>
+
+      <ul>
+        <li><a href="reference/subview.html#pingu.corpus.subview.Subview.num_files">(pingu.corpus.subview.Subview attribute)</a>
 </li>
+      </ul></li>
       <li><a href="reference/corpus.html#pingu.corpus.CorpusView.num_issuers">num_issuers (pingu.corpus.CorpusView attribute)</a>
+
+      <ul>
+        <li><a href="reference/subview.html#pingu.corpus.subview.Subview.num_issuers">(pingu.corpus.subview.Subview attribute)</a>
 </li>
+      </ul></li>
       <li><a href="reference/corpus.html#pingu.corpus.CorpusView.num_utterances">num_utterances (pingu.corpus.CorpusView attribute)</a>
+
+      <ul>
+        <li><a href="reference/subview.html#pingu.corpus.subview.Subview.num_utterances">(pingu.corpus.subview.Subview attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -348,12 +388,14 @@
 </li>
       <li><a href="reference/io.html#module-pingu.corpus.io">pingu.corpus.io (module)</a>
 </li>
-      <li><a href="reference/formats.html#module-pingu.formats">pingu.formats (module)</a>
+      <li><a href="reference/subview.html#module-pingu.corpus.subview">pingu.corpus.subview (module)</a>
 </li>
-      <li><a href="reference/formats.html#module-pingu.formats.audacity">pingu.formats.audacity (module)</a>
+      <li><a href="reference/formats.html#module-pingu.formats">pingu.formats (module)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/formats.html#module-pingu.formats.audacity">pingu.formats.audacity (module)</a>
+</li>
       <li><a href="reference/formats.html#module-pingu.formats.ctm">pingu.formats.ctm (module)</a>
 </li>
       <li><a href="reference/utils.html#module-pingu.utils.jsonfile">pingu.utils.jsonfile (module)</a>
@@ -408,15 +450,17 @@
         <li><a href="reference/io.html#pingu.corpus.io.CorpusLoader.save">(pingu.corpus.io.CorpusLoader method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/corpus.html#pingu.corpus.Corpus.save_at">save_at() (pingu.corpus.Corpus method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/utils.html#pingu.utils.units.seconds_to_sample">seconds_to_sample() (in module pingu.utils.units)</a>
 </li>
       <li><a href="reference/assets.html#pingu.corpus.assets.FeatureContainer.set">set() (pingu.corpus.assets.FeatureContainer method)</a>
 </li>
       <li><a href="reference/utils.html#pingu.utils.text.starts_with_prefix_in_list">starts_with_prefix_in_list() (in module pingu.utils.text)</a>
+</li>
+      <li><a href="reference/subview.html#pingu.corpus.subview.Subview">Subview (class in pingu.corpus.subview)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -433,6 +477,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/assets.html#pingu.corpus.assets.Utterance">Utterance (class in pingu.corpus.assets)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/corpus.html#pingu.corpus.CorpusView.utterances">utterances (pingu.corpus.CorpusView attribute)</a>
 </li>
   </ul></td>
 </tr></table>

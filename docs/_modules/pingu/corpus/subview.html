@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pingu.corpus.subview &mdash; pingu 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="pingu 0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pingu
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation/formats.html">Corpus Formats</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/corpus.html">pingu.corpus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/assets.html">pingu.corpus.assets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/io.html">pingu.corpus.io</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/grabber.html">pingu.corpus.grabber</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/subview.html">pingu.corpus.subview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/formats.html">pingu.formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/utils.html">pingu.utils</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pingu</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pingu.corpus.subview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pingu.corpus.subview</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides class for handling subviews.</span>
+<span class="sd">This includes the subview class itself and also the FilterCriterion classes, which are used to define the data contained in a subview.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">collections</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">base</span>
+
+
+<div class="viewcode-block" id="FilterCriterion"><a class="viewcode-back" href="../../../reference/subview.html#pingu.corpus.subview.FilterCriterion">[docs]</a><span class="k">class</span> <span class="nc">FilterCriterion</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A filter criterion decides wheter a given utterance contained in a given corpus matches the filter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FilterCriterion.match"><a class="viewcode-back" href="../../../reference/subview.html#pingu.corpus.subview.FilterCriterion.match">[docs]</a>    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">utterance</span><span class="p">,</span> <span class="n">corpus</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the utterance matches the filter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            utterance (Utterance): The utterance to match.</span>
+<span class="sd">            corpus (CorpusView): The corpus that contains the utterance.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if the filter matches the utterance, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="MatchingUtteranceIdxFilter"><a class="viewcode-back" href="../../../reference/subview.html#pingu.corpus.subview.MatchingUtteranceIdxFilter">[docs]</a><span class="k">class</span> <span class="nc">MatchingUtteranceIdxFilter</span><span class="p">(</span><span class="n">FilterCriterion</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A filter criterion that matches utterances based on utterance-ids.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        utterance_idxs (list): A list of utterance-ids. Only utterances in the list will pass the filter</span>
+<span class="sd">        inverse (bool): If True only utterance not in the list pass the filter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">utterance_idxs</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utterance_idxs</span> <span class="o">=</span> <span class="n">utterance_idxs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inverse</span> <span class="o">=</span> <span class="n">inverse</span>
+
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">utterance</span><span class="p">,</span> <span class="n">corpus</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">utterance</span><span class="o">.</span><span class="n">idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utterance_idxs</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">utterance</span><span class="o">.</span><span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utterance_idxs</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Subview"><a class="viewcode-back" href="../../../reference/subview.html#pingu.corpus.subview.Subview">[docs]</a><span class="k">class</span> <span class="nc">Subview</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">CorpusView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A subview is a readonly layer representing some subset of a corpus.</span>
+<span class="sd">    The assets the subview contains are defined by filter criteria.</span>
+<span class="sd">    Only if an utterance passes all filter criteria it is contained in the subview.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        corpus (CorpusView): The corpus this subview is based on.</span>
+<span class="sd">        filter_criteria (list): List of :py:class:`FilterCriterion`</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=([&#39;utt-1&#39;, &#39;utt-3&#39;]))</span>
+<span class="sd">        &gt;&gt;&gt; corpus = pingu.corpus.load(&#39;path/to/corpus&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; corpus.num_utterances</span>
+<span class="sd">        14</span>
+<span class="sd">        &gt;&gt;&gt; subset = subview.Subview(self.corpus, filter_criteria=[filter])</span>
+<span class="sd">        &gt;&gt;&gt; subset.num_utterances</span>
+<span class="sd">        2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">filter_criteria</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">corpus</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter_criteria</span> <span class="o">=</span> <span class="n">filter_criteria</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;subview of </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">utterance</span><span class="o">.</span><span class="n">file_idx</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">utterance</span><span class="o">.</span><span class="n">file_idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">utterance</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utterances</span><span class="o">.</span><span class="n">values</span><span class="p">()}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">utterances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">filtered_utterances</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">utt_idx</span><span class="p">,</span> <span class="n">utterance</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">utterances</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">for</span> <span class="n">criterion</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_criteria</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">criterion</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">):</span>
+                    <span class="n">matches</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="n">filtered_utterances</span><span class="p">[</span><span class="n">utt_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">utterance</span>
+
+        <span class="k">return</span> <span class="n">filtered_utterances</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">issuers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">utterance</span><span class="o">.</span><span class="n">issuer_idx</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">issuers</span><span class="p">[</span><span class="n">utterance</span><span class="o">.</span><span class="n">issuer_idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">utterance</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utterances</span><span class="o">.</span><span class="n">values</span><span class="p">()}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">label_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">filtered_label_lists</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">label_list_idx</span><span class="p">,</span> <span class="n">label_lists</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">label_lists</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">utterance_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utterances</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">utterance_idx</span> <span class="ow">in</span> <span class="n">label_lists</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">filtered_label_lists</span><span class="p">[</span><span class="n">label_list_idx</span><span class="p">][</span><span class="n">utterance_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">label_lists</span><span class="p">[</span><span class="n">utterance_idx</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">filtered_label_lists</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">feature_containers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">feature_containers</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, buec.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

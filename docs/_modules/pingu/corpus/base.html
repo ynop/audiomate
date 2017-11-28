@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/assets.html">pingu.corpus.assets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/io.html">pingu.corpus.io</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/grabber.html">pingu.corpus.grabber</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/subview.html">pingu.corpus.subview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/formats.html">pingu.formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/utils.html">pingu.utils</a></li>
 </ul>
@@ -180,21 +181,7 @@
 
 <span class="sd">    Notes:</span>
 <span class="sd">        All paths to files should be held as absolute paths in memory.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        files (dict): A dictionary containing :py:class:`pingu.corpus.assets.File` objects with the file-idx as key.</span>
-<span class="sd">        utterances (dict): A dictionary containing :py:class:`pingu.corpus.assets.Utterance` objects with the utterance-idx as key.</span>
-<span class="sd">        issuers (dict): A dictionary containing :py:class:`pingu.corpus.assets.Issuer` objects with the issuer-idx as key.</span>
-<span class="sd">        label_lists (dict): A dictionary containing utterance-idx/label_list dictionaries with the label-list-idx as key.</span>
-<span class="sd">        feature_containers (dict): A dictionary containing :py:class:`pingu.corpus.assets.FeatureContainer` objects with the feature-idx as key.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">utterances</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">issuers</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">label_lists</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">feature_containers</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="nd">@property</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
@@ -207,6 +194,17 @@
     <span class="c1">#</span>
 
     <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the files in the corpus.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary containing :py:class:`pingu.corpus.assets.File` objects with the file-idx as key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">num_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return number of files. &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">)</span>
@@ -214,6 +212,17 @@
     <span class="c1">#</span>
     <span class="c1">#   Utterances</span>
     <span class="c1">#</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">utterances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the utterances in the corpus.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary containing :py:class:`pingu.corpus.assets.Utterance` objects with the utterance-idx as key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">num_utterances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -225,13 +234,50 @@
     <span class="c1">#</span>
 
     <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">issuers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the issuers in the corpus.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary containing :py:class:`pingu.corpus.assets.Issuer` objects with the issuer-idx as key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">num_issuers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the number of issuers in the dataset. &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">issuers</span><span class="p">)</span>
 
     <span class="c1">#</span>
+    <span class="c1">#   Label List</span>
+    <span class="c1">#</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">label_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the label-lists in the corpus.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary containing utterance-idx/label_list dictionaries with the label-list-idx as key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="c1">#</span>
     <span class="c1">#   Feature Container</span>
     <span class="c1">#</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">feature_containers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the feature-containers in the corpus.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary containing :py:class:`pingu.corpus.assets.FeatureContainer` objects with the feature-idx as key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">num_feature_containers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

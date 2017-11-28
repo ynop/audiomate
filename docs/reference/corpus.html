@@ -108,6 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="assets.html">pingu.corpus.assets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="io.html">pingu.corpus.io</a></li>
 <li class="toctree-l1"><a class="reference internal" href="grabber.html">pingu.corpus.grabber</a></li>
+<li class="toctree-l1"><a class="reference internal" href="subview.html">pingu.corpus.subview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="formats.html">pingu.formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">pingu.utils</a></li>
 </ul>
@@ -186,21 +187,70 @@ there are different loaders in the <a class="reference internal" href="io.html#m
 It only describes the methods for accessing data of the corpus.</p>
 <p class="rubric">Notes</p>
 <p>All paths to files should be held as absolute paths in memory.</p>
+<dl class="attribute">
+<dt id="pingu.corpus.CorpusView.feature_containers">
+<code class="descname">feature_containers</code><a class="headerlink" href="#pingu.corpus.CorpusView.feature_containers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the feature-containers in the corpus.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>files</strong> (<em>dict</em>) – A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.File" title="pingu.corpus.assets.File"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.File</span></code></a> objects with the file-idx as key.</li>
-<li><strong>utterances</strong> (<em>dict</em>) – A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.Utterance" title="pingu.corpus.assets.Utterance"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.Utterance</span></code></a> objects with the utterance-idx as key.</li>
-<li><strong>issuers</strong> (<em>dict</em>) – A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.Issuer" title="pingu.corpus.assets.Issuer"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.Issuer</span></code></a> objects with the issuer-idx as key.</li>
-<li><strong>label_lists</strong> (<em>dict</em>) – A dictionary containing utterance-idx/label_list dictionaries with the label-list-idx as key.</li>
-<li><strong>feature_containers</strong> (<em>dict</em>) – A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.FeatureContainer" title="pingu.corpus.assets.FeatureContainer"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.FeatureContainer</span></code></a> objects with the feature-idx as key.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.FeatureContainer" title="pingu.corpus.assets.FeatureContainer"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.FeatureContainer</span></code></a> objects with the feature-idx as key.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pingu.corpus.CorpusView.files">
+<code class="descname">files</code><a class="headerlink" href="#pingu.corpus.CorpusView.files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the files in the corpus.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.File" title="pingu.corpus.assets.File"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.File</span></code></a> objects with the file-idx as key.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pingu.corpus.CorpusView.issuers">
+<code class="descname">issuers</code><a class="headerlink" href="#pingu.corpus.CorpusView.issuers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the issuers in the corpus.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.Issuer" title="pingu.corpus.assets.Issuer"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.Issuer</span></code></a> objects with the issuer-idx as key.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pingu.corpus.CorpusView.label_lists">
+<code class="descname">label_lists</code><a class="headerlink" href="#pingu.corpus.CorpusView.label_lists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the label-lists in the corpus.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary containing utterance-idx/label_list dictionaries with the label-list-idx as key.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="pingu.corpus.CorpusView.name">
 <code class="descname">name</code><a class="headerlink" href="#pingu.corpus.CorpusView.name" title="Permalink to this definition">¶</a></dt>
@@ -229,6 +279,22 @@ It only describes the methods for accessing data of the corpus.</p>
 <dt id="pingu.corpus.CorpusView.num_utterances">
 <code class="descname">num_utterances</code><a class="headerlink" href="#pingu.corpus.CorpusView.num_utterances" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return number of utterances.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pingu.corpus.CorpusView.utterances">
+<code class="descname">utterances</code><a class="headerlink" href="#pingu.corpus.CorpusView.utterances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the utterances in the corpus.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary containing <a class="reference internal" href="assets.html#pingu.corpus.assets.Utterance" title="pingu.corpus.assets.Utterance"><code class="xref py py-class docutils literal"><span class="pre">pingu.corpus.assets.Utterance</span></code></a> objects with the utterance-idx as key.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
