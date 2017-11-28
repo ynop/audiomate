@@ -6,3 +6,6 @@ there are different loaders in the :py:mod:`pingu.corpus.io` and the assets used
 from .base import CorpusView
 
 from .corpus import Corpus
+
+from .subview import Subview
+from .subview import MatchingUtteranceIdxFilter
