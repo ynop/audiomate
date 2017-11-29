@@ -22,6 +22,10 @@ def sample_kaldi_ds_path():
     return os.path.join(os.path.dirname(__file__), 'kaldi_ds')
 
 
+def sample_musan_ds_path():
+    return os.path.join(os.path.dirname(__file__), 'musan_ds')
+
+
 def get_wav_file_path(name):
     return os.path.join(os.path.dirname(__file__), 'wav_files', name)
 
