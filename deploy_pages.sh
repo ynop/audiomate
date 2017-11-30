@@ -20,6 +20,8 @@ git checkout gh-pages
 rm -rf *
 cp -R ../docs/_build/html/* .
 
+touch .nojekyll
+
 git add .
 git add -u
 git commit -m "Update website"
