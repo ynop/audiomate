@@ -1,24 +1,17 @@
-# Minimal makefile for Sphinx documentation
+# Makefile for Sphinx documentation
 #
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = pingu
-SOURCEDIR     = source
-BUILDDIR      = build
+SOURCEDIR     = .
+BUILDDIR      = _build
 
 # Put it first so that "make" without argument is like "make help".
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: html
-
-html:
-	$(SPHINXBUILD) -b html -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source ../docs
-	@echo
-	@echo "Build finished. The HTML pages are in ../docs"
-	
 .PHONY: help Makefile
 
 # Catch-all target: route all unknown targets to Sphinx using the new

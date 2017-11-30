@@ -23,7 +23,10 @@ setup(name='pingu',
       include_package_data=True,
       zip_safe=False,
       test_suite='nose.collector',
-      tests_require=['nose'],
+      extras_require={
+          'test': ['nose'],
+          'docs': ['Sphinx==1.6.5', 'sphinx-rtd-theme==0.2.5b1']
+      },
       entry_points={
       }
       )
