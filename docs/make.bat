@@ -1,19 +1,17 @@
 @ECHO OFF
 
-pushd %~dp0
-
 REM Command file for Sphinx documentation
 
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build
 )
-set SOURCEDIR=source
-set BUILDDIR=build
+set SOURCEDIR=.
+set BUILDDIR=_build
 set SPHINXPROJ=pingu
 
 if "%1" == "" goto help
 
-%SPHINXBUILD% >NUL 2>NUL
+%SPHINXBUILD% 2> nul
 if errorlevel 9009 (
 	echo.
 	echo.The 'sphinx-build' command was not found. Make sure you have Sphinx
@@ -33,4 +31,3 @@ goto end
 %SPHINXBUILD% -M help %SOURCEDIR% %BUILDDIR% %SPHINXOPTS%
 
 :end
-popd
