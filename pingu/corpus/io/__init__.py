@@ -5,9 +5,17 @@ All loader implementations base on :py:class:`pingu.corpus.io.CorpusLoader`.
 """
 
 from .base import CorpusLoader
-from .default import DefaultLoader
 from .broadcast import BroadcastLoader
+from .default import DefaultLoader
 from .kaldi import KaldiLoader
+
+__loaders = {}
+for cls in CorpusLoader.__subclasses__():
+    __loaders[cls.type()] = cls
+
+
+class UnknownLoaderException(Exception):
+    pass
 
 
 def available_loaders():
@@ -25,10 +33,7 @@ def available_loaders():
             "kaldi" : pingu.corpus.io.KaldiLoader
         }
     """
-    return {
-        DefaultLoader.type(): DefaultLoader,
-        BroadcastLoader.type(): BroadcastLoader
-    }
+    return __loaders
 
 
 def create_loader_of_type(type_name):
@@ -43,5 +48,7 @@ def create_loader_of_type(type_name):
     """
     loaders = available_loaders()
 
-    if type_name in loaders.keys():
-        return loaders[type_name]()
+    if type_name not in loaders.keys():
+        raise UnknownLoaderException('Unknown loader: %s' % (type_name, ))
+
+    return loaders[type_name]()
