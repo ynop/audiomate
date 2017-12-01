@@ -16,9 +16,11 @@ git clone "$REPO" "$TEMP_DIR"
 cd "$TEMP_DIR"
 
 # Remove old contents, copy new contents into place, commit and push everything
-git checkout -b gh-pages
+git checkout -t origin/gh-pages
 rm -rf *
 cp -R ../docs/_build/html/* .
+
+touch .nojekyll
 
 git add .
 git add -u
