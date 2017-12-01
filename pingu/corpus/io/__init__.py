@@ -8,6 +8,7 @@ from .base import CorpusLoader
 from .broadcast import BroadcastLoader
 from .default import DefaultLoader
 from .kaldi import KaldiLoader
+from .musan import MusanLoader
 
 __loaders = {}
 for cls in CorpusLoader.__subclasses__():
