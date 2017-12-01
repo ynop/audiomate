@@ -68,7 +68,10 @@ class Subview(base.CorpusView):
     def __init__(self, corpus, filter_criteria=[]):
         self.corpus = corpus
 
-        self.filter_criteria = filter_criteria
+        if isinstance(filter_criteria, list):
+            self.filter_criteria = filter_criteria
+        else:
+            self.filter_criteria = [filter_criteria]
 
     @property
     def name(self):
