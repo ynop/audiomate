@@ -52,6 +52,44 @@ class Splitter(object):
 
         utterance_idxs = list(self.corpus.utterances.keys())
         splits = Splitter.get_identifiers_randomly_splitted(identifiers=utterance_idxs, proportions=proportions)
+
+        return self._subviews_from_utterance_splits(splits)
+
+    def split_by_proportionally_distribute_labels(self, proportions={}):
+        """
+        Split the corpus into subsets, so the occurrence of the labels is distributed amongst the subsets according to the given proportions.
+
+        Args:
+            proportions (dict): A dictionary containing the relative size of the target subsets. The key is an identifier for the subset.
+
+        Returns:
+            (dict): A dictionary containing the subsets with the identifier from the input as key.
+        """
+
+        identifiers = {}
+
+        for utt_idx in self.corpus.utterances.keys():
+            per_utterance_count = collections.defaultdict(int)
+
+            for label_lists in self.corpus.label_lists.values():
+                if utt_idx in label_lists.keys():
+                    label_list = label_lists[utt_idx]
+
+                    for label_value, count in label_list.label_count().items():
+                        per_utterance_count[label_value] += count
+
+            identifiers[utt_idx] = per_utterance_count
+
+        splits = Splitter.get_identifiers_splitted_by_weights(identifiers, proportions)
+
+        return self._subviews_from_utterance_splits(splits)
+
+    def _subviews_from_utterance_splits(self, splits):
+        """
+        Create subviews from a dict containing utterance-ids for each subview.
+
+        e.g. {'train': ['utt-1', 'utt-2'], 'test': [...], ...}
+        """
         subviews = {}
 
         for idx, subview_utterances in splits.items():

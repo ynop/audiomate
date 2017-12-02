@@ -7,17 +7,25 @@ from .. import resources
 
 class SplitterTest(unittest.TestCase):
     def setUp(self):
-        self.corpus = resources.create_dataset()
+        self.corpus = resources.create_multi_label_corpus()
         self.splitter = splitting.Splitter(self.corpus)
 
     def test_split_by_number_of_utterances(self):
         res = self.splitter.split_by_number_of_utterances({
             'train': 0.6,
-            'test': 0.4
+            'test': 0.2
         })
 
-        self.assertEqual(3, res['train'].num_utterances)
+        self.assertEqual(6, res['train'].num_utterances)
         self.assertEqual(2, res['test'].num_utterances)
+
+    def test_split_by_proportionally_distribute_labels(self):
+        res = self.splitter.split_by_proportionally_distribute_labels({
+            'train': 0.6,
+            'test': 0.2
+        })
+
+        self.assertEqual(self.corpus.num_utterances, sum([sv.num_utterances for sv in res.values()]))
 
     def test_absolute_proportions(self):
         res = self.splitter.absolute_proportions({
