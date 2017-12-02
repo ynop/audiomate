@@ -1,3 +1,4 @@
+import collections
 import heapq
 
 
@@ -145,6 +146,32 @@ class LabelList(object):
 
         all_labels = set([l.value for l in self])
         return sorted(all_labels)
+
+    def label_count(self):
+        """
+        Return for each label the number of occurrences within the list.
+
+        Returns:
+            dict: A dictionary container for every label-value (key) the number of occurrences (value).
+
+        Example::
+            >>> ll = assets.LabelList(labels=[
+            >>>     assets.Label('a', 3.2, 4.5),
+            >>>     assets.Label('b', 5.1, 8.9),
+            >>>     assets.Label('a', 7.2, 10.5),
+            >>>     assets.Label('b', 10.5, 14),
+            >>>     assets.Label('a', 15, 18)
+            >>> ])
+            >>> ll.label_count()
+            {'a': 3 'b': 2}
+        """
+
+        occurrences = collections.defaultdict(int)
+
+        for label in self:
+            occurrences[label.value] += 1
+
+        return occurrences
 
     def __getitem__(self, item):
         return self.labels.__getitem__(item)
