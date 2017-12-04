@@ -13,7 +13,7 @@ def index_name_if_in_list(name, name_list, suffix='', prefix=''):
 
     Parameters:
         name (str): Name
-        name_list (list): List of names that the new name must differ from.
+        name_list (iterable): List of names that the new name must differ from.
         suffix (str): The suffix to append after the index.
         prefix (str): The prefix to append in front of the index.
 

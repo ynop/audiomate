@@ -1,6 +1,7 @@
 import os
 import collections
 import shutil
+import copy
 
 from pingu.corpus import assets
 from pingu.utils import naming
@@ -134,7 +135,7 @@ class Corpus(base.CorpusView):
 
     def new_file(self, path, file_idx, copy_file=False):
         """
-        Adds a new file to the dataset with the given data.
+        Adds a new file to the corpus with the given data.
 
         Parameters:
             path (str): Path of the file to add.
@@ -170,13 +171,42 @@ class Corpus(base.CorpusView):
 
         return new_file
 
+    def import_files(self, files):
+        """
+        Add the given files/file to the corpus.
+        If any of the given file-ids already exists, a suffix is appended so it is unique.
+
+        Args:
+            files (list): Either a list of or a single :py:class:`pingu.corpus.assets.File`.
+
+        Returns:
+            dict: A dictionary containing file idx mappings (old-file-idx/file-instance).
+                  If a file is imported, whose id already exists this mapping can be used to check the new id.
+        """
+
+        if isinstance(files, assets.File):
+            files = [files]
+
+        idx_mapping = {}
+
+        for file in files:
+            idx_mapping[file.idx] = file
+
+            # Add index to idx if already existing
+            if file.idx in self._files.keys():
+                file.idx = naming.index_name_if_in_list(file.idx, self._files.keys())
+
+            self._files[file.idx] = file
+
+        return idx_mapping
+
     #
     #   Utterances
     #
 
     def new_utterance(self, utterance_idx, file_idx, issuer_idx=None, start=0, end=-1):
         """
-        Add a new utterance to the dataset with the given data.
+        Add a new utterance to the corpus with the given data.
 
         Parameters:
             file_idx (str): The file id the utterance is in.
@@ -192,7 +222,7 @@ class Corpus(base.CorpusView):
         new_utt_idx = utterance_idx
 
         # Check if there is a file with the given idx
-        if not file_idx in self._files.keys():
+        if file_idx not in self._files.keys():
             raise ValueError('No file in dataset with id {} to add utterance.'.format(file_idx))
 
         # Add index to idx if already existing
@@ -203,6 +233,43 @@ class Corpus(base.CorpusView):
         self._utterances[new_utt_idx] = new_utt
 
         return new_utt
+
+    def import_utterances(self, utterances):
+        """
+        Add the given utterances/utterance to the corpus.
+        If any of the given utterance-ids already exists, a suffix is appended so it is unique.
+
+        Args:
+            utterances (list): Either a list of or a single :py:class:`pingu.corpus.assets.Utterance`.
+
+        Returns:
+            dict: A dictionary containing file idx mappings (old-utterance-idx/utterance-instance).
+                  If a utterance is imported, whose id already exists this mapping can be used to check the new id.
+        """
+
+        if isinstance(utterances, assets.Utterance):
+            utterances = [utterances]
+
+        idx_mapping = {}
+
+        for utterance in utterances:
+            idx_mapping[utterance.idx] = utterance
+
+            # Check if there is a file with the given idx
+            if utterance.file_idx not in self._files.keys():
+                raise ValueError('No file in corpus with id {} to add utterance {}.'.format(utterance.file_idx, utterance.idx))
+
+            # Check if there is a issuer with the given idx
+            if utterance.issuer_idx is not None and utterance.issuer_idx not in self._issuers.keys():
+                raise ValueError('No issuer in corpus with id {} to add utterance {}.'.format(utterance.issuer_idx, utterance.idx))
+
+            # Add index to idx if already existing
+            if utterance.idx in self._utterances.keys():
+                utterance.idx = naming.index_name_if_in_list(utterance.idx, self._utterances.keys())
+
+            self._utterances[utterance.idx] = utterance
+
+        return idx_mapping
 
     #
     #   Issuer
@@ -230,6 +297,35 @@ class Corpus(base.CorpusView):
         self._issuers[new_issuer_idx] = new_issuer
 
         return new_issuer
+
+    def import_issuers(self, issuers):
+        """
+        Add the given issuers/issuer to the corpus.
+        If any of the given issuer-ids already exists, a suffix is appended so it is unique.
+
+        Args:
+            issuers (list): Either a list of or a single :py:class:`pingu.corpus.assets.Issuer`.
+
+        Returns:
+            dict: A dictionary containing file idx mappings (old-issuer-idx/issuer-instance).
+                  If a issuer is imported, whose id already exists this mapping can be used to check the new id.
+        """
+
+        if isinstance(issuers, assets.Issuer):
+            issuers = [issuers]
+
+        idx_mapping = {}
+
+        for issuer in issuers:
+            idx_mapping[issuer.idx] = issuer
+
+            # Add index to idx if already existing
+            if issuer.idx in self._issuers.keys():
+                issuer.idx = naming.index_name_if_in_list(issuer.idx, self._issuers.keys())
+
+            self._issuers[issuer.idx] = issuer
+
+        return idx_mapping
 
     #
     #   Labeling
@@ -263,6 +359,22 @@ class Corpus(base.CorpusView):
         self._label_lists[new_label_list.idx][utterance_idx] = new_label_list
 
         return new_label_list
+
+    def import_label_list(self, utterance_idx, label_list):
+        """
+        Add the given label_list to the corpus for the given utterance-idx.
+        If the label-list-id already exists, it is overridden
+
+        Args:
+            label_list (LabelList): A label-list
+            utterance_idx (str): A utterance-id for which to add the given label-list
+        """
+
+        # Check if there is a utterance with the given idx
+        if utterance_idx not in self._utterances.keys():
+            raise ValueError('No utterance in corpus with id {} to add label-list {}.'.format(utterance_idx, label_list.idx))
+
+        self._label_lists[label_list.idx][utterance_idx] = label_list
 
     #
     #   FEATURES
@@ -300,3 +412,45 @@ class Corpus(base.CorpusView):
         self._feature_containers[new_feature_idx] = container
 
         return container
+
+    #
+    #   Creation
+    #
+
+    @classmethod
+    def from_corpus(cls, corpus):
+        """
+        Create a new modifiable corpus from any other CorpusView.
+        This for example can be used to create a independent modifiable corpus from a subview.
+
+        Args:
+            corpus (CorpusView): The corpus to create a copy from.
+
+        Returns:
+            Corpus: A new corpus with the same data as the given one.
+        """
+
+        ds = Corpus()
+
+        # Files
+        files = copy.deepcopy(list(corpus.files.values()))
+        file_mapping = ds.import_files(files)
+
+        # Issuers
+        issuers = copy.deepcopy(list(corpus.issuers.values()))
+        issuer_mapping = ds.import_issuers(issuers)
+
+        # Utterances, with replacing changed file- and issuer-ids
+        utterances = copy.deepcopy(list(corpus.utterances.values()))
+        for utterance in utterances:
+            utterance.file_idx = file_mapping[utterance.file_idx].idx
+            utterance.issuer_idx = issuer_mapping[utterance.issuer_idx].idx
+        utterance_mapping = ds.import_utterances(utterances)
+
+        # Label-lists
+        for idx, label_lists in corpus.label_lists.items():
+            for utt_idx, label_list in label_lists.items():
+                new_utt_idx = utterance_mapping[utt_idx].idx
+                ds.import_label_list(new_utt_idx, copy.deepcopy(label_list))
+
+        return ds
