@@ -92,20 +92,18 @@ class MusanCorpusLoaderTest(unittest.TestCase):
     def test_load_label_lists(self):
         ds = self.loader.load(self.test_path)
 
-        self.assertIn('music', ds.label_lists.keys())
-        self.assertIn('noise', ds.label_lists.keys())
+        self.assertIn('audio_type', ds.label_lists.keys())
 
-        self.assertEqual(1, len(ds.label_lists['music'].keys()))
-        self.assertEqual(2, len(ds.label_lists['noise'].keys()))
+        self.assertEqual(5, len(ds.label_lists['audio_type'].keys()))
 
-        self.assertIn('music-fma-0000', ds.label_lists['music'].keys())
-        self.assertIn('noise-free-sound-0000', ds.label_lists['noise'].keys())
-        self.assertIn('noise-free-sound-0001', ds.label_lists['noise'].keys())
+        self.assertIn('music-fma-0000', ds.label_lists['audio_type'].keys())
+        self.assertIn('noise-free-sound-0000', ds.label_lists['audio_type'].keys())
+        self.assertIn('noise-free-sound-0001', ds.label_lists['audio_type'].keys())
 
-        self.assertEqual(1, len(ds.label_lists['music']['music-fma-0000'].labels))
-        self.assertEqual(1, len(ds.label_lists['noise']['noise-free-sound-0000'].labels))
-        self.assertEqual(1, len(ds.label_lists['noise']['noise-free-sound-0001'].labels))
+        self.assertEqual(1, len(ds.label_lists['audio_type']['music-fma-0000'].labels))
+        self.assertEqual(1, len(ds.label_lists['audio_type']['noise-free-sound-0000'].labels))
+        self.assertEqual(1, len(ds.label_lists['audio_type']['noise-free-sound-0001'].labels))
 
-        self.assertEqual('music', ds.label_lists['music']['music-fma-0000'].labels[0].value)
-        self.assertEqual('noise', ds.label_lists['noise']['noise-free-sound-0000'].labels[0].value)
-        self.assertEqual('noise', ds.label_lists['noise']['noise-free-sound-0001'].labels[0].value)
+        self.assertEqual('music', ds.label_lists['audio_type']['music-fma-0000'].labels[0].value)
+        self.assertEqual('noise', ds.label_lists['audio_type']['noise-free-sound-0000'].labels[0].value)
+        self.assertEqual('noise', ds.label_lists['audio_type']['noise-free-sound-0001'].labels[0].value)
