@@ -5,12 +5,15 @@ This module contains functionality for splitting a corpus.
 import random
 import collections
 
-from . import subview
+from pingu.corpus import subview
 
 
 class Splitter(object):
     """
-    A splitter provides different methods for splitting a corpus into different subsets.
+    A splitter provides methods for splitting a corpus into different subsets.
+    It provides different approaches for splitting the corpus. (Methods indicated by ``split_by_``)
+    These methods mostly take some proportions parameter, which defines how big (in relation) the subsets should be.
+    The subsets are returned as :py:class:`pingu.corpus.Subview`.
 
     Args:
         corpus (Corpus): The corpus that should be splitted.
@@ -113,7 +116,10 @@ class Splitter(object):
 
         Example::
 
-            >>> Splitter.get_identifiers_randomly_splitted(['a', 'b', 'c', 'd'], proportions={'melvin' : 0.5, 'timmy' : 0.5})
+            >>> Splitter.get_identifiers_randomly_splitted(
+            >>>     identifiers=['a', 'b', 'c', 'd'],
+            >>>     proportions={'melvin' : 0.5, 'timmy' : 0.5}
+            >>> )
             {'melvin' : ['a', 'c'], 'timmy' : ['b', 'd']}
         """
 
@@ -140,6 +146,11 @@ class Splitter(object):
 
         Returns:
             dict: Dictionary with absolute proportions and same identifiers as key.
+
+        Example::
+
+            >>> Splitter.absolute_proportions({'train': 0.5, 'test': 0.5}, 100)
+            {'train': 50, 'test': 50}
         """
 
         # first create absolute values by flooring non-integer portions

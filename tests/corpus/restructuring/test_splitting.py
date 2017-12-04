@@ -1,8 +1,7 @@
 import unittest
 
-from pingu.corpus import splitting
-
-from .. import resources
+from pingu.corpus.restructuring import splitting
+from tests import resources
 
 
 class SplitterTest(unittest.TestCase):
