@@ -60,7 +60,7 @@ class MusanLoader(base.CorpusLoader):
 
                         corpus.new_file(file_path, file_idx=file_idx, copy_file=False)
                         corpus.new_utterance(utterance_idx, file_idx, issuer_idx)
-                        corpus.new_label_list(utterance_idx, idx=type_name, labels=[assets.Label(type_name)])
+                        corpus.new_label_list(utterance_idx, idx='audio_type', labels=[assets.Label(type_name)])
 
         return corpus
 
