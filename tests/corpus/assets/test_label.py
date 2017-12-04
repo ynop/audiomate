@@ -40,6 +40,9 @@ class CorpusTest(unittest.TestCase):
         self.assertEqual(14, r[1])
         self.assertIn(ll[3], r[2])
 
+        with self.assertRaises(StopIteration):
+            next(ranges)
+
     def test_ranges_with_empty(self):
         ll = assets.LabelList(labels=[
             assets.Label('a', 3.2, 4.5),
@@ -80,3 +83,49 @@ class CorpusTest(unittest.TestCase):
         self.assertEqual(10.5, r[0])
         self.assertEqual(14, r[1])
         self.assertIn(ll[3], r[2])
+
+        with self.assertRaises(StopIteration):
+            next(ranges)
+
+    def test_ranges_include_labels(self):
+        ll = assets.LabelList(labels=[
+            assets.Label('a', 3.2, 4.5),
+            assets.Label('b', 5.1, 8.9)
+        ])
+
+        ranges = ll.ranges(include_labels=['a'])
+
+        r = next(ranges)
+        self.assertEqual(3.2, r[0])
+        self.assertEqual(4.5, r[1])
+        self.assertIn(ll[0], r[2])
+
+        with self.assertRaises(StopIteration):
+            next(ranges)
+
+    def test_ranges_zero_to_end(self):
+        ll = assets.LabelList(labels=[
+            assets.Label('a', 0, -1),
+            assets.Label('b', 5.1, 8.9)
+        ])
+
+        ranges = ll.ranges()
+
+        r = next(ranges)
+        self.assertEqual(0, r[0])
+        self.assertEqual(5.1, r[1])
+        self.assertIn(ll[0], r[2])
+
+        r = next(ranges)
+        self.assertEqual(5.1, r[0])
+        self.assertEqual(8.9, r[1])
+        self.assertIn(ll[0], r[2])
+        self.assertIn(ll[1], r[2])
+
+        r = next(ranges)
+        self.assertEqual(8.9, r[0])
+        self.assertEqual(-1, r[1])
+        self.assertIn(ll[0], r[2])
+
+        with self.assertRaises(StopIteration):
+            next(ranges)

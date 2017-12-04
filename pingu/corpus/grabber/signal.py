@@ -17,16 +17,18 @@ class FramedSignalGrabber(object):
         label_list_idx (str): Only label-lists with this id will be considered.
         frame_length (int): Number of audio samples per frame.
         hop_size (int): Number of audio samples from one to the next frame.
+        include_labels (list): If not empty, only the label values in the list will be grabbed.
 
     Attributes:
         labels (list): List of all labels occuring in the output of the grabber.
     """
 
-    def __init__(self, corpus, label_list_idx='default', frame_length=400, hop_size=160):
+    def __init__(self, corpus, label_list_idx='default', frame_length=400, hop_size=160, include_labels=[]):
         self.corpus = corpus
         self.label_list_idx = label_list_idx
         self.frame_length = frame_length
         self.hop_size = hop_size
+        self.include_labels = include_labels
 
         self.labels = self._extract_labels()
         self.ranges = self._extract_ranges()
@@ -68,6 +70,9 @@ class FramedSignalGrabber(object):
 
         for utterance_idx, label_list in label_lists.items():
             all_labels.update(label_list.label_values())
+
+        if len(self.include_labels) > 0:
+            all_labels = all_labels.intersection(set(self.include_labels))
 
         return sorted(all_labels)
 
@@ -111,7 +116,7 @@ class FramedSignalGrabber(object):
         ranges = []
         offset = frame_offset
 
-        for (range_start, range_end, labels) in label_list.ranges():
+        for (range_start, range_end, labels) in label_list.ranges(include_labels=self.include_labels):
             start, length = self._range_start_len_relative_to_file_in_samples(utterance, file_data, range_start, range_end, sample_rate)
             num_frames = self._frames_from_length(length)
             label_vec = self._label_vec_from_labels(labels)

@@ -62,12 +62,13 @@ class LabelList(object):
         """
         self.labels.extend(labels)
 
-    def ranges(self, yield_ranges_without_labels=False):
+    def ranges(self, yield_ranges_without_labels=False, include_labels=[]):
         """
         Generate all ranges of the label-list. A range is defined as a part of the label-list for which the same labels are defined.
 
         Args:
             yield_ranges_without_labels (bool): If True also yields ranges for which no labels are defined.
+            include_labels (list): If not empty, only the label values in the list will be considered.
 
         Returns:
             generator: A generator which yields one range (tuple start/end/list-of-labels) at a time.
@@ -90,6 +91,7 @@ class LabelList(object):
 
         # all label start events
         events = [(l.start, 1, l) for l in sorted(self.labels, key=lambda x: x.start)]
+        labels_to_end = False
         heapq.heapify(events)
 
         current_range_labels = []
@@ -100,19 +102,27 @@ class LabelList(object):
             label = next_event[2]
 
             # Return current range if its not the first event and not the same time as the previous event
-            if -1 < current_range_start < next_event[0] > current_range_start:
+            if -1 < current_range_start < next_event[0]:
 
                 if len(current_range_labels) > 0 or yield_ranges_without_labels:
                     yield (current_range_start, next_event[0], list(current_range_labels))
 
             # Update labels and add the "end" event
             if next_event[1] == 1:
-                current_range_labels.append(label)
-                heapq.heappush(events, (label.end, -1, label))
+                if len(include_labels) == 0 or label.value in include_labels:
+                    current_range_labels.append(label)
+
+                    if label.end == -1:
+                        labels_to_end = True
+                    else:
+                        heapq.heappush(events, (label.end, -1, label))
             else:
                 current_range_labels.remove(label)
 
             current_range_start = next_event[0]
+
+        if labels_to_end and len(current_range_labels) > 0:
+            yield (current_range_start, -1, list(current_range_labels))
 
     def label_values(self):
         """

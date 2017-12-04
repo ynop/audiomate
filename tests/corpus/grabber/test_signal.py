@@ -42,7 +42,8 @@ class FramedSignalGrabberTest(unittest.TestCase):
 
         ds.new_label_list('a1', 'dudelida', labels=[
             assets.Label('chi', 0.0, 1.0),
-            assets.Label('cha', 1.0, 1.25)
+            assets.Label('cha', 1.0, 1.25),
+            assets.Label('wottinid', 1.25, 1.3)
         ])
 
         ds.new_label_list('a2', 'dudelida', labels=[
@@ -53,7 +54,7 @@ class FramedSignalGrabberTest(unittest.TestCase):
             assets.Label('chi', 0.3, 0.9)
         ])
 
-        gr = grabber.FramedSignalGrabber(ds, label_list_idx='dudelida', frame_length=4, hop_size=2)
+        gr = grabber.FramedSignalGrabber(ds, label_list_idx='dudelida', frame_length=4, hop_size=2, include_labels=['chi', 'cha'])
 
         self.assertEqual(6, len(gr))
 
