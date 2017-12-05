@@ -129,3 +129,18 @@ class CorpusTest(unittest.TestCase):
 
         with self.assertRaises(StopIteration):
             next(ranges)
+
+    def test_label_count(self):
+        ll = assets.LabelList(labels=[
+            assets.Label('a', 3.2, 4.5),
+            assets.Label('b', 5.1, 8.9),
+            assets.Label('c', 7.2, 10.5),
+            assets.Label('a', 10.5, 14),
+            assets.Label('c', 13, 14)
+        ])
+
+        res = ll.label_count()
+
+        self.assertEqual(2, res['a'])
+        self.assertEqual(1, res['b'])
+        self.assertEqual(2, res['c'])
