@@ -63,7 +63,7 @@ class LabelList(object):
         """
         self.labels.extend(labels)
 
-    def ranges(self, yield_ranges_without_labels=False, include_labels=[]):
+    def ranges(self, yield_ranges_without_labels=False, include_labels=None):
         """
         Generate all ranges of the label-list. A range is defined as a part of the label-list for which the same labels are defined.
 
@@ -110,7 +110,7 @@ class LabelList(object):
 
             # Update labels and add the "end" event
             if next_event[1] == 1:
-                if len(include_labels) == 0 or label.value in include_labels:
+                if include_labels is None or label.value in include_labels:
                     current_range_labels.append(label)
 
                     if label.end == -1:

@@ -18,19 +18,26 @@ class FramedSignalGrabber(object):
         frame_length (int): Number of audio samples per frame.
         hop_size (int): Number of audio samples from one to the next frame.
         include_labels (list): If not empty, only the label values in the list will be grabbed.
+        predefined_labels (list): If not empty, this is used as output structure. Only the given labels will be included.
 
     Attributes:
-        labels (list): List of all labels occuring in the output of the grabber.
+        ranges (list): List of all ranges (frame_offset, num_frames, start_sample, num_samples, file_data, label_vec).
+        labels (list): List of all labels occurring in the output of the grabber.
     """
 
-    def __init__(self, corpus, label_list_idx='default', frame_length=400, hop_size=160, include_labels=[]):
+    def __init__(self, corpus, label_list_idx='default', frame_length=400, hop_size=160, include_labels=None, predefined_labels=None):
         self.corpus = corpus
         self.label_list_idx = label_list_idx
         self.frame_length = frame_length
         self.hop_size = hop_size
         self.include_labels = include_labels
 
-        self.labels = self._extract_labels()
+        if predefined_labels is not None:
+            self.labels = list(predefined_labels)
+            self.include_labels = self.labels
+        else:
+            self.labels = self._extract_labels()
+
         self.ranges = self._extract_ranges()
 
     def __len__(self):
@@ -71,7 +78,7 @@ class FramedSignalGrabber(object):
         for utterance_idx, label_list in label_lists.items():
             all_labels.update(label_list.label_values())
 
-        if len(self.include_labels) > 0:
+        if self.include_labels is not None:
             all_labels = all_labels.intersection(set(self.include_labels))
 
         return sorted(all_labels)
