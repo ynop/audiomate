@@ -1,0 +1,28 @@
+language: python
+
+python:
+  - 3.5
+  - 3.6
+  
+branches:
+  except:
+    - gh-pages
+
+build:
+
+  pre_ci_boot:
+    image_name: drydock/u14pytall
+    image_tag: latest
+    pull: true
+    
+  ci:  
+    - "pip install -e ."
+    - "pip install -e .[tests]"
+    
+    #Create folders for test and code coverage
+    - mkdir -p shippable/testresults
+    - mkdir -p shippable/codecoverage
+
+    #Run test and code coverage and output results to the right folder
+    - pytest --junitxml=shippable/testresults/tests.xml
+    - pytest --cov=pingu --cov-report=xml:shippable/codecoverage/coverage.xml
