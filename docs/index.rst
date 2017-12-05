@@ -28,6 +28,7 @@ Example for loading a corpus and using the FramedSignalGrabber to retrieve the a
     :maxdepth: 2
     :caption: Documentation
 
+    documentation/concept
     documentation/formats
 
 .. toctree::
