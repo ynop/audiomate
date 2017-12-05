@@ -93,7 +93,9 @@ class FramedSignalGrabber(object):
 
         label_lists = self.corpus.label_lists[self.label_list_idx]
 
-        for utterance in self.corpus.utterances.values():
+        for utterance_idx in sorted(self.corpus.utterances.keys()):
+            utterance = self.corpus.utterances[utterance_idx]
+
             if utterance.idx in label_lists.keys():
 
                 # Get matrix with audio data of the file that contains the utterance

@@ -48,19 +48,20 @@ class MusanLoader(base.CorpusLoader):
                     annotations = textfile.read_separated_lines_with_first_key(annotations_path, separator=' ',
                                                                                max_columns=ANN_NUM_COLUMS_[type_name])
 
-                with os.scandir(source_directory) as it:
-                    for entry in it:
-                        if not entry.name.endswith('.wav'):
-                            continue
+                it = os.scandir(source_directory)
 
-                        file_path = os.path.join(source_directory, entry.name)
-                        file_idx = entry.name[0:-4]  # chop of .wav
-                        utterance_idx = file_idx  # every file is a separate utterance
-                        issuer_idx = create_or_get_issuer[type_name](corpus, file_idx, annotations)
+                for entry in it:
+                    if not entry.name.endswith('.wav'):
+                        continue
 
-                        corpus.new_file(file_path, file_idx=file_idx, copy_file=False)
-                        corpus.new_utterance(utterance_idx, file_idx, issuer_idx)
-                        corpus.new_label_list(utterance_idx, idx='audio_type', labels=[assets.Label(type_name)])
+                    file_path = os.path.join(source_directory, entry.name)
+                    file_idx = entry.name[0:-4]  # chop of .wav
+                    utterance_idx = file_idx  # every file is a separate utterance
+                    issuer_idx = create_or_get_issuer[type_name](corpus, file_idx, annotations)
+
+                    corpus.new_file(file_path, file_idx=file_idx, copy_file=False)
+                    corpus.new_utterance(utterance_idx, file_idx, issuer_idx)
+                    corpus.new_label_list(utterance_idx, idx='audio_type', labels=[assets.Label(type_name)])
 
         return corpus
 
@@ -70,12 +71,12 @@ class MusanLoader(base.CorpusLoader):
     @staticmethod
     def _directories(path):
         directories = {}
-        with os.scandir(path) as it:
-            for entry in it:
-                if not entry.is_dir():
-                    continue
+        it = os.scandir(path)
+        for entry in it:
+            if not entry.is_dir():
+                continue
 
-                directories[entry.name] = os.path.join(path, entry.name)
+            directories[entry.name] = os.path.join(path, entry.name)
 
         return directories
 

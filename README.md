@@ -1,5 +1,8 @@
 # PINGU
 
+[![Run Status](https://api-ci.cloudlab.zhaw.ch/projects/5a267615fdb6f705007a31e6/badge?branch=master)](https://www-ci.cloudlab.zhaw.ch/github/ynop/pingu)
+[![Coverage Badge](https://api-ci.cloudlab.zhaw.ch/projects/5a267615fdb6f705007a31e6/coverageBadge?branch=master)](https://www-ci.cloudlab.zhaw.ch/github/ynop/pingu)
+
 Pingu is a library for easy access to audio datasets. It provides the datastructures for accessing/loading different datasets in a generic way. This should ease the use of audio datasets for example for machine learning tasks.
 
 Documentation: https://ynop.github.io/pingu/
