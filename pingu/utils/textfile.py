@@ -24,9 +24,10 @@ def read_separated_lines(path, separator=' ', max_columns=-1):
     return list(gen)
 
 
-def read_separated_lines_with_first_key(path, separator=' ', max_columns=-1):
+def read_separated_lines_with_first_key(path: str, separator: str = ' ', max_columns: int = -1):
     """
-    Reads the separated lines of a file and return a dictionary with the first column as keys, value is a list with the rest of the columns.
+    Reads the separated lines of a file and return a dictionary with the first column as keys, value
+    is a list with the rest of the columns.
 
     Parameters:
         path (str): Path to the file to read.
@@ -74,13 +75,16 @@ def read_key_value_lines(path, separator=' ', default_value=''):
 
 def write_separated_lines(path, values, separator=' ', sort_by_column=0):
     """
-    Writes list or dict to file line by line. Dict can have list as value then they written separated on the line.
+    Writes list or dict to file line by line. Dict can have list as value then they written
+    separated on the line.
 
     Parameters:
         path (str): Path to write file to.
         values (dict, list): A dictionary or a list to write to the file.
         separator (str): Separator to use between columns.
-        sort_by_column (int): if >= 0, sorts the list by the given index, if its 0 or 1 and its a dictionary it sorts it by either the key (0) or value (1). By default 0, meaning sorted by the first column or the key.
+        sort_by_column (int): if >= 0, sorts the list by the given index, if its 0 or 1 and its a
+                              dictionary it sorts it by either the key (0) or value (1). By default
+                              0, meaning sorted by the first column or the key.
     """
     f = open(path, 'w', encoding='utf-8')
 
@@ -109,7 +113,8 @@ def write_separated_lines(path, values, separator=' ', sort_by_column=0):
     f.close()
 
 
-def read_separated_lines_generator(path, separator=' ', max_columns=-1, ignore_lines_starting_with=[]):
+def read_separated_lines_generator(path, separator=' ', max_columns=-1,
+                                   ignore_lines_starting_with=[]):
     """
     Creates a generator through all lines of a file and returns the splitted line.
 

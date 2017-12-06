@@ -56,7 +56,9 @@ class DefaultLoader(base.CorpusLoader):
 
         # Read utterances
         utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
-        for utterance_idx, utt_info in textfile.read_separated_lines_with_first_key(utterance_path, separator=' ', max_columns=4).items():
+        utterances = textfile.read_separated_lines_with_first_key(utterance_path, separator=' ',
+                                                                  max_columns=4)
+        for utterance_idx, utt_info in utterances.items():
             issuer_idx = None
             start = 0
             end = -1
@@ -70,7 +72,8 @@ class DefaultLoader(base.CorpusLoader):
             if utterance_idx in utt_issuers.keys():
                 issuer_idx = utt_issuers[utterance_idx]
 
-            corpus.new_utterance(utterance_idx, utt_info[0], issuer_idx=issuer_idx, start=start, end=end)
+            corpus.new_utterance(utterance_idx, utt_info[0], issuer_idx=issuer_idx, start=start,
+                                 end=end)
 
         # Read labels
         for label_file in glob.glob(os.path.join(path, '{}_*.txt'.format(LABEL_FILE_PREFIX))):
@@ -79,8 +82,13 @@ class DefaultLoader(base.CorpusLoader):
 
             utterance_labels = collections.defaultdict(list)
 
-            for record in textfile.read_separated_lines_generator(label_file, separator=' ', max_columns=4):
-                utterance_labels[record[0]].append(assets.Label(record[3], float(record[1]), float(record[2])))
+            labels = textfile.read_separated_lines_generator(label_file, separator=' ',
+                                                             max_columns=4)
+            for record in labels:
+                label = record[3]
+                start = float(record[1])
+                end = float(record[2])
+                utterance_labels[record[0]].append(assets.Label(label, start, end))
 
             for utterance_idx, labels in utterance_labels.items():
                 corpus.new_label_list(utterance_idx, key, labels)
@@ -89,26 +97,33 @@ class DefaultLoader(base.CorpusLoader):
         feat_path = os.path.join(path, FEAT_CONTAINER_FILE_NAME)
 
         if os.path.isfile(feat_path):
-            for container_name, container_path in textfile.read_key_value_lines(feat_path, separator=' ').items():
-                corpus.new_feature_container(container_name, path=os.path.join(path, container_path))
+            containers = textfile.read_key_value_lines(feat_path, separator=' ')
+            for container_name, container_path in containers.items():
+                corpus.new_feature_container(container_name,
+                                             path=os.path.join(path, container_path))
 
         return corpus
 
     def _save(self, corpus, path):
         # Write files
         file_path = os.path.join(path, FILES_FILE_NAME)
-        file_records = [[file.idx, os.path.relpath(file.path, corpus.path)] for file in corpus.files.values()]
+        file_records = [[file.idx, os.path.relpath(file.path, corpus.path)] for file in
+                        corpus.files.values()]
         textfile.write_separated_lines(file_path, file_records, separator=' ', sort_by_column=0)
 
         # Write utterances
         utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
-        utterance_records = {utterance.idx: [utterance.file_idx, utterance.start, utterance.end] for utterance in corpus.utterances.values()}
-        textfile.write_separated_lines(utterance_path, utterance_records, separator=' ', sort_by_column=0)
+        utterance_records = {utterance.idx: [utterance.file_idx, utterance.start, utterance.end] for
+                             utterance in corpus.utterances.values()}
+        textfile.write_separated_lines(utterance_path, utterance_records, separator=' ',
+                                       sort_by_column=0)
 
         # Write utt_issuers
         utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
-        utt_issuer_records = {utterance.idx: utterance.issuer_idx for utterance in corpus.utterances.values()}
-        textfile.write_separated_lines(utt_issuer_path, utt_issuer_records, separator=' ', sort_by_column=0)
+        utt_issuer_records = {utterance.idx: utterance.issuer_idx for utterance in
+                              corpus.utterances.values()}
+        textfile.write_separated_lines(utt_issuer_path, utt_issuer_records, separator=' ',
+                                       sort_by_column=0)
 
         # Write labels
         for label_list_idx, label_lists in corpus.label_lists.items():

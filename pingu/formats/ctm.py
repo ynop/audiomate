@@ -9,7 +9,8 @@ def write_file(path, entries):
 
     Args:
         path (str): Path to write the file to.
-        entries (list): List with entries to write. (entries -> wave-file, channel, start (seconds), duration (seconds), label)
+        entries (list): List with entries to write. (entries -> wave-file, channel, start (seconds),
+                        duration (seconds), label)
 
     Example::
 
@@ -21,7 +22,7 @@ def write_file(path, entries):
         >>> write_file('/path/to/file.txt', data)
     """
 
-    textfile.write_separated_lines(path, entries, separator=" ")
+    textfile.write_separated_lines(path, entries, separator=' ')
 
 
 def read_file(path):
@@ -48,7 +49,8 @@ def read_file(path):
             ]
         }
     """
-    gen = textfile.read_separated_lines_generator(path, max_columns=6, ignore_lines_starting_with=[';;'])
+    gen = textfile.read_separated_lines_generator(path, max_columns=6,
+                                                  ignore_lines_starting_with=[';;'])
 
     utterances = collections.defaultdict(list)
 

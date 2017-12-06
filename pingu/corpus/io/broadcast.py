@@ -1,8 +1,8 @@
 import os
 
 import pingu
-from pingu.formats import audacity
 from pingu.corpus import assets
+from pingu.formats import audacity
 from pingu.utils import textfile
 from . import base
 
@@ -15,8 +15,9 @@ FEAT_CONTAINER_FILE_NAME = 'features.txt'
 
 class BroadcastLoader(base.CorpusLoader):
     """
-    This is the corpus loader which is used for corpora where a separate label file per utterance exists.
-    This especially is useful for corpora where the utterances are very long (e.g. broadcast recordings).
+    This is the corpus loader which is used for corpora where a separate label file per utterance
+    exists. This especially is useful for corpora where the utterances are very long (e.g. broadcast
+    recordings).
     """
 
     @classmethod
@@ -56,7 +57,9 @@ class BroadcastLoader(base.CorpusLoader):
 
         # Read utterances
         utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
-        for utterance_idx, utt_info in textfile.read_separated_lines_with_first_key(utterance_path, separator=' ', max_columns=4).items():
+        utterances = textfile.read_separated_lines_with_first_key(utterance_path, separator=' ',
+                                                                  max_columns=4)
+        for utterance_idx, utt_info in utterances.items():
             issuer_idx = None
             start = 0
             end = -1
@@ -70,11 +73,13 @@ class BroadcastLoader(base.CorpusLoader):
             if utterance_idx in utt_issuers.keys():
                 issuer_idx = utt_issuers[utterance_idx]
 
-            corpus.new_utterance(utterance_idx, utt_info[0], issuer_idx=issuer_idx, start=start, end=end)
+            corpus.new_utterance(utterance_idx, utt_info[0], issuer_idx=issuer_idx, start=start,
+                                 end=end)
 
         # Read labels
         label_reference_file = os.path.join(path, LABEL_FILE)
-        label_references = textfile.read_separated_lines(label_reference_file, separator=' ', max_columns=3)
+        label_references = textfile.read_separated_lines(label_reference_file, separator=' ',
+                                                         max_columns=3)
 
         for record in label_references:
             utt_idx = record[0]
@@ -93,10 +98,12 @@ class BroadcastLoader(base.CorpusLoader):
         feat_path = os.path.join(path, FEAT_CONTAINER_FILE_NAME)
 
         if os.path.isfile(feat_path):
-            for container_name, container_path in textfile.read_key_value_lines(feat_path, separator=' ').items():
-                corpus.new_feature_container(container_name, path=os.path.join(path, container_path))
+            containers = textfile.read_key_value_lines(feat_path, separator=' ')
+            for container_name, container_path in containers.items():
+                corpus.new_feature_container(container_name,
+                                             path=os.path.join(path, container_path))
 
         return corpus
 
     def _save(self, corpus, path):
-        raise NotImplementedError("There is no implementation for saving in broadcast format.")
+        raise NotImplementedError('There is no implementation for saving in broadcast format.')

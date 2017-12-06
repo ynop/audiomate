@@ -14,7 +14,8 @@ class CorpusTest(unittest.TestCase):
         self.corpus = pingu.Corpus(self.tempdir)
 
         self.corpus.files['existing_file'] = assets.File('existing_file', '../any/path.wav')
-        self.corpus.utterances['existing_utt'] = assets.Utterance('existing_utt', 'existing_file', issuer_idx='existing_issuer')
+        self.corpus.utterances['existing_utt'] = assets.Utterance('existing_utt', 'existing_file',
+                                                                  issuer_idx='existing_issuer')
         self.corpus.issuers['existing_issuer'] = assets.Issuer('existing_issuer')
 
     def tearDown(self):
@@ -29,14 +30,16 @@ class CorpusTest(unittest.TestCase):
 
         self.assertEqual(2, self.corpus.num_files)
         self.assertEqual('fid', self.corpus.files['fid'].idx)
-        self.assertEqual(os.path.abspath(os.path.join(os.getcwd(), '../some/path.wav')), self.corpus.files['fid'].path)
+        self.assertEqual(os.path.abspath(os.path.join(os.getcwd(), '../some/path.wav')),
+                         self.corpus.files['fid'].path)
 
     def test_new_file_duplicate_idx(self):
         self.corpus.new_file('../some/other/path.wav', 'existing_file')
 
         self.assertEqual(2, self.corpus.num_files)
         self.assertEqual('existing_file_1', self.corpus.files['existing_file_1'].idx)
-        self.assertEqual(os.path.abspath(os.path.join(os.getcwd(), '../some/other/path.wav')), self.corpus.files['existing_file_1'].path)
+        self.assertEqual(os.path.abspath(os.path.join(os.getcwd(), '../some/other/path.wav')),
+                         self.corpus.files['existing_file_1'].path)
 
     def test_new_file_copy_file(self):
         file_path, file_name = resources.dummy_wav_path_and_name()
@@ -44,7 +47,8 @@ class CorpusTest(unittest.TestCase):
         self.corpus.new_file(file_path, 'fid', copy_file=True)
 
         self.assertEqual(2, self.corpus.num_files)
-        self.assertEqual(os.path.join(self.tempdir, 'files', 'fid.wav'), self.corpus.files['fid'].path)
+        self.assertEqual(os.path.join(self.tempdir, 'files', 'fid.wav'),
+                         self.corpus.files['fid'].path)
 
     def test_import_files(self):
         importing_files = [
@@ -86,7 +90,8 @@ class CorpusTest(unittest.TestCase):
         self.assertEqual(20, self.corpus.utterances['some_utt'].end)
 
     def test_new_utterance_duplicate_idx(self):
-        self.corpus.new_utterance('existing_utt', 'existing_file', issuer_idx='iid', start=0, end=20)
+        self.corpus.new_utterance('existing_utt', 'existing_file', issuer_idx='iid', start=0,
+                                  end=20)
 
         self.assertEqual(2, self.corpus.num_utterances)
         self.assertEqual('existing_utt_1', self.corpus.utterances['existing_utt_1'].idx)
@@ -95,7 +100,7 @@ class CorpusTest(unittest.TestCase):
         self.assertEqual(0, self.corpus.utterances['existing_utt_1'].start)
         self.assertEqual(20, self.corpus.utterances['existing_utt_1'].end)
 
-    def test_new_utterance_duplicate_idx(self):
+    def test_new_utterance_value_error_if_file_unknown(self):
         with self.assertRaises(ValueError):
             self.corpus.new_utterance('some_utt', 'some_file', issuer_idx='iid', start=0, end=20)
 
@@ -200,7 +205,8 @@ class CorpusTest(unittest.TestCase):
         self.corpus.new_feature_container('mfcc')
 
         self.assertEqual(1, self.corpus.num_feature_containers)
-        self.assertEqual(os.path.join(self.tempdir, 'features', 'mfcc'), self.corpus.feature_containers['mfcc'].path)
+        self.assertEqual(os.path.join(self.tempdir, 'features', 'mfcc'),
+                         self.corpus.feature_containers['mfcc'].path)
 
     #
     #   CREATION

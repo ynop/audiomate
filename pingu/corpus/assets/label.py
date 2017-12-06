@@ -9,7 +9,8 @@ class Label(object):
     Parameters:
         value (str): The text of the label.
         start (float): Start of the label within the utterance in seconds. (default: 0)
-        end (float): End of the label within the utterance in seconds. (default: -1) (-1 defines the end of the utterance)
+        end (float): End of the label within the utterance in seconds. (default: -1) (-1 defines
+                     the end of the utterance)
     """
     __slots__ = ['value', 'start', 'end']
 
@@ -65,14 +66,18 @@ class LabelList(object):
 
     def ranges(self, yield_ranges_without_labels=False, include_labels=None):
         """
-        Generate all ranges of the label-list. A range is defined as a part of the label-list for which the same labels are defined.
+        Generate all ranges of the label-list. A range is defined as a part of the label-list for
+        which the same labels are defined.
 
         Args:
-            yield_ranges_without_labels (bool): If True also yields ranges for which no labels are defined.
-            include_labels (list): If not empty, only the label values in the list will be considered.
+            yield_ranges_without_labels (bool): If True also yields ranges for which no labels are
+                                                defined.
+            include_labels (list): If not empty, only the label values in the list will be
+                                   considered.
 
         Returns:
-            generator: A generator which yields one range (tuple start/end/list-of-labels) at a time.
+            generator: A generator which yields one range (tuple start/end/list-of-labels) at a
+                       time.
 
         Example:
             >>> ll = assets.LabelList(labels=[
@@ -102,7 +107,8 @@ class LabelList(object):
             next_event = heapq.heappop(events)
             label = next_event[2]
 
-            # Return current range if its not the first event and not the same time as the previous event
+            # Return current range if its not the first event and not the same time as the previous
+            # event
             if -1 < current_range_start < next_event[0]:
 
                 if len(current_range_labels) > 0 or yield_ranges_without_labels:
@@ -152,7 +158,8 @@ class LabelList(object):
         Return for each label the number of occurrences within the list.
 
         Returns:
-            dict: A dictionary container for every label-value (key) the number of occurrences (value).
+            dict: A dictionary container for every label-value (key) the number of occurrences
+                  (value).
 
         Example::
             >>> ll = assets.LabelList(labels=[

@@ -1,6 +1,7 @@
 import unittest
 
-from pingu.corpus.io import *
+from pingu.corpus.io import CorpusLoader, available_loaders, create_loader_of_type
+from pingu.corpus.io import UnknownLoaderException
 
 
 class HelpersTest(unittest.TestCase):
@@ -14,7 +15,8 @@ class HelpersTest(unittest.TestCase):
 
         for expected_loader in expected_loaders:
             self.assertIn(expected_loader, actual_loaders.values(), 'Loader not registered')
-            self.assertIn(expected_loader.type(), actual_loaders.keys(), 'Loader not available under its type()')
+            self.assertIn(expected_loader.type(), actual_loaders.keys(),
+                          'Loader not available under its type()')
 
     def test_all_loaders_creatable(self):
         expected_loaders = CorpusLoader.__subclasses__()

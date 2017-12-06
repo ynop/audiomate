@@ -1,5 +1,5 @@
-import shutil
 import os
+import shutil
 import tempfile
 import unittest
 
@@ -54,7 +54,8 @@ class FramedSignalGrabberTest(unittest.TestCase):
             assets.Label('chi', 0.3, 0.9)
         ])
 
-        gr = grabber.FramedSignalGrabber(ds, label_list_idx='dudelida', frame_length=4, hop_size=2, include_labels=['chi', 'cha'])
+        gr = grabber.FramedSignalGrabber(ds, label_list_idx='dudelida', frame_length=4, hop_size=2,
+                                         include_labels=['chi', 'cha'])
 
         self.assertEqual(6, len(gr))
 

@@ -21,7 +21,8 @@ class CorpusLoader(metaclass=abc.ABCMeta):
         missing_files = self._check_for_missing_files(path)
 
         if missing_files is not None:
-            raise IOError('Invalid dataset of type {}: files {} not found at {}'.format(self.type(), ' '.join(missing_files), path))
+            raise IOError('Invalid data set of type {}: files {} not found at {}'.format(
+                self.type(), ' '.join(missing_files), path))
 
         return self._load(path)
 
@@ -53,5 +54,8 @@ class CorpusLoader(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def _check_for_missing_files(self, path):
-        """ Return a list of necessary files for the current type of dataset that are missing in the given folder. None if path seems valid. """
+        """
+        Return a list of necessary files for the current type of dataset that are missing in the
+        given folder. None if path seems valid.
+        """
         return None

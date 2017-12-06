@@ -15,9 +15,9 @@ build:
     image_tag: latest
     pull: true
     
-  ci:  
-    - "pip install -e ."
-    - "pip install -e .[tests]"
+  ci:
+    - "pip install -e .[tests,ci]"
+    - "flake8"
     
     #Create folders for test and code coverage
     - mkdir -p shippable/testresults

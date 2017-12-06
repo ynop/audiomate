@@ -1,6 +1,7 @@
 """
 This module provides class for handling subviews.
-This includes the subview class itself and also the FilterCriterion classes, which are used to define the data contained in a subview.
+This includes the subview class itself and also the FilterCriterion classes, which are used to
+define the data contained in a subview.
 """
 
 import collections
@@ -10,7 +11,8 @@ from . import base
 
 class FilterCriterion(object):
     """
-    A filter criterion decides wheter a given utterance contained in a given corpus matches the filter.
+    A filter criterion decides wheter a given utterance contained in a given corpus matches the
+    filter.
     """
 
     def match(self, utterance, corpus):
@@ -32,7 +34,8 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
     A filter criterion that matches utterances based on utterance-ids.
 
     Args:
-        utterance_idxs (list): A list of utterance-ids. Only utterances in the list will pass the filter
+        utterance_idxs (list): A list of utterance-ids. Only utterances in the list will pass the
+                               filter
         inverse (bool): If True only utterance not in the list pass the filter.
     """
 
@@ -41,7 +44,8 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
         self.inverse = inverse
 
     def match(self, utterance, corpus):
-        return (utterance.idx in self.utterance_idxs and not self.inverse) or (utterance.idx not in self.utterance_idxs and self.inverse)
+        return (utterance.idx in self.utterance_idxs and not self.inverse) \
+               or (utterance.idx not in self.utterance_idxs and self.inverse)
 
 
 class Subview(base.CorpusView):
@@ -79,7 +83,8 @@ class Subview(base.CorpusView):
 
     @property
     def files(self):
-        return {utterance.file_idx: self.corpus.files[utterance.file_idx] for utterance in self.utterances.values()}
+        return {utterance.file_idx: self.corpus.files[utterance.file_idx] for utterance in
+                self.utterances.values()}
 
     @property
     def utterances(self):
@@ -99,7 +104,8 @@ class Subview(base.CorpusView):
 
     @property
     def issuers(self):
-        return {utterance.issuer_idx: self.corpus.issuers[utterance.issuer_idx] for utterance in self.utterances.values()}
+        return {utterance.issuer_idx: self.corpus.issuers[utterance.issuer_idx] for utterance in
+                self.utterances.values()}
 
     @property
     def label_lists(self):
