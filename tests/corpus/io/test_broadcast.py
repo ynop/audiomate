@@ -1,10 +1,7 @@
 import os
 import unittest
-import tempfile
-import shutil
 
 from pingu.corpus import io
-
 from tests import resources
 
 
@@ -21,13 +18,17 @@ class DefaultCorpusLoaderTest(unittest.TestCase):
 
         self.assertEqual(4, ds.num_files)
         self.assertEqual('file-1', ds.files['file-1'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'files', 'a', 'wav_1.wav'), ds.files['file-1'].path)
+        self.assertEqual(os.path.join(self.test_path, 'files', 'a', 'wav_1.wav'),
+                         ds.files['file-1'].path)
         self.assertEqual('file-2', ds.files['file-2'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'files', 'b', 'wav_2.wav'), ds.files['file-2'].path)
+        self.assertEqual(os.path.join(self.test_path, 'files', 'b', 'wav_2.wav'),
+                         ds.files['file-2'].path)
         self.assertEqual('file-3', ds.files['file-3'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'files', 'c', 'wav_3.wav'), ds.files['file-3'].path)
+        self.assertEqual(os.path.join(self.test_path, 'files', 'c', 'wav_3.wav'),
+                         ds.files['file-3'].path)
         self.assertEqual('file-4', ds.files['file-4'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'files', 'd', 'wav_4.wav'), ds.files['file-4'].path)
+        self.assertEqual(os.path.join(self.test_path, 'files', 'd', 'wav_4.wav'),
+                         ds.files['file-4'].path)
 
     def test_load_utterances(self):
         ds = self.loader.load(self.test_path)

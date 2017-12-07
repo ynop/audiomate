@@ -4,9 +4,9 @@ import struct
 import numpy as np
 
 import pingu
-from . import base
 from pingu.corpus import assets
 from pingu.utils import textfile
+from . import base
 
 WAV_FILE_NAME = 'wav.scp'
 SEGMENTS_FILE_NAME = 'segments'
@@ -18,7 +18,10 @@ FEATS_FILE_NAME = 'feats'
 
 class KaldiLoader(base.CorpusLoader):
     """
-    This loader is used to load/save data sets with the kaldi data format according to http://kaldi-asr.org/doc/data_prep.html.
+    This loader is used to load/save data sets with the KALDI data format.
+
+    # References
+        - [KALDI data format description](http://kaldi-asr.org/doc/data_prep.html)
     """
 
     def __init__(self, main_label_list_idx='default', main_feature_idx='default'):
@@ -46,7 +49,8 @@ class KaldiLoader(base.CorpusLoader):
 
         # load wavs
         wav_file_path = os.path.join(path, WAV_FILE_NAME)
-        for file_idx, file_path in textfile.read_key_value_lines(wav_file_path, separator=' ').items():
+        wav_file_paths = textfile.read_key_value_lines(wav_file_path, separator=' ')
+        for file_idx, file_path in wav_file_paths.items():
             if not os.path.isabs(file_path):
                 file_path = os.path.join(path, file_path)
 
@@ -62,7 +66,9 @@ class KaldiLoader(base.CorpusLoader):
         segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
 
         if os.path.isfile(segments_path):
-            for utt_id, utt_info in textfile.read_separated_lines_with_first_key(segments_path, separator=' ', max_columns=4).items():
+            utterances = textfile.read_separated_lines_with_first_key(segments_path, separator=' ',
+                                                                      max_columns=4)
+            for utt_id, utt_info in utterances.items():
                 start = 0
                 end = -1
 
@@ -79,7 +85,8 @@ class KaldiLoader(base.CorpusLoader):
                     if speaker_idx not in corpus.issuers.keys():
                         corpus.new_issuer(speaker_idx)
 
-                corpus.new_utterance(utt_id, utt_info[0], issuer_idx=speaker_idx, start=start, end=end)
+                corpus.new_utterance(utt_id, utt_info[0], issuer_idx=speaker_idx, start=start,
+                                     end=end)
         else:
             for file_idx in corpus.files.keys():
                 speaker_idx = None
@@ -93,7 +100,8 @@ class KaldiLoader(base.CorpusLoader):
 
         # load transcriptions
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
-        for utt_id, transcription in textfile.read_key_value_lines(text_path, separator=' ').items():
+        transcriptions = textfile.read_key_value_lines(text_path, separator=' ')
+        for utt_id, transcription in transcriptions.items():
             corpus.new_label_list(utt_id, labels=[assets.Label(transcription)])
 
         return corpus
@@ -107,13 +115,17 @@ class KaldiLoader(base.CorpusLoader):
 
         # Write utterances
         utterance_path = os.path.join(path, SEGMENTS_FILE_NAME)
-        utterance_records = {utterance.idx: [utterance.file_idx, utterance.start, utterance.end] for utterance in corpus.utterances.values()}
-        textfile.write_separated_lines(utterance_path, utterance_records, separator=' ', sort_by_column=0)
+        utterance_records = {utterance.idx: [utterance.file_idx, utterance.start, utterance.end] for
+                             utterance in corpus.utterances.values()}
+        textfile.write_separated_lines(utterance_path, utterance_records, separator=' ',
+                                       sort_by_column=0)
 
         # Write utt2spk
         utt2spk_path = os.path.join(path, UTT2SPK_FILE_NAME)
-        utt2spk_records = {utterance.idx: utterance.issuer_idx for utterance in corpus.utterances.values()}
-        textfile.write_separated_lines(utt2spk_path, utt2spk_records, separator=' ', sort_by_column=0)
+        utt2spk_records = {utterance.idx: utterance.issuer_idx for utterance in
+                           corpus.utterances.values()}
+        textfile.write_separated_lines(utt2spk_path, utt2spk_records, separator=' ',
+                                       sort_by_column=0)
 
         # Write label-list
         transcriptions = {}
@@ -213,7 +225,7 @@ class KaldiLoader(base.CorpusLoader):
                 f.write(struct.pack('<i', np.size(matrix, 1)))
 
                 flattened = matrix.reshape(np.size(matrix, 0) * np.size(matrix, 1))
-                flattened.tofile(f, sep="")
+                flattened.tofile(f, sep='')
 
                 scp_entries.append('{} {}:{}'.format(utterance_id, ark_path, offset))
 

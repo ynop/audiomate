@@ -31,7 +31,8 @@ def remove_punctuation(text, exceptions=[]):
 
 def starts_with_prefix_in_list(text, prefixes):
     """
-    Return True if the given string starts with one of the prefixes in the given list, otherwise return False.
+    Return True if the given string starts with one of the prefixes in the given list, otherwise
+    return False.
 
     Arguments:
         text (str): Text to check for prefixes.

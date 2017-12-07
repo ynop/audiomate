@@ -1,5 +1,5 @@
-import collections
 import abc
+import collections
 
 
 class CorpusView(metaclass=abc.ABCMeta):
@@ -15,7 +15,7 @@ class CorpusView(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def name(self):
         """ Return the name of the dataset (Equals basename of the path, if not None). """
-        return "undefined"
+        return 'undefined'
 
     #
     #   Files
@@ -28,7 +28,8 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the files in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`pingu.corpus.assets.File` objects with the file-idx as key.
+            dict: A dictionary containing :py:class:`pingu.corpus.assets.File` objects with the
+            file-idx as key.
         """
         return {}
 
@@ -48,7 +49,8 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the utterances in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`pingu.corpus.assets.Utterance` objects with the utterance-idx as key.
+            dict: A dictionary containing :py:class:`pingu.corpus.assets.Utterance` objects with the
+            utterance-idx as key.
         """
         return {}
 
@@ -68,7 +70,8 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the issuers in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`pingu.corpus.assets.Issuer` objects with the issuer-idx as key.
+            dict: A dictionary containing :py:class:`pingu.corpus.assets.Issuer` objects with the
+            issuer-idx as key.
         """
         return {}
 
@@ -88,7 +91,8 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the label-lists in the corpus.
 
         Returns:
-            dict: A dictionary containing utterance-idx/label_list dictionaries with the label-list-idx as key.
+            dict: A dictionary containing utterance-idx/label_list dictionaries with the
+            label-list-idx as key.
         """
         return collections.defaultdict(dict)
 
@@ -103,7 +107,8 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the feature-containers in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`pingu.corpus.assets.FeatureContainer` objects with the feature-idx as key.
+            dict: A dictionary containing :py:class:`pingu.corpus.assets.FeatureContainer` objects
+            with the feature-idx as key.
         """
         return {}
 

@@ -26,8 +26,8 @@ class MusanLoader(base.CorpusLoader):
         return 'musan'
 
     def _check_for_missing_files(self, path):
-        # Some annotation files are missing anyway in the original dataset (e.g. speech/us-gov/ANNOTATIONS).
-        # What's left would be checking for missing directories.
+        # Some annotation files are missing anyway in the original dataset
+        # (e.g. speech/us-gov/ANNOTATIONS). What's left would be checking for missing directories.
         pass
 
     def _load(self, path):
@@ -45,8 +45,8 @@ class MusanLoader(base.CorpusLoader):
                 annotations = {}
 
                 if os.path.exists(annotations_path):
-                    annotations = textfile.read_separated_lines_with_first_key(annotations_path, separator=' ',
-                                                                               max_columns=ANN_NUM_COLUMS_[type_name])
+                    annotations = textfile.read_separated_lines_with_first_key(
+                        annotations_path, separator=' ', max_columns=ANN_NUM_COLUMS_[type_name])
 
                 it = os.scandir(source_directory)
 
@@ -61,12 +61,13 @@ class MusanLoader(base.CorpusLoader):
 
                     corpus.new_file(file_path, file_idx=file_idx, copy_file=False)
                     corpus.new_utterance(utterance_idx, file_idx, issuer_idx)
-                    corpus.new_label_list(utterance_idx, idx='audio_type', labels=[assets.Label(type_name)])
+                    corpus.new_label_list(utterance_idx, idx='audio_type',
+                                          labels=[assets.Label(type_name)])
 
         return corpus
 
     def _save(self, corpus, path):
-        raise NotImplementedError("There is no implementation for saving in MUSAN format.")
+        raise NotImplementedError('There is no implementation for saving in MUSAN format.')
 
     @staticmethod
     def _directories(path):
@@ -103,7 +104,8 @@ class MusanLoader(base.CorpusLoader):
             return None
 
         if file_idx in annotations:
-            corpus.new_issuer(file_idx, {'gender': annotations[file_idx][0], 'language': annotations[file_idx][1]})
+            corpus.new_issuer(file_idx, {'gender': annotations[file_idx][0],
+                                         'language': annotations[file_idx][1]})
         else:
             corpus.new_issuer(file_idx, {'gender': None, 'language': None})
 

@@ -1,7 +1,7 @@
-import os
 import collections
-import shutil
 import copy
+import os
+import shutil
 
 from pingu.corpus import assets
 from pingu.utils import naming
@@ -15,11 +15,13 @@ class Corpus(base.CorpusView):
     """
     The Corpus class represents a single corpus.
     It extends :py:class:`pingu.corpus.CorpusView` with the functionality for loading and saving.
-    Furthermore it provides the functionality for adding/modifying assets of the corpus like files and utterances.
+    Furthermore it provides the functionality for adding/modifying assets of the corpus like files
+    and utterances.
 
     Args:
         path (str): Path where the corpus is stored. (Optional)
-        loader (CorpusLoader): A loader to use for loading/saving. (By default the DefaultLoader is used)
+        loader (CorpusLoader): A loader to use for loading/saving. (By default the DefaultLoader is
+                               used)
     """
 
     def __init__(self, path=None, loader=None):
@@ -43,7 +45,7 @@ class Corpus(base.CorpusView):
     @property
     def name(self):
         if self.path is None:
-            return "undefined"
+            return 'undefined'
         else:
             return os.path.basename(os.path.abspath(self.path))
 
@@ -83,11 +85,14 @@ class Corpus(base.CorpusView):
 
     def save_at(self, path, loader=None):
         """
-        Save this corpus at the given path. If the path differs from the current path set, the path gets updated.
+        Save this corpus at the given path. If the path differs from the current path set, the path
+        gets updated.
 
         Parameters:
-            path (str): Path to save the dataset to.
-            loader (str, CorpusLoader): If you want to use another loader (e.g. to export to another format). Otherwise it uses the loader associated with this dataset.
+            path (str): Path to save the data set to.
+            loader (str, CorpusLoader): If you want to use another loader (e.g. to export to another
+                                        format). Otherwise it uses the loader associated with this
+                                        data set.
         """
 
         if loader is None:
@@ -109,7 +114,8 @@ class Corpus(base.CorpusView):
     @classmethod
     def load(cls, path, loader=None):
         """
-        Loads the corpus from the given path, using the given loader. If no loader is given the default loader is used.
+        Loads the corpus from the given path, using the given loader. If no loader is given the
+        default loader is used.
 
         Args:
             path (str): Path to load the corpus from.
@@ -140,7 +146,8 @@ class Corpus(base.CorpusView):
         Parameters:
             path (str): Path of the file to add.
             file_idx (str): The id to associate the file with.
-            copy_file (bool): If True the file is copied to the dataset folder, otherwise the given path is used directly.
+            copy_file (bool): If True the file is copied to the data set folder, otherwise the given
+                              path is used directly.
 
         Returns:
             File: The newly added File.
@@ -181,7 +188,8 @@ class Corpus(base.CorpusView):
 
         Returns:
             dict: A dictionary containing file idx mappings (old-file-idx/file-instance).
-                  If a file is imported, whose id already exists this mapping can be used to check the new id.
+                  If a file is imported, whose id already exists this mapping can be used to check
+                  the new id.
         """
 
         if isinstance(files, assets.File):
@@ -210,10 +218,12 @@ class Corpus(base.CorpusView):
 
         Parameters:
             file_idx (str): The file id the utterance is in.
-            utterance_idx (str): The id to associate with the utterance. If None or already exists, one is generated.
+            utterance_idx (str): The id to associate with the utterance. If None or already exists,
+                                 one is generated.
             issuer_idx (str): The issuer id to associate with the utterance.
             start (float): Start of the utterance within the file [seconds].
-            end (float): End of the utterance within the file [seconds]. -1 equals the end of the file.
+            end (float): End of the utterance within the file [seconds]. -1 equals the end of the
+                         file.
 
         Returns:
             Utterance: The newly added utterance.
@@ -229,7 +239,8 @@ class Corpus(base.CorpusView):
         if new_utt_idx in self._utterances.keys():
             new_utt_idx = naming.index_name_if_in_list(new_utt_idx, self._utterances.keys())
 
-        new_utt = assets.Utterance(new_utt_idx, file_idx, issuer_idx=issuer_idx, start=start, end=end)
+        new_utt = assets.Utterance(new_utt_idx, file_idx, issuer_idx=issuer_idx, start=start,
+                                   end=end)
         self._utterances[new_utt_idx] = new_utt
 
         return new_utt
@@ -240,11 +251,13 @@ class Corpus(base.CorpusView):
         If any of the given utterance-ids already exists, a suffix is appended so it is unique.
 
         Args:
-            utterances (list): Either a list of or a single :py:class:`pingu.corpus.assets.Utterance`.
+            utterances (list): Either a list of or a single
+            :py:class:`pingu.corpus.assets.Utterance`.
 
         Returns:
             dict: A dictionary containing file idx mappings (old-utterance-idx/utterance-instance).
-                  If a utterance is imported, whose id already exists this mapping can be used to check the new id.
+                  If a utterance is imported, whose id already exists this mapping can be used to
+                  check the new id.
         """
 
         if isinstance(utterances, assets.Utterance):
@@ -257,11 +270,15 @@ class Corpus(base.CorpusView):
 
             # Check if there is a file with the given idx
             if utterance.file_idx not in self._files.keys():
-                raise ValueError('No file in corpus with id {} to add utterance {}.'.format(utterance.file_idx, utterance.idx))
+                raise ValueError(
+                    'No file in corpus with id {} to add utterance {}.'.format(utterance.file_idx,
+                                                                               utterance.idx))
 
             # Check if there is a issuer with the given idx
-            if utterance.issuer_idx is not None and utterance.issuer_idx not in self._issuers.keys():
-                raise ValueError('No issuer in corpus with id {} to add utterance {}.'.format(utterance.issuer_idx, utterance.idx))
+            if utterance.issuer_idx is not None \
+                    and utterance.issuer_idx not in self._issuers.keys():
+                raise ValueError('No issuer in corpus with id {} to add utterance {}.'.format(
+                    utterance.issuer_idx, utterance.idx))
 
             # Add index to idx if already existing
             if utterance.idx in self._utterances.keys():
@@ -280,7 +297,8 @@ class Corpus(base.CorpusView):
         Add a new issuer to the dataset with the given data.
 
         Parameters:
-            issuer_idx (str): The id to associate the issuer with. If None or already exists, one is generated.
+            issuer_idx (str): The id to associate the issuer with. If None or already exists, one is
+                              generated.
             info (dict, list): Additional info of the issuer.
 
         Returns:
@@ -308,7 +326,8 @@ class Corpus(base.CorpusView):
 
         Returns:
             dict: A dictionary containing file idx mappings (old-issuer-idx/issuer-instance).
-                  If a issuer is imported, whose id already exists this mapping can be used to check the new id.
+                  If a issuer is imported, whose id already exists this mapping can be used to check
+                  the new id.
         """
 
         if isinstance(issuers, assets.Issuer):
@@ -372,7 +391,9 @@ class Corpus(base.CorpusView):
 
         # Check if there is a utterance with the given idx
         if utterance_idx not in self._utterances.keys():
-            raise ValueError('No utterance in corpus with id {} to add label-list {}.'.format(utterance_idx, label_list.idx))
+            raise ValueError(
+                'No utterance in corpus with id {} to add label-list {}.'.format(utterance_idx,
+                                                                                 label_list.idx))
 
         self._label_lists[label_list.idx][utterance_idx] = label_list
 
@@ -397,7 +418,8 @@ class Corpus(base.CorpusView):
 
         # Add index to idx if already existing
         if new_feature_idx in self._feature_containers.keys():
-            new_feature_idx = naming.index_name_if_in_list(new_feature_idx, self._feature_containers.keys())
+            new_feature_idx = naming.index_name_if_in_list(new_feature_idx,
+                                                           self._feature_containers.keys())
 
         # Set default path if none given
         if new_feature_path is None:

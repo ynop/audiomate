@@ -19,7 +19,7 @@ def write_label_file(path, entries):
         >>> write_label_file('/some/path/to/file.txt', data)
     """
 
-    textfile.write_separated_lines(path, entries, separator="\t")
+    textfile.write_separated_lines(path, entries, separator='\t')
 
 
 def read_label_file(path):
@@ -42,7 +42,7 @@ def read_label_file(path):
     """
     labels = []
 
-    for record in textfile.read_separated_lines_generator(path, separator="\t", max_columns=3):
+    for record in textfile.read_separated_lines_generator(path, separator='\t', max_columns=3):
         labels.append([float(record[0]), float(record[1]), str(record[2])])
 
     return labels

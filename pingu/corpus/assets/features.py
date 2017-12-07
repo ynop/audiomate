@@ -4,10 +4,12 @@ import h5py
 class FeatureContainer(object):
     """
     A feature-container holds matrix-like data. The data is stored as HDF5 file.
-    The feature-container provides functionality to access this data. For each utterance a hdf5 dataset is created within the file, if there is feature-data for a given utterance.
+    The feature-container provides functionality to access this data. For each utterance a hdf5
+    data set is created within the file, if there is feature-data for a given utterance.
 
     Args:
-        path (str): Path to where the HDF5 file is stored. If the file doesn't exist, one is created.
+        path (str): Path to where the HDF5 file is stored. If the file doesn't exist, one is
+                    created.
 
     Examples::
 
@@ -58,12 +60,12 @@ class FeatureContainer(object):
             The feature container has to be opened in advance.
         """
         if self._file is None:
-            raise ValueError("The feature container is not opened!")
+            raise ValueError('The feature container is not opened!')
 
         if utterance_idx in self._file:
             del self._file[utterance_idx]
 
-        self.file.create_dataset(utterance_idx, data=features, compression="lzf")
+        self.file.create_dataset(utterance_idx, data=features, compression='lzf')
 
     def remove(self, utterance_idx):
         """
@@ -76,7 +78,7 @@ class FeatureContainer(object):
             The feature container has to be opened in advance.
         """
         if self._file is None:
-            raise ValueError("The feature container is not opened!")
+            raise ValueError('The feature container is not opened!')
 
         if utterance_idx in self._file:
             del self._file[utterance_idx]
@@ -95,7 +97,7 @@ class FeatureContainer(object):
             numpy.ndarray: The stored data.
         """
         if self._file is None:
-            raise ValueError("The feature container is not opened!")
+            raise ValueError('The feature container is not opened!')
 
         if utterance_idx in self._file:
             return self._file[utterance_idx][()]

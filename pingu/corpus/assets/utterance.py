@@ -7,7 +7,8 @@ class Utterance(object):
         file_idx (str): The identifier of the file this utterance is belonging to.
         issuer_idx (str): The identifier of the issuer this utterance was created from.
         start (float): The start of the utterance within the audio file in seconds. (default 0)
-        end (float): The end of the utterance within the audio file in seconds. (default -1) (-1 indicates that the utterance ends at the end of the file.
+        end (float): The end of the utterance within the audio file in seconds. -1 indicates that
+                     the utterance ends at the end of the file. (default -1)
     """
 
     __slots__ = ['idx', 'file_idx', 'issuer_idx', 'start', 'end']

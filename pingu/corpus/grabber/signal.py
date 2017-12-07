@@ -8,9 +8,10 @@ from pingu.utils import units
 
 class FramedSignalGrabber(object):
     """
-    The FramedSignalGrabber provides access to the samples of the audio data in frames.
-    The whole dataset is split into ranges. One range is a section with the same labels.
-    Only ranges are considered that have labels from the given label-list. Ranges are padded with zeros, if the frame-length doesn't match.
+    The FramedSignalGrabber provides access to the samples of the audio data in frames. The whole
+    data set is split into ranges. One range is a section with the same labels. Only ranges are
+    considered that have labels from the given label-list. Ranges are padded with zeros, if the
+    frame-length doesn't match.
 
     Args:
         corpus (Corpus): The corpus to get the data from.
@@ -18,14 +19,17 @@ class FramedSignalGrabber(object):
         frame_length (int): Number of audio samples per frame.
         hop_size (int): Number of audio samples from one to the next frame.
         include_labels (list): If not empty, only the label values in the list will be grabbed.
-        predefined_labels (list): If not empty, this is used as output structure. Only the given labels will be included.
+        predefined_labels (list): If not empty, this is used as output structure. Only the given
+                                  labels will be included.
 
     Attributes:
-        ranges (list): List of all ranges (frame_offset, num_frames, start_sample, num_samples, file_data, label_vec).
+        ranges (list): List of all ranges (frame_offset, num_frames, start_sample, num_samples,
+                       file_data, label_vec).
         labels (list): List of all labels occurring in the output of the grabber.
     """
 
-    def __init__(self, corpus, label_list_idx='default', frame_length=400, hop_size=160, include_labels=None, predefined_labels=None):
+    def __init__(self, corpus, label_list_idx='default', frame_length=400, hop_size=160,
+                 include_labels=None, predefined_labels=None):
         self.corpus = corpus
         self.label_list_idx = label_list_idx
         self.frame_length = frame_length
@@ -85,7 +89,8 @@ class FramedSignalGrabber(object):
 
     def _extract_ranges(self):
         """
-        Get all ranges of the dataset. Range --> (frame_offset, num_frames, start_sample, num_samples, file_data, label_vec)
+        Get all ranges of the data set. Range --> (frame_offset, num_frames, start_sample,
+        num_samples, file_data, label_vec)
         """
         ranges = []
         files = {}
@@ -110,23 +115,34 @@ class FramedSignalGrabber(object):
                 label_list = label_lists[utterance.idx]
 
                 # Extract ranges
-                utt_ranges, offset = self._extract_ranges_from_utterance(utterance, file_data, label_list, offset, sample_rate)
+                utt_ranges, offset = self._extract_ranges_from_utterance(utterance,
+                                                                         file_data,
+                                                                         label_list,
+                                                                         offset,
+                                                                         sample_rate)
                 ranges.extend(utt_ranges)
 
         return ranges
 
-    def _extract_ranges_from_utterance(self, utterance, file_data, label_list, frame_offset, sample_rate):
+    def _extract_ranges_from_utterance(self, utterance, file_data, label_list, frame_offset,
+                                       sample_rate):
         """
         Extract the ranges from the given utterance.
 
         Returns:
-            (list, int): List of ranges (frame_offset, num_frames, start_sample, num_samples, file_data, label_vec), new frame offset
+            (list, int): List of ranges (frame_offset, num_frames, start_sample, num_samples,
+                         file_data, label_vec), new frame offset
         """
         ranges = []
         offset = frame_offset
 
-        for (range_start, range_end, labels) in label_list.ranges(include_labels=self.include_labels):
-            start, length = self._range_start_len_relative_to_file_in_samples(utterance, file_data, range_start, range_end, sample_rate)
+        for (range_start, range_end, labels) in \
+                label_list.ranges(include_labels=self.include_labels):
+            start, length = self._range_start_len_relative_to_file_in_samples(utterance,
+                                                                              file_data,
+                                                                              range_start,
+                                                                              range_end,
+                                                                              sample_rate)
             num_frames = self._frames_from_length(length)
             label_vec = self._label_vec_from_labels(labels)
 
@@ -136,7 +152,8 @@ class FramedSignalGrabber(object):
 
         return ranges, offset
 
-    def _range_start_len_relative_to_file_in_samples(self, utterance, file_data, range_start, range_end, sample_rate):
+    def _range_start_len_relative_to_file_in_samples(self, utterance, file_data, range_start,
+                                                     range_end, sample_rate):
         """
         Calculate the range start and length in samples relative to the audio file.
         """
@@ -150,7 +167,8 @@ class FramedSignalGrabber(object):
         length = utt_len - start
 
         if range_end > -1:
-            length = utt_start + units.seconds_to_sample(range_end, sampling_rate=sample_rate) - start
+            length = utt_start + units.seconds_to_sample(range_end, sampling_rate=sample_rate) \
+                     - start
 
         return start, length
 

@@ -2,8 +2,8 @@
 This module contains functionality for splitting a corpus.
 """
 
-import random
 import collections
+import random
 
 from pingu.corpus import subview
 
@@ -12,8 +12,8 @@ class Splitter(object):
     """
     A splitter provides methods for splitting a corpus into different subsets.
     It provides different approaches for splitting the corpus. (Methods indicated by ``split_by_``)
-    These methods mostly take some proportions parameter, which defines how big (in relation) the subsets should be.
-    The subsets are returned as :py:class:`pingu.corpus.Subview`.
+    These methods mostly take some proportions parameter, which defines how big (in relation) the
+    subsets should be. The subsets are returned as :py:class:`pingu.corpus.Subview`.
 
     Args:
         corpus (Corpus): The corpus that should be splitted.
@@ -25,10 +25,12 @@ class Splitter(object):
     def split_by_number_of_utterances(self, proportions={}):
         """
         Split the corpus into subsets with the given number of utterances.
-        The corpus gets splitted into len(proportions) parts, so the number of utterances are distributed according to the proportions.
+        The corpus gets splitted into len(proportions) parts, so the number of utterances are
+        distributed according to the proportions.
 
         Args:
-            proportions (dict): A dictionary containing the relative size of the target subsets. The key is an identifier for the subset.
+            proportions (dict): A dictionary containing the relative size of the target subsets.
+            The key is an identifier for the subset.
 
         Returns:
             (dict): A dictionary containing the subsets with the identifier from the input as key.
@@ -54,16 +56,19 @@ class Splitter(object):
         """
 
         utterance_idxs = list(self.corpus.utterances.keys())
-        splits = Splitter.get_identifiers_randomly_splitted(identifiers=utterance_idxs, proportions=proportions)
+        splits = Splitter.get_identifiers_randomly_splitted(identifiers=utterance_idxs,
+                                                            proportions=proportions)
 
         return self._subviews_from_utterance_splits(splits)
 
     def split_by_proportionally_distribute_labels(self, proportions={}):
         """
-        Split the corpus into subsets, so the occurrence of the labels is distributed amongst the subsets according to the given proportions.
+        Split the corpus into subsets, so the occurrence of the labels is distributed amongst the
+        subsets according to the given proportions.
 
         Args:
-            proportions (dict): A dictionary containing the relative size of the target subsets. The key is an identifier for the subset.
+            proportions (dict): A dictionary containing the relative size of the target subsets.
+            The key is an identifier for the subset.
 
         Returns:
             (dict): A dictionary containing the subsets with the identifier from the input as key.
@@ -109,10 +114,12 @@ class Splitter(object):
 
         Args:
             identifiers (list): List of identifiers (str).
-            proportions (dict): A dictionary containing the proportions with the identifier from the input as key.
+            proportions (dict): A dictionary containing the proportions with the identifier from the
+            input as key.
 
         Returns:
-            dict: Dictionary containing a list of identifiers per part with the same key as the proportions dict.
+            dict: Dictionary containing a list of identifiers per part with the same key as the
+            proportions dict.
 
         Example::
 
@@ -139,7 +146,8 @@ class Splitter(object):
     @staticmethod
     def absolute_proportions(proportions, count):
         """
-        Split a given integer into n parts according to len(proportions) so they sum up to count and match the given proportions.
+        Split a given integer into n parts according to len(proportions) so they sum up to count and
+        match the given proportions.
 
         Args:
             proportions (dict): Dict of proportions, with a identifier as key.
@@ -155,7 +163,8 @@ class Splitter(object):
 
         # first create absolute values by flooring non-integer portions
         relative_sum = sum(proportions.values())
-        absolute_proportions = {idx: int(count / relative_sum * prop_value) for idx, prop_value in proportions.items()}
+        absolute_proportions = {idx: int(count / relative_sum * prop_value) for idx, prop_value in
+                                proportions.items()}
 
         # Now distribute the rest value randomly over the different parts
         absolute_sum = sum(absolute_proportions.values())
@@ -171,18 +180,22 @@ class Splitter(object):
     @staticmethod
     def get_identifiers_splitted_by_weights(identifiers={}, proportions={}):
         """
-        Divide the given identifiers based on the given proportions. But instead of randomly split the identifiers it is based on category weights.
-        Every identifier has a weight for any number of categories. The target is to split the identifiers in a way,
-        so the sum of category k within of part x is proportional to the sum of category x over all parts according to the given proportions.
-        This is done by greedily insert the identifiers step by step in a part which has free space (weight).
-        If there are no fitting parts anymore, the one with the least weight exceed is used.
+        Divide the given identifiers based on the given proportions. But instead of randomly split
+        the identifiers it is based on category weights. Every identifier has a weight for any
+        number of categories. The target is to split the identifiers in a way, so the sum of
+        category k within of part x is proportional to the sum of category x over all parts
+        according to the given proportions. This is done by greedily insert the identifiers step by
+        step in a part which has free space (weight). If there are no fitting parts anymore, the one
+        with the least weight exceed is used.
 
         Args:
-            identifiers (dict): A dictionary containing the weights for each identifier (key). Per item a dictionary of weights per category is given.
+            identifiers (dict): A dictionary containing the weights for each identifier (key). Per
+                                item a dictionary of weights per category is given.
             proportions (dict): Dict of proportions, with a identifier as key.
 
         Returns:
-            dictionary (dict): Dictionary containing a list of identifiers per part with the same key as the proportions dict.
+            dictionary (dict): Dictionary containing a list of identifiers per part with the same
+                               key as the proportions dict.
 
         Example::
 

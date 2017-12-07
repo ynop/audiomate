@@ -24,7 +24,8 @@ class SplitterTest(unittest.TestCase):
             'test': 0.2
         })
 
-        self.assertEqual(self.corpus.num_utterances, sum([sv.num_utterances for sv in res.values()]))
+        self.assertEqual(self.corpus.num_utterances,
+                         sum([sv.num_utterances for sv in res.values()]))
 
     def test_absolute_proportions(self):
         res = self.splitter.absolute_proportions({
@@ -66,7 +67,8 @@ class SplitterTest(unittest.TestCase):
             'dev': 0.25
         }
 
-        res = splitting.Splitter.get_identifiers_splitted_by_weights(identifiers=identifiers, proportions=proportions)
+        res = splitting.Splitter.get_identifiers_splitted_by_weights(identifiers=identifiers,
+                                                                     proportions=proportions)
 
         for x, y in res.items():
             print(x, len(y))
@@ -93,7 +95,8 @@ class SplitterTest(unittest.TestCase):
             'dev': 0.25
         }
 
-        res = splitting.Splitter.get_identifiers_splitted_by_weights(identifiers=identifiers, proportions=proportions)
+        res = splitting.Splitter.get_identifiers_splitted_by_weights(identifiers=identifiers,
+                                                                     proportions=proportions)
 
         self.assertGreater(len(res['train']), 0)
         self.assertGreater(len(res['test']), 0)

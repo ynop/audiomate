@@ -15,7 +15,7 @@ class TextFileUtilsTest(unittest.TestCase):
             ['c', '3', 'z']
         ]
 
-        records = textfile.read_separated_lines(file_path, separator="\t")
+        records = textfile.read_separated_lines(file_path, separator='\t')
 
         self.assertListEqual(expected, records)
 
@@ -28,7 +28,7 @@ class TextFileUtilsTest(unittest.TestCase):
             'c': ['3', 'z']
         }
 
-        records = textfile.read_separated_lines_with_first_key(file_path, separator="\t")
+        records = textfile.read_separated_lines_with_first_key(file_path, separator='\t')
 
         self.assertDictEqual(expected, records)
 
@@ -41,17 +41,17 @@ class TextFileUtilsTest(unittest.TestCase):
             'c': '3'
         }
 
-        records = textfile.read_key_value_lines(file_path, separator=" ")
+        records = textfile.read_key_value_lines(file_path, separator=' ')
 
         self.assertDictEqual(expected, records)
 
     def test_write_separated_lines_sorted(self):
         data = {
-            "hallo-0_103": "hallo-0_1",
-            "hallo-0_122": "hallo-0",
-            "hallo-0_1031": "hallo-0_1",
-            "hallo-0_1322": "hallo-0",
-            "hallo-0_1224": "hallo-0"
+            'hallo-0_103': 'hallo-0_1',
+            'hallo-0_122': 'hallo-0',
+            'hallo-0_1031': 'hallo-0_1',
+            'hallo-0_1322': 'hallo-0',
+            'hallo-0_1224': 'hallo-0'
         }
 
         f, path = tempfile.mkstemp(text=True)

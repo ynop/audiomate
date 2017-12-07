@@ -2,11 +2,11 @@
 The assets module contains data-structures that are contained in a corpus.
 """
 
-from .file import File
-from .utterance import Utterance
-from .issuer import Issuer
+from .file import File  # noqa: F401
+from .utterance import Utterance  # noqa: F401
+from .issuer import Issuer  # noqa: F401
 
-from .label import Label
-from .label import LabelList
+from .label import Label  # noqa: F401
+from .label import LabelList  # noqa: F401
 
-from .features import FeatureContainer
+from .features import FeatureContainer  # noqa: F401

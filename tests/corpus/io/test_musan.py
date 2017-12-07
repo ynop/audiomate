@@ -1,5 +1,5 @@
-import os
 import unittest
+from os.path import join
 
 from pingu.corpus import io
 from tests import resources
@@ -16,23 +16,23 @@ class MusanCorpusLoaderTest(unittest.TestCase):
         self.assertEqual(5, ds.num_files)
 
         self.assertEqual('music-fma-0000', ds.files['music-fma-0000'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'music', 'fma', 'music-fma-0000.wav'),
+        self.assertEqual(join(self.test_path, 'music', 'fma', 'music-fma-0000.wav'),
                          ds.files['music-fma-0000'].path)
 
         self.assertEqual('noise-free-sound-0000', ds.files['noise-free-sound-0000'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'noise', 'free-sound', 'noise-free-sound-0000.wav'),
+        self.assertEqual(join(self.test_path, 'noise', 'free-sound', 'noise-free-sound-0000.wav'),
                          ds.files['noise-free-sound-0000'].path)
 
         self.assertEqual('noise-free-sound-0001', ds.files['noise-free-sound-0001'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'noise', 'free-sound', 'noise-free-sound-0001.wav'),
+        self.assertEqual(join(self.test_path, 'noise', 'free-sound', 'noise-free-sound-0001.wav'),
                          ds.files['noise-free-sound-0001'].path)
 
         self.assertEqual('speech-librivox-0000', ds.files['speech-librivox-0000'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'speech', 'librivox', 'speech-librivox-0000.wav'),
+        self.assertEqual(join(self.test_path, 'speech', 'librivox', 'speech-librivox-0000.wav'),
                          ds.files['speech-librivox-0000'].path)
 
         self.assertEqual('speech-librivox-0001', ds.files['speech-librivox-0001'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'speech', 'librivox', 'speech-librivox-0001.wav'),
+        self.assertEqual(join(self.test_path, 'speech', 'librivox', 'speech-librivox-0001.wav'),
                          ds.files['speech-librivox-0001'].path)
 
     def test_load_issuers(self):
@@ -51,7 +51,8 @@ class MusanCorpusLoaderTest(unittest.TestCase):
         self.assertEqual('french', ds.issuers['speech-librivox-0001'].info['language'])
 
         self.assertIn('Quiet_Music_for_Tiny_Robots', ds.issuers.keys())
-        self.assertEqual('Quiet_Music_for_Tiny_Robots', ds.issuers['Quiet_Music_for_Tiny_Robots'].idx)
+        self.assertEqual('Quiet_Music_for_Tiny_Robots',
+                         ds.issuers['Quiet_Music_for_Tiny_Robots'].idx)
         self.assertIsNone(ds.issuers['Quiet_Music_for_Tiny_Robots'].info)
 
     def test_load_utterances(self):
@@ -105,5 +106,7 @@ class MusanCorpusLoaderTest(unittest.TestCase):
         self.assertEqual(1, len(ds.label_lists['audio_type']['noise-free-sound-0001'].labels))
 
         self.assertEqual('music', ds.label_lists['audio_type']['music-fma-0000'].labels[0].value)
-        self.assertEqual('noise', ds.label_lists['audio_type']['noise-free-sound-0000'].labels[0].value)
-        self.assertEqual('noise', ds.label_lists['audio_type']['noise-free-sound-0001'].labels[0].value)
+        self.assertEqual('noise',
+                         ds.label_lists['audio_type']['noise-free-sound-0000'].labels[0].value)
+        self.assertEqual('noise',
+                         ds.label_lists['audio_type']['noise-free-sound-0001'].labels[0].value)
