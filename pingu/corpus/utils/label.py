@@ -35,7 +35,7 @@ class LabelMapper(object):
         >>>    assets.Label('speech', 5.1, 8.9),
         >>>    assets.Label('music', 7.2, 10.5),
         >>>    assets.Label('d', 10.5, 14),
-        >>>    assets.Label('e', 11.5, 16),  # =>>> gibt fehler wenn 'e', 11.5 , 13   ===> warum?
+        >>>    assets.Label('e', 11.5, 16),  # todo: throws error with this data: 'e', 11.5 , 13
         >>>])
 
         Example:
