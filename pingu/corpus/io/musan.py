@@ -12,9 +12,9 @@ ANN_NUM_COLUMS_ = {'music': 4, 'noise': 1, 'speech': 3}
 ANN_FILE_NAME_ = 'ANNOTATIONS'
 
 
-class MusanLoader(base.CorpusLoader):
+class MusanReader(base.CorpusReader):
     """
-    Corpus loader for the MUSAN corpus. MUSAN is a corpus of music, speech, and noise recordings.
+    Reader for the MUSAN corpus. MUSAN is a corpus of music, speech, and noise recordings.
 
     # References
         - [MUSAN: A Music, Speech, and Noise Corpus](https://arxiv.org/pdf/1510.08484v1.pdf)
@@ -26,7 +26,7 @@ class MusanLoader(base.CorpusLoader):
         return 'musan'
 
     def _check_for_missing_files(self, path):
-        # Some annotation files are missing anyway in the original dataset
+        # Some annotation files are missing anyway in the original data set
         # (e.g. speech/us-gov/ANNOTATIONS). What's left would be checking for missing directories.
         pass
 
@@ -37,7 +37,7 @@ class MusanLoader(base.CorpusLoader):
             'speech': self._create_or_get_speech_issuer,
         }
 
-        corpus = pingu.Corpus(path=path, loader=self)
+        corpus = pingu.Corpus(path=path)
 
         for type_name, type_directory in self._directories(path).items():
             for _, source_directory in self._directories(type_directory).items():
@@ -65,9 +65,6 @@ class MusanLoader(base.CorpusLoader):
                                           labels=[assets.Label(type_name)])
 
         return corpus
-
-    def _save(self, corpus, path):
-        raise NotImplementedError('There is no implementation for saving in MUSAN format.')
 
     @staticmethod
     def _directories(path):

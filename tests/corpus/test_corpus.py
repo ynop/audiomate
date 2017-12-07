@@ -3,8 +3,12 @@ import shutil
 import tempfile
 import unittest
 
+import pytest
+
 import pingu
 from pingu.corpus import assets
+from pingu.corpus.io import MusanReader, KaldiWriter
+from pingu.corpus.io import UnknownWriterException, UnknownReaderException
 from .. import resources
 
 
@@ -223,3 +227,231 @@ class CorpusTest(unittest.TestCase):
 
         original.files['wav-1'].path = '/changed/path.wav'
         self.assertNotEqual(original.files['wav-1'].path, copy.files['wav-1'].path)
+
+    #
+    #    CORPUS READING
+    #
+
+    def test_load_throws_exception_when_reader_unknown(self):
+        corpus = pingu.Corpus()
+
+        with pytest.raises(UnknownReaderException):
+            corpus.load(resources.sample_default_ds_path(), reader='does_not_exist')
+
+    def test_load_with_default_reader_when_reader_unspecified(self):
+        corpus = pingu.Corpus()
+        corpus = corpus.load(resources.sample_default_ds_path())
+
+        assert corpus.name == 'default_ds'
+        assert corpus.path == resources.sample_default_ds_path()
+        assert corpus.num_files == 4
+        assert 'file-1' in corpus.files
+        assert 'file-2' in corpus.files
+        assert 'file-3' in corpus.files
+        assert 'file-4' in corpus.files
+
+    def test_load_with_custom_reader_specified_by_name(self):
+        corpus = pingu.Corpus()
+        corpus = corpus.load(resources.sample_musan_ds_path(), reader='musan')
+
+        assert corpus.name == 'musan_ds'
+        assert corpus.path == resources.sample_musan_ds_path()
+        assert corpus.num_files == 5
+        assert 'music-fma-0000' in corpus.files
+        assert 'noise-free-sound-0000' in corpus.files
+        assert 'noise-free-sound-0001' in corpus.files
+        assert 'speech-librivox-0000' in corpus.files
+        assert 'speech-librivox-0001' in corpus.files
+
+    def test_load_with_custom_reader_specified_by_instance(self):
+        corpus = pingu.Corpus()
+        corpus = corpus.load(resources.sample_musan_ds_path(), reader=MusanReader())
+
+        assert corpus.name == 'musan_ds'
+        assert corpus.path == resources.sample_musan_ds_path()
+        assert corpus.num_files == 5
+        assert 'music-fma-0000' in corpus.files
+        assert 'noise-free-sound-0000' in corpus.files
+        assert 'noise-free-sound-0001' in corpus.files
+        assert 'speech-librivox-0000' in corpus.files
+        assert 'speech-librivox-0001' in corpus.files
+
+    #
+    #    CORPUS SAVING
+    #
+
+    def test_save_at_corpus_path_throws_exception_when_writer_does_not_exist(self):
+        corpus = pingu.Corpus()
+        corpus = corpus.load(resources.sample_default_ds_path())
+
+        assert corpus.name == 'default_ds'
+        assert corpus.path == resources.sample_default_ds_path()
+        assert corpus.num_files == 4
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 0
+
+        corpus.path = self.tempdir
+        with pytest.raises(UnknownWriterException):
+            corpus.save(writer='does_not_exist')
+
+        assert len(os.listdir(self.tempdir)) == 0
+
+    def test_save_at_corpus_path_with_default_writer_when_writer_unspecified(self):
+        corpus = pingu.Corpus()
+        corpus = corpus.load(resources.sample_default_ds_path())
+
+        assert corpus.name == 'default_ds'
+        assert corpus.path == resources.sample_default_ds_path()
+        assert corpus.num_files == 4
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 0
+
+        corpus.path = self.tempdir
+        corpus.save()
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 5
+
+        assert 'files.txt' in tempdir_contents
+        assert 'labels_raw_text.txt' in tempdir_contents
+        assert 'labels_text.txt' in tempdir_contents
+        assert 'utt_issuers.txt' in tempdir_contents
+        assert 'utterances.txt' in tempdir_contents
+
+    def test_save_at_corpus_path_with_writer_specified_by_name(self):
+        corpus = pingu.Corpus()
+        corpus = corpus.load(resources.sample_kaldi_ds_path(), reader='kaldi')
+
+        assert corpus.name == 'kaldi_ds'
+        assert corpus.path == resources.sample_kaldi_ds_path()
+        assert corpus.path != self.tempdir
+        assert corpus.num_files == 4
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 0
+
+        corpus.path = self.tempdir
+        corpus.save(writer='kaldi')
+
+        assert corpus.path == self.tempdir
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 4
+
+        assert 'segments' in tempdir_contents
+        assert 'text' in tempdir_contents
+        assert 'utt2spk' in tempdir_contents
+        assert 'wav.scp' in tempdir_contents
+
+    def test_save_at_corpus_path_with_writer_specified_by_instance(self):
+        corpus = pingu.Corpus()
+        corpus = corpus.load(resources.sample_kaldi_ds_path(), reader='kaldi')
+
+        assert corpus.name == 'kaldi_ds'
+        assert corpus.path == resources.sample_kaldi_ds_path()
+        assert corpus.path != self.tempdir
+        assert corpus.num_files == 4
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 0
+
+        corpus.path = self.tempdir
+        corpus.save(writer=KaldiWriter())
+
+        assert corpus.path == self.tempdir
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 4
+
+        assert 'segments' in tempdir_contents
+        assert 'text' in tempdir_contents
+        assert 'utt2spk' in tempdir_contents
+        assert 'wav.scp' in tempdir_contents
+
+    def test_save_at_path_throws_exception_when_writer_does_not_exist(self):
+        corpus = pingu.Corpus()
+        corpus = corpus.load(resources.sample_default_ds_path())
+
+        assert corpus.name == 'default_ds'
+        assert corpus.path == resources.sample_default_ds_path()
+        assert corpus.num_files == 4
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 0
+
+        with pytest.raises(UnknownWriterException):
+            corpus.save_at(self.tempdir, writer='does_not_exist')
+
+        assert len(os.listdir(self.tempdir)) == 0
+
+    def test_save_at_path_with_default_writer_when_writer_unspecified(self):
+        corpus = pingu.Corpus()
+        corpus = corpus.load(resources.sample_default_ds_path())
+
+        assert corpus.name == 'default_ds'
+        assert corpus.path == resources.sample_default_ds_path()
+        assert corpus.num_files == 4
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 0
+
+        corpus.save_at(self.tempdir)
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 5
+
+        assert 'files.txt' in tempdir_contents
+        assert 'labels_raw_text.txt' in tempdir_contents
+        assert 'labels_text.txt' in tempdir_contents
+        assert 'utt_issuers.txt' in tempdir_contents
+        assert 'utterances.txt' in tempdir_contents
+
+    def test_save_at_path_with_writer_specified_by_name(self):
+        corpus = pingu.Corpus()
+        corpus = corpus.load(resources.sample_kaldi_ds_path(), reader='kaldi')
+
+        assert corpus.name == 'kaldi_ds'
+        assert corpus.path == resources.sample_kaldi_ds_path()
+        assert corpus.path != self.tempdir
+        assert corpus.num_files == 4
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 0
+
+        corpus.save_at(self.tempdir, writer='kaldi')
+
+        assert corpus.path == self.tempdir
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 4
+
+        assert 'segments' in tempdir_contents
+        assert 'text' in tempdir_contents
+        assert 'utt2spk' in tempdir_contents
+        assert 'wav.scp' in tempdir_contents
+
+    def test_save_at_path_with_writer_specified_by_instance(self):
+        corpus = pingu.Corpus()
+        corpus = corpus.load(resources.sample_kaldi_ds_path(), reader='kaldi')
+
+        assert corpus.name == 'kaldi_ds'
+        assert corpus.path == resources.sample_kaldi_ds_path()
+        assert corpus.path != self.tempdir
+        assert corpus.num_files == 4
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 0
+
+        corpus.save_at(self.tempdir, writer=KaldiWriter())
+
+        assert corpus.path == self.tempdir
+
+        tempdir_contents = os.listdir(self.tempdir)
+        assert len(tempdir_contents) == 4
+
+        assert 'segments' in tempdir_contents
+        assert 'text' in tempdir_contents
+        assert 'utt2spk' in tempdir_contents
+        assert 'wav.scp' in tempdir_contents

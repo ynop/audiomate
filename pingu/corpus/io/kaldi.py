@@ -16,9 +16,9 @@ TRANSCRIPTION_FILE_NAME = 'text'
 FEATS_FILE_NAME = 'feats'
 
 
-class KaldiLoader(base.CorpusLoader):
+class KaldiReader(base.CorpusReader):
     """
-    This loader is used to load/save data sets with the KALDI data format.
+    This reader is used to load data sets in the KALDI data format.
 
     # References
         - [KALDI data format description](http://kaldi-asr.org/doc/data_prep.html)
@@ -45,7 +45,7 @@ class KaldiLoader(base.CorpusLoader):
         return missing_files or None
 
     def _load(self, path):
-        corpus = pingu.Corpus(path=path, loader=self)
+        corpus = pingu.Corpus(path=path)
 
         # load wavs
         wav_file_path = os.path.join(path, WAV_FILE_NAME)
@@ -106,6 +106,23 @@ class KaldiLoader(base.CorpusLoader):
 
         return corpus
 
+
+class KaldiWriter(base.CorpusWriter):
+    """
+    This writer writes a data set out in the KALDI data format.
+
+    # References
+        - [KALDI data format description](http://kaldi-asr.org/doc/data_prep.html)
+    """
+
+    def __init__(self, main_label_list_idx='default', main_feature_idx='default'):
+        self.main_label_list_idx = main_label_list_idx
+        self.main_feature_idx = main_feature_idx
+
+    @classmethod
+    def type(cls):
+        return 'kaldi'
+
     def _save(self, corpus, path):
         kaldi_files = {f.idx: f.path for f in corpus.files.values()}
 
@@ -163,7 +180,7 @@ class KaldiLoader(base.CorpusLoader):
         scp_entries = textfile.read_key_value_lines(path, separator=' ')
 
         for utterance_id, rx_specifier in scp_entries.items():
-            yield utterance_id, KaldiLoader.read_float_matrix(rx_specifier)
+            yield utterance_id, KaldiWriter.read_float_matrix(rx_specifier)
 
     @staticmethod
     def read_float_matrix(rx_specifier):

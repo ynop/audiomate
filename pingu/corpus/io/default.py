@@ -14,9 +14,9 @@ LABEL_FILE_PREFIX = 'labels'
 FEAT_CONTAINER_FILE_NAME = 'features.txt'
 
 
-class DefaultLoader(base.CorpusLoader):
+class DefaultReader(base.CorpusReader):
     """
-    This is the corpus loader which is used by default.
+    This is the corpus reader which is used by default.
     """
 
     @classmethod
@@ -36,7 +36,7 @@ class DefaultLoader(base.CorpusLoader):
         return missing_files or None
 
     def _load(self, path):
-        corpus = pingu.Corpus(path=path, loader=self)
+        corpus = pingu.Corpus(path=path)
 
         # Read files
         file_path = os.path.join(path, FILES_FILE_NAME)
@@ -103,6 +103,16 @@ class DefaultLoader(base.CorpusLoader):
                                              path=os.path.join(path, container_path))
 
         return corpus
+
+
+class DefaultWriter(base.CorpusWriter):
+    """
+    This is the corpus writer which is used by default.
+    """
+
+    @classmethod
+    def type(cls):
+        return 'default'
 
     def _save(self, corpus, path):
         # Write files

@@ -7,16 +7,13 @@ from pingu.corpus import io
 from tests import resources
 
 
-class KaldiLoaderTest(unittest.TestCase):
+class KaldiReaderTest(unittest.TestCase):
     def setUp(self):
-        self.loader = io.KaldiLoader()
+        self.reader = io.KaldiReader()
         self.test_path = resources.sample_kaldi_ds_path()
 
-    def tearDown(self):
-        pass
-
     def test_load_files(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertEqual(4, ds.num_files)
         self.assertEqual('file-1', ds.files['file-1'].idx)
@@ -33,7 +30,7 @@ class KaldiLoaderTest(unittest.TestCase):
                          ds.files['file-4'].path)
 
     def test_load_utterances(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertEqual(5, ds.num_utterances)
 
@@ -68,7 +65,7 @@ class KaldiLoaderTest(unittest.TestCase):
         self.assertEqual(-1, ds.utterances['utt-5'].end)
 
     def test_load_label_lists(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertIn('default', ds.label_lists.keys())
         self.assertIn('utt-1', ds.label_lists['default'].keys())
@@ -79,10 +76,16 @@ class KaldiLoaderTest(unittest.TestCase):
         self.assertEqual(0, ds.label_lists['default']['utt-4'].labels[0].start)
         self.assertEqual(-1, ds.label_lists['default']['utt-4'].labels[0].end)
 
+
+class KaldiWriterTest(unittest.TestCase):
+    def setUp(self):
+        self.writer = io.KaldiWriter()
+        self.test_path = resources.sample_kaldi_ds_path()
+
     def test_save(self):
         ds = resources.create_dataset()
         path = tempfile.mkdtemp()
-        self.loader.save(ds, path)
+        self.writer.save(ds, path)
 
         self.assertIn('segments', os.listdir(path))
         self.assertIn('text', os.listdir(path))

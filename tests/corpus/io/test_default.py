@@ -7,16 +7,13 @@ from pingu.corpus import io
 from tests import resources
 
 
-class DefaultCorpusLoaderTest(unittest.TestCase):
+class DefaultCorpusReaderTest(unittest.TestCase):
     def setUp(self):
-        self.loader = io.DefaultLoader()
+        self.reader = io.DefaultReader()
         self.test_path = resources.sample_default_ds_path()
 
-    def tearDown(self):
-        pass
-
     def test_load_files(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertEqual(4, ds.num_files)
         self.assertEqual('file-1', ds.files['file-1'].idx)
@@ -33,7 +30,7 @@ class DefaultCorpusLoaderTest(unittest.TestCase):
                          ds.files['file-4'].path)
 
     def test_load_utterances(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertEqual(5, ds.num_utterances)
 
@@ -68,7 +65,7 @@ class DefaultCorpusLoaderTest(unittest.TestCase):
         self.assertEqual(-1, ds.utterances['utt-5'].end)
 
     def test_load_label_lists(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertIn('text', ds.label_lists.keys())
         self.assertIn('utt-1', ds.label_lists['text'].keys())
@@ -81,17 +78,23 @@ class DefaultCorpusLoaderTest(unittest.TestCase):
         self.assertEqual(4.2, ds.label_lists['text']['utt-4'].labels[2].end)
 
     def test_load_features(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertEqual(os.path.join(self.test_path, 'features', 'mfcc'),
                          ds.feature_containers['mfcc'].path)
         self.assertEqual(os.path.join(self.test_path, 'features', 'fbank'),
                          ds.feature_containers['fbank'].path)
 
+
+class DefaultCorpusWriterTest(unittest.TestCase):
+    def setUp(self):
+        self.writer = io.DefaultWriter()
+        self.test_path = resources.sample_default_ds_path()
+
     def test_save(self):
         ds = resources.create_dataset()
         path = tempfile.mkdtemp()
-        self.loader.save(ds, path)
+        self.writer.save(ds, path)
 
         self.assertIn('files.txt', os.listdir(path))
         self.assertIn('utterances.txt', os.listdir(path))

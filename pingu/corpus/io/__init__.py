@@ -4,52 +4,96 @@ The io module contains the loaders which provide functionality to load corpora f
 All loader implementations base on :py:class:`pingu.corpus.io.CorpusLoader`.
 """
 
-from .base import CorpusLoader
-from .broadcast import BroadcastLoader  # noqa: F401
-from .default import DefaultLoader  # noqa: F401
-from .kaldi import KaldiLoader  # noqa: F401
-from .musan import MusanLoader  # noqa: F401
+from .base import CorpusReader, CorpusWriter
+from .broadcast import BroadcastReader  # noqa: F401
+from .default import DefaultReader, DefaultWriter  # noqa: F401
+from .kaldi import KaldiReader, KaldiWriter  # noqa: F401
+from .musan import MusanReader  # noqa: F401
 
-__loaders = {}
-for cls in CorpusLoader.__subclasses__():
-    __loaders[cls.type()] = cls
+__readers = {}
+for cls in CorpusReader.__subclasses__():
+    __readers[cls.type()] = cls
+
+__writers = {}
+for cls in CorpusWriter.__subclasses__():
+    __writers[cls.type()] = cls
 
 
-class UnknownLoaderException(Exception):
+class UnknownReaderException(Exception):
     pass
 
 
-def available_loaders():
+class UnknownWriterException(Exception):
+    pass
+
+
+def available_readers():
     """
-    Get a mapping of all available loaders.
+    Get a mapping of all available readers.
 
     Returns:
-        dict: A dictionary with loader classes with the name of these loaders as key.
+        dict: A dictionary with reader classes with the name of these readers as key.
 
     Example::
 
-        >>> available_loaders()
+        >>> available_readers()
         {
-            "default" : pingu.corpus.io.DefaultLoader,
-            "kaldi" : pingu.corpus.io.KaldiLoader
+            "default" : pingu.corpus.io.DefaultReader,
+            "kaldi" : pingu.corpus.io.KaldiReader
         }
     """
-    return __loaders
+    return __readers
 
 
-def create_loader_of_type(type_name):
+def available_writers():
     """
-        Create an instance of the loader with the given name.
+    Get a mapping of all available writers.
+
+    Returns:
+        dict: A dictionary with writer classes with the name of these writers as key.
+
+    Example::
+
+        >>> available_writers()
+        {
+            "default" : pingu.corpus.io.DefaultWriter,
+            "kaldi" : pingu.corpus.io.KaldiWriter
+        }
+    """
+    return __writers
+
+
+def create_reader_of_type(type_name):
+    """
+        Create an instance of the reader with the given name.
 
         Args:
-            type_name: The name of a loader.
+            type_name: The name of a reader.
 
         Returns:
-            An instance of the loader with the given type.
+            An instance of the reader with the given type.
     """
-    loaders = available_loaders()
+    readers = available_readers()
 
-    if type_name not in loaders.keys():
-        raise UnknownLoaderException('Unknown loader: %s' % (type_name,))
+    if type_name not in readers.keys():
+        raise UnknownReaderException('Unknown reader: %s' % (type_name,))
 
-    return loaders[type_name]()
+    return readers[type_name]()
+
+
+def create_writer_of_type(type_name):
+    """
+        Create an instance of the writer with the given name.
+
+        Args:
+            type_name: The name of a writer.
+
+        Returns:
+            An instance of the writer with the given type.
+    """
+    writers = available_writers()
+
+    if type_name not in writers.keys():
+        raise UnknownWriterException('Unknown writer: %s' % (type_name,))
+
+    return writers[type_name]()

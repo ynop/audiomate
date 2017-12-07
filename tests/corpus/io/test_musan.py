@@ -5,13 +5,13 @@ from pingu.corpus import io
 from tests import resources
 
 
-class MusanCorpusLoaderTest(unittest.TestCase):
+class MusanCorpusReaderTest(unittest.TestCase):
     def setUp(self):
-        self.loader = io.MusanLoader()
+        self.reader = io.MusanReader()
         self.test_path = resources.sample_musan_ds_path()
 
     def test_load_files(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertEqual(5, ds.num_files)
 
@@ -36,7 +36,7 @@ class MusanCorpusLoaderTest(unittest.TestCase):
                          ds.files['speech-librivox-0001'].path)
 
     def test_load_issuers(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertEqual(3, ds.num_issuers)
 
@@ -56,7 +56,7 @@ class MusanCorpusLoaderTest(unittest.TestCase):
         self.assertIsNone(ds.issuers['Quiet_Music_for_Tiny_Robots'].info)
 
     def test_load_utterances(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertEqual(5, ds.num_utterances)
 
@@ -91,7 +91,7 @@ class MusanCorpusLoaderTest(unittest.TestCase):
         self.assertEqual(-1, ds.utterances['speech-librivox-0001'].end)
 
     def test_load_label_lists(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertIn('audio_type', ds.label_lists.keys())
 
