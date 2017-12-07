@@ -17,10 +17,13 @@ class Splitter(object):
 
     Args:
         corpus (Corpus): The corpus that should be splitted.
+        random_seed (int): Seed to use for random number generation.
     """
 
-    def __init__(self, corpus):
+    def __init__(self, corpus, random_seed=None):
         self.corpus = corpus
+        self.rand = random.Random()
+        self.rand.seed(a=random_seed)
 
     def split_by_number_of_utterances(self, proportions={}):
         """
@@ -55,9 +58,10 @@ class Splitter(object):
             20
         """
 
-        utterance_idxs = list(self.corpus.utterances.keys())
-        splits = Splitter.get_identifiers_randomly_splitted(identifiers=utterance_idxs,
-                                                            proportions=proportions)
+        utterance_idxs = sorted(list(self.corpus.utterances.keys()))
+        self.rand.shuffle(utterance_idxs)
+        splits = Splitter.split_identifiers(identifiers=utterance_idxs,
+                                            proportions=proportions)
 
         return self._subviews_from_utterance_splits(splits)
 
@@ -108,7 +112,7 @@ class Splitter(object):
         return subviews
 
     @staticmethod
-    def get_identifiers_randomly_splitted(identifiers=[], proportions={}):
+    def split_identifiers(identifiers=[], proportions={}):
         """
         Split the given identifiers by the given proportions.
 
@@ -123,7 +127,7 @@ class Splitter(object):
 
         Example::
 
-            >>> Splitter.get_identifiers_randomly_splitted(
+            >>> Splitter.split_identifiers(
             >>>     identifiers=['a', 'b', 'c', 'd'],
             >>>     proportions={'melvin' : 0.5, 'timmy' : 0.5}
             >>> )
@@ -131,8 +135,6 @@ class Splitter(object):
         """
 
         absolute_proportions = Splitter.absolute_proportions(proportions, len(identifiers))
-
-        random.shuffle(identifiers)
 
         parts = {}
         start_index = 0
@@ -169,7 +171,7 @@ class Splitter(object):
         # Now distribute the rest value randomly over the different parts
         absolute_sum = sum(absolute_proportions.values())
         rest_value = count - absolute_sum
-        subset_keys = list(proportions.keys())
+        subset_keys = sorted(list(proportions.keys()))
 
         for i in range(rest_value):
             key = subset_keys[i % len(subset_keys)]
@@ -182,8 +184,8 @@ class Splitter(object):
         """
         Divide the given identifiers based on the given proportions. But instead of randomly split
         the identifiers it is based on category weights. Every identifier has a weight for any
-        number of categories. The target is to split the identifiers in a way, so the sum of
-        category k within of part x is proportional to the sum of category x over all parts
+        number of categories. The target is, to split the identifiers in a way, so the sum of
+        category k within part x is proportional to the sum of category x over all parts
         according to the given proportions. This is done by greedily insert the identifiers step by
         step in a part which has free space (weight). If there are no fitting parts anymore, the one
         with the least weight exceed is used.
@@ -236,11 +238,12 @@ class Splitter(object):
                 target_weights_per_part[idx][category] = proportion
 
         # Distribute items greedily
-        part_ids = list(proportions.keys())
+        part_ids = sorted(list(proportions.keys()))
         current_weights_per_part = {idx: collections.defaultdict(int) for idx in part_ids}
         result = collections.defaultdict(list)
 
-        for identifier, cat_weights in identifiers.items():
+        for identifier in sorted(identifiers.keys()):
+            cat_weights = identifiers[identifier]
 
             target_part = None
             current_part = 0

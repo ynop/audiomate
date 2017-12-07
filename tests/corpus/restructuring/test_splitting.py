@@ -18,6 +18,24 @@ class SplitterTest(unittest.TestCase):
         self.assertEqual(6, res['train'].num_utterances)
         self.assertEqual(2, res['test'].num_utterances)
 
+    def test_split_by_number_of_utterances_seed(self):
+        self.corpus = resources.create_multi_label_corpus()
+        res1 = splitting.Splitter(self.corpus, random_seed=15).split_by_number_of_utterances({
+            'train': 0.6,
+            'test': 0.2
+        })
+
+        self.corpus = resources.create_multi_label_corpus()
+        res2 = splitting.Splitter(self.corpus, random_seed=15).split_by_number_of_utterances({
+            'train': 0.6,
+            'test': 0.2
+        })
+
+        self.assertSetEqual(set(res1['train'].utterances.keys()),
+                            set(res2['train'].utterances.keys()))
+        self.assertSetEqual(set(res1['test'].utterances.keys()),
+                            set(res2['test'].utterances.keys()))
+
     def test_split_by_proportionally_distribute_labels(self):
         res = self.splitter.split_by_proportionally_distribute_labels({
             'train': 0.6,
@@ -26,6 +44,26 @@ class SplitterTest(unittest.TestCase):
 
         self.assertEqual(self.corpus.num_utterances,
                          sum([sv.num_utterances for sv in res.values()]))
+
+    def test_split_by_proportionally_distribute_labels_seed(self):
+        corpus = resources.create_multi_label_corpus()
+        splitter = splitting.Splitter(corpus, random_seed=15)
+        res1 = splitter.split_by_proportionally_distribute_labels({
+            'train': 0.6,
+            'test': 0.2
+        })
+
+        corpus = resources.create_multi_label_corpus()
+        splitter = splitting.Splitter(corpus, random_seed=15)
+        res2 = splitter.split_by_proportionally_distribute_labels({
+            'train': 0.6,
+            'test': 0.2
+        })
+
+        self.assertSetEqual(set(res1['train'].utterances.keys()),
+                            set(res2['train'].utterances.keys()))
+        self.assertSetEqual(set(res1['test'].utterances.keys()),
+                            set(res2['test'].utterances.keys()))
 
     def test_absolute_proportions(self):
         res = self.splitter.absolute_proportions({
@@ -39,7 +77,7 @@ class SplitterTest(unittest.TestCase):
         self.assertEqual(24, res['c'])
 
     def test_get_identifiers_randomly_splitted(self):
-        res = self.splitter.get_identifiers_randomly_splitted(identifiers=[
+        res = self.splitter.split_identifiers(identifiers=[
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'v', 't'
         ], proportions={
             'a': 0.3333,
@@ -69,9 +107,6 @@ class SplitterTest(unittest.TestCase):
 
         res = splitting.Splitter.get_identifiers_splitted_by_weights(identifiers=identifiers,
                                                                      proportions=proportions)
-
-        for x, y in res.items():
-            print(x, len(y))
 
         self.assertGreater(len(res['train']), 0)
         self.assertGreater(len(res['test']), 0)
