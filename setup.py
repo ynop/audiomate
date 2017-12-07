@@ -17,7 +17,7 @@ setup(name='pingu',
       ],
       keywords='',
       license='MIT',
-      packages=find_packages(),
+      packages=find_packages(exclude=['tests']),
       install_requires=[
           'numpy==1.13.3',
           'scipy==1.0.0',
