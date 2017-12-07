@@ -20,22 +20,12 @@ class Corpus(base.CorpusView):
 
     Args:
         path (str): Path where the corpus is stored. (Optional)
-        loader (CorpusLoader): A loader to use for loading/saving. (By default the DefaultLoader is
-                               used)
     """
 
-    def __init__(self, path=None, loader=None):
+    def __init__(self, path=None):
         super(Corpus, self).__init__()
 
         self.path = path
-
-        # Set default loader of none is given
-        if loader is None:
-            from . import io
-            self.loader = io.DefaultLoader()
-        else:
-            self.loader = loader
-
         self._files = {}
         self._utterances = {}
         self._issuers = {}
@@ -73,67 +63,61 @@ class Corpus(base.CorpusView):
     #   IO
     #
 
-    def save(self):
+    def save(self, writer=None):
         """
         If self.path is defined, it tries to save the corpus at the given path.
         """
 
         if self.path is None:
-            raise ValueError('No path given to save the dataset.')
+            raise ValueError('No path given to save the data set.')
 
-        self.save_at(self.path)
+        self.save_at(self.path, writer)
 
-    def save_at(self, path, loader=None):
+    def save_at(self, path, writer=None):
         """
         Save this corpus at the given path. If the path differs from the current path set, the path
         gets updated.
 
         Parameters:
             path (str): Path to save the data set to.
-            loader (str, CorpusLoader): If you want to use another loader (e.g. to export to another
-                                        format). Otherwise it uses the loader associated with this
-                                        data set.
+            writer (str, CorpusWriter): The writer or the name of the reader to use.
         """
 
-        if loader is None:
-            # If not loader given, use the one associated with the corpus
-            self.loader.save(self, path)
-
-        elif type(loader) == str:
+        if writer is None:
+            from . import io
+            writer = io.DefaultWriter()
+        elif type(writer) == str:
             # If a loader is given as string, try to create such a loader.
             from . import io
-            loader = io.create_loader_of_type(loader)
-            loader.save(self, path)
+            writer = io.create_writer_of_type(writer)
 
-        else:
-            # Use the given loader
-            loader.save(self, path)
+        writer.save(self, path)
 
         self.path = path
 
     @classmethod
-    def load(cls, path, loader=None):
+    def load(cls, path, reader=None):
         """
-        Loads the corpus from the given path, using the given loader. If no loader is given the
-        default loader is used.
+        Loads the corpus from the given path, using the given reader. If no reader is given the
+        :py:class:`pingu.corpus.io.DefaultReader` is used.
 
         Args:
             path (str): Path to load the corpus from.
-            loader (str, CorpusLoader): The loader or the name of the loader to use.
+            reader (str, CorpusReader): The reader or the name of the reader to use.
 
         Returns:
             Corpus: The loaded corpus.
         """
 
-        if loader is None:
+        if reader is None:
             from . import io
-            loader = io.DefaultLoader()
+            reader = io.DefaultReader()
 
-        elif type(loader) == str:
+        elif type(reader) == str:
             from . import io
-            loader = io.create_loader_of_type(loader)
+            reader = io.create_reader_of_type(reader)
 
-        return loader.load(path)
+        return reader.load(path)
 
     #
     # File

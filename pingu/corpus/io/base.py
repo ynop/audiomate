@@ -1,10 +1,7 @@
 import abc
 
 
-class CorpusLoader(metaclass=abc.ABCMeta):
-    """
-    A loader defines functionality to load and save a corpus from/to a given path.
-    """
+class CorpusReader(metaclass=abc.ABCMeta):
 
     def load(self, path):
         """
@@ -16,7 +13,6 @@ class CorpusLoader(metaclass=abc.ABCMeta):
         Returns:
             Corpus: The loaded corpus.
         """
-
         # Check for missing files
         missing_files = self._check_for_missing_files(path)
 
@@ -25,6 +21,28 @@ class CorpusLoader(metaclass=abc.ABCMeta):
                 self.type(), ' '.join(missing_files), path))
 
         return self._load(path)
+
+    @classmethod
+    @abc.abstractmethod
+    def type(cls):
+        """ Return the type of the loader (e.g. kaldi, TIMIT, ...). """
+        return 'not_implemented'
+
+    @abc.abstractmethod
+    def _load(self, path):
+        """ The loader specific load function. """
+        pass
+
+    @abc.abstractmethod
+    def _check_for_missing_files(self, path):
+        """
+        Return a list of necessary files for the current type of dataset that are missing in the
+        given folder. None if path seems valid.
+        """
+        return None
+
+
+class CorpusWriter(metaclass=abc.ABCMeta):
 
     def save(self, corpus, path):
         """
@@ -43,19 +61,6 @@ class CorpusLoader(metaclass=abc.ABCMeta):
         return 'not_implemented'
 
     @abc.abstractmethod
-    def _load(self, path):
-        """ The loader specific load function. """
-        pass
-
-    @abc.abstractmethod
     def _save(self, corpus, path):
         """ The loader specific save function. """
         pass
-
-    @abc.abstractmethod
-    def _check_for_missing_files(self, path):
-        """
-        Return a list of necessary files for the current type of dataset that are missing in the
-        given folder. None if path seems valid.
-        """
-        return None

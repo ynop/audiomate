@@ -13,9 +13,9 @@ LABEL_FILE = 'labels.txt'
 FEAT_CONTAINER_FILE_NAME = 'features.txt'
 
 
-class BroadcastLoader(base.CorpusLoader):
+class BroadcastReader(base.CorpusReader):
     """
-    This is the corpus loader which is used for corpora where a separate label file per utterance
+    This is the corpus reader which is used for corpora where a separate label file per utterance
     exists. This especially is useful for corpora where the utterances are very long (e.g. broadcast
     recordings).
     """
@@ -37,7 +37,7 @@ class BroadcastLoader(base.CorpusLoader):
         return missing_files or None
 
     def _load(self, path):
-        corpus = pingu.Corpus(path=path, loader=self)
+        corpus = pingu.Corpus(path=path)
 
         # Read files
         file_path = os.path.join(path, FILES_FILE_NAME)
@@ -104,6 +104,3 @@ class BroadcastLoader(base.CorpusLoader):
                                              path=os.path.join(path, container_path))
 
         return corpus
-
-    def _save(self, corpus, path):
-        raise NotImplementedError('There is no implementation for saving in broadcast format.')

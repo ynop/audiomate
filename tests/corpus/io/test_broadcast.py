@@ -5,16 +5,13 @@ from pingu.corpus import io
 from tests import resources
 
 
-class DefaultCorpusLoaderTest(unittest.TestCase):
+class DefaultCorpusReaderTest(unittest.TestCase):
     def setUp(self):
-        self.loader = io.BroadcastLoader()
+        self.reader = io.BroadcastReader()
         self.test_path = resources.sample_broadcast_ds_path()
 
-    def tearDown(self):
-        pass
-
     def test_load_files(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertEqual(4, ds.num_files)
         self.assertEqual('file-1', ds.files['file-1'].idx)
@@ -31,7 +28,7 @@ class DefaultCorpusLoaderTest(unittest.TestCase):
                          ds.files['file-4'].path)
 
     def test_load_utterances(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertEqual(5, ds.num_utterances)
 
@@ -66,7 +63,7 @@ class DefaultCorpusLoaderTest(unittest.TestCase):
         self.assertEqual(-1, ds.utterances['utt-5'].end)
 
     def test_load_label_lists(self):
-        ds = self.loader.load(self.test_path)
+        ds = self.reader.load(self.test_path)
 
         self.assertIn('default', ds.label_lists.keys())
         self.assertIn('music', ds.label_lists.keys())
