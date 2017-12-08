@@ -26,7 +26,7 @@ setup(name='pingu',
       ],
       include_package_data=True,
       zip_safe=False,
-      test_suite='nose.collector',
+      test_suite='tests',
       extras_require={
           'tests': ['pytest==%s' % (PYTEST_VERSION_,), 'pytest-runner==3.0', 'pytest-cov==2.5.1'],
           'ci': ['flake8==3.5.0', 'flake8-quotes==0.12.1'],
