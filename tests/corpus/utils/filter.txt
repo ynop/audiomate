@@ -1,6 +1,0 @@
-a b| a_b
-b c| b_c
-x c| x_c
-b c| b_c
-d e| MusikSprach
-speech music| muspeech

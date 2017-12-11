@@ -42,6 +42,7 @@ Example for loading a corpus and using the FramedSignalGrabber to retrieve the a
     reference/grabber
     reference/subview
     reference/restructuring
+    reference/corpus_utils
     reference/formats
     reference/utils
 
