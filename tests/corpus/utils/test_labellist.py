@@ -8,7 +8,7 @@ from pingu.corpus.utils import labellist
 from pingu.corpus.utils.labellist import UnmappedLabelsException
 
 
-class LabelMapperTest(unittest.TestCase):
+class TestLabelListUtilities(object):
 
     def test_relabel_maps_a_onto_b(self):
         label_list = assets.LabelList(labels=[
