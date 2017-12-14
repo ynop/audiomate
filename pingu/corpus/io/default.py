@@ -33,7 +33,7 @@ class DefaultReader(base.CorpusReader):
             if not os.path.isfile(file_path):
                 missing_files.append(file_name)
 
-        return missing_files or None
+        return missing_files
 
     def _load(self, path):
         corpus = pingu.Corpus(path=path)
