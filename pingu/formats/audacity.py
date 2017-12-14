@@ -1,5 +1,6 @@
 import re
 
+from pingu.corpus.assets import Label, LabelList
 from pingu.utils import textfile
 
 __TIME_JUNK_PATTERN = re.compile(r'[^0-9.\-]')
@@ -22,6 +23,21 @@ def write_label_file(path, entries):
         >>>
         >>> write_label_file('/some/path/to/file.txt', data)
     """
+
+    textfile.write_separated_lines(path, entries, separator='\t')
+
+
+def write_label_list(path, label_list):
+    """
+    Writes the given `label_list` to an audacity label file.
+
+    Args:
+        path (str): Path to write the file to.
+        label_list (pingu.corpus.assets.LabelList): Label list
+    """
+    entries = []
+    for label in label_list:
+        entries.append([label.start, label.end, label.value])
 
     textfile.write_separated_lines(path, entries, separator='\t')
 
@@ -50,6 +66,24 @@ def read_label_file(path):
         labels.append([float(_clean_time(record[0])), float(_clean_time(record[1])), str(record[2])])
 
     return labels
+
+
+def read_label_list(path):
+    """
+    Reads labels from an Audacity label file and returns them wrapped in a :py:class:`pingu.corpus.assets.LabelList`.
+
+    Args:
+        path (str): Path to the Audacity label file
+
+    Returns:
+        pingu.corpus.assets.LabelList: Label list containing the labels
+    """
+    labels = []
+    for record in textfile.read_separated_lines_generator(path, separator='\t', max_columns=3):
+        labels.append(
+            Label(str(record[2]), float(_clean_time(record[0])), float(_clean_time(record[1]))))
+
+    return LabelList(labels=labels)
 
 
 def _clean_time(time_str):
