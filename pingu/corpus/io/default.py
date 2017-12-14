@@ -16,7 +16,7 @@ FEAT_CONTAINER_FILE_NAME = 'features.txt'
 
 class DefaultReader(base.CorpusReader):
     """
-    This is the corpus reader which is used by default.
+    Reads corpora in the Default format.
     """
 
     @classmethod
@@ -107,7 +107,7 @@ class DefaultReader(base.CorpusReader):
 
 class DefaultWriter(base.CorpusWriter):
     """
-    This is the corpus writer which is used by default.
+    Writes corpora in the Default format.
     """
 
     @classmethod

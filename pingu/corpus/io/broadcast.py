@@ -15,9 +15,7 @@ FEAT_CONTAINER_FILE_NAME = 'features.txt'
 
 class BroadcastReader(base.CorpusReader):
     """
-    This is the corpus reader which is used for corpora where a separate label file per utterance
-    exists. This especially is useful for corpora where the utterances are very long (e.g. broadcast
-    recordings).
+    Reads corpora in the Broadcast format.
     """
 
     @classmethod

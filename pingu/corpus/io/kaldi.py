@@ -18,10 +18,13 @@ FEATS_FILE_NAME = 'feats'
 
 class KaldiReader(base.CorpusReader):
     """
-    This reader is used to load data sets in the KALDI data format.
+    Supports reading data sets in Kaldi format.
 
-    # References
-        - [KALDI data format description](http://kaldi-asr.org/doc/data_prep.html)
+    .. seealso::
+
+       `Kaldi: Data preparation <http://kaldi-asr.org/doc/data_prep.html>`_
+          Describes how a data set has to be structured to be understood by Kaldi and the format of the individual
+          files.
     """
 
     def __init__(self, main_label_list_idx='default', main_feature_idx='default'):
@@ -109,10 +112,13 @@ class KaldiReader(base.CorpusReader):
 
 class KaldiWriter(base.CorpusWriter):
     """
-    This writer writes a data set out in the KALDI data format.
+    Supports writing data sets in Kaldi format.
 
-    # References
-        - [KALDI data format description](http://kaldi-asr.org/doc/data_prep.html)
+    .. seealso::
+
+       `Kaldi: Data preparation <http://kaldi-asr.org/doc/data_prep.html>`_
+          Describes how a data set has to be structured to be understood by Kaldi and the format of the individual
+          files.
     """
 
     def __init__(self, main_label_list_idx='default', main_feature_idx='default'):

@@ -235,8 +235,7 @@ class Corpus(base.CorpusView):
         If any of the given utterance-ids already exists, a suffix is appended so it is unique.
 
         Args:
-            utterances (list): Either a list of or a single
-            :py:class:`pingu.corpus.assets.Utterance`.
+            utterances (list): Either a list of or a single :py:class:`pingu.corpus.assets.Utterance`.
 
         Returns:
             dict: A dictionary containing file idx mappings (old-utterance-idx/utterance-instance).

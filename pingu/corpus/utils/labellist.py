@@ -10,12 +10,11 @@ class UnmappedLabelsException(Exception):
 
 def relabel(label_list, projections):
     """
-    Relabel an entire :py:class:`pingu.corpus.assets.LabelList` using user-defined
-    projections. Labels can be renamed, removed or overlapping labels can be flattened to a single
-    label per segment.
+    Relabel an entire :py:class:`~pingu.corpus.assets.LabelList` using user-defined projections. Labels can be renamed,
+    removed or overlapping labels can be flattened to a single label per segment.
 
-    This method raises a :py:class:`pingu.corpus.assets.UnmappedLabelsException` if a projection
-    for one or more combinations of labels is not defined.
+    This method raises a :py:class:`~pingu.corpus.utils.labellist.UnmappedLabelsException` if a projection for one or
+    more combinations of labels is not defined.
 
     Args:
         label_list (pingu.corpus.assets.LabelList): The label list to relabel
@@ -23,6 +22,9 @@ def relabel(label_list, projections):
                             labels.
     Returns:
         pingu.corpus.assets.LabelList: New label list with remapped labels
+
+    Raises:
+        UnmappedLabelsException: If a projection for one or more combinations of labels is not defined.
 
     Example:
         >>> projections = {
@@ -71,8 +73,7 @@ def find_missing_projections(label_list, projections):
                             labels.
 
     Returns:
-        dict: Dictionary where the keys are naturally sorted tuples of unmapped label combinations
-              that should be relabeled to the key's value
+        List: List of combinations of labels that are not covered by any projection
 
     Example:
         >>> ll = assets.LabelList(labels=[
