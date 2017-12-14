@@ -1,10 +1,10 @@
 import os.path
 
-from pingu.formats.audacity import read_label_file, write_label_file
+from pingu.corpus.assets import Label, LabelList
+from pingu.formats.audacity import read_label_file, read_label_list, write_label_file, write_label_list
 
 
 class TestAudacityFormat(object):
-
     def test_read_label_file_en(self):
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_en.txt')
         labels = read_label_file(path)
@@ -33,6 +33,34 @@ class TestAudacityFormat(object):
         assert labels[1][1] == 43531.343483
         assert labels[1][2] == 'speech_male'
 
+    def test_read_label_list_en(self):
+        path = os.path.join(os.path.dirname(__file__), 'audacity_labels_en.txt')
+        ll = read_label_list(path)
+
+        assert len(ll) == 2
+
+        assert ll[0].start == 43352.824046
+        assert ll[0].end == 43525.837661
+        assert ll[0].value == 'music'
+
+        assert ll[1].start == 43512.446969
+        assert ll[1].end == 43531.343483
+        assert ll[1].value == 'speech_male'
+
+    def test_read_label_list_de(self):
+        path = os.path.join(os.path.dirname(__file__), 'audacity_labels_de.txt')
+        ll = read_label_list(path)
+
+        assert len(ll) == 2
+
+        assert ll[0].start == 43352.824046
+        assert ll[0].end == 43525.837661
+        assert ll[0].value == 'music'
+
+        assert ll[1].start == 43512.446969
+        assert ll[1].end == 43531.343483
+        assert ll[1].value == 'speech_male'
+
     def test_write_label_file(self, tmpdir):
         path = os.path.join(tmpdir.strpath, 'audacity_labels.txt')
         entries = [
@@ -41,6 +69,25 @@ class TestAudacityFormat(object):
         ]
 
         write_label_file(path, entries)
+
+        assert os.path.isfile(path)
+
+        with open(path) as file:
+            lines = file.readlines()
+
+            assert len(lines) == 2
+
+            assert lines[0] == '10.01\t11.08\tmusic\n'
+            assert lines[1] == '11.08\t13.33\tspeech_male\n'
+
+    def test_write_label_list(self, tmpdir):
+        path = os.path.join(tmpdir.strpath, 'audacity_labels.txt')
+        ll = LabelList(labels=[
+            Label('music', 10.01, 11.08),
+            Label('speech_male', 11.08, 13.33),
+        ])
+
+        write_label_list(path, ll)
 
         assert os.path.isfile(path)
 
