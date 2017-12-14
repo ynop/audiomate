@@ -96,7 +96,7 @@ class LabelList(object):
         """
 
         # all label start events
-        events = [(l.start, 1, l) for l in sorted(self.labels, key=lambda x: x.start)]
+        events = [(l.start, 1, l) for l in self.labels]
         labels_to_end = False
         heapq.heapify(events)
 
