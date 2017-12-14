@@ -1,7 +1,9 @@
 import collections
 import heapq
+from functools import total_ordering
 
 
+@total_ordering
 class Label(object):
     """
     Represents a label that describes some part of an utterance.
@@ -18,6 +20,15 @@ class Label(object):
         self.value = value
         self.start = start
         self.end = end
+
+    def __eq__(self, other):
+        return (self.start, self.end, self.value.lower()) == (other.start, other.end, other.value.lower())
+
+    def __lt__(self, other):
+        self_end = float('inf') if self.end == -1 else self.end
+        other_end = float('inf') if other.end == -1 else other.end
+
+        return (self.start, self_end, self.value.lower()) < (other.start, other_end, other.value.lower())
 
 
 class LabelList(object):
