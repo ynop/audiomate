@@ -84,14 +84,14 @@ def find_missing_projections(label_list, projections):
         >>> find_missing_projections(ll, {('b',): 'new_label'})
         [('a', 'b'), ('a', 'b', 'c'), ('a', 'c'), ('c',)]
     """
-    unmapped_combinations = []
+    unmapped_combinations = set()
     for labeled_segment in label_list.ranges():
         combination = tuple(sorted([label.value for label in labeled_segment[2]]))
 
         if combination not in projections:
-            unmapped_combinations.append(combination)
+            unmapped_combinations.add(combination)
 
-    return unmapped_combinations
+    return sorted(unmapped_combinations)
 
 
 def load_projections(projections_file):

@@ -198,6 +198,21 @@ class LabelMapperTest(unittest.TestCase):
         assert ('a', 'b', 'c',) in unmapped_combinations
         assert ('a', 'c',) in unmapped_combinations
 
+    def test_no_duplicate_missing_projections_reported(self):
+        label_list = assets.LabelList(labels=[
+            assets.Label('b', 1.0, 2.0),
+            assets.Label('a', 1.5, 2.5),
+            assets.Label('b', 3.0, 4.0),
+            assets.Label('a', 3.5, 4.5),
+        ])
+
+        unmapped_combinations = labellist.find_missing_projections(label_list, {})
+
+        assert len(unmapped_combinations) == 3
+        assert ('b',) in unmapped_combinations
+        assert ('a', 'b',) in unmapped_combinations
+        assert ('a',) in unmapped_combinations
+
     def test_no_missing_projections_if_projection_complete(self):
         projections = {
             ('b',): 'foo',
