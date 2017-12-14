@@ -51,7 +51,7 @@ pip install -e .
 ### Running the test suite
 
 ```
-pip install -e .[tests]
+pip install -e .[dev]
 python setup.py test
 ```
 
@@ -67,7 +67,7 @@ The documentation is written in [reStructuredText](http://docutils.sourceforge.n
 To generate the documentation, execute:
 
 ```
-pip install -e .[docs]
+pip install -e .[dev]
 cd docs
 make html
 ```
