@@ -277,3 +277,16 @@ class TestLabelListUtilities(object):
         unmapped_combinations = labellist.find_missing_projections(label_list, projections)
 
         assert len(unmapped_combinations) == 0
+
+    def test_missing_projections_are_naturally_sorted(self):
+        label_list = assets.LabelList(labels=[
+            assets.Label('b', 1.0, 2.0),
+            assets.Label('a', 1.5, 2.5),
+        ])
+
+        unmapped_combinations = labellist.find_missing_projections(label_list, {})
+
+        assert len(unmapped_combinations) == 3
+        assert unmapped_combinations[0] == ('a',)
+        assert unmapped_combinations[1] == ('a', 'b',)
+        assert unmapped_combinations[2] == ('b',)
