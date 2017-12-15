@@ -175,7 +175,7 @@ class LabelList(object):
             dict: A dictionary container for every label-value (key) the number of occurrences
                   (value).
 
-        Example::
+        Example:
             >>> ll = assets.LabelList(labels=[
             >>>     assets.Label('a', 3.2, 4.5),
             >>>     assets.Label('b', 5.1, 8.9),
