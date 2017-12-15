@@ -1,5 +1,4 @@
 import os.path
-import unittest
 
 import pytest
 
@@ -148,6 +147,37 @@ class TestLabelListUtilities(object):
 
         assert ex.value.message == expected_message
 
+    def test_relabel_proceeds_despite_unmapped_labels_in_presence_of_wildcard_rule(self):
+        label_list = assets.LabelList(labels=[
+            assets.Label('a', 3.2, 5.1),
+            assets.Label('b', 4.2, 4.7),
+            assets.Label('c', 4.3, 4.8)
+        ])
+
+        actual = labellist.relabel(label_list, {('a',): 'new_label_a', ('**',): 'catch_all'})
+
+        assert len(actual) == 5
+
+        assert actual[0].start == 3.2
+        assert actual[0].end == 4.2
+        assert actual[0].value == 'new_label_a'
+
+        assert actual[1].start == 4.2
+        assert actual[1].end == 4.3
+        assert actual[1].value == 'catch_all'
+
+        assert actual[2].start == 4.3
+        assert actual[2].end == 4.7
+        assert actual[2].value == 'catch_all'
+
+        assert actual[3].start == 4.7
+        assert actual[3].end == 4.8
+        assert actual[3].value == 'catch_all'
+
+        assert actual[4].start == 4.8
+        assert actual[4].end == 5.1
+        assert actual[4].value == 'new_label_a'
+
     def test_load_projections_from_file(self):
         path = os.path.join(os.path.dirname(__file__), 'projections.txt')
         projections = labellist.load_projections(path)
@@ -220,6 +250,22 @@ class TestLabelListUtilities(object):
             ('a', 'b', 'c',): 'foo',
             ('a', 'c',): 'foo',
             ('c',): 'bar'
+        }
+
+        label_list = assets.LabelList(labels=[
+            assets.Label('b', 3.2, 4.5),
+            assets.Label('a', 4.0, 4.9),
+            assets.Label('c', 4.2, 5.1)
+        ])
+
+        unmapped_combinations = labellist.find_missing_projections(label_list, projections)
+
+        assert len(unmapped_combinations) == 0
+
+    def test_no_missing_projections_if_covered_by_catch_all_rule(self):
+        projections = {
+            ('b',): 'new_label_b',
+            ('**',): 'new_label_all',
         }
 
         label_list = assets.LabelList(labels=[
