@@ -30,6 +30,9 @@ class Label(object):
 
         return (self.start, self_end, self.value.lower()) < (other.start, other_end, other.value.lower())
 
+    def __repr__(self) -> str:
+        return 'Label({}, {}, {})'.format(self.value, self.start, self.end)
+
 
 class LabelList(object):
     """
@@ -190,6 +193,30 @@ class LabelList(object):
             occurrences[label.value] += 1
 
         return occurrences
+
+    def apply(self, fn):
+        """
+        Apply the given function `fn` to every label in this label list. `fn` is a function of one argument that
+        receives the current label which can then be edited in place.
+
+        Args:
+            fn (func): Function to apply to every label
+
+        Example:
+            >>> ll = LabelList(labels=[
+            ...     Label('a_label', 1.0, 2.0),
+            ...     Label('another_label', 2.0, 3.0)
+            ... ])
+            >>> def shift_labels(label):
+            ...     label.start += 1.0
+            ...     label.end += 1.0
+            ...
+            >>> ll.apply(shift_labels)
+            >>> ll.labels
+            [Label(a_label, 2.0, 3.0), Label(another_label, 3.0, 4.0)]
+        """
+        for label in self.labels:
+            fn(label)
 
     def __getitem__(self, item):
         return self.labels.__getitem__(item)
