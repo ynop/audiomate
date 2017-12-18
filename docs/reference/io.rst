@@ -5,24 +5,58 @@ pingu.corpus.io
     :members:
 .. currentmodule:: pingu.corpus.io
 
-Base loader
------------
+Base Classes
+------------
 
-.. autoclass:: CorpusLoader
+.. autoclass:: CorpusReader
    :members:
    :inherited-members:
+   :private-members:
 
-Loader implementations
-----------------------
+.. autoclass:: CorpusWriter
+   :members:
+   :inherited-members:
+   :private-members:
 
-Default
-^^^^^^^
-.. autoclass:: DefaultLoader
+Implementations
+---------------
+
+.. _table-format-support-of-readers-writers-by-format:
+
+.. table:: Support for Reading and Writing by Format
+
+  ==============================  =====  =======
+  Format                          Read   Write
+  ==============================  =====  =======
+  Broadcast                       x
+  Default                         x      x
+  Kaldi                           x      x
+  MUSAN                           x
+  ==============================  =====  =======
+
 
 Broadcast
 ^^^^^^^^^
-.. autoclass:: BroadcastLoader
+.. autoclass:: BroadcastReader
+   :members:
+
+Default
+^^^^^^^
+.. autoclass:: DefaultReader
+   :members:
+
+.. autoclass:: DefaultWriter
+   :members:
 
 Kaldi
 ^^^^^
-.. autoclass:: BroadcastLoader
+.. autoclass:: KaldiReader
+   :members:
+
+.. autoclass:: KaldiWriter
+   :members:
+
+MUSAN
+^^^^^
+.. autoclass:: MusanReader
+   :members:

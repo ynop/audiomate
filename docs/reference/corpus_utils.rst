@@ -9,3 +9,7 @@ LabelList
 
 .. automodule:: pingu.corpus.utils.labellist
     :members:
+
+Exceptions
+----------
+.. autoexception:: pingu.corpus.utils.labellist.UnmappedLabelsException

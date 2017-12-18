@@ -16,7 +16,7 @@ build:
     pull: true
     
   ci:
-    - "pip install -e .[tests,ci]"
+    - "pip install -e .[dev,ci]"
     - "flake8"
     
     #Create folders for test and code coverage

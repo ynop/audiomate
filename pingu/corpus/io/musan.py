@@ -16,9 +16,13 @@ class MusanReader(base.CorpusReader):
     """
     Reader for the MUSAN corpus. MUSAN is a corpus of music, speech, and noise recordings.
 
-    # References
-        - [MUSAN: A Music, Speech, and Noise Corpus](https://arxiv.org/pdf/1510.08484v1.pdf)
-        - [OpenSLR: MUSAN](http://www.openslr.org/17/) (download)
+    .. seealso::
+
+       `MUSAN: A Music, Speech, and Noise Corpus <https://arxiv.org/pdf/1510.08484v1.pdf>`_
+          Paper explaining the structure and characteristics of the corpus
+
+       `OpenSLR: MUSAN <http://www.openslr.org/17/>`_
+          Download page
     """
 
     @classmethod

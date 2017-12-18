@@ -28,9 +28,14 @@ setup(name='pingu',
       zip_safe=False,
       test_suite='tests',
       extras_require={
-          'tests': ['pytest==%s' % (PYTEST_VERSION_,), 'pytest-runner==3.0', 'pytest-cov==2.5.1'],
+          'dev': [
+              'pytest==%s' % (PYTEST_VERSION_,),
+              'pytest-runner==3.0',
+              'pytest-cov==2.5.1',
+              'Sphinx==1.6.5',
+              'sphinx-rtd-theme==0.2.5b1'
+          ],
           'ci': ['flake8==3.5.0', 'flake8-quotes==0.12.1'],
-          'docs': ['Sphinx==1.6.5', 'sphinx-rtd-theme==0.2.5b1']
       },
       setup_requires=['pytest-runner'],
       tests_require=['pytest==%s' % (PYTEST_VERSION_,)],

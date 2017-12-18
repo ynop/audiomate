@@ -1,7 +1,6 @@
 """
-The io module contains the loaders which provide functionality to load corpora from the filesystem.
-
-All loader implementations base on :py:class:`pingu.corpus.io.CorpusLoader`.
+This module contains classes to read and write corpora from the filesystem in a wide range of formats. They can also be
+used to convert between formats.
 """
 
 from .base import CorpusReader, CorpusWriter
