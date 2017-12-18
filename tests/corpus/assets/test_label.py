@@ -3,7 +3,7 @@ import unittest
 from pingu.corpus import assets
 
 
-class CorpusTest(unittest.TestCase):
+class TestLabelList(unittest.TestCase):
     def test_ranges(self):
         ll = assets.LabelList(labels=[
             assets.Label('a', 3.2, 4.5),
@@ -130,6 +130,30 @@ class CorpusTest(unittest.TestCase):
         with self.assertRaises(StopIteration):
             next(ranges)
 
+    def test_ranges_with_same_start_times(self):
+        ll = assets.LabelList(labels=[
+            assets.Label('a', 1.2, 1.3),
+            assets.Label('b', 1.2, 5.6)
+        ])
+
+        ranges = ll.ranges()
+
+        r = next(ranges)
+        assert r[0] == 1.2
+        assert r[1] == 1.3
+        assert len(r[2]) == 2
+        assert ll[0] in r[2]
+        assert ll[1] in r[2]
+
+        r = next(ranges)
+        assert r[0] == 1.3
+        assert r[1] == 5.6
+        assert len(r[2]) == 1
+        assert ll[1] in r[2]
+
+        with self.assertRaises(StopIteration):
+            next(ranges)
+
     def test_label_count(self):
         ll = assets.LabelList(labels=[
             assets.Label('a', 3.2, 4.5),
@@ -144,3 +168,42 @@ class CorpusTest(unittest.TestCase):
         self.assertEqual(2, res['a'])
         self.assertEqual(1, res['b'])
         self.assertEqual(2, res['c'])
+
+
+class TestLabel(object):
+    def test_lt_start_time_considered_first(self):
+        a = assets.Label('some label', 1.0, 2.0)
+        b = assets.Label('some label', 1.1, 2.0)
+
+        assert a < b
+
+    def test_lt_end_time_considered_second(self):
+        a = assets.Label('some label', 1.0, 1.9)
+        b = assets.Label('some label', 1.0, 2.0)
+
+        assert a < b
+
+    def test_lt_end_time_properly_handles_custom_infinity(self):
+        a = assets.Label('some label', 1.0, 1.9)
+        b = assets.Label('some label', 1.0, -1)
+
+        assert a < b
+
+    def test_lt_value_considered_third(self):
+        a = assets.Label('some label a', 1.0, 2.0)
+        b = assets.Label('some label b', 1.0, 2.0)
+
+        assert a < b
+
+    def test_lt_value_ignores_capitalization(self):
+        a = assets.Label('some label A', 1.0, 2.0)
+        b = assets.Label('some label a', 1.0, 2.0)
+
+        assert not a < b  # not == because == tests different method
+        assert not a > b  # not == because == tests different method
+
+    def test_eq_ignores_capitalization(self):
+        a = assets.Label('some label A', 1.0, 2.0)
+        b = assets.Label('some label a', 1.0, 2.0)
+
+        assert a == b
