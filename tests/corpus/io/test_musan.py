@@ -1,5 +1,5 @@
 import unittest
-from os.path import join
+import os
 
 from pingu.corpus import io
 from tests import resources
@@ -13,100 +13,95 @@ class MusanCorpusReaderTest(unittest.TestCase):
     def test_load_files(self):
         ds = self.reader.load(self.test_path)
 
-        self.assertEqual(5, ds.num_files)
+        fma = os.path.join(self.test_path, 'music', 'fma')
+        free_sound = os.path.join(self.test_path, 'noise', 'free-sound')
+        librivox = os.path.join(self.test_path, 'speech', 'librivox')
 
-        self.assertEqual('music-fma-0000', ds.files['music-fma-0000'].idx)
-        self.assertEqual(join(self.test_path, 'music', 'fma', 'music-fma-0000.wav'),
-                         ds.files['music-fma-0000'].path)
+        assert ds.num_files == 5
 
-        self.assertEqual('noise-free-sound-0000', ds.files['noise-free-sound-0000'].idx)
-        self.assertEqual(join(self.test_path, 'noise', 'free-sound', 'noise-free-sound-0000.wav'),
-                         ds.files['noise-free-sound-0000'].path)
+        assert ds.files['music-fma-0000'].idx == 'music-fma-0000'
+        assert ds.files['music-fma-0000'].path == os.path.join(fma, 'music-fma-0000.wav')
 
-        self.assertEqual('noise-free-sound-0001', ds.files['noise-free-sound-0001'].idx)
-        self.assertEqual(join(self.test_path, 'noise', 'free-sound', 'noise-free-sound-0001.wav'),
-                         ds.files['noise-free-sound-0001'].path)
+        assert ds.files['noise-free-sound-0000'].idx == 'noise-free-sound-0000'
+        assert ds.files['noise-free-sound-0000'].path == os.path.join(free_sound, 'noise-free-sound-0000.wav')
+        assert ds.files['noise-free-sound-0001'].idx == 'noise-free-sound-0001'
+        assert ds.files['noise-free-sound-0001'].path == os.path.join(free_sound, 'noise-free-sound-0001.wav')
 
-        self.assertEqual('speech-librivox-0000', ds.files['speech-librivox-0000'].idx)
-        self.assertEqual(join(self.test_path, 'speech', 'librivox', 'speech-librivox-0000.wav'),
-                         ds.files['speech-librivox-0000'].path)
-
-        self.assertEqual('speech-librivox-0001', ds.files['speech-librivox-0001'].idx)
-        self.assertEqual(join(self.test_path, 'speech', 'librivox', 'speech-librivox-0001.wav'),
-                         ds.files['speech-librivox-0001'].path)
+        assert ds.files['speech-librivox-0000'].idx == 'speech-librivox-0000'
+        assert ds.files['speech-librivox-0000'].path == os.path.join(librivox, 'speech-librivox-0000.wav')
+        assert ds.files['speech-librivox-0001'].idx == 'speech-librivox-0001'
+        assert ds.files['speech-librivox-0001'].path == os.path.join(librivox, 'speech-librivox-0001.wav')
 
     def test_load_issuers(self):
         ds = self.reader.load(self.test_path)
 
-        self.assertEqual(3, ds.num_issuers)
+        assert ds.num_issuers == 3
 
-        self.assertIn('speech-librivox-0000', ds.issuers.keys())
-        self.assertEqual('speech-librivox-0000', ds.issuers['speech-librivox-0000'].idx)
-        self.assertEqual('m', ds.issuers['speech-librivox-0000'].info['gender'])
-        self.assertEqual('english', ds.issuers['speech-librivox-0000'].info['language'])
+        assert 'speech-librivox-0000' in ds.issuers.keys()
+        assert ds.issuers['speech-librivox-0000'].idx == 'speech-librivox-0000'
+        assert ds.issuers['speech-librivox-0000'].info['gender'] == 'm'
+        assert ds.issuers['speech-librivox-0000'].info['language'] == 'english'
 
-        self.assertIn('speech-librivox-0001', ds.issuers.keys())
-        self.assertEqual('speech-librivox-0001', ds.issuers['speech-librivox-0001'].idx)
-        self.assertEqual('f', ds.issuers['speech-librivox-0001'].info['gender'])
-        self.assertEqual('french', ds.issuers['speech-librivox-0001'].info['language'])
+        assert 'speech-librivox-0001' in ds.issuers.keys()
+        assert ds.issuers['speech-librivox-0001'].idx == 'speech-librivox-0001'
+        assert ds.issuers['speech-librivox-0001'].info['gender'] == 'f'
+        assert ds.issuers['speech-librivox-0001'].info['language'] == 'french'
 
-        self.assertIn('Quiet_Music_for_Tiny_Robots', ds.issuers.keys())
-        self.assertEqual('Quiet_Music_for_Tiny_Robots',
-                         ds.issuers['Quiet_Music_for_Tiny_Robots'].idx)
-        self.assertIsNone(ds.issuers['Quiet_Music_for_Tiny_Robots'].info)
+        assert 'Quiet_Music_for_Tiny_Robots' in ds.issuers.keys()
+        assert ds.issuers['Quiet_Music_for_Tiny_Robots'].idx == 'Quiet_Music_for_Tiny_Robots'
+
+        assert ds.issuers['Quiet_Music_for_Tiny_Robots'].info is None
 
     def test_load_utterances(self):
         ds = self.reader.load(self.test_path)
 
-        self.assertEqual(5, ds.num_utterances)
+        assert ds.num_utterances == 5
 
-        self.assertEqual('music-fma-0000', ds.utterances['music-fma-0000'].idx)
-        self.assertEqual('music-fma-0000', ds.utterances['music-fma-0000'].file_idx)
-        self.assertEqual('Quiet_Music_for_Tiny_Robots', ds.utterances['music-fma-0000'].issuer_idx)
-        self.assertEqual(0, ds.utterances['music-fma-0000'].start)
-        self.assertEqual(-1, ds.utterances['music-fma-0000'].end)
+        assert ds.utterances['music-fma-0000'].idx == 'music-fma-0000'
+        assert ds.utterances['music-fma-0000'].file.idx == 'music-fma-0000'
+        assert ds.utterances['music-fma-0000'].issuer.idx == 'Quiet_Music_for_Tiny_Robots'
+        assert ds.utterances['music-fma-0000'].start == 0
+        assert ds.utterances['music-fma-0000'].end == -1
 
-        self.assertEqual('noise-free-sound-0000', ds.utterances['noise-free-sound-0000'].idx)
-        self.assertEqual('noise-free-sound-0000', ds.utterances['noise-free-sound-0000'].file_idx)
-        self.assertIsNone(ds.utterances['noise-free-sound-0000'].issuer_idx)
-        self.assertEqual(0, ds.utterances['noise-free-sound-0000'].start)
-        self.assertEqual(-1, ds.utterances['noise-free-sound-0000'].end)
+        assert ds.utterances['noise-free-sound-0000'].idx == 'noise-free-sound-0000'
+        assert ds.utterances['noise-free-sound-0000'].file.idx == 'noise-free-sound-0000'
+        assert ds.utterances['noise-free-sound-0000'].issuer is None
+        assert ds.utterances['noise-free-sound-0000'].start == 0
+        assert ds.utterances['noise-free-sound-0000'].end == -1
 
-        self.assertEqual('noise-free-sound-0001', ds.utterances['noise-free-sound-0001'].idx)
-        self.assertEqual('noise-free-sound-0001', ds.utterances['noise-free-sound-0001'].file_idx)
-        self.assertIsNone(ds.utterances['noise-free-sound-0001'].issuer_idx)
-        self.assertEqual(0, ds.utterances['noise-free-sound-0001'].start)
-        self.assertEqual(-1, ds.utterances['noise-free-sound-0001'].end)
+        assert ds.utterances['noise-free-sound-0001'].idx == 'noise-free-sound-0001'
+        assert ds.utterances['noise-free-sound-0001'].file.idx == 'noise-free-sound-0001'
+        assert ds.utterances['noise-free-sound-0001'].issuer is None
+        assert ds.utterances['noise-free-sound-0001'].start == 0
+        assert ds.utterances['noise-free-sound-0001'].end == -1
 
-        self.assertEqual('speech-librivox-0000', ds.utterances['speech-librivox-0000'].idx)
-        self.assertEqual('speech-librivox-0000', ds.utterances['speech-librivox-0000'].file_idx)
-        self.assertEqual('speech-librivox-0000', ds.utterances['speech-librivox-0000'].issuer_idx)
-        self.assertEqual(0, ds.utterances['speech-librivox-0000'].start)
-        self.assertEqual(-1, ds.utterances['speech-librivox-0000'].end)
+        assert ds.utterances['speech-librivox-0000'].idx == 'speech-librivox-0000'
+        assert ds.utterances['speech-librivox-0000'].file.idx == 'speech-librivox-0000'
+        assert ds.utterances['speech-librivox-0000'].issuer.idx == 'speech-librivox-0000'
+        assert ds.utterances['speech-librivox-0000'].start == 0
+        assert ds.utterances['speech-librivox-0000'].end == -1
 
-        self.assertEqual('speech-librivox-0001', ds.utterances['speech-librivox-0001'].idx)
-        self.assertEqual('speech-librivox-0001', ds.utterances['speech-librivox-0001'].file_idx)
-        self.assertEqual('speech-librivox-0001', ds.utterances['speech-librivox-0001'].issuer_idx)
-        self.assertEqual(0, ds.utterances['speech-librivox-0001'].start)
-        self.assertEqual(-1, ds.utterances['speech-librivox-0001'].end)
+        assert ds.utterances['speech-librivox-0001'].idx == 'speech-librivox-0001'
+        assert ds.utterances['speech-librivox-0001'].file.idx == 'speech-librivox-0001'
+        assert ds.utterances['speech-librivox-0001'].issuer.idx == 'speech-librivox-0001'
+        assert ds.utterances['speech-librivox-0001'].start == 0
+        assert ds.utterances['speech-librivox-0001'].end == -1
 
     def test_load_label_lists(self):
         ds = self.reader.load(self.test_path)
 
-        self.assertIn('audio_type', ds.label_lists.keys())
+        utt_1 = ds.utterances['music-fma-0000']
+        utt_2 = ds.utterances['noise-free-sound-0000']
+        utt_3 = ds.utterances['noise-free-sound-0001']
 
-        self.assertEqual(5, len(ds.label_lists['audio_type'].keys()))
+        assert 'audio_type' in utt_1.label_lists.keys()
+        assert 'audio_type' in utt_2.label_lists.keys()
+        assert 'audio_type' in utt_3.label_lists.keys()
 
-        self.assertIn('music-fma-0000', ds.label_lists['audio_type'].keys())
-        self.assertIn('noise-free-sound-0000', ds.label_lists['audio_type'].keys())
-        self.assertIn('noise-free-sound-0001', ds.label_lists['audio_type'].keys())
+        assert len(utt_1.label_lists['audio_type'].labels) == 1
+        assert len(utt_2.label_lists['audio_type'].labels) == 1
+        assert len(utt_3.label_lists['audio_type'].labels) == 1
 
-        self.assertEqual(1, len(ds.label_lists['audio_type']['music-fma-0000'].labels))
-        self.assertEqual(1, len(ds.label_lists['audio_type']['noise-free-sound-0000'].labels))
-        self.assertEqual(1, len(ds.label_lists['audio_type']['noise-free-sound-0001'].labels))
-
-        self.assertEqual('music', ds.label_lists['audio_type']['music-fma-0000'].labels[0].value)
-        self.assertEqual('noise',
-                         ds.label_lists['audio_type']['noise-free-sound-0000'].labels[0].value)
-        self.assertEqual('noise',
-                         ds.label_lists['audio_type']['noise-free-sound-0001'].labels[0].value)
+        assert utt_1.label_lists['audio_type'].labels[0].value == 'music'
+        assert utt_2.label_lists['audio_type'].labels[0].value == 'noise'
+        assert utt_3.label_lists['audio_type'].labels[0].value == 'noise'

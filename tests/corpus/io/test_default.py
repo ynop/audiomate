@@ -15,75 +15,72 @@ class DefaultCorpusReaderTest(unittest.TestCase):
     def test_load_files(self):
         ds = self.reader.load(self.test_path)
 
-        self.assertEqual(4, ds.num_files)
-        self.assertEqual('file-1', ds.files['file-1'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'files', 'wav_1.wav'),
-                         ds.files['file-1'].path)
-        self.assertEqual('file-2', ds.files['file-2'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'files', 'wav_2.wav'),
-                         ds.files['file-2'].path)
-        self.assertEqual('file-3', ds.files['file-3'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'files', 'wav_3.wav'),
-                         ds.files['file-3'].path)
-        self.assertEqual('file-4', ds.files['file-4'].idx)
-        self.assertEqual(os.path.join(self.test_path, 'files', 'wav_4.wav'),
-                         ds.files['file-4'].path)
+        assert ds.num_files == 4
+        assert ds.files['file-1'].idx == 'file-1'
+        assert ds.files['file-1'].path == os.path.join(self.test_path, 'files', 'wav_1.wav')
+        assert ds.files['file-2'].idx == 'file-2'
+        assert ds.files['file-2'].path == os.path.join(self.test_path, 'files', 'wav_2.wav')
+        assert ds.files['file-3'].idx == 'file-3'
+        assert ds.files['file-3'].path == os.path.join(self.test_path, 'files', 'wav_3.wav')
+        assert ds.files['file-4'].idx == 'file-4'
+        assert ds.files['file-4'].path == os.path.join(self.test_path, 'files', 'wav_4.wav')
 
     def test_load_utterances(self):
         ds = self.reader.load(self.test_path)
 
-        self.assertEqual(5, ds.num_utterances)
+        assert ds.num_utterances == 5
 
-        self.assertEqual('utt-1', ds.utterances['utt-1'].idx)
-        self.assertEqual('file-1', ds.utterances['utt-1'].file_idx)
-        self.assertEqual('speaker-1', ds.utterances['utt-1'].issuer_idx)
-        self.assertEqual(0, ds.utterances['utt-1'].start)
-        self.assertEqual(-1, ds.utterances['utt-1'].end)
+        assert ds.utterances['utt-1'].idx == 'utt-1'
+        assert ds.utterances['utt-1'].file.idx == 'file-1'
+        assert ds.utterances['utt-1'].issuer.idx == 'speaker-1'
+        assert ds.utterances['utt-1'].start == 0
+        assert ds.utterances['utt-1'].end == -1
 
-        self.assertEqual('utt-2', ds.utterances['utt-2'].idx)
-        self.assertEqual('file-2', ds.utterances['utt-2'].file_idx)
-        self.assertEqual('speaker-1', ds.utterances['utt-2'].issuer_idx)
-        self.assertEqual(0, ds.utterances['utt-2'].start)
-        self.assertEqual(-1, ds.utterances['utt-2'].end)
+        assert ds.utterances['utt-2'].idx == 'utt-2'
+        assert ds.utterances['utt-2'].file.idx == 'file-2'
+        assert ds.utterances['utt-2'].issuer.idx == 'speaker-1'
+        assert ds.utterances['utt-2'].start == 0
+        assert ds.utterances['utt-2'].end == -1
 
-        self.assertEqual('utt-3', ds.utterances['utt-3'].idx)
-        self.assertEqual('file-3', ds.utterances['utt-3'].file_idx)
-        self.assertEqual('speaker-2', ds.utterances['utt-3'].issuer_idx)
-        self.assertEqual(0, ds.utterances['utt-3'].start)
-        self.assertEqual(15, ds.utterances['utt-3'].end)
+        assert ds.utterances['utt-3'].idx == 'utt-3'
+        assert ds.utterances['utt-3'].file.idx == 'file-3'
+        assert ds.utterances['utt-3'].issuer.idx == 'speaker-2'
+        assert ds.utterances['utt-3'].start == 0
+        assert ds.utterances['utt-3'].end == 15
 
-        self.assertEqual('utt-4', ds.utterances['utt-4'].idx)
-        self.assertEqual('file-3', ds.utterances['utt-4'].file_idx)
-        self.assertEqual('speaker-2', ds.utterances['utt-4'].issuer_idx)
-        self.assertEqual(15, ds.utterances['utt-4'].start)
-        self.assertEqual(25, ds.utterances['utt-4'].end)
+        assert ds.utterances['utt-4'].idx == 'utt-4'
+        assert ds.utterances['utt-4'].file.idx == 'file-3'
+        assert ds.utterances['utt-4'].issuer.idx == 'speaker-2'
+        assert ds.utterances['utt-4'].start == 15
+        assert ds.utterances['utt-4'].end == 25
 
-        self.assertEqual('utt-5', ds.utterances['utt-5'].idx)
-        self.assertEqual('file-4', ds.utterances['utt-5'].file_idx)
-        self.assertEqual('speaker-3', ds.utterances['utt-5'].issuer_idx)
-        self.assertEqual(0, ds.utterances['utt-5'].start)
-        self.assertEqual(-1, ds.utterances['utt-5'].end)
+        assert ds.utterances['utt-5'].idx == 'utt-5'
+        assert ds.utterances['utt-5'].file.idx == 'file-4'
+        assert ds.utterances['utt-5'].issuer.idx == 'speaker-3'
+        assert ds.utterances['utt-5'].start == 0
+        assert ds.utterances['utt-5'].end == -1
 
     def test_load_label_lists(self):
         ds = self.reader.load(self.test_path)
 
-        self.assertIn('text', ds.label_lists.keys())
-        self.assertIn('utt-1', ds.label_lists['text'].keys())
-        self.assertIn('utt-3', ds.label_lists['raw_text'].keys())
+        utt_1 = ds.utterances['utt-1']
+        utt_3 = ds.utterances['utt-3']
+        utt_4 = ds.utterances['utt-4']
 
-        self.assertEqual(3, len(ds.label_lists['text']['utt-4'].labels))
-        self.assertEqual('are', ds.label_lists['text']['utt-4'].labels[1].value)
+        assert 'text' in utt_1.label_lists.keys()
+        assert 'raw_text' in utt_3.label_lists.keys()
 
-        self.assertEqual(3.5, ds.label_lists['text']['utt-4'].labels[2].start)
-        self.assertEqual(4.2, ds.label_lists['text']['utt-4'].labels[2].end)
+        assert len(utt_4.label_lists['text'].labels) == 3
+        assert utt_4.label_lists['text'].labels[1].value == 'are'
+
+        assert utt_4.label_lists['text'].labels[2].start == 3.5
+        assert utt_4.label_lists['text'].labels[2].end == 4.2
 
     def test_load_features(self):
         ds = self.reader.load(self.test_path)
 
-        self.assertEqual(os.path.join(self.test_path, 'features', 'mfcc'),
-                         ds.feature_containers['mfcc'].path)
-        self.assertEqual(os.path.join(self.test_path, 'features', 'fbank'),
-                         ds.feature_containers['fbank'].path)
+        assert ds.feature_containers['mfcc'].path == os.path.join(self.test_path, 'features', 'mfcc')
+        assert ds.feature_containers['fbank'].path == os.path.join(self.test_path, 'features', 'fbank')
 
 
 class DefaultCorpusWriterTest(unittest.TestCase):
@@ -96,9 +93,9 @@ class DefaultCorpusWriterTest(unittest.TestCase):
         path = tempfile.mkdtemp()
         self.writer.save(ds, path)
 
-        self.assertIn('files.txt', os.listdir(path))
-        self.assertIn('utterances.txt', os.listdir(path))
-        self.assertIn('utt_issuers.txt', os.listdir(path))
-        self.assertIn('labels_default.txt', os.listdir(path))
+        assert 'files.txt' in os.listdir(path)
+        assert 'utterances.txt' in os.listdir(path)
+        assert 'utt_issuers.txt' in os.listdir(path)
+        assert 'labels_default.txt' in os.listdir(path)
 
         shutil.rmtree(path, ignore_errors=True)

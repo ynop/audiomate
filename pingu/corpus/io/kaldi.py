@@ -7,6 +7,7 @@ import pingu
 from pingu.corpus import assets
 from pingu.utils import textfile
 from . import base
+from . import default
 
 WAV_FILE_NAME = 'wav.scp'
 SEGMENTS_FILE_NAME = 'segments'
@@ -48,26 +49,23 @@ class KaldiReader(base.CorpusReader):
         return missing_files
 
     def _load(self, path):
+        wav_file_path = os.path.join(path, WAV_FILE_NAME)
+        utt2spk_path = os.path.join(path, UTT2SPK_FILE_NAME)
+        segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
+        text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
+
         corpus = pingu.Corpus(path=path)
 
-        # load wavs
-        wav_file_path = os.path.join(path, WAV_FILE_NAME)
-        wav_file_paths = textfile.read_key_value_lines(wav_file_path, separator=' ')
-        for file_idx, file_path in wav_file_paths.items():
-            if not os.path.isabs(file_path):
-                file_path = os.path.join(path, file_path)
+        default.DefaultReader.read_files(wav_file_path, corpus)
+        utt2spk = default.DefaultReader.read_utt_to_issuer_mapping(utt2spk_path, corpus)
+        KaldiReader.read_utterances(segments_path, corpus, utt2spk)
+        KaldiReader.read_transcriptions(text_path, corpus)
 
-            corpus.new_file(file_path, file_idx)
+        return corpus
 
+    @staticmethod
+    def read_utterances(segments_path, corpus, utt2spk):
         # load utterances
-        utt2spk_path = os.path.join(path, UTT2SPK_FILE_NAME)
-        utt2spk = {}
-
-        if os.path.isfile(utt2spk_path):
-            utt2spk = textfile.read_key_value_lines(utt2spk_path, separator=' ')
-
-        segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
-
         if os.path.isfile(segments_path):
             utterances = textfile.read_separated_lines_with_first_key(segments_path, separator=' ',
                                                                       max_columns=4)
@@ -84,9 +82,7 @@ class KaldiReader(base.CorpusReader):
                 speaker_idx = None
 
                 if utt_id in utt2spk.keys():
-                    speaker_idx = utt2spk[utt_id]
-                    if speaker_idx not in corpus.issuers.keys():
-                        corpus.new_issuer(speaker_idx)
+                    speaker_idx = utt2spk[utt_id].idx
 
                 corpus.new_utterance(utt_id, utt_info[0], issuer_idx=speaker_idx, start=start,
                                      end=end)
@@ -95,19 +91,16 @@ class KaldiReader(base.CorpusReader):
                 speaker_idx = None
 
                 if file_idx in utt2spk.keys():
-                    speaker_idx = utt2spk[file_idx]
-                    if speaker_idx not in corpus.issuers.keys():
-                        corpus.new_issuer(speaker_idx)
+                    speaker_idx = utt2spk[file_idx].idx
 
                 corpus.new_utterance(file_idx, file_idx, issuer_idx=speaker_idx)
 
-        # load transcriptions
-        text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
+    @staticmethod
+    def read_transcriptions(text_path, corpus):
         transcriptions = textfile.read_key_value_lines(text_path, separator=' ')
         for utt_id, transcription in transcriptions.items():
-            corpus.new_label_list(utt_id, labels=[assets.Label(transcription)])
-
-        return corpus
+            ll = assets.LabelList(labels=[assets.Label(transcription)])
+            corpus.utterances[utt_id].set_label_list(ll)
 
 
 class KaldiWriter(base.CorpusWriter):
@@ -130,37 +123,29 @@ class KaldiWriter(base.CorpusWriter):
         return 'kaldi'
 
     def _save(self, corpus, path):
-        kaldi_files = {f.idx: f.path for f in corpus.files.values()}
-
-        # Write files
-        file_path = os.path.join(path, WAV_FILE_NAME)
-        textfile.write_separated_lines(file_path, kaldi_files, separator=' ', sort_by_column=0)
-
-        # Write utterances
-        utterance_path = os.path.join(path, SEGMENTS_FILE_NAME)
-        utterance_records = {utterance.idx: [utterance.file_idx, utterance.start, utterance.end] for
-                             utterance in corpus.utterances.values()}
-        textfile.write_separated_lines(utterance_path, utterance_records, separator=' ',
-                                       sort_by_column=0)
-
-        # Write utt2spk
+        wav_file_path = os.path.join(path, WAV_FILE_NAME)
         utt2spk_path = os.path.join(path, UTT2SPK_FILE_NAME)
-        utt2spk_records = {utterance.idx: utterance.issuer_idx for utterance in
-                           corpus.utterances.values()}
-        textfile.write_separated_lines(utt2spk_path, utt2spk_records, separator=' ',
-                                       sort_by_column=0)
+        segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
+        text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
 
-        # Write label-list
+        default.DefaultWriter.write_files(wav_file_path, corpus)
+        default.DefaultWriter.write_utterances(segments_path, corpus)
+        default.DefaultWriter.write_utt_to_issuer_mapping(utt2spk_path, corpus)
+
+        self._write_transcriptions(text_path, corpus)
+        self._write_features(path, corpus)
+
+    def _write_transcriptions(self, text_path, corpus):
         transcriptions = {}
 
-        if self.main_label_list_idx in corpus.label_lists.keys():
-            for utt_idx, label_list in corpus.label_lists[self.main_label_list_idx].items():
-                transcriptions[utt_idx] = ' '.join([l.value for l in label_list])
+        for utterance in corpus.utterances.values():
+            if self.main_label_list_idx in utterance.label_lists.keys():
+                label_list = utterance.label_lists[self.main_label_list_idx]
+                transcriptions[utterance.idx] = ' '.join([l.value for l in label_list])
 
-        text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
         textfile.write_separated_lines(text_path, transcriptions, separator=' ', sort_by_column=0)
 
-        # Write features
+    def _write_features(self, path, corpus):
         if self.main_feature_idx in corpus.feature_containers.keys():
             fc = corpus.features_containers[self.main_feature_idx]
             fc.open()

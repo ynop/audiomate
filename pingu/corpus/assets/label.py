@@ -13,13 +13,15 @@ class Label(object):
         start (float): Start of the label within the utterance in seconds. (default: 0)
         end (float): End of the label within the utterance in seconds. (default: -1) (-1 defines
                      the end of the utterance)
+        label_list (LabelList): The label-list this label is belonging to.
     """
-    __slots__ = ['value', 'start', 'end']
+    __slots__ = ['value', 'start', 'end', 'label_list']
 
     def __init__(self, value, start=0, end=-1):
         self.value = value
         self.start = start
         self.end = end
+        self.label_list = None
 
     def __eq__(self, other):
         return (self.start, self.end, self.value.lower()) == (other.start, other.end, other.value.lower())
@@ -41,9 +43,10 @@ class LabelList(object):
 
     Args:
         idx (str): An unique identifier for the label-list within a corpus for one utterance.
+        labels (list): The list containing the :py:class:`pingu.corpus.assets.Label`.
 
     Attributes:
-        labels (list): The list containing the :py:class:`pingu.corpus.assets.Label`.
+        utterance (Utterance): The utterance this label-list is belonging to.
 
     Example::
 
@@ -54,11 +57,14 @@ class LabelList(object):
         >>> ])
     """
 
-    __slots__ = ['labels', 'idx']
+    __slots__ = ['idx', 'labels', 'utterance']
 
     def __init__(self, idx='default', labels=[]):
         self.idx = idx
-        self.labels = list(labels)
+        self.utterance = None
+
+        self.labels = []
+        self.extend(labels)
 
     def append(self, label):
         """
@@ -67,6 +73,7 @@ class LabelList(object):
         Args:
             label (Label): The label to add.
         """
+        label.label_list = self
         self.labels.append(label)
 
     def extend(self, labels):
@@ -76,7 +83,8 @@ class LabelList(object):
         Args:
             labels (list): Labels to add.
         """
-        self.labels.extend(labels)
+        for label in labels:
+            self.append(label)
 
     def ranges(self, yield_ranges_without_labels=False, include_labels=None):
         """
@@ -94,11 +102,11 @@ class LabelList(object):
                        time.
 
         Example:
-            >>> ll = assets.LabelList(labels=[
-            >>>     assets.Label('a', 3.2, 4.5),
-            >>>     assets.Label('b', 5.1, 8.9),
-            >>>     assets.Label('c', 7.2, 10.5),
-            >>>     assets.Label('d', 10.5, 14)
+            >>> ll = LabelList(labels=[
+            >>>     Label('a', 3.2, 4.5),
+            >>>     Label('b', 5.1, 8.9),
+            >>>     Label('c', 7.2, 10.5),
+            >>>     Label('d', 10.5, 14)
             >>> ])
             >>> ranges = ll.ranges()
             >>> next(ranges)
@@ -153,12 +161,12 @@ class LabelList(object):
             list: Lexicographically sorted list (str) of label values.
 
         Example:
-            >>> ll = assets.LabelList(labels=[
-            >>>     assets.Label('a', 3.2, 4.5),
-            >>>     assets.Label('b', 5.1, 8.9),
-            >>>     assets.Label('c', 7.2, 10.5),
-            >>>     assets.Label('d', 10.5, 14),
-            >>>     assets.Label('d', 15, 18)
+            >>> ll = LabelList(labels=[
+            >>>     Label('a', 3.2, 4.5),
+            >>>     Label('b', 5.1, 8.9),
+            >>>     Label('c', 7.2, 10.5),
+            >>>     Label('d', 10.5, 14),
+            >>>     Label('d', 15, 18)
             >>> ])
             >>> ll.label_values()
             ['a', 'b', 'c', 'd']
@@ -176,12 +184,12 @@ class LabelList(object):
                   (value).
 
         Example:
-            >>> ll = assets.LabelList(labels=[
-            >>>     assets.Label('a', 3.2, 4.5),
-            >>>     assets.Label('b', 5.1, 8.9),
-            >>>     assets.Label('a', 7.2, 10.5),
-            >>>     assets.Label('b', 10.5, 14),
-            >>>     assets.Label('a', 15, 18)
+            >>> ll = LabelList(labels=[
+            >>>     Label('a', 3.2, 4.5),
+            >>>     Label('b', 5.1, 8.9),
+            >>>     Label('a', 7.2, 10.5),
+            >>>     Label('b', 10.5, 14),
+            >>>     Label('a', 15, 18)
             >>> ])
             >>> ll.label_count()
             {'a': 3 'b': 2}

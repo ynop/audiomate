@@ -4,6 +4,28 @@ from pingu.corpus import assets
 
 
 class TestLabelList(unittest.TestCase):
+    def test_append(self):
+        ll = assets.LabelList()
+
+        label = assets.Label('some text')
+        ll.append(label)
+
+        assert len(ll) == 1
+        assert label.label_list == ll
+
+    def test_extend(self):
+        ll = assets.LabelList()
+
+        label_a = assets.Label('some text')
+        label_b = assets.Label('more text')
+        label_c = assets.Label('text again')
+        ll.extend([label_a, label_b, label_c])
+
+        assert len(ll) == 3
+        assert label_a.label_list == ll
+        assert label_b.label_list == ll
+        assert label_c.label_list == ll
+
     def test_ranges(self):
         ll = assets.LabelList(labels=[
             assets.Label('a', 3.2, 4.5),

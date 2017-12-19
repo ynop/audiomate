@@ -55,11 +55,11 @@ def create_dataset():
     utt_4 = ds.new_utterance('utt-4', file_3.idx, issuer_idx=issuer_2.idx, start=15, end=25)
     utt_5 = ds.new_utterance('utt-5', file_4.idx, issuer_idx=issuer_3.idx)
 
-    ds.new_label_list(utt_1.idx, labels=assets.Label('who am i'))
-    ds.new_label_list(utt_2.idx, labels=assets.Label('who are you'))
-    ds.new_label_list(utt_3.idx, labels=assets.Label('who is he'))
-    ds.new_label_list(utt_4.idx, labels=assets.Label('who are they'))
-    ds.new_label_list(utt_5.idx, labels=assets.Label('who is she'))
+    utt_1.set_label_list(assets.LabelList('default', labels=[assets.Label('who am i')]))
+    utt_2.set_label_list(assets.LabelList('default', labels=[assets.Label('who are you')]))
+    utt_3.set_label_list(assets.LabelList('default', labels=[assets.Label('who is he')]))
+    utt_4.set_label_list(assets.LabelList('default', labels=[assets.Label('who are they')]))
+    utt_5.set_label_list(assets.LabelList('default', labels=[assets.Label('who is she')]))
 
     return ds
 
@@ -90,46 +90,46 @@ def create_multi_label_corpus():
     utt_7 = ds.new_utterance('utt-7', file_4.idx, issuer_idx=issuer_3.idx, start=15, end=25)
     utt_8 = ds.new_utterance('utt-8', file_4.idx, issuer_idx=issuer_3.idx, start=25, end=40)
 
-    ds.new_label_list(utt_1.idx, labels=[
+    utt_1.set_label_list(assets.LabelList(labels=[
         assets.Label('music', 0, 5),
         assets.Label('speech', 5, 12),
         assets.Label('music', 13, 15)
-    ])
+    ]))
 
-    ds.new_label_list(utt_2.idx, labels=[
+    utt_2.set_label_list(assets.LabelList(labels=[
         assets.Label('music', 0, 5),
         assets.Label('speech', 5, 12),
         assets.Label('music', 13, 15)
-    ])
+    ]))
 
-    ds.new_label_list(utt_3.idx, labels=[
+    utt_3.set_label_list(assets.LabelList(labels=[
         assets.Label('music', 0, 1),
         assets.Label('speech', 2, 6)
-    ])
+    ]))
 
-    ds.new_label_list(utt_4.idx, labels=[
+    utt_4.set_label_list(assets.LabelList(labels=[
         assets.Label('music', 0, 5),
         assets.Label('speech', 5, 12),
         assets.Label('music', 13, 15)
-    ])
+    ]))
 
-    ds.new_label_list(utt_5.idx, labels=[
+    utt_5.set_label_list(assets.LabelList(labels=[
         assets.Label('speech', 0, 7)
-    ])
+    ]))
 
-    ds.new_label_list(utt_6.idx, labels=[
+    utt_6.set_label_list(assets.LabelList(labels=[
         assets.Label('music', 0, 5),
         assets.Label('speech', 5, 12),
         assets.Label('music', 13, 15)
-    ])
+    ]))
 
-    ds.new_label_list(utt_7.idx, labels=[
+    utt_7.set_label_list(assets.LabelList(labels=[
         assets.Label('music', 0, 5),
         assets.Label('speech', 5, 11)
-    ])
+    ]))
 
-    ds.new_label_list(utt_8.idx, labels=[
+    utt_8.set_label_list(assets.LabelList(labels=[
         assets.Label('music', 0, 10)
-    ])
+    ]))
 
     return ds

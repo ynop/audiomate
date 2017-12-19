@@ -1,4 +1,3 @@
-import collections
 import copy
 import os
 import shutil
@@ -29,7 +28,6 @@ class Corpus(base.CorpusView):
         self._files = {}
         self._utterances = {}
         self._issuers = {}
-        self._label_lists = collections.defaultdict(dict)
         self._feature_containers = {}
 
     @property
@@ -50,10 +48,6 @@ class Corpus(base.CorpusView):
     @property
     def issuers(self):
         return self._issuers
-
-    @property
-    def label_lists(self):
-        return self._label_lists
 
     @property
     def feature_containers(self):
@@ -217,14 +211,27 @@ class Corpus(base.CorpusView):
 
         # Check if there is a file with the given idx
         if file_idx not in self._files.keys():
-            raise ValueError('No file in dataset with id {} to add utterance.'.format(file_idx))
+            raise ValueError('File with id {} does not exist!'.format(file_idx))
+
+        # Check if issuer exists
+        issuer = None
+
+        if issuer_idx is not None:
+            if issuer_idx not in self._issuers.keys():
+                raise ValueError('Issuer with id {} does not exist!'.format(issuer_idx))
+            else:
+                issuer = self._issuers[issuer_idx]
 
         # Add index to idx if already existing
         if new_utt_idx in self._utterances.keys():
             new_utt_idx = naming.index_name_if_in_list(new_utt_idx, self._utterances.keys())
 
-        new_utt = assets.Utterance(new_utt_idx, file_idx, issuer_idx=issuer_idx, start=start,
+        new_utt = assets.Utterance(new_utt_idx,
+                                   self.files[file_idx],
+                                   issuer=issuer,
+                                   start=start,
                                    end=end)
+
         self._utterances[new_utt_idx] = new_utt
 
         return new_utt
@@ -252,16 +259,13 @@ class Corpus(base.CorpusView):
             idx_mapping[utterance.idx] = utterance
 
             # Check if there is a file with the given idx
-            if utterance.file_idx not in self._files.keys():
-                raise ValueError(
-                    'No file in corpus with id {} to add utterance {}.'.format(utterance.file_idx,
-                                                                               utterance.idx))
+            if utterance.file not in self._files.values():
+                raise ValueError('File with id {} is not in the corpus.'.format(utterance.file.idx, utterance.idx))
 
             # Check if there is a issuer with the given idx
-            if utterance.issuer_idx is not None \
-                    and utterance.issuer_idx not in self._issuers.keys():
+            if utterance.issuer is not None and utterance.issuer not in self._issuers.values():
                 raise ValueError('No issuer in corpus with id {} to add utterance {}.'.format(
-                    utterance.issuer_idx, utterance.idx))
+                    utterance.issuer.idx, utterance.idx))
 
             # Add index to idx if already existing
             if utterance.idx in self._utterances.keys():
@@ -328,57 +332,6 @@ class Corpus(base.CorpusView):
             self._issuers[issuer.idx] = issuer
 
         return idx_mapping
-
-    #
-    #   Labeling
-    #
-
-    def new_label_list(self, utterance_idx, idx=None, labels=None):
-        """
-        Add a new label-list with the given data.
-
-        Parameters:
-            utterance_idx (str): Utterance id the label-list is associated with.
-            idx (str): An identifier this label-list is associated with.
-            labels (list): Labels to add to the new label-list.
-
-        Returns:
-            LabelList: The newly added label-list.
-        """
-
-        new_label_list_idx = idx
-
-        if new_label_list_idx is None:
-            new_label_list_idx = 'default'
-
-        new_label_list = assets.LabelList(idx=new_label_list_idx)
-
-        if isinstance(labels, assets.Label):
-            new_label_list.append(labels)
-        elif isinstance(labels, list):
-            new_label_list.extend(labels)
-
-        self._label_lists[new_label_list.idx][utterance_idx] = new_label_list
-
-        return new_label_list
-
-    def import_label_list(self, utterance_idx, label_list):
-        """
-        Add the given label_list to the corpus for the given utterance-idx.
-        If the label-list-id already exists, it is overridden
-
-        Args:
-            label_list (LabelList): A label-list
-            utterance_idx (str): A utterance-id for which to add the given label-list
-        """
-
-        # Check if there is a utterance with the given idx
-        if utterance_idx not in self._utterances.keys():
-            raise ValueError(
-                'No utterance in corpus with id {} to add label-list {}.'.format(utterance_idx,
-                                                                                 label_list.idx))
-
-        self._label_lists[label_list.idx][utterance_idx] = label_list
 
     #
     #   FEATURES
@@ -448,14 +401,9 @@ class Corpus(base.CorpusView):
         # Utterances, with replacing changed file- and issuer-ids
         utterances = copy.deepcopy(list(corpus.utterances.values()))
         for utterance in utterances:
-            utterance.file_idx = file_mapping[utterance.file_idx].idx
-            utterance.issuer_idx = issuer_mapping[utterance.issuer_idx].idx
-        utterance_mapping = ds.import_utterances(utterances)
+            utterance.file = file_mapping[utterance.file.idx]
+            utterance.issuer = issuer_mapping[utterance.issuer.idx]
 
-        # Label-lists
-        for idx, label_lists in corpus.label_lists.items():
-            for utt_idx, label_list in label_lists.items():
-                new_utt_idx = utterance_mapping[utt_idx].idx
-                ds.import_label_list(new_utt_idx, copy.deepcopy(label_list))
+        ds.import_utterances(utterances)
 
         return ds
