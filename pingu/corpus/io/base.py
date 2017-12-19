@@ -26,7 +26,7 @@ class CorpusReader(metaclass=abc.ABCMeta):
         # Check for missing files
         missing_files = self._check_for_missing_files(path)
 
-        if missing_files is not None:
+        if len(missing_files) > 0:
             raise IOError('Invalid data set of type {}: files {} not found at {}'.format(
                 self.type(), ' '.join(missing_files), path))
 
@@ -65,10 +65,17 @@ class CorpusReader(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def _check_for_missing_files(self, path):
         """
-        Return a list of necessary files for the current type of data set that are missing in the given folder.
-        None if path seems valid.
+        Tests whether all required files (like annotations) to read the corpus successfully are present. If files are
+        missing, a list with the paths of the missing files is returned. All paths are relative to `path`. If no files
+        are missing, an empty list is returned.
+
+        Args:
+            path (str): Path to the root directory of the data set
+
+        Returns:
+            list: Paths of all the missing files, relative to the path of the root directory of the data set.
         """
-        return None
+        return []
 
 
 class CorpusWriter(metaclass=abc.ABCMeta):

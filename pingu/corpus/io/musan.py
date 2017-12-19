@@ -32,7 +32,7 @@ class MusanReader(base.CorpusReader):
     def _check_for_missing_files(self, path):
         # Some annotation files are missing anyway in the original data set
         # (e.g. speech/us-gov/ANNOTATIONS). What's left would be checking for missing directories.
-        pass
+        return []
 
     def _load(self, path):
         create_or_get_issuer = {
