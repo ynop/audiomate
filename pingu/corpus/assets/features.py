@@ -22,37 +22,6 @@ class FeatureContainer(object):
         array([1, 2, 3, 4])
     """
 
-    def __init__(self, path):
-        self.path = path
-        self._file = None
-
-    @property
-    def frame_size(self):
-        """ The number of samples used per frame. """
-        return self._file.attrs['frame-size']
-
-    @frame_size.setter
-    def frame_size(self, frame_size):
-        self._file.attrs['frame-size'] = frame_size
-
-    @property
-    def hop_size(self):
-        """ The number of samples between two frames. """
-        return self._file.attrs['hop-size']
-
-    @hop_size.setter
-    def hop_size(self, hop_size):
-        self._file.attrs['hop-size'] = hop_size
-
-    @property
-    def sampling_rate(self):
-        """ The sampling-rate of the signal these frames are based on. """
-        return self._file.attrs['sampling-rate']
-
-    @sampling_rate.setter
-    def sampling_rate(self, sampling_rate):
-        self._file.attrs['sampling-rate'] = sampling_rate
-
     def open(self):
         """
         Open the feature container file in order to read/write to it.
@@ -75,6 +44,43 @@ class FeatureContainer(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
 
+    def __init__(self, path):
+        self.path = path
+        self._file = None
+
+    @property
+    def frame_size(self):
+        """ The number of samples used per frame. """
+        self._check_is_open()
+        return self._file.attrs['frame-size']
+
+    @frame_size.setter
+    def frame_size(self, frame_size):
+        self._check_is_open()
+        self._file.attrs['frame-size'] = frame_size
+
+    @property
+    def hop_size(self):
+        """ The number of samples between two frames. """
+        self._check_is_open()
+        return self._file.attrs['hop-size']
+
+    @hop_size.setter
+    def hop_size(self, hop_size):
+        self._check_is_open()
+        self._file.attrs['hop-size'] = hop_size
+
+    @property
+    def sampling_rate(self):
+        """ The sampling-rate of the signal these frames are based on. """
+        self._check_is_open()
+        return self._file.attrs['sampling-rate']
+
+    @sampling_rate.setter
+    def sampling_rate(self, sampling_rate):
+        self._check_is_open()
+        self._file.attrs['sampling-rate'] = sampling_rate
+
     def keys(self):
         """
         Return all keys available in the feature-container.
@@ -85,6 +91,8 @@ class FeatureContainer(object):
         Note:
             The feature container has to be opened in advance.
         """
+        self._check_is_open()
+
         return list(self._file.keys())
 
     def set(self, utterance_idx, features):
@@ -99,8 +107,7 @@ class FeatureContainer(object):
         Note:
             The feature container has to be opened in advance.
         """
-        if self._file is None:
-            raise ValueError('The feature container is not opened!')
+        self._check_is_open()
 
         if utterance_idx in self._file:
             del self._file[utterance_idx]
@@ -117,8 +124,7 @@ class FeatureContainer(object):
         Note:
             The feature container has to be opened in advance.
         """
-        if self._file is None:
-            raise ValueError('The feature container is not opened!')
+        self._check_is_open()
 
         if utterance_idx in self._file:
             del self._file[utterance_idx]
@@ -137,8 +143,7 @@ class FeatureContainer(object):
         Returns:
             numpy.ndarray: The stored data.
         """
-        if self._file is None:
-            raise ValueError('The feature container is not opened!')
+        self._check_is_open()
 
         if utterance_idx in self._file:
             data = self._file[utterance_idx]
@@ -154,9 +159,13 @@ class FeatureContainer(object):
         """
         Return statistics calculated overall features in the container.
 
+        Note:
+            The feature container has to be opened in advance.
+
         Returns:
             tuple: A tuple containing statistics (min, max, mean, variance)
         """
+        self._check_is_open()
 
         per_utt_stats = np.array(list(self.stats_per_utterance().values()))
         count = per_utt_stats[:, 4]
@@ -173,9 +182,13 @@ class FeatureContainer(object):
         """
         Return statistics calculated for each utterance in the container.
 
+        Note:
+            The feature container has to be opened in advance.
+
         Returns:
             dict: A dictionary containing a tuple with stats (min, max, mean, variance, number of values) for each utt.
         """
+        self._check_is_open()
 
         stats = {}
 
@@ -184,3 +197,7 @@ class FeatureContainer(object):
             stats[utt_id] = (np.min(data), np.max(data), np.mean(data), np.var(data), data.size)
 
         return stats
+
+    def _check_is_open(self):
+        if self._file is None:
+            raise ValueError('The feature container is not opened!')

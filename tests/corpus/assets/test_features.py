@@ -15,6 +15,15 @@ class FeatureContainerTest(unittest.TestCase):
     def tearDown(self):
         self.container.close()
 
+    def test_frame_size(self):
+        assert self.container.frame_size == 400
+
+    def test_hop_size(self):
+        assert self.container.hop_size == 160
+
+    def test_sampling_rate(self):
+        assert self.container.sampling_rate == 16000
+
     def test_stats_per_utterance(self):
         utt_stats = self.container.stats_per_utterance()
 
@@ -36,6 +45,12 @@ class FeatureContainerTest(unittest.TestCase):
         assert utt_stats['utt-3'][3] == pytest.approx(0.071833200069641057)
         assert utt_stats['utt-3'][4] == 220
 
+    def test_stats_per_utterance_not_open(self):
+        self.container.close()
+
+        with pytest.raises(ValueError):
+            self.container.stats_per_utterance()
+
     def test_stats(self):
         stats = self.container.stats()
 
@@ -43,3 +58,9 @@ class FeatureContainerTest(unittest.TestCase):
         assert stats[1] == pytest.approx(0.99834417857609881)
         assert stats[2] == pytest.approx(0.50267482489606408)
         assert stats[3] == pytest.approx(0.07317811077366114)
+
+    def test_stats_not_open(self):
+        self.container.close()
+
+        with pytest.raises(ValueError):
+            self.container.stats()
