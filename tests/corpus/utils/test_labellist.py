@@ -1,5 +1,4 @@
 import os.path
-import unittest
 
 import pytest
 
@@ -8,7 +7,7 @@ from pingu.corpus.utils import labellist
 from pingu.corpus.utils.labellist import UnmappedLabelsException
 
 
-class LabelMapperTest(unittest.TestCase):
+class TestLabelListUtilities(object):
 
     def test_relabel_maps_a_onto_b(self):
         label_list = assets.LabelList(labels=[
@@ -148,6 +147,37 @@ class LabelMapperTest(unittest.TestCase):
 
         assert ex.value.message == expected_message
 
+    def test_relabel_proceeds_despite_unmapped_labels_in_presence_of_wildcard_rule(self):
+        label_list = assets.LabelList(labels=[
+            assets.Label('a', 3.2, 5.1),
+            assets.Label('b', 4.2, 4.7),
+            assets.Label('c', 4.3, 4.8)
+        ])
+
+        actual = labellist.relabel(label_list, {('a',): 'new_label_a', ('**',): 'catch_all'})
+
+        assert len(actual) == 5
+
+        assert actual[0].start == 3.2
+        assert actual[0].end == 4.2
+        assert actual[0].value == 'new_label_a'
+
+        assert actual[1].start == 4.2
+        assert actual[1].end == 4.3
+        assert actual[1].value == 'catch_all'
+
+        assert actual[2].start == 4.3
+        assert actual[2].end == 4.7
+        assert actual[2].value == 'catch_all'
+
+        assert actual[3].start == 4.7
+        assert actual[3].end == 4.8
+        assert actual[3].value == 'catch_all'
+
+        assert actual[4].start == 4.8
+        assert actual[4].end == 5.1
+        assert actual[4].value == 'new_label_a'
+
     def test_load_projections_from_file(self):
         path = os.path.join(os.path.dirname(__file__), 'projections.txt')
         projections = labellist.load_projections(path)
@@ -198,6 +228,21 @@ class LabelMapperTest(unittest.TestCase):
         assert ('a', 'b', 'c',) in unmapped_combinations
         assert ('a', 'c',) in unmapped_combinations
 
+    def test_no_duplicate_missing_projections_reported(self):
+        label_list = assets.LabelList(labels=[
+            assets.Label('b', 1.0, 2.0),
+            assets.Label('a', 1.5, 2.5),
+            assets.Label('b', 3.0, 4.0),
+            assets.Label('a', 3.5, 4.5),
+        ])
+
+        unmapped_combinations = labellist.find_missing_projections(label_list, {})
+
+        assert len(unmapped_combinations) == 3
+        assert ('b',) in unmapped_combinations
+        assert ('a', 'b',) in unmapped_combinations
+        assert ('a',) in unmapped_combinations
+
     def test_no_missing_projections_if_projection_complete(self):
         projections = {
             ('b',): 'foo',
@@ -216,3 +261,32 @@ class LabelMapperTest(unittest.TestCase):
         unmapped_combinations = labellist.find_missing_projections(label_list, projections)
 
         assert len(unmapped_combinations) == 0
+
+    def test_no_missing_projections_if_covered_by_catch_all_rule(self):
+        projections = {
+            ('b',): 'new_label_b',
+            ('**',): 'new_label_all',
+        }
+
+        label_list = assets.LabelList(labels=[
+            assets.Label('b', 3.2, 4.5),
+            assets.Label('a', 4.0, 4.9),
+            assets.Label('c', 4.2, 5.1)
+        ])
+
+        unmapped_combinations = labellist.find_missing_projections(label_list, projections)
+
+        assert len(unmapped_combinations) == 0
+
+    def test_missing_projections_are_naturally_sorted(self):
+        label_list = assets.LabelList(labels=[
+            assets.Label('b', 1.0, 2.0),
+            assets.Label('a', 1.5, 2.5),
+        ])
+
+        unmapped_combinations = labellist.find_missing_projections(label_list, {})
+
+        assert len(unmapped_combinations) == 3
+        assert unmapped_combinations[0] == ('a',)
+        assert unmapped_combinations[1] == ('a', 'b',)
+        assert unmapped_combinations[2] == ('b',)

@@ -1,6 +1,8 @@
 from pingu.corpus import assets
 from pingu.utils import textfile
 
+WILDCARD_COMBINATION = ('**',)
+
 
 class UnmappedLabelsException(Exception):
     def __init__(self, message):
@@ -12,6 +14,11 @@ def relabel(label_list, projections):
     """
     Relabel an entire :py:class:`~pingu.corpus.assets.LabelList` using user-defined projections. Labels can be renamed,
     removed or overlapping labels can be flattened to a single label per segment.
+
+    Each entry in the dictionary of projections represents a single projection that maps a combination of labels (key)
+    to a single new label (value). The combination of labels to be mapped is a tuple of naturally sorted labels that
+    apply to one or more segments simultaneously. By defining a special wildcard projection using `('**',)` is is not
+    required to specify a projection for every single combination of labels.
 
     This method raises a :py:class:`~pingu.corpus.utils.labellist.UnmappedLabelsException` if a projection for one or
     more combinations of labels is not defined.
@@ -33,7 +40,7 @@ def relabel(label_list, projections):
         ...     ('c',): 'c',
         ...     ('a', 'b',): 'a_b',
         ...     ('a', 'b', 'c',): 'a_b_c',
-        ...     ('b', 'c',): 'b_c',
+        ...     ('**',): 'b_c',
         ... }
         >>> label_list = assets.LabelList(labels=[
         ...     assets.Label('a', 3.2, 4.5),
@@ -51,7 +58,7 @@ def relabel(label_list, projections):
     new_labels = []
     for labeled_segment in label_list.ranges():
         combination = tuple(sorted([label.value for label in labeled_segment[2]]))
-        label_mapping = projections[combination]
+        label_mapping = projections[combination] if combination in projections else projections[WILDCARD_COMBINATION]
 
         if label_mapping == '':
             continue
@@ -63,9 +70,14 @@ def relabel(label_list, projections):
 
 def find_missing_projections(label_list, projections):
     """
-    Finds all combinations of labels in `label_list` that are not covered by an entry in the
-    `projections`. Returns a list containing tuples of uncovered label combinations or en empty
-    list if there are none. All uncovered label combinations are naturally sorted.
+    Finds all combinations of labels in `label_list` that are not covered by an entry in the dictionary of
+    `projections`. Returns a list containing tuples of uncovered label combinations or en empty list if there are none.
+    All uncovered label combinations are naturally sorted.
+
+    Each entry in the dictionary of projections represents a single projection that maps a combination of labels (key)
+    to a single new label (value). The combination of labels to be mapped is a tuple of naturally sorted labels that
+    apply to one or more segments simultaneously. By defining a special wildcard projection using `('**',)` is is not
+    required to specify a projection for every single combination of labels.
 
     Args:
         label_list (pingu.corpus.assets.LabelList): The label list to relabel
@@ -84,14 +96,18 @@ def find_missing_projections(label_list, projections):
         >>> find_missing_projections(ll, {('b',): 'new_label'})
         [('a', 'b'), ('a', 'b', 'c'), ('a', 'c'), ('c',)]
     """
-    unmapped_combinations = []
+    unmapped_combinations = set()
+
+    if WILDCARD_COMBINATION in projections:
+        return []
+
     for labeled_segment in label_list.ranges():
         combination = tuple(sorted([label.value for label in labeled_segment[2]]))
 
         if combination not in projections:
-            unmapped_combinations.append(combination)
+            unmapped_combinations.add(combination)
 
-    return unmapped_combinations
+    return sorted(unmapped_combinations)
 
 
 def load_projections(projections_file):
