@@ -1,5 +1,5 @@
 utt-1 file-1
 utt-2 file-2
-utt-3 file-3 0 15
-utt-4 file-3 15 25
+utt-3 file-3 0 1.5
+utt-4 file-3 1.5 2.5
 utt-5 file-4

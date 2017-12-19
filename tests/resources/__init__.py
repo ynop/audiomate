@@ -34,6 +34,10 @@ def get_wav_file_path(name):
     return os.path.join(os.path.dirname(__file__), 'wav_files', name)
 
 
+def get_feat_container_path():
+    return os.path.join(os.path.dirname(__file__), 'feat_container')
+
+
 def create_dataset():
     temp_path = tempfile.mkdtemp()
 
