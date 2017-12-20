@@ -1,12 +1,18 @@
 import unittest
 
+import numpy as np
+import librosa
+
 from pingu.corpus import assets
+
+from tests import resources
 
 
 class UtteranceTest(unittest.TestCase):
     def setUp(self):
+        self.file = assets.File('wav', resources.get_wav_file_path('wav_1.wav'))
         self.issuer = assets.Issuer('toni')
-        self.utt = assets.Utterance('test', None, issuer=self.issuer)
+        self.utt = assets.Utterance('test', self.file, issuer=self.issuer, start=1.25, end=1.30)
 
         self.ll_1 = assets.LabelList(idx='alpha', labels=[
             assets.Label('a', 3.2, 4.5),
@@ -59,3 +65,7 @@ class UtteranceTest(unittest.TestCase):
     def test_label_count_with_idx_restriction(self):
         count = self.utt.label_count(label_list_ids=['bravo', 'charlie'])
         assert count == {'a': 2, 'c': 1, 'd': 1, 'e': 1, 'f': 1, 'g': 1}
+
+    def test_read_samples(self):
+        expected, __ = librosa.core.load(self.file.path, sr=None, offset=1.25, duration=0.05)
+        assert np.array_equal(self.utt.read_samples(), expected)

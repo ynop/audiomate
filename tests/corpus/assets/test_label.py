@@ -1,6 +1,11 @@
 import unittest
 
+import numpy as np
+import librosa
+
 from pingu.corpus import assets
+
+from tests import resources
 
 
 class TestLabelList(unittest.TestCase):
@@ -229,3 +234,37 @@ class TestLabel(object):
         b = assets.Label('some label a', 1.0, 2.0)
 
         assert a == b
+
+    def test_read_samples(self):
+        file = assets.File('wav', resources.get_wav_file_path('wav_1.wav'))
+        issuer = assets.Issuer('toni')
+        utt = assets.Utterance('test', file, issuer=issuer, start=1.0, end=2.30)
+
+        l1 = assets.Label('a', 0.15, 0.448)
+        l2 = assets.Label('a', 0.5, 0.73)
+        ll = assets.LabelList(labels=[l1, l2])
+
+        utt.set_label_list(ll)
+
+        expected, __ = librosa.core.load(file.path, sr=None, offset=1.15, duration=0.298)
+        assert np.array_equal(l1.read_samples(), expected)
+
+        expected, __ = librosa.core.load(file.path, sr=None, offset=1.5, duration=0.23)
+        assert np.array_equal(l2.read_samples(), expected)
+
+    def test_read_samples_no_utterance_and_label_end(self):
+        file = assets.File('wav', resources.get_wav_file_path('wav_1.wav'))
+        issuer = assets.Issuer('toni')
+        utt = assets.Utterance('test', file, issuer=issuer, start=1.0, end=-1)
+
+        l1 = assets.Label('a', 0.15, 0.448)
+        l2 = assets.Label('a', 0.5, -1)
+        ll = assets.LabelList(labels=[l1, l2])
+
+        utt.set_label_list(ll)
+
+        expected, __ = librosa.core.load(file.path, sr=None, offset=1.15, duration=0.298)
+        assert np.array_equal(l1.read_samples(), expected)
+
+        expected, __ = librosa.core.load(file.path, sr=None, offset=1.5)
+        assert np.array_equal(l2.read_samples(), expected)

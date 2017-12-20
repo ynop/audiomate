@@ -35,6 +35,26 @@ class Label(object):
     def __repr__(self) -> str:
         return 'Label({}, {}, {})'.format(self.value, self.start, self.end)
 
+    def read_samples(self, sr=None):
+        """
+        Read the samples of the utterance.
+
+        Args:
+            sr (int): If None uses the sampling rate given by the file, otherwise resamples to the given sampling rate.
+
+        Returns:
+            np.ndarray: A numpy array containing the samples as a floating point (numpy.float32) time series.
+        """
+        start = self.label_list.utterance.start + self.start
+        duration = None
+
+        if self.end >= 0:
+            duration = self.end - self.start
+        elif self.label_list.utterance.end >= 0:
+            duration = self.label_list.utterance.end - start
+
+        return self.label_list.utterance.file.read_samples(sr=sr, offset=start, duration=duration)
+
 
 class LabelList(object):
     """

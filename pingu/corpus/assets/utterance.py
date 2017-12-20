@@ -30,6 +30,31 @@ class Utterance(object):
         if self.issuer is not None:
             self.issuer.utterances.add(self)
 
+    #
+    #   Signal
+    #
+
+    def read_samples(self, sr=None):
+        """
+        Read the samples of the utterance.
+
+        Args:
+            sr (int): If None uses the sampling rate given by the file, otherwise resamples to the given sampling rate.
+
+        Returns:
+            np.ndarray: A numpy array containing the samples as a floating point (numpy.float32) time series.
+        """
+        duration = None
+
+        if self.end >= 0:
+            duration = self.end - self.start
+
+        return self.file.read_samples(sr=sr, offset=self.start, duration=duration)
+
+    #
+    #   Labels
+    #
+
     def set_label_list(self, label_list):
         """
         Set the given label-list for this utterance. If the label-list-idx is not set, ``default`` is used.

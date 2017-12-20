@@ -56,18 +56,19 @@ class File(object):
         with wave.open(self.path, 'r') as f:
             return f.getnframes() / f.getframerate()
 
-    def read_samples(self, sr=None):
+    def read_samples(self, sr=None, offset=0, duration=None):
         """
         Return the samples from the file.
         Uses librosa for loading
         (see http://librosa.github.io/librosa/generated/librosa.core.load.html).
 
         Args:
-            sr (int): If None uses the sampling rate given by the file,
-            otherwise resamples to the given sampling rate.
+            sr (int): If None uses the sampling rate given by the file, otherwise resamples to the given sampling rate.
+            offset (float): The time in seconds, from where to start reading the samples (rel. to the file start).
+            duration (float): The length of the samples to read in seconds.
 
         Returns:
-            np.ndarray: A numpy array containing the samples.
+            np.ndarray: A numpy array containing the samples as a floating point (numpy.float32) time series.
         """
-        samples, __ = librosa.core.load(self.path, sr=sr)
+        samples, __ = librosa.core.load(self.path, sr=sr, offset=offset, duration=duration)
         return samples
