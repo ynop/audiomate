@@ -7,7 +7,7 @@ from pingu.corpus import io
 from tests import resources
 
 
-class DefaultCorpusReaderTest(unittest.TestCase):
+class DefaultReaderTest(unittest.TestCase):
     def setUp(self):
         self.reader = io.DefaultReader()
         self.test_path = resources.sample_default_ds_path()
@@ -83,7 +83,7 @@ class DefaultCorpusReaderTest(unittest.TestCase):
         assert ds.feature_containers['fbank'].path == os.path.join(self.test_path, 'features', 'fbank')
 
 
-class DefaultCorpusWriterTest(unittest.TestCase):
+class DefaultWriterTest(unittest.TestCase):
     def setUp(self):
         self.writer = io.DefaultWriter()
         self.test_path = resources.sample_default_ds_path()

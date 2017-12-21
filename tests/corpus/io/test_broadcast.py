@@ -5,7 +5,7 @@ from pingu.corpus import io
 from tests import resources
 
 
-class DefaultCorpusReaderTest(unittest.TestCase):
+class BroadcastReaderTest(unittest.TestCase):
     def setUp(self):
         self.reader = io.BroadcastReader()
         self.test_path = resources.sample_broadcast_ds_path()

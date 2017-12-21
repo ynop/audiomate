@@ -5,7 +5,7 @@ from pingu.corpus import io
 from tests import resources
 
 
-class MusanCorpusReaderTest(unittest.TestCase):
+class MusanReaderTest(unittest.TestCase):
     def setUp(self):
         self.reader = io.MusanReader()
         self.test_path = resources.sample_musan_ds_path()
