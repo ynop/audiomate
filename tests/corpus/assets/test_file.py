@@ -11,7 +11,7 @@ MONO_16K_16BIT_9 = os.path.join(os.path.dirname(__file__), 'mono_16k_16bit_9.wav
 STEREO_22050_32BIT_13 = os.path.join(os.path.dirname(__file__), 'stereo_22050_32bit_13.wav')
 
 
-class LabelMapperTest(unittest.TestCase):
+class FileTest(unittest.TestCase):
     def setUp(self):
         self.mono_file = assets.File('fileid', MONO_16K_16BIT_9)
         self.stereo_file = assets.File('fileid', STEREO_22050_32BIT_13)
@@ -36,11 +36,22 @@ class LabelMapperTest(unittest.TestCase):
         assert self.mono_file.duration == pytest.approx(0.0005625)
         assert self.stereo_file.duration == pytest.approx(0.000589569161)
 
-    def test_read_samples(self):
+    def test_read_samples_mono(self):
         expected, __ = librosa.core.load(MONO_16K_16BIT_9, sr=None)
         actual = self.mono_file.read_samples()
         assert np.array_equal(actual, expected)
 
+    def test_read_samples_stereo(self):
         expected, __ = librosa.core.load(STEREO_22050_32BIT_13, sr=None)
         actual = self.stereo_file.read_samples()
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_mono_downsampling(self):
+        expected, __ = librosa.core.load(MONO_16K_16BIT_9, sr=8000)
+        actual = self.mono_file.read_samples(sr=8000)
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_mono_upsampling(self):
+        expected, __ = librosa.core.load(MONO_16K_16BIT_9, sr=22050)
+        actual = self.mono_file.read_samples(sr=22050)
         assert np.array_equal(actual, expected)
