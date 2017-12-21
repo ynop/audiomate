@@ -1,5 +1,7 @@
 import collections
 
+from . import label
+
 
 class Utterance(object):
     """
@@ -12,6 +14,7 @@ class Utterance(object):
         start (float): The start of the utterance within the audio file in seconds. (default 0)
         end (float): The end of the utterance within the audio file in seconds. -1 indicates that
                      the utterance ends at the end of the file. (default -1)
+        label_lists (LabelList, list): A single or multiple label-lists.
 
     Attributes:
         label_lists (dict): A dictionary containing label-lists with the label-list-idx as key.
@@ -19,13 +22,16 @@ class Utterance(object):
 
     __slots__ = ['idx', 'file', 'issuer', 'start', 'end', 'label_lists']
 
-    def __init__(self, idx, file, issuer=None, start=0, end=-1):
+    def __init__(self, idx, file, issuer=None, start=0, end=-1, label_lists=None):
         self.idx = idx
         self.file = file
         self.issuer = issuer
         self.start = start
         self.end = end
         self.label_lists = {}
+
+        if label_lists is not None:
+            self.set_label_list(label_lists)
 
         if self.issuer is not None:
             self.issuer.utterances.add(self)
@@ -55,20 +61,25 @@ class Utterance(object):
     #   Labels
     #
 
-    def set_label_list(self, label_list):
+    def set_label_list(self, label_lists):
         """
         Set the given label-list for this utterance. If the label-list-idx is not set, ``default`` is used.
         If there is already a label-list with the given idx, it will be overriden.
 
         Args:
-            label_list (LabelList): The label-list to add.
+            label_list (LabelList, list): A single or multiple label-lists to add.
 
         """
-        if label_list.idx is None:
-            label_list.idx = 'default'
 
-        label_list.utterance = self
-        self.label_lists[label_list.idx] = label_list
+        if isinstance(label_lists, label.LabelList):
+            label_lists = [label_lists]
+
+        for label_list in label_lists:
+            if label_list.idx is None:
+                label_list.idx = 'default'
+
+            label_list.utterance = self
+            self.label_lists[label_list.idx] = label_list
 
     def all_label_values(self, label_list_ids=None):
         """
