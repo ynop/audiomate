@@ -235,6 +235,29 @@ class TestLabel(object):
 
         assert a == b
 
+    def test_eq_ignores_label_list_relation(self):
+        a = assets.Label('some label A', 1.0, 2.0)
+        b = assets.Label('some label a', 1.0, 2.0)
+
+        al = assets.LabelList(idx='one', labels=[a])
+        bl = assets.LabelList(idx='another', labels=[b])
+
+        assert a.label_list == al
+        assert b.label_list == bl
+        assert a == b
+
+    def test_lt_ignores_label_list_relation(self):
+        a = assets.Label('some label A', 1.0, 2.0)
+        b = assets.Label('some label a', 1.0, 2.0)
+
+        al = assets.LabelList(idx='one', labels=[a])
+        bl = assets.LabelList(idx='another', labels=[b])
+
+        assert a.label_list == al
+        assert b.label_list == bl
+        assert not a < b
+        assert not a > b
+
     def test_read_samples(self):
         file = assets.File('wav', resources.get_wav_file_path('wav_1.wav'))
         issuer = assets.Issuer('toni')
