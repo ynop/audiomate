@@ -57,6 +57,13 @@ class Utterance(object):
 
         return self.file.read_samples(sr=sr, offset=self.start, duration=duration)
 
+    @property
+    def sampling_rate(self):
+        """
+        Return the sampling rate.
+        """
+        return self.file.sampling_rate
+
     #
     #   Labels
     #

@@ -46,13 +46,13 @@ class DefaultReaderTest(unittest.TestCase):
         assert ds.utterances['utt-3'].file.idx == 'file-3'
         assert ds.utterances['utt-3'].issuer.idx == 'speaker-2'
         assert ds.utterances['utt-3'].start == 0
-        assert ds.utterances['utt-3'].end == 15
+        assert ds.utterances['utt-3'].end == 1.5
 
         assert ds.utterances['utt-4'].idx == 'utt-4'
         assert ds.utterances['utt-4'].file.idx == 'file-3'
         assert ds.utterances['utt-4'].issuer.idx == 'speaker-2'
-        assert ds.utterances['utt-4'].start == 15
-        assert ds.utterances['utt-4'].end == 25
+        assert ds.utterances['utt-4'].start == 1.5
+        assert ds.utterances['utt-4'].end == 2.5
 
         assert ds.utterances['utt-5'].idx == 'utt-5'
         assert ds.utterances['utt-5'].file.idx == 'file-4'
