@@ -59,8 +59,8 @@ def create_dataset():
 
     utt_1 = ds.new_utterance('utt-1', file_1.idx, issuer_idx=issuer_1.idx)
     utt_2 = ds.new_utterance('utt-2', file_2.idx, issuer_idx=issuer_1.idx)
-    utt_3 = ds.new_utterance('utt-3', file_3.idx, issuer_idx=issuer_2.idx, start=0, end=15)
-    utt_4 = ds.new_utterance('utt-4', file_3.idx, issuer_idx=issuer_2.idx, start=15, end=25)
+    utt_3 = ds.new_utterance('utt-3', file_3.idx, issuer_idx=issuer_2.idx, start=0, end=1.5)
+    utt_4 = ds.new_utterance('utt-4', file_3.idx, issuer_idx=issuer_2.idx, start=1.5, end=2.5)
     utt_5 = ds.new_utterance('utt-5', file_4.idx, issuer_idx=issuer_3.idx)
 
     utt_1.set_label_list(assets.LabelList('default', labels=[assets.Label('who am i')]))

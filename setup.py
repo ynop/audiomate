@@ -22,7 +22,8 @@ setup(name='pingu',
           'numpy==1.13.3',
           'scipy==1.0.0',
           'librosa==0.5.1',
-          'h5py==2.7.1'
+          'h5py==2.7.1',
+          'networkx==2.0'
       ],
       include_package_data=True,
       zip_safe=False,
