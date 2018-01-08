@@ -52,8 +52,22 @@ class Processor(metaclass=abc.ABCMeta):
         feat_container = assets.FeatureContainer(output_path)
         feat_container.open()
 
+        sampling_rate = -1
+
         for utterance in corpus.utterances.values():
+            utt_sampling_rate = utterance.sampling_rate
+
+            if sampling_rate > 0 and sampling_rate != utt_sampling_rate:
+                raise ValueError(
+                    'File {} has a different sampling-rate than the previous ones!'.format(utterance.file.idx))
+
+            sampling_rate = utt_sampling_rate
+
             self.process_utterance(utterance, feat_container, corpus=corpus, frame_size=frame_size, hop_size=hop_size)
+
+        feat_container.frame_size = frame_size
+        feat_container.hop_size = hop_size
+        feat_container.sampling_rate = sampling_rate
 
         feat_container.close()
 

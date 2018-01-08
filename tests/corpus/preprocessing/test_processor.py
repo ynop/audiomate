@@ -23,7 +23,7 @@ class OfflineProcessorTest(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.tempdir, ignore_errors=True)
 
-    def test_process(self):
+    def test_process_corpus(self):
         ds = resources.create_dataset()
         processor = OfflineProcessorDummy()
         feat_path = os.path.join(self.tempdir, 'feats')
@@ -53,3 +53,15 @@ class OfflineProcessorTest(unittest.TestCase):
 
         assert 'test' in feat_container.keys()
         assert feat_container.get('test').shape == (20, 4096)
+
+    def test_process_corpus_sets_container_attributes(self):
+        ds = resources.create_dataset()
+        processor = OfflineProcessorDummy()
+        feat_path = os.path.join(self.tempdir, 'feats')
+
+        feat_container = processor.process_corpus(ds, feat_path, frame_size=4096, hop_size=2048)
+
+        with feat_container:
+            assert feat_container.frame_size == 4096
+            assert feat_container.hop_size == 2048
+            assert feat_container.sampling_rate == 16000
