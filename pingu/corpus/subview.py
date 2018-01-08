@@ -32,7 +32,7 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
     A filter criterion that matches utterances based on utterance-ids.
 
     Args:
-        utterance_idxs (list): A list of utterance-ids. Only utterances in the list will pass the
+        utterance_idxs (set): A list of utterance-ids. Only utterances in the list will pass the
                                filter
         inverse (bool): If True only utterance not in the list pass the filter.
     """
@@ -54,7 +54,7 @@ class Subview(base.CorpusView):
 
     Args:
         corpus (CorpusView): The corpus this subview is based on.
-        filter_criteria (list): List of :py:class:`FilterCriterion`
+        filter_criteria (list, FilterCriterion): List of :py:class:`FilterCriterion`
 
     Example::
 

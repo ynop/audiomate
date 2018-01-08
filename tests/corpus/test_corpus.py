@@ -7,8 +7,10 @@ import pytest
 
 import pingu
 from pingu.corpus import assets
+from pingu.corpus import subview
 from pingu.corpus.io import MusanReader, KaldiWriter
 from pingu.corpus.io import UnknownWriterException, UnknownReaderException
+
 from .. import resources
 
 
@@ -189,6 +191,20 @@ class CorpusTest(unittest.TestCase):
 
         assert self.corpus.num_feature_containers == 1
         assert self.corpus.feature_containers['mfcc'].path == os.path.join(self.tempdir, 'features', 'mfcc')
+
+    #
+    #   SUBVIEW ADD
+    #
+    def test_import_subview(self):
+        train_set = subview.Subview(None, filter_criteria=[
+            subview.MatchingUtteranceIdxFilter(utterance_idxs={'existing_utt'})
+        ])
+
+        self.corpus.import_subview('train', train_set)
+
+        assert self.corpus.num_subviews == 1
+        assert self.corpus.subviews['train'] == train_set
+        assert self.corpus.subviews['train'].corpus == self.corpus
 
     #
     #   CREATION

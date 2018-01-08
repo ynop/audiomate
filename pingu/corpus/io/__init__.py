@@ -8,6 +8,7 @@ from .broadcast import BroadcastReader  # noqa: F401
 from .default import DefaultReader, DefaultWriter  # noqa: F401
 from .kaldi import KaldiReader, KaldiWriter  # noqa: F401
 from .musan import MusanReader  # noqa: F401
+from .speech_commands import SpeechCommandsReader  # noqa: F401
 
 __readers = {}
 for cls in CorpusReader.__subclasses__():

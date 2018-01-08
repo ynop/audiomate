@@ -77,7 +77,7 @@ class CorpusView(metaclass=abc.ABCMeta):
 
     @property
     def num_issuers(self):
-        """ Return the number of issuers in the dataset. """
+        """ Return the number of issuers in the corpus. """
         return len(self.issuers)
 
     #
@@ -98,8 +98,27 @@ class CorpusView(metaclass=abc.ABCMeta):
 
     @property
     def num_feature_containers(self):
-        """ Return the number of feature-containers in the dataset. """
+        """ Return the number of feature-containers in the corpus. """
         return len(self.feature_containers)
+
+    #
+    #   Subviews
+    #
+
+    @property
+    def subviews(self):
+        """
+        Return the subviews of the corpus.
+
+        Returns:
+             dict: A dictionary containing :py:class:`pingu.corpus.Subview` objects with the subview-idx as key.
+        """
+        return {}
+
+    @property
+    def num_subviews(self):
+        """ Return the number of subviews in the corpus. """
+        return len(self.subviews)
 
     #
     #   Labels

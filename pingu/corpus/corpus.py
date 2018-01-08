@@ -29,6 +29,7 @@ class Corpus(base.CorpusView):
         self._utterances = {}
         self._issuers = {}
         self._feature_containers = {}
+        self._subviews = {}
 
     @property
     def name(self):
@@ -52,6 +53,10 @@ class Corpus(base.CorpusView):
     @property
     def feature_containers(self):
         return self._feature_containers
+
+    @property
+    def subviews(self):
+        return self._subviews
 
     #
     #   IO
@@ -370,6 +375,23 @@ class Corpus(base.CorpusView):
         self._feature_containers[new_feature_idx] = container
 
         return container
+
+    #
+    #   Subviews
+    #
+
+    def import_subview(self, idx, subview):
+        """
+        Add the given subview to the corpus.
+
+        Args:
+            idx (str): An idx that is unique in the corpus for identifying the subview.
+                       If already a subview exists with the given id it will be overridden.
+            subview (Subview): The subview to add.
+        """
+
+        subview.corpus = self
+        self._subviews[idx] = subview
 
     #
     #   Creation
