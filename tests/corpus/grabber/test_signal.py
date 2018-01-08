@@ -36,23 +36,23 @@ class FramedSignalGrabberTest(unittest.TestCase):
         ds.new_file(file_a_path, 'a')
         ds.new_file(file_b_path, 'b')
 
-        ds.new_utterance('a1', 'a', start=0.25, end=1.5)
-        ds.new_utterance('a2', 'a', start=1.5, end=3.0)
-        ds.new_utterance('b1', 'b', start=0.0, end=1.02)
+        utt_a1 = ds.new_utterance('a1', 'a', start=0.25, end=1.5)
+        utt_a2 = ds.new_utterance('a2', 'a', start=1.5, end=3.0)
+        utt_a3 = ds.new_utterance('b1', 'b', start=0.0, end=1.02)
 
-        ds.new_label_list('a1', 'dudelida', labels=[
+        utt_a1.set_label_list(assets.LabelList(idx='dudelida', labels=[
             assets.Label('chi', 0.0, 1.0),
             assets.Label('cha', 1.0, 1.25),
             assets.Label('wottinid', 1.25, 1.3)
-        ])
+        ]))
 
-        ds.new_label_list('a2', 'dudelida', labels=[
+        utt_a2.set_label_list(assets.LabelList(idx='dudelida', labels=[
             assets.Label('cha', 0.2, 1.2)
-        ])
+        ]))
 
-        ds.new_label_list('b1', 'dudelida', labels=[
+        utt_a3.set_label_list(assets.LabelList(idx='dudelida', labels=[
             assets.Label('chi', 0.3, 0.9)
-        ])
+        ]))
 
         gr = grabber.FramedSignalGrabber(ds, label_list_idx='dudelida', frame_length=4, hop_size=2,
                                          include_labels=['chi', 'cha'])

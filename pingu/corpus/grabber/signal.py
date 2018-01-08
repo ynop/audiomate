@@ -76,11 +76,7 @@ class FramedSignalGrabber(object):
                 return range
 
     def _extract_labels(self):
-        label_lists = self.corpus.label_lists[self.label_list_idx]
-        all_labels = set([])
-
-        for utterance_idx, label_list in label_lists.items():
-            all_labels.update(label_list.label_values())
+        all_labels = self.corpus.all_label_values(label_list_ids=[self.label_list_idx])
 
         if self.include_labels is not None:
             all_labels = all_labels.intersection(set(self.include_labels))
@@ -96,23 +92,21 @@ class FramedSignalGrabber(object):
         files = {}
         offset = 0
 
-        label_lists = self.corpus.label_lists[self.label_list_idx]
-
         for utterance_idx in sorted(self.corpus.utterances.keys()):
             utterance = self.corpus.utterances[utterance_idx]
 
-            if utterance.idx in label_lists.keys():
+            if self.label_list_idx in utterance.label_lists.keys():
 
                 # Get matrix with audio data of the file that contains the utterance
-                if utterance.file_idx in files.keys():
-                    sample_rate, file_data = files[utterance.file_idx]
+                if utterance.file.idx in files.keys():
+                    sample_rate, file_data = files[utterance.file.idx]
                 else:
-                    file = self.corpus.files[utterance.file_idx]
+                    file = utterance.file
                     sample_rate, file_data = wavfile.read(file.path, mmap=True)
-                    files[utterance.file_idx] = (sample_rate, file_data)
+                    files[file.idx] = (sample_rate, file_data)
 
                 # Get the corresponding label-list
-                label_list = label_lists[utterance.idx]
+                label_list = utterance.label_lists[self.label_list_idx]
 
                 # Extract ranges
                 utt_ranges, offset = self._extract_ranges_from_utterance(utterance,
@@ -136,8 +130,7 @@ class FramedSignalGrabber(object):
         ranges = []
         offset = frame_offset
 
-        for (range_start, range_end, labels) in \
-                label_list.ranges(include_labels=self.include_labels):
+        for (range_start, range_end, labels) in label_list.ranges(include_labels=self.include_labels):
             start, length = self._range_start_len_relative_to_file_in_samples(utterance,
                                                                               file_data,
                                                                               range_start,

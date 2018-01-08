@@ -47,9 +47,3 @@ class SubviewTest(unittest.TestCase):
         self.assertEqual(2, self.subview.num_issuers)
         self.assertIn('spk-1', self.subview.issuers.keys())
         self.assertIn('spk-2', self.subview.issuers.keys())
-
-    def test_label_lists(self):
-        self.assertEqual(1, len(self.subview.label_lists))
-        self.assertEqual(2, len(self.subview.label_lists['default']))
-        self.assertIn('utt-1', self.subview.label_lists['default'].keys())
-        self.assertIn('utt-3', self.subview.label_lists['default'].keys())

@@ -80,17 +80,8 @@ class Splitter(object):
 
         identifiers = {}
 
-        for utt_idx in self.corpus.utterances.keys():
-            per_utterance_count = collections.defaultdict(int)
-
-            for label_lists in self.corpus.label_lists.values():
-                if utt_idx in label_lists.keys():
-                    label_list = label_lists[utt_idx]
-
-                    for label_value, count in label_list.label_count().items():
-                        per_utterance_count[label_value] += count
-
-            identifiers[utt_idx] = per_utterance_count
+        for utterance in self.corpus.utterances.values():
+            identifiers[utterance.idx] = utterance.label_count()
 
         splits = Splitter.get_identifiers_splitted_by_weights(identifiers, proportions)
 

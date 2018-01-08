@@ -1,9 +1,36 @@
 import unittest
 
+import numpy as np
+import librosa
+
 from pingu.corpus import assets
+
+from tests import resources
 
 
 class TestLabelList(unittest.TestCase):
+    def test_append(self):
+        ll = assets.LabelList()
+
+        label = assets.Label('some text')
+        ll.append(label)
+
+        assert len(ll) == 1
+        assert label.label_list == ll
+
+    def test_extend(self):
+        ll = assets.LabelList()
+
+        label_a = assets.Label('some text')
+        label_b = assets.Label('more text')
+        label_c = assets.Label('text again')
+        ll.extend([label_a, label_b, label_c])
+
+        assert len(ll) == 3
+        assert label_a.label_list == ll
+        assert label_b.label_list == ll
+        assert label_c.label_list == ll
+
     def test_ranges(self):
         ll = assets.LabelList(labels=[
             assets.Label('a', 3.2, 4.5),
@@ -207,3 +234,60 @@ class TestLabel(object):
         b = assets.Label('some label a', 1.0, 2.0)
 
         assert a == b
+
+    def test_eq_ignores_label_list_relation(self):
+        a = assets.Label('some label A', 1.0, 2.0)
+        b = assets.Label('some label a', 1.0, 2.0)
+
+        al = assets.LabelList(idx='one', labels=[a])
+        bl = assets.LabelList(idx='another', labels=[b])
+
+        assert a.label_list == al
+        assert b.label_list == bl
+        assert a == b
+
+    def test_lt_ignores_label_list_relation(self):
+        a = assets.Label('some label A', 1.0, 2.0)
+        b = assets.Label('some label a', 1.0, 2.0)
+
+        al = assets.LabelList(idx='one', labels=[a])
+        bl = assets.LabelList(idx='another', labels=[b])
+
+        assert a.label_list == al
+        assert b.label_list == bl
+        assert not a < b
+        assert not a > b
+
+    def test_read_samples(self):
+        file = assets.File('wav', resources.get_wav_file_path('wav_1.wav'))
+        issuer = assets.Issuer('toni')
+        utt = assets.Utterance('test', file, issuer=issuer, start=1.0, end=2.30)
+
+        l1 = assets.Label('a', 0.15, 0.448)
+        l2 = assets.Label('a', 0.5, 0.73)
+        ll = assets.LabelList(labels=[l1, l2])
+
+        utt.set_label_list(ll)
+
+        expected, __ = librosa.core.load(file.path, sr=None, offset=1.15, duration=0.298)
+        assert np.array_equal(l1.read_samples(), expected)
+
+        expected, __ = librosa.core.load(file.path, sr=None, offset=1.5, duration=0.23)
+        assert np.array_equal(l2.read_samples(), expected)
+
+    def test_read_samples_no_utterance_and_label_end(self):
+        file = assets.File('wav', resources.get_wav_file_path('wav_1.wav'))
+        issuer = assets.Issuer('toni')
+        utt = assets.Utterance('test', file, issuer=issuer, start=1.0, end=-1)
+
+        l1 = assets.Label('a', 0.15, 0.448)
+        l2 = assets.Label('a', 0.5, -1)
+        ll = assets.LabelList(labels=[l1, l2])
+
+        utt.set_label_list(ll)
+
+        expected, __ = librosa.core.load(file.path, sr=None, offset=1.15, duration=0.298)
+        assert np.array_equal(l1.read_samples(), expected)
+
+        expected, __ = librosa.core.load(file.path, sr=None, offset=1.5)
+        assert np.array_equal(l2.read_samples(), expected)

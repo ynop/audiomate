@@ -5,6 +5,7 @@ from pingu.corpus import assets
 from pingu.formats import audacity
 from pingu.utils import textfile
 from . import base
+from . import default
 
 FILES_FILE_NAME = 'files.txt'
 UTTERANCE_FILE_NAME = 'utterances.txt'
@@ -35,49 +36,25 @@ class BroadcastReader(base.CorpusReader):
         return missing_files
 
     def _load(self, path):
+        file_path = os.path.join(path, FILES_FILE_NAME)
+        utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
+        utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
+        feat_path = os.path.join(path, FEAT_CONTAINER_FILE_NAME)
+
         corpus = pingu.Corpus(path=path)
 
-        # Read files
-        file_path = os.path.join(path, FILES_FILE_NAME)
-        for file_idx, file_path in textfile.read_key_value_lines(file_path, separator=' ').items():
-            corpus.new_file(os.path.join(path, file_path), file_idx=file_idx, copy_file=False)
+        default.DefaultReader.read_files(file_path, corpus)
+        utt_id_to_issuer = default.DefaultReader.read_utt_to_issuer_mapping(utt_issuer_path, corpus)
+        default.DefaultReader.read_utterances(utterance_path, corpus, utt_id_to_issuer)
+        BroadcastReader.read_labels(path, corpus)
+        default.DefaultReader.read_feature_containers(feat_path, corpus)
 
-        # Read utt to issuer mapping
-        utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
-        utt_issuers = {}
+        return corpus
 
-        if os.path.isfile(utt_issuer_path):
-            utt_issuers = textfile.read_key_value_lines(utt_issuer_path, separator=' ')
-
-            for utterance_idx, issuer_idx in utt_issuers.items():
-                if issuer_idx not in corpus.issuers.keys():
-                    corpus.new_issuer(issuer_idx=issuer_idx)
-
-        # Read utterances
-        utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
-        utterances = textfile.read_separated_lines_with_first_key(utterance_path, separator=' ',
-                                                                  max_columns=4)
-        for utterance_idx, utt_info in utterances.items():
-            issuer_idx = None
-            start = 0
-            end = -1
-
-            if len(utt_info) > 1:
-                start = float(utt_info[1])
-
-            if len(utt_info) > 2:
-                end = float(utt_info[2])
-
-            if utterance_idx in utt_issuers.keys():
-                issuer_idx = utt_issuers[utterance_idx]
-
-            corpus.new_utterance(utterance_idx, utt_info[0], issuer_idx=issuer_idx, start=start,
-                                 end=end)
-
-        # Read labels
+    @staticmethod
+    def read_labels(path, corpus):
         label_reference_file = os.path.join(path, LABEL_FILE)
-        label_references = textfile.read_separated_lines(label_reference_file, separator=' ',
-                                                         max_columns=3)
+        label_references = textfile.read_separated_lines(label_reference_file, separator=' ', max_columns=3)
 
         for record in label_references:
             utt_idx = record[0]
@@ -90,15 +67,5 @@ class BroadcastReader(base.CorpusReader):
             entries = audacity.read_label_file(label_path)
             labels = [assets.Label(x[2], x[0], x[1]) for x in entries]
 
-            corpus.new_label_list(utt_idx, idx=label_idx, labels=labels)
-
-        # Read features
-        feat_path = os.path.join(path, FEAT_CONTAINER_FILE_NAME)
-
-        if os.path.isfile(feat_path):
-            containers = textfile.read_key_value_lines(feat_path, separator=' ')
-            for container_name, container_path in containers.items():
-                corpus.new_feature_container(container_name,
-                                             path=os.path.join(path, container_path))
-
-        return corpus
+            ll = assets.LabelList(idx=label_idx, labels=labels)
+            corpus.utterances[utt_idx].set_label_list(ll)

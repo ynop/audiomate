@@ -6,8 +6,12 @@ class Issuer(object):
     Args:
         idx (str): An unique identifier for this issuer within a dataset.
         info (dict): Any additional infos for this issuer as dict.
+
+    Attributes:
+        utterances (list): List of utterances that this issuer owns.
     """
 
     def __init__(self, idx, info={}):
         self.idx = idx
         self.info = info
+        self.utterances = set()

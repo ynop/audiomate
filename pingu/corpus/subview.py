@@ -4,8 +4,6 @@ This includes the subview class itself and also the FilterCriterion classes, whi
 define the data contained in a subview.
 """
 
-import collections
-
 from . import base
 
 
@@ -83,8 +81,7 @@ class Subview(base.CorpusView):
 
     @property
     def files(self):
-        return {utterance.file_idx: self.corpus.files[utterance.file_idx] for utterance in
-                self.utterances.values()}
+        return {utterance.file.idx: utterance.file for utterance in self.utterances.values()}
 
     @property
     def utterances(self):
@@ -104,19 +101,7 @@ class Subview(base.CorpusView):
 
     @property
     def issuers(self):
-        return {utterance.issuer_idx: self.corpus.issuers[utterance.issuer_idx] for utterance in
-                self.utterances.values()}
-
-    @property
-    def label_lists(self):
-        filtered_label_lists = collections.defaultdict(dict)
-
-        for label_list_idx, label_lists in self.corpus.label_lists.items():
-            for utterance_idx in self.utterances.keys():
-                if utterance_idx in label_lists.keys():
-                    filtered_label_lists[label_list_idx][utterance_idx] = label_lists[utterance_idx]
-
-        return filtered_label_lists
+        return {utterance.issuer.idx: utterance.issuer for utterance in self.utterances.values()}
 
     @property
     def feature_containers(self):

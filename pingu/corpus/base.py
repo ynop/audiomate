@@ -81,22 +81,6 @@ class CorpusView(metaclass=abc.ABCMeta):
         return len(self.issuers)
 
     #
-    #   Label List
-    #
-
-    @property
-    @abc.abstractmethod
-    def label_lists(self):
-        """
-        Return the label-lists in the corpus.
-
-        Returns:
-            dict: A dictionary containing utterance-idx/label_list dictionaries with the
-            label-list-idx as key.
-        """
-        return collections.defaultdict(dict)
-
-    #
     #   Feature Container
     #
 
@@ -116,3 +100,44 @@ class CorpusView(metaclass=abc.ABCMeta):
     def num_feature_containers(self):
         """ Return the number of feature-containers in the dataset. """
         return len(self.feature_containers)
+
+    #
+    #   Labels
+    #
+
+    def all_label_values(self, label_list_ids=None):
+        """
+        Return a set of all label-values occurring in this corpus.
+
+        Args:
+            label_list_ids (list): If not None, only labels from label-lists with an id contained in this list
+                                   are considered.
+
+        Returns:
+             set: A set of distinct label-values.
+        """
+        values = set()
+
+        for utterance in self.utterances.values():
+            values = values.union(utterance.all_label_values(label_list_ids=label_list_ids))
+
+        return values
+
+    def label_count(self, label_list_ids=None):
+        """
+        Return a dictionary containing the number of times, every label-value in this corpus is occurring.
+
+        Args:
+            label_list_ids (list): If not None, only labels from label-lists with an id contained in this list
+                                   are considered.
+
+        Returns:
+            dict: A dictionary containing the number of occurrences with the label-value as key.
+        """
+        count = collections.defaultdict(int)
+
+        for utterance in self.utterances.values():
+            for label_value, utt_count in utterance.label_count(label_list_ids=label_list_ids).items():
+                count[label_value] += utt_count
+
+        return count
