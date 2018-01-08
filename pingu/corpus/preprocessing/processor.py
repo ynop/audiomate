@@ -31,26 +31,19 @@ class Processor(metaclass=abc.ABCMeta):
     For implementing a specific processor, the ``process_utterance`` method has to be implemented:
         * This method is called for every utterance in the corpus.
         * In the method any feature extraction / pre-processing can be done.
-          For framing the ``self.frame_size`` and ``self.hop_size`` have to be used.
         * The result then has to be saved in the feature-container, which is passed along with the utterance.
           The result has to be saved, with the id of the utterance, which is passed as argument.
-
-    Args:
-        frame_size (int): The number of samples per frame.
-        hop_size (int): The number of samples between two frames.
     """
 
-    def __init__(self, frame_size, hop_size):
-        self.frame_size = frame_size
-        self.hop_size = hop_size
-
-    def process_corpus(self, corpus, output_path):
+    def process_corpus(self, corpus, output_path, frame_size=400, hop_size=160):
         """
         Process the given corpus and save the processed features in a feature-container at the given path.
 
         Args:
             corpus (Corpus): The corpus to process the utterances from.
             output_path (str): A path to save the feature-container to.
+            frame_size (int): The number of samples per frame.
+            hop_size (int): The number of samples between two frames.
 
         Returns:
             FeatureContainer: The feature-container containing the processed features.
@@ -60,14 +53,14 @@ class Processor(metaclass=abc.ABCMeta):
         feat_container.open()
 
         for utterance in corpus.utterances.values():
-            self.process_utterance(utterance, feat_container)
+            self.process_utterance(utterance, feat_container, corpus=corpus, frame_size=frame_size, hop_size=hop_size)
 
         feat_container.close()
 
         return feat_container
 
     @abc.abstractmethod
-    def process_utterance(self, utterance, feature_container, corpus=None):
+    def process_utterance(self, utterance, feature_container, corpus=None, frame_size=400, hop_size=160):
         """
         Extract features of the given utterances and put it in the given feature-container.
 
@@ -75,6 +68,8 @@ class Processor(metaclass=abc.ABCMeta):
             utterance (Utterance): The utterance to process.
             feature_container (FeatureContainer): The feature-container to store the output.
             corpus (Corpus): The corpus where the utterance is from, if available.
+            frame_size (int): The number of samples per frame.
+            hop_size (int): The number of samples between two frames.
         """
         pass
 
@@ -93,20 +88,20 @@ class OfflineProcessor(Processor, metaclass=abc.ABCMeta):
 
     """
 
-    def process_utterance(self, utterance, feature_container, corpus=None):
+    def process_utterance(self, utterance, feature_container, corpus=None, frame_size=400, hop_size=160):
         samples = utterance.read_samples()
 
         if samples.size <= 0:
             raise ValueError('Utterance {} has no samples'.format(utterance.idx))
 
         # Pad with zeros to match frames
-        num_frames = math.ceil((samples.size - self.frame_size) / self.hop_size + 1)
-        num_pad_samples = (num_frames - 1) * self.hop_size + self.frame_size
+        num_frames = math.ceil((samples.size - frame_size) / hop_size + 1)
+        num_pad_samples = (num_frames - 1) * hop_size + frame_size
 
         if num_pad_samples > samples.size:
             samples = np.pad(samples, (0, num_pad_samples - samples.size), mode='constant', constant_values=0)
 
-        frames = librosa.util.frame(samples, frame_length=self.frame_size, hop_length=self.hop_size).T
+        frames = librosa.util.frame(samples, frame_length=frame_size, hop_length=hop_size).T
         processed = self.process_sequence(frames, utterance.sampling_rate, utterance=utterance, corpus=corpus)
         feature_container.set(utterance.idx, processed)
 

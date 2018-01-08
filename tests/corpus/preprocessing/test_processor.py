@@ -5,6 +5,7 @@ import os
 
 import h5py
 
+from pingu.corpus import assets
 from pingu.corpus import preprocessing
 
 from tests import resources
@@ -24,10 +25,10 @@ class OfflineProcessorTest(unittest.TestCase):
 
     def test_process(self):
         ds = resources.create_dataset()
-        processor = OfflineProcessorDummy(frame_size=4096, hop_size=2048)
+        processor = OfflineProcessorDummy()
         feat_path = os.path.join(self.tempdir, 'feats')
 
-        processor.process_corpus(ds, feat_path)
+        processor.process_corpus(ds, feat_path, frame_size=4096, hop_size=2048)
 
         with h5py.File(feat_path, 'r') as f:
             utts = set(f.keys())
@@ -39,3 +40,16 @@ class OfflineProcessorTest(unittest.TestCase):
             assert f['utt-3'].shape == (11, 4096)
             assert f['utt-4'].shape == (7, 4096)
             assert f['utt-5'].shape == (20, 4096)
+
+    def test_process_utterance(self):
+        processor = OfflineProcessorDummy()
+        feat_path = os.path.join(self.tempdir, 'feats')
+        file = assets.File('test_file', resources.get_wav_file_path('wav_1.wav'))
+        utterance = assets.Utterance('test', file)
+        feat_container = assets.FeatureContainer(feat_path)
+        feat_container.open()
+
+        processor.process_utterance(utterance, feat_container, frame_size=4096, hop_size=2048)
+
+        assert 'test' in feat_container.keys()
+        assert feat_container.get('test').shape == (20, 4096)
