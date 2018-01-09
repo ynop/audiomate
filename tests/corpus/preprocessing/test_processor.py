@@ -4,6 +4,7 @@ import shutil
 import os
 
 import h5py
+import pytest
 
 from pingu.corpus import assets
 from pingu.corpus import preprocessing
@@ -65,3 +66,31 @@ class OfflineProcessorTest(unittest.TestCase):
             assert feat_container.frame_size == 4096
             assert feat_container.hop_size == 2048
             assert feat_container.sampling_rate == 16000
+
+    def test_process_empty_utterance_raises_error(self):
+        processor = OfflineProcessorDummy()
+        feat_path = os.path.join(self.tempdir, 'feats')
+        file = assets.File('test_file', resources.get_wav_file_path('empty.wav'))
+        utterance = assets.Utterance('test', file)
+        feat_container = assets.FeatureContainer(feat_path)
+        feat_container.open()
+
+        with pytest.raises(ValueError):
+            processor.process_utterance(utterance, feat_container, frame_size=4096, hop_size=2048)
+
+        feat_container.close()
+
+    def test_process_utterance_smaller_than_frame_size(self):
+        processor = OfflineProcessorDummy()
+        feat_path = os.path.join(self.tempdir, 'feats')
+        file = assets.File('test_file', resources.get_wav_file_path('wav_200_samples.wav'))
+        utterance = assets.Utterance('test', file)
+        feat_container = assets.FeatureContainer(feat_path)
+        feat_container.open()
+
+        processor.process_utterance(utterance, feat_container, frame_size=4096, hop_size=2048)
+
+        assert 'test' in feat_container.keys()
+        assert feat_container.get('test').shape == (1, 4096)
+
+        feat_container.close()

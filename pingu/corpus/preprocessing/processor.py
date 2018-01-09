@@ -109,8 +109,11 @@ class OfflineProcessor(Processor, metaclass=abc.ABCMeta):
             raise ValueError('Utterance {} has no samples'.format(utterance.idx))
 
         # Pad with zeros to match frames
-        num_frames = math.ceil((samples.size - frame_size) / hop_size + 1)
+        num_frames = math.ceil(max(samples.size - frame_size, 0) / hop_size + 1)
         num_pad_samples = (num_frames - 1) * hop_size + frame_size
+
+        print(num_frames)
+        print(num_pad_samples)
 
         if num_pad_samples > samples.size:
             samples = np.pad(samples, (0, num_pad_samples - samples.size), mode='constant', constant_values=0)
