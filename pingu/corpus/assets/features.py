@@ -114,7 +114,7 @@ class FeatureContainer(object):
         if utterance_idx in self._file:
             del self._file[utterance_idx]
 
-        self._file.create_dataset(utterance_idx, data=features, compression='lzf')
+        self._file.create_dataset(utterance_idx, data=features)
 
     def remove(self, utterance_idx):
         """
