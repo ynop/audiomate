@@ -36,6 +36,16 @@ class Utterance(object):
         if self.issuer is not None:
             self.issuer.utterances.add(self)
 
+    @property
+    def duration(self):
+        """
+        Return the absolute duration in secons.
+        """
+        if self.end == -1:
+            return self.file.duration - self.start
+        else:
+            return self.end - self.start
+
     #
     #   Signal
     #

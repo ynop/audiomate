@@ -2,6 +2,7 @@ import unittest
 
 import numpy as np
 import librosa
+import pytest
 
 from pingu.corpus import assets
 
@@ -44,6 +45,13 @@ class UtteranceTest(unittest.TestCase):
             self.ll_duplicate_idx,
             self.ll_3
         ])
+
+    def test_duration(self):
+        assert self.utt.duration == pytest.approx(0.05)
+
+    def test_duration_end_of_file(self):
+        utt = assets.Utterance('utt', self.file, start=0.3, end=-1)
+        assert utt.duration == pytest.approx(2.2951875)
 
     def test_issuer_relation_on_creation(self):
         assert self.utt.issuer == self.issuer
