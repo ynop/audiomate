@@ -35,7 +35,7 @@ class Processor(metaclass=abc.ABCMeta):
           The result has to be saved, with the id of the utterance, which is passed as argument.
     """
 
-    def process_corpus(self, corpus, output_path, frame_size=400, hop_size=160):
+    def process_corpus(self, corpus, output_path, frame_size=400, hop_size=160, sr=None):
         """
         Process the given corpus and save the processed features in a feature-container at the given path.
 
@@ -44,6 +44,7 @@ class Processor(metaclass=abc.ABCMeta):
             output_path (str): A path to save the feature-container to.
             frame_size (int): The number of samples per frame.
             hop_size (int): The number of samples between two frames.
+            sr (int): Use the given sampling rate. If None uses the native sampling rate from the file.
 
         Returns:
             FeatureContainer: The feature-container containing the processed features.
@@ -63,18 +64,22 @@ class Processor(metaclass=abc.ABCMeta):
 
             sampling_rate = utt_sampling_rate
 
-            self.process_utterance(utterance, feat_container, corpus=corpus, frame_size=frame_size, hop_size=hop_size)
+            self.process_utterance(utterance, feat_container,
+                                   corpus=corpus,
+                                   frame_size=frame_size,
+                                   hop_size=hop_size,
+                                   sr=sr)
 
         feat_container.frame_size = frame_size
         feat_container.hop_size = hop_size
-        feat_container.sampling_rate = sampling_rate
+        feat_container.sampling_rate = sr or sampling_rate
 
         feat_container.close()
 
         return feat_container
 
     @abc.abstractmethod
-    def process_utterance(self, utterance, feature_container, corpus=None, frame_size=400, hop_size=160):
+    def process_utterance(self, utterance, feature_container, corpus=None, frame_size=400, hop_size=160, sr=None):
         """
         Extract features of the given utterances and put it in the given feature-container.
 
@@ -84,6 +89,7 @@ class Processor(metaclass=abc.ABCMeta):
             corpus (Corpus): The corpus where the utterance is from, if available.
             frame_size (int): The number of samples per frame.
             hop_size (int): The number of samples between two frames.
+            sr (int): Use the given sampling rate. If None uses the native sampling rate from the file.
         """
         pass
 
@@ -98,12 +104,12 @@ class OfflineProcessor(Processor, metaclass=abc.ABCMeta):
 
     Note:
         The samples are padded with zeros to match the number of frames equal to
-        math.ceil((20 - self.frame_size) / self.hop_size + 1).
+        math.ceil((num_samples - self.frame_size) / self.hop_size + 1).
 
     """
 
-    def process_utterance(self, utterance, feature_container, corpus=None, frame_size=400, hop_size=160):
-        samples = utterance.read_samples()
+    def process_utterance(self, utterance, feature_container, corpus=None, frame_size=400, hop_size=160, sr=None):
+        samples = utterance.read_samples(sr=sr)
 
         if samples.size <= 0:
             raise ValueError('Utterance {} has no samples'.format(utterance.idx))
@@ -111,9 +117,6 @@ class OfflineProcessor(Processor, metaclass=abc.ABCMeta):
         # Pad with zeros to match frames
         num_frames = math.ceil(max(samples.size - frame_size, 0) / hop_size + 1)
         num_pad_samples = (num_frames - 1) * hop_size + frame_size
-
-        print(num_frames)
-        print(num_pad_samples)
 
         if num_pad_samples > samples.size:
             samples = np.pad(samples, (0, num_pad_samples - samples.size), mode='constant', constant_values=0)
