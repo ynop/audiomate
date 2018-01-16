@@ -46,6 +46,13 @@ class UtteranceTest(unittest.TestCase):
             self.ll_3
         ])
 
+    def test_end_abs(self):
+        assert self.utt.end_abs == 1.30
+
+    def test_end_abs_end_of_file(self):
+        utt = assets.Utterance('utt', self.file, start=0.3, end=-1)
+        assert utt.end_abs == pytest.approx(2.5951875)
+
     def test_duration(self):
         assert self.utt.duration == pytest.approx(0.05)
 

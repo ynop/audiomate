@@ -37,14 +37,21 @@ class Utterance(object):
             self.issuer.utterances.add(self)
 
     @property
-    def duration(self):
+    def end_abs(self):
         """
-        Return the absolute duration in secons.
+        Return the absolute end of the utterance relative to the signal.
         """
         if self.end == -1:
-            return self.file.duration - self.start
+            return self.file.duration
         else:
-            return self.end - self.start
+            return self.end
+
+    @property
+    def duration(self):
+        """
+        Return the absolute duration in seconds.
+        """
+        return self.end_abs - self.start
 
     #
     #   Signal
@@ -63,7 +70,7 @@ class Utterance(object):
         duration = None
 
         if self.end >= 0:
-            duration = self.end - self.start
+            duration = self.duration
 
         return self.file.read_samples(sr=sr, offset=self.start, duration=duration)
 

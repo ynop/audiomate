@@ -2,6 +2,7 @@ import unittest
 
 import numpy as np
 import librosa
+import pytest
 
 from pingu.corpus import assets
 
@@ -9,6 +10,24 @@ from tests import resources
 
 
 class TestLabelList(unittest.TestCase):
+
+    def setUp(self):
+        file = assets.File('wav', resources.get_wav_file_path('wav_1.wav'))
+        utt = assets.Utterance('utt', file, start=0.3, end=-1)
+        ll = assets.LabelList()
+        self.test_label = assets.Label('a', start=0.5, end=-1)
+        ll.append(self.test_label)
+        utt.set_label_list(ll)
+
+    def test_start_abs(self):
+        assert self.test_label.start_abs == pytest.approx(0.8)
+
+    def test_end_abs(self):
+        assert self.test_label.end_abs == pytest.approx(2.5951875)
+
+    def test_duration(self):
+        assert self.test_label.duration == pytest.approx(1.7951875)
+
     def test_append(self):
         ll = assets.LabelList()
 

@@ -35,6 +35,30 @@ class Label(object):
     def __repr__(self) -> str:
         return 'Label({}, {}, {})'.format(self.value, self.start, self.end)
 
+    @property
+    def start_abs(self):
+        """
+        Return the absolute start of the label in seconds relative to the signal.
+        """
+        return self.label_list.utterance.start + self.start
+
+    @property
+    def end_abs(self):
+        """
+        Return the absolute end of the label in seconds relative to the signal.
+        """
+        if self.end == -1:
+            return self.label_list.utterance.end_abs
+        else:
+            return self.end + self.label_list.utterance.start
+
+    @property
+    def duration(self):
+        """
+        Return the duration of the label in seconds.
+        """
+        return self.end_abs - self.start_abs
+
     def read_samples(self, sr=None):
         """
         Read the samples of the utterance.
@@ -45,15 +69,12 @@ class Label(object):
         Returns:
             np.ndarray: A numpy array containing the samples as a floating point (numpy.float32) time series.
         """
-        start = self.label_list.utterance.start + self.start
         duration = None
 
-        if self.end >= 0:
-            duration = self.end - self.start
-        elif self.label_list.utterance.end >= 0:
-            duration = self.label_list.utterance.end - start
+        if self.end >= 0 or self.label_list.utterance.end >= 0:
+            duration = self.duration
 
-        return self.label_list.utterance.file.read_samples(sr=sr, offset=start, duration=duration)
+        return self.label_list.utterance.file.read_samples(sr=sr, offset=self.start_abs, duration=duration)
 
 
 class LabelList(object):
