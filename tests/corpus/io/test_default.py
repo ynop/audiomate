@@ -82,6 +82,21 @@ class DefaultReaderTest(unittest.TestCase):
         assert ds.feature_containers['mfcc'].path == os.path.join(self.test_path, 'features', 'mfcc')
         assert ds.feature_containers['fbank'].path == os.path.join(self.test_path, 'features', 'fbank')
 
+    def test_load_subviews(self):
+        ds = self.reader.load(self.test_path)
+
+        assert 'train' in ds.subviews.keys()
+        assert 'dev' in ds.subviews.keys()
+
+        assert len(ds.subviews['train'].filter_criteria) == 1
+        assert len(ds.subviews['dev'].filter_criteria) == 1
+
+        assert ds.subviews['train'].filter_criteria[0].utterance_idxs == {'utt-1', 'utt-2', 'utt-3'}
+        assert ds.subviews['dev'].filter_criteria[0].utterance_idxs == {'utt-4', 'utt-5'}
+
+        assert not ds.subviews['train'].filter_criteria[0].inverse
+        assert not ds.subviews['dev'].filter_criteria[0].inverse
+
 
 class DefaultWriterTest(unittest.TestCase):
     def setUp(self):

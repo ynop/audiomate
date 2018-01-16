@@ -1,2 +1,2 @@
-filtered_speaker_ids
-filtered_utt_ids utt-2 utt-4
+matching_utterance_ids
+include,utt-1,utt-2,utt-3

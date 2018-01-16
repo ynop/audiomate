@@ -4,6 +4,7 @@ import os
 
 import pingu
 from pingu.corpus import assets
+from pingu.corpus import subview
 from pingu.utils import textfile
 from . import base
 
@@ -12,6 +13,7 @@ UTTERANCE_FILE_NAME = 'utterances.txt'
 UTT_ISSUER_FILE_NAME = 'utt_issuers.txt'
 LABEL_FILE_PREFIX = 'labels'
 FEAT_CONTAINER_FILE_NAME = 'features.txt'
+SUBVIEW_FILE_PREFIX = 'subview'
 
 
 class DefaultReader(base.CorpusReader):
@@ -48,6 +50,7 @@ class DefaultReader(base.CorpusReader):
         DefaultReader.read_utterances(utterance_path, corpus, utt_id_to_issuer)
         DefaultReader.read_labels(path, corpus)
         DefaultReader.read_feature_containers(feat_path, corpus)
+        DefaultReader.read_subviews(path, corpus)
 
         return corpus
 
@@ -117,6 +120,18 @@ class DefaultReader(base.CorpusReader):
             containers = textfile.read_key_value_lines(feat_path, separator=' ')
             for container_name, container_path in containers.items():
                 corpus.new_feature_container(container_name, path=os.path.join(base_path, container_path))
+
+    @staticmethod
+    def read_subviews(path, corpus):
+        for sv_file in glob.glob(os.path.join(path, '{}_*.txt'.format(SUBVIEW_FILE_PREFIX))):
+            file_name = os.path.basename(sv_file)
+            key = file_name[len('{}_'.format(SUBVIEW_FILE_PREFIX)):len(file_name) - len('.txt')]
+
+            with open(sv_file, 'r') as f:
+                content = f.read().strip()
+
+            sv = subview.Subview.parse(content)
+            corpus.import_subview(key, sv)
 
 
 class DefaultWriter(base.CorpusWriter):
