@@ -67,3 +67,15 @@ class SubviewTest(unittest.TestCase):
         self.assertEqual(2, self.subview.num_issuers)
         self.assertIn('spk-1', self.subview.issuers.keys())
         self.assertIn('spk-2', self.subview.issuers.keys())
+
+    def test_serialize(self):
+        repr = self.subview.serialize()
+
+        assert repr == 'matching_utterance_ids\ninclude,utt-1,utt-3'
+
+    def test_parse(self):
+        sv = subview.Subview.parse('matching_utterance_ids\ninclude,utt-1,utt-3', corpus=self.corpus)
+
+        assert sv.corpus == self.corpus
+        assert len(sv.filter_criteria) == 1
+        assert sv.filter_criteria[0].utterance_idxs == {'utt-1', 'utt-3'}

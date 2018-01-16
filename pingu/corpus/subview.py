@@ -97,6 +97,32 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
         return 'matching_utterance_ids'
 
 
+__filter_criteria = {}
+for cls in FilterCriterion.__subclasses__():
+    __filter_criteria[cls.name()] = cls
+
+
+class UnknownFilterCriteriaException(Exception):
+    pass
+
+
+def available_filter_criteria():
+    """
+    Get a mapping of all available filter criteria.
+
+    Returns:
+        dict: A dictionary with filter-criterion classes with the name of these criteria as key.
+
+    Example::
+
+        >>> available_filter_criteria()
+        {
+            "matching_utterance_ids" : pingu.corpus.subview.MatchingUtteranceIdxFilter
+        }
+    """
+    return __filter_criteria
+
+
 class Subview(base.CorpusView):
     """
     A subview is a readonly layer representing some subset of a corpus.
@@ -157,3 +183,45 @@ class Subview(base.CorpusView):
     @property
     def feature_containers(self):
         return self.corpus.feature_containers
+
+    def serialize(self):
+        """
+        Return a string representing the subview with all of its filter criteria.
+
+        Returns:
+            str: String with subview definition.
+        """
+        lines = []
+
+        for criterion in self.filter_criteria:
+            lines.append(criterion.name())
+            lines.append(criterion.serialize())
+
+        return '\n'.join(lines)
+
+    @classmethod
+    def parse(cls, representation, corpus=None):
+        """
+        Creates a subview from a string representation (created with ``self.serialize``).
+
+        Args:
+            representation (str): The representation.
+
+        Returns:
+            Subview: The created subview.
+        """
+
+        criteria_definitions = representation.split('\n')
+        criteria = []
+
+        for i in range(0, len(criteria_definitions), 2):
+            filter_name = criteria_definitions[i]
+            filter_repr = criteria_definitions[i + 1]
+
+            if filter_name not in available_filter_criteria():
+                raise UnknownFilterCriteriaException('Unknown filter-criterion {}'.format(filter_name))
+
+            criterion = available_filter_criteria()[filter_name].parse(filter_repr)
+            criteria.append(criterion)
+
+        return cls(corpus, criteria)
