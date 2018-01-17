@@ -101,16 +101,34 @@ class DefaultReaderTest(unittest.TestCase):
 class DefaultWriterTest(unittest.TestCase):
     def setUp(self):
         self.writer = io.DefaultWriter()
+        self.ds = resources.create_dataset()
         self.test_path = resources.sample_default_ds_path()
+        self.path = tempfile.mkdtemp()
 
-    def test_save(self):
-        ds = resources.create_dataset()
-        path = tempfile.mkdtemp()
-        self.writer.save(ds, path)
+    def tearDown(self):
+        shutil.rmtree(self.path, ignore_errors=True)
 
-        assert 'files.txt' in os.listdir(path)
-        assert 'utterances.txt' in os.listdir(path)
-        assert 'utt_issuers.txt' in os.listdir(path)
-        assert 'labels_default.txt' in os.listdir(path)
+    def test_save_files_exist(self):
+        self.writer.save(self.ds, self.path)
+        files = os.listdir(self.path)
 
-        shutil.rmtree(path, ignore_errors=True)
+        assert len(files) == 7
+
+        assert 'files.txt' in files
+        assert 'utterances.txt' in files
+        assert 'utt_issuers.txt' in files
+        assert 'labels_default.txt' in files
+        assert 'subview_train.txt' in files
+        assert 'subview_dev.txt' in files
+
+    def test_save_subviews(self):
+        self.writer.save(self.ds, self.path)
+
+        with open(os.path.join(self.path, 'subview_train.txt'), 'r') as f:
+            sv_train_content = f.read()
+
+        with open(os.path.join(self.path, 'subview_dev.txt'), 'r') as f:
+            sv_dev_content = f.read()
+
+        assert sv_train_content.strip() == 'matching_utterance_ids\ninclude,utt-1,utt-2,utt-3'
+        assert sv_dev_content.strip() == 'matching_utterance_ids\ninclude,utt-4,utt-5'

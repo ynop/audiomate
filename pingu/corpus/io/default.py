@@ -154,6 +154,7 @@ class DefaultWriter(base.CorpusWriter):
         DefaultWriter.write_utt_to_issuer_mapping(utt_issuer_path, corpus)
         DefaultWriter.write_labels(path, corpus)
         DefaultWriter.write_feature_containers(container_path, corpus)
+        DefaultWriter.write_subviews(path, corpus)
 
     @staticmethod
     def write_files(file_path, corpus):
@@ -188,3 +189,10 @@ class DefaultWriter(base.CorpusWriter):
     def write_feature_containers(container_path, corpus):
         feat_records = [(idx, container.path) for idx, container in corpus.feature_containers.items()]
         textfile.write_separated_lines(container_path, feat_records, separator=' ')
+
+    @staticmethod
+    def write_subviews(path, corpus):
+        for name, sv in corpus.subviews.items():
+            sv_path = os.path.join(path, '{}_{}.txt'.format(SUBVIEW_FILE_PREFIX, name))
+            with open(sv_path, 'w') as f:
+                f.write(sv.serialize())
