@@ -1,5 +1,7 @@
 import unittest
 
+import pytest
+
 from pingu.corpus.restructuring import splitting
 from tests import resources
 
@@ -8,6 +10,21 @@ class SplitterTest(unittest.TestCase):
     def setUp(self):
         self.corpus = resources.create_multi_label_corpus()
         self.splitter = splitting.Splitter(self.corpus)
+
+    def test_split_by_length_of_utterances(self):
+        res = self.splitter.split_by_length_of_utterances({
+            'train': 0.6,
+            'test': 0.2
+        })
+
+        train_utt_ids = res['train'].utterances.keys()
+        test_utt_ids = res['test'].utterances.keys()
+
+        train_duration = sum([utt.duration for utt in res['train'].utterances.values()])
+        test_duration = sum([utt.duration for utt in res['test'].utterances.values()])
+
+        assert set(train_utt_ids).union(test_utt_ids) == set(self.corpus.utterances.keys())
+        assert train_duration / test_duration == pytest.approx(3, rel=5.0)
 
     def test_split_by_number_of_utterances(self):
         res = self.splitter.split_by_number_of_utterances({

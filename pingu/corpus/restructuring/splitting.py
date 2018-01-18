@@ -25,6 +25,47 @@ class Splitter(object):
         self.rand = random.Random()
         self.rand.seed(a=random_seed)
 
+    def split_by_length_of_utterances(self, proportions={}):
+        """
+        Split the corpus into subsets where the total duration of subsets are proportional to the given proportions.
+        The corpus gets splitted into len(proportions) parts, so the number of utterances are
+        distributed according to the proportions.
+
+        Args:
+            proportions (dict): A dictionary containing the relative size of the target subsets.
+            The key is an identifier for the subset.
+
+        Returns:
+            (dict): A dictionary containing the subsets with the identifier from the input as key.
+
+        Example::
+
+            >>> spl = Splitter(corpus)
+            >>> corpus.num_utterances
+            100
+            >>> subsets = spl.split_by_length_of_utterances(proportions={
+            >>>     "train" : 0.6,
+            >>>     "dev" : 0.2,
+            >>>     "test" : 0.2
+            >>> })
+            >>> print(subsets)
+            {'dev': <pingu.corpus.subview.Subview at 0x104ce7400>,
+            'test': <pingu.corpus.subview.Subview at 0x104ce74e0>,
+            'train': <pingu.corpus.subview.Subview at 0x104ce7438>}
+            >>> subsets['train'].num_utterances
+            60
+            >>> subset['test'].num_utterances
+            20
+        """
+
+        utterance_to_duration = {}
+        for utterance in self.corpus.utterances.values():
+            utterance_to_duration[utterance.idx] = {'length': int(utterance.duration*100)}
+
+        splits = Splitter.get_identifiers_splitted_by_weights(utterance_to_duration, proportions=proportions)
+
+        return self._subviews_from_utterance_splits(splits)
+
     def split_by_number_of_utterances(self, proportions={}):
         """
         Split the corpus into subsets with the given number of utterances.
