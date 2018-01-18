@@ -310,3 +310,32 @@ class TestLabel(object):
 
         expected, __ = librosa.core.load(file.path, sr=None, offset=1.5)
         assert np.array_equal(l2.read_samples(), expected)
+
+    def test_start_abs(self):
+        label = assets.Label('a', 2, 5)
+        ll = assets.LabelList(labels=[label])
+        assets.Utterance('utt-1', None, start=1, end=19, label_lists=[ll])
+
+        assert label.start_abs == 3
+
+    def test_start_abs_no_utterance(self):
+        label = assets.Label('a', 2, 5)
+
+        assert label.start_abs == 2
+
+    def test_end_abs(self):
+        label = assets.Label('a', 2, 5)
+        ll = assets.LabelList(labels=[label])
+        assets.Utterance('utt-1', None, start=1, end=19, label_lists=[ll])
+
+        assert label.end_abs == 6
+
+    def test_end_abs_no_utterance(self):
+        label = assets.Label('a', 2, 5)
+
+        assert label.end_abs == 5
+
+    def test_duration(self):
+        label = assets.Label('a', 2, 5)
+
+        assert label.duration == 3
