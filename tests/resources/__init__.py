@@ -3,6 +3,7 @@ import tempfile
 
 import pingu
 from pingu.corpus import assets
+from pingu.corpus import subview
 
 
 def dummy_wav_path_and_name():
@@ -68,6 +69,15 @@ def create_dataset():
     utt_3.set_label_list(assets.LabelList('default', labels=[assets.Label('who is he')]))
     utt_4.set_label_list(assets.LabelList('default', labels=[assets.Label('who are they')]))
     utt_5.set_label_list(assets.LabelList('default', labels=[assets.Label('who is she')]))
+
+    train_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-1', 'utt-2', 'utt-3'})
+    sv_train = subview.Subview(ds, filter_criteria=[train_filter])
+
+    dev_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-4', 'utt-5'})
+    sv_dev = subview.Subview(ds, filter_criteria=[dev_filter])
+
+    ds.import_subview('train', sv_train)
+    ds.import_subview('dev', sv_dev)
 
     return ds
 

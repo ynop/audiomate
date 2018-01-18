@@ -4,6 +4,7 @@ import os
 
 import pingu
 from pingu.corpus import assets
+from pingu.corpus import subview
 from pingu.utils import textfile
 from . import base
 
@@ -12,6 +13,7 @@ UTTERANCE_FILE_NAME = 'utterances.txt'
 UTT_ISSUER_FILE_NAME = 'utt_issuers.txt'
 LABEL_FILE_PREFIX = 'labels'
 FEAT_CONTAINER_FILE_NAME = 'features.txt'
+SUBVIEW_FILE_PREFIX = 'subview'
 
 
 class DefaultReader(base.CorpusReader):
@@ -48,6 +50,7 @@ class DefaultReader(base.CorpusReader):
         DefaultReader.read_utterances(utterance_path, corpus, utt_id_to_issuer)
         DefaultReader.read_labels(path, corpus)
         DefaultReader.read_feature_containers(feat_path, corpus)
+        DefaultReader.read_subviews(path, corpus)
 
         return corpus
 
@@ -118,6 +121,18 @@ class DefaultReader(base.CorpusReader):
             for container_name, container_path in containers.items():
                 corpus.new_feature_container(container_name, path=os.path.join(base_path, container_path))
 
+    @staticmethod
+    def read_subviews(path, corpus):
+        for sv_file in glob.glob(os.path.join(path, '{}_*.txt'.format(SUBVIEW_FILE_PREFIX))):
+            file_name = os.path.basename(sv_file)
+            key = file_name[len('{}_'.format(SUBVIEW_FILE_PREFIX)):len(file_name) - len('.txt')]
+
+            with open(sv_file, 'r') as f:
+                content = f.read().strip()
+
+            sv = subview.Subview.parse(content)
+            corpus.import_subview(key, sv)
+
 
 class DefaultWriter(base.CorpusWriter):
     """
@@ -139,6 +154,7 @@ class DefaultWriter(base.CorpusWriter):
         DefaultWriter.write_utt_to_issuer_mapping(utt_issuer_path, corpus)
         DefaultWriter.write_labels(path, corpus)
         DefaultWriter.write_feature_containers(container_path, corpus)
+        DefaultWriter.write_subviews(path, corpus)
 
     @staticmethod
     def write_files(file_path, corpus):
@@ -173,3 +189,10 @@ class DefaultWriter(base.CorpusWriter):
     def write_feature_containers(container_path, corpus):
         feat_records = [(idx, container.path) for idx, container in corpus.feature_containers.items()]
         textfile.write_separated_lines(container_path, feat_records, separator=' ')
+
+    @staticmethod
+    def write_subviews(path, corpus):
+        for name, sv in corpus.subviews.items():
+            sv_path = os.path.join(path, '{}_{}.txt'.format(SUBVIEW_FILE_PREFIX, name))
+            with open(sv_path, 'w') as f:
+                f.write(sv.serialize())

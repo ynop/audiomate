@@ -82,20 +82,105 @@ class DefaultReaderTest(unittest.TestCase):
         assert ds.feature_containers['mfcc'].path == os.path.join(self.test_path, 'features', 'mfcc')
         assert ds.feature_containers['fbank'].path == os.path.join(self.test_path, 'features', 'fbank')
 
+    def test_load_subviews(self):
+        ds = self.reader.load(self.test_path)
+
+        assert 'train' in ds.subviews.keys()
+        assert 'dev' in ds.subviews.keys()
+
+        assert len(ds.subviews['train'].filter_criteria) == 1
+        assert len(ds.subviews['dev'].filter_criteria) == 1
+
+        assert ds.subviews['train'].filter_criteria[0].utterance_idxs == {'utt-1', 'utt-2', 'utt-3'}
+        assert ds.subviews['dev'].filter_criteria[0].utterance_idxs == {'utt-4', 'utt-5'}
+
+        assert not ds.subviews['train'].filter_criteria[0].inverse
+        assert not ds.subviews['dev'].filter_criteria[0].inverse
+
 
 class DefaultWriterTest(unittest.TestCase):
     def setUp(self):
         self.writer = io.DefaultWriter()
+        self.ds = resources.create_dataset()
         self.test_path = resources.sample_default_ds_path()
+        self.path = tempfile.mkdtemp()
 
-    def test_save(self):
-        ds = resources.create_dataset()
-        path = tempfile.mkdtemp()
-        self.writer.save(ds, path)
+    def tearDown(self):
+        shutil.rmtree(self.path, ignore_errors=True)
 
-        assert 'files.txt' in os.listdir(path)
-        assert 'utterances.txt' in os.listdir(path)
-        assert 'utt_issuers.txt' in os.listdir(path)
-        assert 'labels_default.txt' in os.listdir(path)
+    def test_save_files_exist(self):
+        self.writer.save(self.ds, self.path)
+        files = os.listdir(self.path)
 
-        shutil.rmtree(path, ignore_errors=True)
+        assert len(files) == 7
+
+        assert 'files.txt' in files
+        assert 'utterances.txt' in files
+        assert 'utt_issuers.txt' in files
+        assert 'labels_default.txt' in files
+        assert 'subview_train.txt' in files
+        assert 'subview_dev.txt' in files
+
+    def test_save_files(self):
+        self.writer.save(self.ds, self.path)
+
+        file_1_path = os.path.relpath(resources.get_wav_file_path('wav_1.wav'), self.path)
+        file_2_path = os.path.relpath(resources.get_wav_file_path('wav_2.wav'), self.path)
+        file_3_path = os.path.relpath(resources.get_wav_file_path('wav_3.wav'), self.path)
+        file_4_path = os.path.relpath(resources.get_wav_file_path('wav_4.wav'), self.path)
+
+        with open(os.path.join(self.path, 'files.txt'), 'r') as f:
+            file_content = f.read()
+
+        assert file_content.strip() == 'wav-1 {}\nwav_2 {}\nwav_3 {}\nwav_4 {}'.format(file_1_path,
+                                                                                       file_2_path,
+                                                                                       file_3_path,
+                                                                                       file_4_path)
+
+    def test_save_utterances(self):
+        self.writer.save(self.ds, self.path)
+
+        with open(os.path.join(self.path, 'utterances.txt'), 'r') as f:
+            file_content = f.read()
+
+        assert file_content.strip() == 'utt-1 wav-1 0 -1\n' \
+                                       'utt-2 wav_2 0 -1\n' \
+                                       'utt-3 wav_3 0 1.5\n' \
+                                       'utt-4 wav_3 1.5 2.5\n' \
+                                       'utt-5 wav_4 0 -1'
+
+    def test_save_utt_to_issuer(self):
+        self.writer.save(self.ds, self.path)
+
+        with open(os.path.join(self.path, 'utt_issuers.txt'), 'r') as f:
+            file_content = f.read()
+
+        assert file_content.strip() == 'utt-1 spk-1\n' \
+                                       'utt-2 spk-1\n' \
+                                       'utt-3 spk-2\n' \
+                                       'utt-4 spk-2\n' \
+                                       'utt-5 spk-3'
+
+    def test_save_labels(self):
+        self.writer.save(self.ds, self.path)
+
+        with open(os.path.join(self.path, 'labels_default.txt'), 'r') as f:
+            file_content = f.read()
+
+        assert file_content.strip() == 'utt-1 0 -1 who am i\n' \
+                                       'utt-2 0 -1 who are you\n' \
+                                       'utt-3 0 -1 who is he\n' \
+                                       'utt-4 0 -1 who are they\n' \
+                                       'utt-5 0 -1 who is she'
+
+    def test_save_subviews(self):
+        self.writer.save(self.ds, self.path)
+
+        with open(os.path.join(self.path, 'subview_train.txt'), 'r') as f:
+            sv_train_content = f.read()
+
+        with open(os.path.join(self.path, 'subview_dev.txt'), 'r') as f:
+            sv_dev_content = f.read()
+
+        assert sv_train_content.strip() == 'matching_utterance_ids\ninclude,utt-1,utt-2,utt-3'
+        assert sv_dev_content.strip() == 'matching_utterance_ids\ninclude,utt-4,utt-5'
