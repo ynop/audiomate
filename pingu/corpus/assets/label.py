@@ -251,6 +251,32 @@ class LabelList(object):
 
         return occurrences
 
+    def label_total_duration(self):
+        """
+        Return for each distinct label value the total duration of all occurrences.
+
+        Returns:
+            dict: A dictionary containing for every label-value (key) the total duration in seconds (value).
+
+        Example:
+            >>> ll = LabelList(labels=[
+            >>>     Label('a', 3, 5),
+            >>>     Label('b', 5, 8),
+            >>>     Label('a', 8, 10),
+            >>>     Label('b', 10, 14),
+            >>>     Label('a', 15, 18.5)
+            >>> ])
+            >>> ll.label_total_duration()
+            {'a': 7.5 'b': 7.0}
+        """
+
+        durations = collections.defaultdict(float)
+
+        for label in self:
+            durations[label.value] += label.duration
+
+        return durations
+
     def apply(self, fn):
         """
         Apply the given function `fn` to every label in this label list. `fn` is a function of one argument that

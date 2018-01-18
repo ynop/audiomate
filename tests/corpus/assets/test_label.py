@@ -215,6 +215,21 @@ class TestLabelList(unittest.TestCase):
         self.assertEqual(1, res['b'])
         self.assertEqual(2, res['c'])
 
+    def test_label_total_durations(self):
+        ll = assets.LabelList(labels=[
+            assets.Label('a', 3.2, 4.5),
+            assets.Label('b', 5.1, 8.9),
+            assets.Label('c', 7.2, 10.5),
+            assets.Label('a', 10.5, 14),
+            assets.Label('c', 13, 14)
+        ])
+
+        res = ll.label_total_duration()
+
+        assert res['a'] == pytest.approx(4.8)
+        assert res['b'] == pytest.approx(3.8)
+        assert res['c'] == pytest.approx(4.3)
+
 
 class TestLabel(object):
     def test_lt_start_time_considered_first(self):
