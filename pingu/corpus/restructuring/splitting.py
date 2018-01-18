@@ -60,7 +60,7 @@ class Splitter(object):
 
         utterance_to_duration = {}
         for utterance in self.corpus.utterances.values():
-            utterance_to_duration[utterance.idx] = {'length': int(utterance.duration*100)}
+            utterance_to_duration[utterance.idx] = {'length': int(utterance.duration * 100)}
 
         splits = Splitter.get_identifiers_splitted_by_weights(utterance_to_duration, proportions=proportions)
 
@@ -74,7 +74,7 @@ class Splitter(object):
 
         Args:
             proportions (dict): A dictionary containing the relative size of the target subsets.
-            The key is an identifier for the subset.
+                                The key is an identifier for the subset.
 
         Returns:
             (dict): A dictionary containing the subsets with the identifier from the input as key.
@@ -106,14 +106,16 @@ class Splitter(object):
 
         return self._subviews_from_utterance_splits(splits)
 
-    def split_by_proportionally_distribute_labels(self, proportions={}):
+    def split_by_proportionally_distribute_labels(self, proportions={}, use_lengths=True):
         """
         Split the corpus into subsets, so the occurrence of the labels is distributed amongst the
         subsets according to the given proportions.
 
         Args:
             proportions (dict): A dictionary containing the relative size of the target subsets.
-            The key is an identifier for the subset.
+                                The key is an identifier for the subset.
+            use_lengths (bool): If True the lengths of the labels are considered for splitting proportionally,
+                                otherwise only the number of occurrences is taken into account.
 
         Returns:
             (dict): A dictionary containing the subsets with the identifier from the input as key.
@@ -122,7 +124,10 @@ class Splitter(object):
         identifiers = {}
 
         for utterance in self.corpus.utterances.values():
-            identifiers[utterance.idx] = utterance.label_count()
+            if use_lengths:
+                identifiers[utterance.idx] = {l: int(d * 100) for l, d in utterance.label_total_duration().items()}
+            else:
+                identifiers[utterance.idx] = utterance.label_count()
 
         splits = Splitter.get_identifiers_splitted_by_weights(identifiers, proportions)
 

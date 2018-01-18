@@ -24,7 +24,7 @@ class SplitterTest(unittest.TestCase):
         test_duration = sum([utt.duration for utt in res['test'].utterances.values()])
 
         assert set(train_utt_ids).union(test_utt_ids) == set(self.corpus.utterances.keys())
-        assert train_duration / test_duration == pytest.approx(3, rel=5.0)
+        assert train_duration / test_duration == pytest.approx(3, rel=0.1)
 
     def test_split_by_number_of_utterances(self):
         res = self.splitter.split_by_number_of_utterances({
@@ -53,29 +53,44 @@ class SplitterTest(unittest.TestCase):
         self.assertSetEqual(set(res1['test'].utterances.keys()),
                             set(res2['test'].utterances.keys()))
 
-    def test_split_by_proportionally_distribute_labels(self):
+    def test_split_by_proportionally_distribute_labels_by_lengths(self):
         res = self.splitter.split_by_proportionally_distribute_labels({
             'train': 0.6,
             'test': 0.2
         })
 
+        train_utt_ids = res['train'].utterances.keys()
+        test_utt_ids = res['test'].utterances.keys()
+
+        train_duration = sum([utt.duration for utt in res['train'].utterances.values()])
+        test_duration = sum([utt.duration for utt in res['test'].utterances.values()])
+
+        assert set(train_utt_ids).union(test_utt_ids) == set(self.corpus.utterances.keys())
+        assert train_duration / test_duration == pytest.approx(3, rel=0.3)
+
+    def test_split_by_proportionally_distribute_labels_by_number(self):
+        res = self.splitter.split_by_proportionally_distribute_labels({
+            'train': 0.6,
+            'test': 0.2
+        }, use_lengths=False)
+
         self.assertEqual(self.corpus.num_utterances,
                          sum([sv.num_utterances for sv in res.values()]))
 
-    def test_split_by_proportionally_distribute_labels_seed(self):
+    def test_split_by_proportionally_distribute_labels_by_number_seed(self):
         corpus = resources.create_multi_label_corpus()
         splitter = splitting.Splitter(corpus, random_seed=15)
         res1 = splitter.split_by_proportionally_distribute_labels({
             'train': 0.6,
             'test': 0.2
-        })
+        }, use_lengths=False)
 
         corpus = resources.create_multi_label_corpus()
         splitter = splitting.Splitter(corpus, random_seed=15)
         res2 = splitter.split_by_proportionally_distribute_labels({
             'train': 0.6,
             'test': 0.2
-        })
+        }, use_lengths=False)
 
         self.assertSetEqual(set(res1['train'].utterances.keys()),
                             set(res2['train'].utterances.keys()))
