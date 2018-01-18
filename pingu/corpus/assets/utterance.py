@@ -139,7 +139,27 @@ class Utterance(object):
 
         for label_list in self.label_lists.values():
             if label_list_ids is None or label_list.idx in label_list_ids:
-                for label_value, label_list_count in label_list.label_count().items():
-                    count[label_value] += label_list_count
+                for label_value, label_count in label_list.label_count().items():
+                    count[label_value] += label_count
 
         return count
+
+    def label_total_duration(self, label_list_ids=None):
+        """
+        Return a dictionary containing the number of seconds, every label-value is occurring in this utterance.
+
+        Args:
+            label_list_ids (list): If not None, only labels from label-lists with an id contained in this list
+                                   are considered.
+
+        Returns:
+            dict: A dictionary containing the number of seconds with the label-value as key.
+        """
+        duration = collections.defaultdict(float)
+
+        for label_list in self.label_lists.values():
+            if label_list_ids is None or label_list.idx in label_list_ids:
+                for label_value, label_duration in label_list.label_total_duration().items():
+                    duration[label_value] += label_duration
+
+        return duration

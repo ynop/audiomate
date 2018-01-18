@@ -215,6 +215,21 @@ class TestLabelList(unittest.TestCase):
         self.assertEqual(1, res['b'])
         self.assertEqual(2, res['c'])
 
+    def test_label_total_durations(self):
+        ll = assets.LabelList(labels=[
+            assets.Label('a', 3.2, 4.5),
+            assets.Label('b', 5.1, 8.9),
+            assets.Label('c', 7.2, 10.5),
+            assets.Label('a', 10.5, 14),
+            assets.Label('c', 13, 14)
+        ])
+
+        res = ll.label_total_duration()
+
+        assert res['a'] == pytest.approx(4.8)
+        assert res['b'] == pytest.approx(3.8)
+        assert res['c'] == pytest.approx(4.3)
+
 
 class TestLabel(object):
     def test_lt_start_time_considered_first(self):
@@ -310,3 +325,32 @@ class TestLabel(object):
 
         expected, __ = librosa.core.load(file.path, sr=None, offset=1.5)
         assert np.array_equal(l2.read_samples(), expected)
+
+    def test_start_abs(self):
+        label = assets.Label('a', 2, 5)
+        ll = assets.LabelList(labels=[label])
+        assets.Utterance('utt-1', None, start=1, end=19, label_lists=[ll])
+
+        assert label.start_abs == 3
+
+    def test_start_abs_no_utterance(self):
+        label = assets.Label('a', 2, 5)
+
+        assert label.start_abs == 2
+
+    def test_end_abs(self):
+        label = assets.Label('a', 2, 5)
+        ll = assets.LabelList(labels=[label])
+        assets.Utterance('utt-1', None, start=1, end=19, label_lists=[ll])
+
+        assert label.end_abs == 6
+
+    def test_end_abs_no_utterance(self):
+        label = assets.Label('a', 2, 5)
+
+        assert label.end_abs == 5
+
+    def test_duration(self):
+        label = assets.Label('a', 2, 5)
+
+        assert label.duration == 3

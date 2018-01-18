@@ -39,15 +39,24 @@ class Label(object):
     def start_abs(self):
         """
         Return the absolute start of the label in seconds relative to the signal.
+        If the label isn't linked to any utterance via label-list,
+        it is assumed ``self.start`` is relative to the start of the signal, hence ``self.start`` == ``self.start_abs``.
         """
+        if self.label_list is None or self.label_list.utterance is None:
+            return self.start
+
         return self.label_list.utterance.start + self.start
 
     @property
     def end_abs(self):
         """
         Return the absolute end of the label in seconds relative to the signal.
+        If the label isn't linked to any utterance via label-list,
+        it is assumed ``self.end`` is relative to the start of the signal, hence ``self.end`` == ``self.end_abs``.
         """
-        if self.end == -1:
+        if self.label_list is None or self.label_list.utterance is None:
+            return self.end
+        elif self.end == -1:
             return self.label_list.utterance.end_abs
         else:
             return self.end + self.label_list.utterance.start
@@ -221,8 +230,7 @@ class LabelList(object):
         Return for each label the number of occurrences within the list.
 
         Returns:
-            dict: A dictionary container for every label-value (key) the number of occurrences
-                  (value).
+            dict: A dictionary containing for every label-value (key) the number of occurrences (value).
 
         Example:
             >>> ll = LabelList(labels=[
@@ -242,6 +250,32 @@ class LabelList(object):
             occurrences[label.value] += 1
 
         return occurrences
+
+    def label_total_duration(self):
+        """
+        Return for each distinct label value the total duration of all occurrences.
+
+        Returns:
+            dict: A dictionary containing for every label-value (key) the total duration in seconds (value).
+
+        Example:
+            >>> ll = LabelList(labels=[
+            >>>     Label('a', 3, 5),
+            >>>     Label('b', 5, 8),
+            >>>     Label('a', 8, 10),
+            >>>     Label('b', 10, 14),
+            >>>     Label('a', 15, 18.5)
+            >>> ])
+            >>> ll.label_total_duration()
+            {'a': 7.5 'b': 7.0}
+        """
+
+        durations = collections.defaultdict(float)
+
+        for label in self:
+            durations[label.value] += label.duration
+
+        return durations
 
     def apply(self, fn):
         """

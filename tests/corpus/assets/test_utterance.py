@@ -83,11 +83,11 @@ class UtteranceTest(unittest.TestCase):
         assert ll_4.utterance == self.utt
 
     def test_label_values(self):
-        assert self.utt.all_label_values() == set(['a', 'b', 'c', 'd', 'e', 'f', 'g'])
+        assert self.utt.all_label_values() == {'a', 'b', 'c', 'd', 'e', 'f', 'g'}
 
     def test_label_values_with_idx_restriction(self):
         all_values = self.utt.all_label_values(label_list_ids=['bravo', 'charlie'])
-        assert all_values == set(['a', 'c', 'd', 'e', 'f', 'g'])
+        assert all_values == {'a', 'c', 'd', 'e', 'f', 'g'}
 
     def test_label_count(self):
         assert self.utt.label_count() == {'a': 3, 'b': 1, 'c': 2, 'd': 3, 'e': 1, 'f': 1, 'g': 1}
@@ -95,6 +95,14 @@ class UtteranceTest(unittest.TestCase):
     def test_label_count_with_idx_restriction(self):
         count = self.utt.label_count(label_list_ids=['bravo', 'charlie'])
         assert count == {'a': 2, 'c': 1, 'd': 1, 'e': 1, 'f': 1, 'g': 1}
+
+    def test_label_duration(self):
+        duration = self.utt.label_total_duration(label_list_ids=['alpha', 'charlie'])
+        assert duration['a'] == pytest.approx(4.5)
+        assert duration['b'] == pytest.approx(3.8)
+        assert duration['c'] == pytest.approx(3.3)
+        assert duration['d'] == pytest.approx(6.5)
+        assert duration['g'] == pytest.approx(3.7)
 
     def test_read_samples(self):
         expected, __ = librosa.core.load(self.file.path, sr=None, offset=1.25, duration=0.05)
