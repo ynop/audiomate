@@ -3,6 +3,8 @@ import collections
 
 import numpy as np
 
+from pingu.utils import stats
+
 
 class CorpusView(metaclass=abc.ABCMeta):
     """
@@ -168,32 +170,28 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return statistics calculated overall samples of all utterances in the corpus.
 
         Returns:
-            tuple: A tuple containing statistics (min, max, mean, variance)
+            DataStats: A DataStats object containing statistics overall samples in the corpus.
         """
 
-        per_utt_stats = np.array(list(self.stats_per_utterance().values()))
-        count = per_utt_stats[:, 4]
-        relative_count = count / np.sum(count)
-
-        min_value = np.min(per_utt_stats[:, 0])
-        max_value = np.max(per_utt_stats[:, 1])
-        mean_value = np.sum(relative_count * per_utt_stats[:, 2])
-        var_value = np.sum(relative_count * (per_utt_stats[:, 3] + np.power(per_utt_stats[:, 2] - mean_value, 2)))
-
-        return min_value, max_value, mean_value, var_value
+        per_utt_stats = self.stats_per_utterance()
+        return stats.DataStats.concatenate(per_utt_stats.values())
 
     def stats_per_utterance(self):
         """
         Return statistics calculated for all samples of each utterance in the corpus.
 
         Returns:
-            dict: A dictionary containing a tuple with stats (min, max, mean, variance, number of values) for each utt.
+            dict: A dictionary containing a DataStats object for each utt.
         """
 
-        stats = {}
+        all_stats = {}
 
         for utterance in self.utterances.values():
             data = utterance.read_samples()
-            stats[utterance.idx] = (np.min(data), np.max(data), np.mean(data), np.var(data), data.size)
+            all_stats[utterance.idx] = stats.DataStats(float(np.mean(data)),
+                                                       float(np.var(data)),
+                                                       np.min(data),
+                                                       np.max(data),
+                                                       data.size)
 
-        return stats
+        return all_stats

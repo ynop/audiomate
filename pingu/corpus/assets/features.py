@@ -1,6 +1,8 @@
 import h5py
 import numpy as np
 
+from pingu.utils import stats
+
 
 class FeatureContainer(object):
     """
@@ -163,20 +165,13 @@ class FeatureContainer(object):
             The feature container has to be opened in advance.
 
         Returns:
-            tuple: A tuple containing statistics (min, max, mean, variance)
+            DataStats: Statistics overall data points of all features.
         """
         self._check_is_open()
 
-        per_utt_stats = np.array(list(self.stats_per_utterance().values()))
-        count = per_utt_stats[:, 4]
-        relative_count = count / np.sum(count)
+        per_utt_stats = self.stats_per_utterance()
 
-        min_value = np.min(per_utt_stats[:, 0])
-        max_value = np.max(per_utt_stats[:, 1])
-        mean_value = np.sum(relative_count * per_utt_stats[:, 2])
-        var_value = np.sum(relative_count * (per_utt_stats[:, 3] + np.power(per_utt_stats[:, 2] - mean_value, 2)))
-
-        return min_value, max_value, mean_value, var_value
+        return stats.DataStats.concatenate(per_utt_stats.values())
 
     def stats_per_utterance(self):
         """
@@ -186,17 +181,21 @@ class FeatureContainer(object):
             The feature container has to be opened in advance.
 
         Returns:
-            dict: A dictionary containing a tuple with stats (min, max, mean, variance, number of values) for each utt.
+            dict: A dictionary containing a DataStats object for each utterance.
         """
         self._check_is_open()
 
-        stats = {}
+        all_stats = {}
 
         for utt_id, data in self._file.items():
             data = data[()]
-            stats[utt_id] = (np.min(data), np.max(data), np.mean(data), np.var(data), data.size)
+            all_stats[utt_id] = stats.DataStats(float(np.mean(data)),
+                                                float(np.var(data)),
+                                                np.min(data),
+                                                np.max(data),
+                                                data.size)
 
-        return stats
+        return all_stats
 
     def _check_is_open(self):
         if self._file is None:
