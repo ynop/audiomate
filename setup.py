@@ -30,6 +30,7 @@ setup(name='pingu',
       test_suite='tests',
       extras_require={
           'dev': [
+              'click==6.7',
               'pytest==%s' % (PYTEST_VERSION_,),
               'pytest-runner==3.0',
               'pytest-cov==2.5.1',
