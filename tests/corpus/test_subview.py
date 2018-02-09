@@ -54,19 +54,19 @@ class SubviewTest(unittest.TestCase):
         self.subview = subview.Subview(self.corpus, filter_criteria=[filter])
 
     def test_files(self):
-        self.assertEqual(2, self.subview.num_files)
-        self.assertIn('wav-1', self.subview.files.keys())
-        self.assertIn('wav_3', self.subview.files.keys())
+        assert self.subview.num_files == 2
+        assert 'wav-1' in self.subview.files.keys()
+        assert 'wav_3' in self.subview.files.keys()
 
     def test_utterances(self):
-        self.assertEqual(2, self.subview.num_utterances)
-        self.assertIn('utt-1', self.subview.utterances.keys())
-        self.assertIn('utt-3', self.subview.utterances.keys())
+        assert self.subview.num_utterances == 2
+        assert 'utt-1' in self.subview.utterances.keys()
+        assert 'utt-3' in self.subview.utterances.keys()
 
     def test_issuers(self):
-        self.assertEqual(2, self.subview.num_issuers)
-        self.assertIn('spk-1', self.subview.issuers.keys())
-        self.assertIn('spk-2', self.subview.issuers.keys())
+        assert self.subview.num_issuers == 2
+        assert 'spk-1' in self.subview.issuers.keys()
+        assert 'spk-2' in self.subview.issuers.keys()
 
     def test_serialize(self):
         repr = self.subview.serialize()
@@ -79,3 +79,11 @@ class SubviewTest(unittest.TestCase):
         assert sv.corpus == self.corpus
         assert len(sv.filter_criteria) == 1
         assert sv.filter_criteria[0].utterance_idxs == {'utt-1', 'utt-3'}
+
+    def test_utterances_without_issuers(self):
+        self.corpus.utterances['utt-3'].issuer = None
+        self.corpus.utterances['utt-4'].issuer = None
+        self.corpus.utterances['utt-5'].issuer = None
+
+        assert self.subview.num_utterances == 2
+        assert self.subview.num_issuers == 1

@@ -178,7 +178,13 @@ class Subview(base.CorpusView):
 
     @property
     def issuers(self):
-        return {utterance.issuer.idx: utterance.issuer for utterance in self.utterances.values()}
+        issuers = {}
+
+        for utterance in self.utterances.values():
+            if utterance.issuer is not None:
+                issuers[utterance.issuer.idx] = utterance.issuer
+
+        return issuers
 
     @property
     def feature_containers(self):
