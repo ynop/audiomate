@@ -184,3 +184,25 @@ class DefaultWriterTest(unittest.TestCase):
 
         assert sv_train_content.strip() == 'matching_utterance_ids\ninclude,utt-1,utt-2,utt-3'
         assert sv_dev_content.strip() == 'matching_utterance_ids\ninclude,utt-4,utt-5'
+
+    def test_save_utterances_with_no_issuer(self):
+        self.ds.utterances['utt-3'].issuer = None
+        self.ds.utterances['utt-4'].issuer = None
+        self.ds.utterances['utt-5'].issuer = None
+
+        self.writer.save(self.ds, self.path)
+
+        with open(os.path.join(self.path, 'utterances.txt'), 'r') as f:
+            file_content = f.read()
+
+        assert file_content.strip() == 'utt-1 wav-1 0 -1\n' \
+                                       'utt-2 wav_2 0 -1\n' \
+                                       'utt-3 wav_3 0 1.5\n' \
+                                       'utt-4 wav_3 1.5 2.5\n' \
+                                       'utt-5 wav_4 0 -1'
+
+        with open(os.path.join(self.path, 'utt_issuers.txt'), 'r') as f:
+            file_content = f.read()
+
+        assert file_content.strip() == 'utt-1 spk-1\n' \
+                                       'utt-2 spk-1'

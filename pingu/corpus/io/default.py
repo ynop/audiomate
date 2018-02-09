@@ -169,7 +169,12 @@ class DefaultWriter(base.CorpusWriter):
 
     @staticmethod
     def write_utt_to_issuer_mapping(utt_issuer_path, corpus):
-        utt_issuer_records = {utterance.idx: utterance.issuer.idx for utterance in corpus.utterances.values()}
+        utt_issuer_records = {}
+
+        for utterance in corpus.utterances.values():
+            if utterance.issuer is not None:
+                utt_issuer_records[utterance.idx] = utterance.issuer.idx
+
         textfile.write_separated_lines(utt_issuer_path, utt_issuer_records, separator=' ', sort_by_column=0)
 
     @staticmethod
