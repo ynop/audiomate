@@ -122,14 +122,17 @@ class DefaultWriterTest(unittest.TestCase):
         assert 'subview_dev.txt' in files
 
     def test_save_files(self):
-        self.writer.save(self.ds, self.path)
+        out_path = os.path.join(self.path, 'somesubdir')  # make sure relative path changes in contrast to self.ds.path
+        os.makedirs(out_path)
 
-        file_1_path = os.path.relpath(resources.get_wav_file_path('wav_1.wav'), self.path)
-        file_2_path = os.path.relpath(resources.get_wav_file_path('wav_2.wav'), self.path)
-        file_3_path = os.path.relpath(resources.get_wav_file_path('wav_3.wav'), self.path)
-        file_4_path = os.path.relpath(resources.get_wav_file_path('wav_4.wav'), self.path)
+        self.writer.save(self.ds, out_path)
 
-        with open(os.path.join(self.path, 'files.txt'), 'r') as f:
+        file_1_path = os.path.relpath(resources.get_wav_file_path('wav_1.wav'), out_path)
+        file_2_path = os.path.relpath(resources.get_wav_file_path('wav_2.wav'), out_path)
+        file_3_path = os.path.relpath(resources.get_wav_file_path('wav_3.wav'), out_path)
+        file_4_path = os.path.relpath(resources.get_wav_file_path('wav_4.wav'), out_path)
+
+        with open(os.path.join(out_path, 'files.txt'), 'r') as f:
             file_content = f.read()
 
         assert file_content.strip() == 'wav-1 {}\nwav_2 {}\nwav_3 {}\nwav_4 {}'.format(file_1_path,

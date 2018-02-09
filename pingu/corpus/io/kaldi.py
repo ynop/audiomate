@@ -128,7 +128,7 @@ class KaldiWriter(base.CorpusWriter):
         segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
 
-        default.DefaultWriter.write_files(wav_file_path, corpus)
+        default.DefaultWriter.write_files(wav_file_path, corpus, path)
         default.DefaultWriter.write_utterances(segments_path, corpus)
         default.DefaultWriter.write_utt_to_issuer_mapping(utt2spk_path, corpus)
 

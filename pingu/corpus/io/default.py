@@ -149,7 +149,7 @@ class DefaultWriter(base.CorpusWriter):
         utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
         container_path = os.path.join(path, FEAT_CONTAINER_FILE_NAME)
 
-        DefaultWriter.write_files(file_path, corpus)
+        DefaultWriter.write_files(file_path, corpus, path)
         DefaultWriter.write_utterances(utterance_path, corpus)
         DefaultWriter.write_utt_to_issuer_mapping(utt_issuer_path, corpus)
         DefaultWriter.write_labels(path, corpus)
@@ -157,8 +157,8 @@ class DefaultWriter(base.CorpusWriter):
         DefaultWriter.write_subviews(path, corpus)
 
     @staticmethod
-    def write_files(file_path, corpus):
-        file_records = [[file.idx, os.path.relpath(file.path, corpus.path)] for file in corpus.files.values()]
+    def write_files(file_path, corpus, path):
+        file_records = [[file.idx, os.path.relpath(file.path, path)] for file in corpus.files.values()]
         textfile.write_separated_lines(file_path, file_records, separator=' ', sort_by_column=0)
 
     @staticmethod
