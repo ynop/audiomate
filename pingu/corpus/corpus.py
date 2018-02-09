@@ -424,7 +424,9 @@ class Corpus(base.CorpusView):
         utterances = copy.deepcopy(list(corpus.utterances.values()))
         for utterance in utterances:
             utterance.file = file_mapping[utterance.file.idx]
-            utterance.issuer = issuer_mapping[utterance.issuer.idx]
+
+            if utterance.issuer is not None:
+                utterance.issuer = issuer_mapping[utterance.issuer.idx]
 
         ds.import_utterances(utterances)
 

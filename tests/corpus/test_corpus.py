@@ -221,6 +221,19 @@ class CorpusTest(unittest.TestCase):
         original.files['wav-1'].path = '/changed/path.wav'
         assert original.files['wav-1'].path != copy.files['wav-1'].path
 
+    def test_from_corpus_only_utterances_and_files(self):
+        ds = pingu.Corpus()
+        ds.new_file('/random/path', 'file_1')
+        ds.new_file('/random/path2', 'file_2')
+        ds.new_utterance('utt_1', 'file_1')
+        ds.new_utterance('utt_2', 'file_2')
+
+        copy = pingu.Corpus.from_corpus(ds)
+
+        assert copy.num_files == 2
+        assert copy.num_utterances == 2
+        assert copy.num_issuers == 0
+
     #
     #    CORPUS READING
     #
