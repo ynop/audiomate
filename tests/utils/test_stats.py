@@ -23,3 +23,18 @@ class DataStatsTest(unittest.TestCase):
         assert concatenated.min == pytest.approx(np.min(values))
         assert concatenated.max == pytest.approx(np.max(values))
         assert concatenated.num == values.size
+
+    def test_to_dict(self):
+        s = stats.DataStats(2.3, 1.2, -2, 4.0, 99)
+        d = s.to_dict()
+
+        assert d == {'mean': 2.3, 'var': 1.2, 'max': 4.0, 'min': -2, 'num': 99}
+
+    def test_from_dict(self):
+        s = stats.DataStats.from_dict({'mean': 2.3, 'var': 1.2, 'max': 4.0, 'min': -2, 'num': 99})
+
+        assert s.mean == pytest.approx(2.3)
+        assert s.var == pytest.approx(1.2)
+        assert s.min == pytest.approx(-2)
+        assert s.max == pytest.approx(4.0)
+        assert s.num == 99

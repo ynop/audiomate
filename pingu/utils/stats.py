@@ -29,6 +29,36 @@ class DataStats(object):
         """
         return np.array([self.mean, self.var, self.min, self.max, self.num])
 
+    def to_dict(self):
+        """
+        Return the stats as a dictionary.
+        """
+        return {
+            'mean': self.mean,
+            'var': self.var,
+            'min': self.min,
+            'max': self.max,
+            'num': self.num
+        }
+
+    @classmethod
+    def from_dict(self, dict_with_stats):
+        """
+        Create a DataStats object from a dictionary with stats.
+
+        Args:
+            dict_with_stats (dict): Dictionary containing stats.
+
+        Returns:
+            (DataStats): Statistics
+        """
+
+        return DataStats(dict_with_stats['mean'],
+                         dict_with_stats['var'],
+                         dict_with_stats['min'],
+                         dict_with_stats['max'],
+                         dict_with_stats['num'])
+
     @classmethod
     def concatenate(cls, list_of_stats):
         """
