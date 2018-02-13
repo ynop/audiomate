@@ -18,7 +18,6 @@ class FeatureContainer(object):
                     created.
 
     Examples::
-
         >>> fc = FeatureContainer('/path/to/hdf5file')
 
         >>> with fc:
