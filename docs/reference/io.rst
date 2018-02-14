@@ -32,6 +32,7 @@ Implementations
   Default                         x      x
   Kaldi                           x      x
   MUSAN                           x
+  Google Speech Commands          x
   ==============================  =====  =======
 
 
@@ -60,3 +61,9 @@ MUSAN
 ^^^^^
 .. autoclass:: MusanReader
    :members:
+
+Google Speech Commands
+^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: SpeechCommandsReader
+   :members:
+
