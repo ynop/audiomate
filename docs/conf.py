@@ -38,6 +38,7 @@ import sphinx_rtd_theme
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.githubpages',
+              'sphinx.ext.mathjax',
               'sphinx.ext.napoleon']
 
 napoleon_use_ivar = True
