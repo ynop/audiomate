@@ -165,6 +165,25 @@ class CorpusView(metaclass=abc.ABCMeta):
 
         return count
 
+    def label_durations(self, label_list_ids=None):
+        """
+        Return a dictionary containing the total duration, every label-value in this corpus is occurring.
+
+        Args:
+            label_list_ids (list): If not None, only labels from label-lists with an id contained in this list
+                                   are considered.
+
+        Returns:
+            dict: A dictionary containing the total duration with the label-value as key.
+        """
+        duration = collections.defaultdict(int)
+
+        for utterance in self.utterances.values():
+            for label_value, utt_count in utterance.label_total_duration(label_list_ids=label_list_ids).items():
+                duration[label_value] += utt_count
+
+        return duration
+
     def stats(self):
         """
         Return statistics calculated overall samples of all utterances in the corpus.
