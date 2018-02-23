@@ -1,5 +1,8 @@
 import collections
 
+import numpy as np
+
+from pingu.utils import units
 from . import label
 
 
@@ -52,6 +55,26 @@ class Utterance(object):
         Return the absolute duration in seconds.
         """
         return self.end_abs - self.start
+
+    def num_samples(self, sr=None):
+        """
+        Return the number of samples.
+
+        Args:
+            sr (int): Calculate the number of samples with the given sampling-rate.
+                      If None use the native sampling-rate.
+
+        Returns:
+            int: Number of samples
+        """
+        native_sr = self.sampling_rate
+        num_samples = units.seconds_to_sample(self.duration, native_sr)
+
+        if sr is not None:
+            ratio = float(sr) / native_sr
+            num_samples = int(np.ceil(num_samples * ratio))
+
+        return num_samples
 
     #
     #   Signal

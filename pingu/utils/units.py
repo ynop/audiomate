@@ -3,6 +3,10 @@ This module contains functions for handling different units.
 Especially it provides function to convert from one to another unit (e.g. seconds -> sample-indexn).
 """
 
+import math
+
+import numpy as np
+
 
 def seconds_to_sample(seconds, sampling_rate=16000):
     """
@@ -20,7 +24,7 @@ def seconds_to_sample(seconds, sampling_rate=16000):
         20800
     """
 
-    return int(seconds * sampling_rate)
+    return int(np.round(sampling_rate * seconds))
 
 
 def sample_to_seconds(sample, sampling_rate=16000):
@@ -42,28 +46,61 @@ def sample_to_seconds(sample, sampling_rate=16000):
     return sample / sampling_rate
 
 
-def sample_to_frame(sample, hop_size):
+class FrameSettings(object):
     """
-    Convert a sample index to a frame index.
+    This class provides functions for handling conversions/calculations between time, samples and frames.
+
+    By default the framing is done as follows:
+        * The first frame starts at sample 0
+        * The end of the last frame is higher than the last sample.
 
     Args:
-        sample (int): The index of the sample (0 based).
-        hop_size (int): The number of samples between two frames.
-
-    Returns:
-        int: The frame index.
+        frame_size (int): Number of samples used per frame.
+        hop_size (int): Number of samples between two frames.
     """
-    return sample // hop_size
 
+    def __init__(self, frame_size, hop_size):
+        self.frame_size = frame_size
+        self.hop_size = hop_size
 
-def seconds_to_frame(seconds, hop_size, sampling_rate=16000):
-    """
-    Convert a time in seconds to the frame index.
+    def num_frames(self, num_samples):
+        """
+        Return the number of frames that will be used for a signal with the length of ``num_samples``.
+        """
+        return math.ceil(max(num_samples - self.frame_size, 0) / self.hop_size + 1)
 
-    Args:
-        seconds (float): The time in seconds.
-        hop_size (int): The number of samples between two frames.
-        sampling_rate (int): The sampling rate of the signal.
-    """
-    sample = seconds_to_sample(seconds, sampling_rate=sampling_rate)
-    return sample_to_frame(sample, hop_size)
+    def sample_to_frame_range(self, sample_index):
+        """
+        Return a tuple containing the indices of the first frame containing the sample with the given index and
+        the last frame (exclusive, doesn't contain the sample anymor).
+        """
+        start = max(0, int((sample_index - self.frame_size) / self.hop_size) + 1)
+        end = int(sample_index / self.hop_size) + 1
+        return start, end
+
+    def frame_to_sample(self, frame_index):
+        """
+        Return a tuple containing the indices of the sample which are the first sample and the end (exclusive)
+        of the frame with the given index.
+        """
+        start = frame_index * self.hop_size
+        end = start + self.frame_size
+        return start, end
+
+    def time_range_to_frame_range(self, start, end, sr):
+        """
+        Calculate the frames containing samples from the given time range in seconds.
+
+        Args:
+            start (float): Start time in seconds.
+            end (float): End time in seconds.
+            sr (int): The sampling rate to use for time-to-sample conversion.
+
+        Returns:
+            tuple: A tuple containing the start and end (exclusive) frame indices.
+        """
+
+        start_sample = seconds_to_sample(start, sr)
+        end_sample = seconds_to_sample(end, sr)
+
+        return self.sample_to_frame_range(start_sample)[0], self.sample_to_frame_range(end_sample-1)[1]
