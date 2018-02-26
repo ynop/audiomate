@@ -97,6 +97,51 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
         return 'matching_utterance_ids'
 
 
+class MatchingLabelFilter(FilterCriterion):
+    """
+    A filter criterion that only accepts utterances which only have the given labels.
+
+    Args:
+        labels (set): A set of labels which are accepted.
+        label_list_ids (set): Only check label-lists with these ids. If empty checks all label-lists.
+    """
+
+    def __init__(self, labels=set(), label_list_ids=set()):
+        self.labels = labels
+        self.label_list_ids = label_list_ids
+
+    def match(self, utterance, corpus):
+        for label_list_idx, label_list in utterance.label_lists.items():
+            if len(self.label_list_ids) == 0 or label_list_idx in self.label_list_ids:
+                for label in label_list:
+                    if label.value not in self.labels:
+                        return False
+
+        return True
+
+    def serialize(self):
+        ll_ids = ','.join(sorted(self.label_list_ids))
+        labels = ','.join(sorted(self.labels))
+        return '{}|||{}'.format(ll_ids, labels)
+
+    @classmethod
+    def parse(cls, representation):
+        parts = representation.strip().split('|||')
+
+        if len(parts) > 1:
+            ll_ids = parts[0].strip().split(',')
+            labels = parts[1].strip().split(',')
+        else:
+            ll_ids = set()
+            labels = parts[0].strip().split(',')
+
+        return cls(set(labels), set(ll_ids))
+
+    @classmethod
+    def name(cls):
+        return 'matching_labels'
+
+
 __filter_criteria = {}
 for cls in FilterCriterion.__subclasses__():
     __filter_criteria[cls.name()] = cls
