@@ -18,6 +18,8 @@ Base Classes
    :inherited-members:
    :private-members:
 
+.. _io_implementations:
+
 Implementations
 ---------------
 
@@ -30,6 +32,7 @@ Implementations
   ==============================  =====  =======
   Broadcast                       x
   Default                         x      x
+  Folder                          x
   Kaldi                           x      x
   MUSAN                           x
   Google Speech Commands          x
@@ -47,6 +50,11 @@ Default
    :members:
 
 .. autoclass:: DefaultWriter
+   :members:
+
+Folder
+^^^^^^
+.. autoclass:: FolderReader
    :members:
 
 Kaldi

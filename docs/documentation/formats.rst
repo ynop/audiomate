@@ -13,7 +13,7 @@ A corpus format defines how a corpus is saved on disk. For the use with this lib
 * DefaultLoader :class:`pingu.corpus.io.DefaultLoader`
 * Broadcast :class:`pingu.corpus.io.BroadcastLoader`
 
-Furthermore there exist loaders for other formats or for specific datasets:
+Furthermore there exist readers and writers for other formats or specific datasets.
+For a list of available readers and writers check :ref:`io_implementations`.
 
-* Kaldi :class:`pingu.corpus.io.KaldiLoader`
 
