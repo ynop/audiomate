@@ -19,6 +19,10 @@ def sample_broadcast_ds_path():
     return os.path.join(os.path.dirname(__file__), 'broadcast_ds')
 
 
+def sample_gtzan_ds_path():
+    return os.path.join(os.path.dirname(__file__), 'gtzan_ds')
+
+
 def sample_kaldi_ds_path():
     return os.path.join(os.path.dirname(__file__), 'kaldi_ds')
 
