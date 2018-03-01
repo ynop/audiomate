@@ -2,7 +2,7 @@
 This module contains classes for creating a preprocessing/feature-extraction pipeline.
 
 There are different classes for offline and online processing, subclassing either
-``:py:class:`pingu.corpus.preprocessing.OfflineProcessor` or ``:py:class:`pingu.corpus.preprocessing.OnlineProcessor`.
+:py:class:`pingu.corpus.preprocessing.OfflineProcessor` or :py:class:`pingu.corpus.preprocessing.OnlineProcessor`.
 
 A pipeline consists of one of two types of steps. A computation step takes data from a previous step or the input and
 processes it. A reduction step is used to merge outputs of multiple previous steps.

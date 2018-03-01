@@ -1,3 +1,9 @@
+"""
+This module contains code to convert label-lists to vector representations.
+This is for example used when training a classifier and the labels act as target values.
+Then they can be converted to a numerical representation using Encoders.
+"""
+
 import numpy as np
 
 

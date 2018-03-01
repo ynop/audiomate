@@ -1,19 +1,3 @@
-"""
-This module contains the base classes for processors.
-A processor is used to process the samples of utterances from a corpus.
-
-There are different levels of abstractions for a processor.
-On top there is the ``:py:class:`pingu.corpus.preprocessing.Processor`, which provides the basic structure to process
-the utterances one after another.
-
-Based on that there are two subclasses ``:py:class:`pingu.corpus.preprocessing.OnlineProcessor` and
-``:py:class:`pingu.corpus.preprocessing.OfflineProcessor`. The first one is streaming-processor for processing samples
-frame by frame without the need for loading the full utterance.
-
-The latter one is used to process all samples of the utterance at once.
-In a lot of cases this is easier to implement.
-"""
-
 import abc
 import math
 
@@ -29,10 +13,29 @@ class Processor(metaclass=abc.ABCMeta):
     The processor produces from a given corpus features, which it then stores in a feature-container.
 
     For implementing a specific processor, the ``process_utterance`` method has to be implemented:
+
         * This method is called for every utterance in the corpus.
         * In the method any feature extraction / pre-processing can be done.
         * The result then has to be saved in the feature-container, which is passed along with the utterance.
           The result has to be saved, with the id of the utterance, which is passed as argument.
+
+    Example:
+        >>> import pingu
+        >>> from pingu.corpus.preprocessing.pipeline import offline
+        >>>
+        >>> ds = pingu.Corpus.load('some/corpus/path')
+        >>> mfcc_processor = offline.MFCC(n_mfcc=13, n_mels=128)
+        >>> norm_processor = offline.MeanVarianceNorm(mean=5.4, variance=2.3, parent=mfcc_processor)
+        >>>
+        >>> fc = norm_processor.process_corpus(ds, output_path='path/mfcc_features.h5', frame_size=400, hop_size=160)
+        >>> fc
+        <pingu.corpus.assets.features.FeatureContainer at 0x10d451a20>
+        >>> fc.open()
+        >>> fc.get('existing-utterance-id')[()]
+        array([[-6.18418212,  3.93379946,  2.51237535,  3.62199459, -6.77845303,
+         3.28746939,  1.36316432, -0.7814685 , -2.36003147,  3.27370797,
+        -3.24373709, -2.42513017, -1.55695699],
+        ...
     """
 
     def process_corpus(self, corpus, output_path, frame_size=400, hop_size=160, sr=None):
@@ -99,6 +102,7 @@ class OfflineProcessor(Processor, metaclass=abc.ABCMeta):
     This class should be used for feature extraction in batch mode (one full utterance in a step).
 
     For implementing a specific offline-processor, the ``process_sequence`` method has to be implemented:
+
         * As input the method receives a 2-Dimensional array of frames (n-frames x n-samples-per-frame).
         * It must return a array with the first dimension of the same size as the input.
 

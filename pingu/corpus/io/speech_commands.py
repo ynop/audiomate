@@ -12,7 +12,11 @@ class SpeechCommandsReader(base.CorpusReader):
     """
     Reads the google speech commands dataset.
 
-    https://research.googleblog.com/2017/08/launching-speech-commands-dataset.html
+    .. seealso::
+
+        `Launching Speech Commands DS <https://research.googleblog.com/2017/08/launching-speech-commands-dataset.html>`_
+            Blog-Entry on the release of the speech commands dataset.
+
     """
 
     @classmethod
