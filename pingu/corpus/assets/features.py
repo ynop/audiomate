@@ -254,7 +254,11 @@ class PartitioningFeatureIterator(object):
         self._shuffle = shuffle
         self._seed = seed
 
-        self._data_sets = tuple(hdf5file.keys())
+        data_sets = list(hdf5file.keys())
+        if shuffle:
+            _random_state(self._seed).shuffle(data_sets)
+
+        self._data_sets = tuple(data_sets)
         self._partitions = []
         self._partition_idx = 0
         self._partition_data = None
@@ -325,7 +329,8 @@ class PartitioningFeatureIterator(object):
             while partition_free_space >= record_size and remaining_records >= 1:
                 num_fitting_records = int(partition_free_space / record_size)
                 num_records_taken = min(remaining_records, num_fitting_records)
-                end = (dset_name, start[1] + num_records_taken)
+                end_index = num_records_taken if dset_name != start[0] else start[1] + num_records_taken
+                end = (dset_name, end_index)
 
                 if num_records_taken == num_fitting_records:  # Partition is going to be full afterwards
                     self._partitions.append((start, end))
@@ -399,6 +404,9 @@ class DataSetProperties:
         self.name = name
         self.num_of_records = num_of_records
         self.record_size = record_size
+
+    def __repr__(self):
+        return 'DataSetProperties({0}, {1}, {2})'.format(self.name, self.num_of_records, self.record_size)
 
 
 class Partition:
