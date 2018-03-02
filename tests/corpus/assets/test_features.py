@@ -166,20 +166,23 @@ class TestPartitioningFeatureIterator(object):
     def test_next_emits_all_features_in_random_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
         file = h5py.File(file_path, 'w')
         file.create_dataset('utt-1', data=ds1)
         file.create_dataset('utt-2', data=ds2)
+        file.create_dataset('utt-3', data=ds3)
 
-        features = tuple(PartitioningFeatureIterator(file, 120, shuffle=True, seed=13))
+        features = tuple(PartitioningFeatureIterator(file, 120, shuffle=True, seed=16))
 
-        assert 5 == len(features)
+        assert 6 == len(features)
 
-        self.assert_features_equal(('utt-2', 2, [0.5, 0.5, 0.5, 0.5, 0.5]), features[0])
-        self.assert_features_equal(('utt-2', 1, [0.4, 0.4, 0.4, 0.4, 0.4]), features[1])
-        self.assert_features_equal(('utt-1', 1, [0.2, 0.2, 0.2, 0.2, 0.2]), features[2])
-        self.assert_features_equal(('utt-1', 0, [0.1, 0.1, 0.1, 0.1, 0.1]), features[3])
+        self.assert_features_equal(('utt-1', 1, [0.2, 0.2, 0.2, 0.2, 0.2]), features[0])
+        self.assert_features_equal(('utt-3', 0, [0.6, 0.6, 0.6, 0.6, 0.6]), features[1])
+        self.assert_features_equal(('utt-1', 0, [0.1, 0.1, 0.1, 0.1, 0.1]), features[2])
+        self.assert_features_equal(('utt-2', 2, [0.5, 0.5, 0.5, 0.5, 0.5]), features[3])
         self.assert_features_equal(('utt-2', 0, [0.3, 0.3, 0.3, 0.3, 0.3]), features[4])
+        self.assert_features_equal(('utt-2', 1, [0.4, 0.4, 0.4, 0.4, 0.4]), features[5])
 
     def test_next_emits_all_features_if_partition_spans_multiple_data_sets_in_sequential_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -271,9 +274,9 @@ class TestPartitioningFeatureIterator(object):
         iterator = PartitioningFeatureIterator(file, 81, shuffle=True, seed=42)  # one byte more than ds1
 
         assert 3 == len(iterator._partitions)
-        assert (('utt-1', 0), ('utt-1', 2)) in iterator._partitions
+        assert (('utt-1', 1), ('utt-1', 2)) in iterator._partitions
         assert (('utt-2', 0), ('utt-2', 2)) in iterator._partitions
-        assert (('utt-2', 2), ('utt-2', 3)) in iterator._partitions
+        assert (('utt-2', 2), ('utt-1', 1)) in iterator._partitions
 
     def test_partitioning_remaining_space_filled_with_next_data_set(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -283,7 +286,7 @@ class TestPartitioningFeatureIterator(object):
         file.create_dataset('utt-1', data=ds1)
         file.create_dataset('utt-2', data=ds2)
 
-        iterator = PartitioningFeatureIterator(file, 120, shuffle=True, seed=42)
+        iterator = PartitioningFeatureIterator(file, 120, shuffle=True, seed=32)
 
         assert 2 == len(iterator._partitions)
         assert (('utt-1', 0), ('utt-2', 1)) in iterator._partitions
@@ -297,7 +300,7 @@ class TestPartitioningFeatureIterator(object):
         file.create_dataset('utt-1', data=ds1)
         file.create_dataset('utt-2', data=ds2)
 
-        iterator = PartitioningFeatureIterator(file, 120, shuffle=True, seed=42)
+        iterator = PartitioningFeatureIterator(file, 120, shuffle=True, seed=12)
 
         assert 3 == len(iterator._partitions)
         assert (('utt-1', 0), ('utt-1', 2)) in iterator._partitions
