@@ -33,6 +33,7 @@ Implementations
   Broadcast                       x
   Default                         x      x
   Folder                          x
+  GTZAN                           x
   Kaldi                           x      x
   MUSAN                           x
   Google Speech Commands          x
@@ -55,6 +56,11 @@ Default
 Folder
 ^^^^^^
 .. autoclass:: FolderReader
+   :members:
+
+GTZAN
+^^^^^
+.. autoclass:: GtzanReader
    :members:
 
 Kaldi

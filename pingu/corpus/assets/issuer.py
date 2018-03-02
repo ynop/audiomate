@@ -15,3 +15,6 @@ class Issuer(object):
         self.idx = idx
         self.info = info
         self.utterances = set()
+
+    def __str__(self):
+        return 'Issuer(idx={0}, info={1})'.format(self.idx, self.info)

@@ -6,6 +6,7 @@ used to convert between formats.
 from .base import CorpusReader, CorpusWriter
 from .broadcast import BroadcastReader  # noqa: F401
 from .default import DefaultReader, DefaultWriter  # noqa: F401
+from .gtzan import GtzanReader  # noqa: F401
 from .kaldi import KaldiReader, KaldiWriter  # noqa: F401
 from .musan import MusanReader  # noqa: F401
 from .speech_commands import SpeechCommandsReader  # noqa: F401
