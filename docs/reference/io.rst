@@ -37,6 +37,7 @@ Implementations
   Kaldi                           x      x
   MUSAN                           x
   Google Speech Commands          x
+  TUDA German Distant Speech      x
   ==============================  =====  =======
 
 
@@ -79,5 +80,10 @@ MUSAN
 Google Speech Commands
 ^^^^^^^^^^^^^^^^^^^^^^
 .. autoclass:: SpeechCommandsReader
+   :members:
+
+TUDA German Distant Speech
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: TudaReader
    :members:
 

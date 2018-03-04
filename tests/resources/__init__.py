@@ -35,6 +35,10 @@ def sample_speech_commands_ds_path():
     return os.path.join(os.path.dirname(__file__), 'speech_commands_ds')
 
 
+def sample_tuda_ds_path():
+    return os.path.join(os.path.dirname(__file__), 'tuda_ds')
+
+
 def get_wav_folder():
     return os.path.join(os.path.dirname(__file__), 'wav_files')
 
