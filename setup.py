@@ -23,7 +23,9 @@ setup(name='pingu',
           'scipy==1.0.0',
           'librosa==0.5.1',
           'h5py==2.7.1',
-          'networkx==2.0'
+          'networkx==2.0',
+          'beautifulsoup4==4.6.0',
+          'lxml==4.1.1'
       ],
       include_package_data=True,
       zip_safe=False,
