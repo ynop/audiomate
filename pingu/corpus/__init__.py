@@ -8,5 +8,5 @@ from .base import CorpusView  # noqa: F401
 
 from .corpus import Corpus  # noqa: F401
 
-from .subview import Subview  # noqa: F401
-from .subview import MatchingUtteranceIdxFilter  # noqa: F401
+from pingu.corpus.subset.subview import Subview  # noqa: F401
+from pingu.corpus.subset.subview import MatchingUtteranceIdxFilter  # noqa: F401

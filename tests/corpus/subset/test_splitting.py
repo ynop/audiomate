@@ -2,7 +2,7 @@ import unittest
 
 import pytest
 
-from pingu.corpus.restructuring import splitting
+from pingu.corpus.subset import splitting
 from tests import resources
 
 

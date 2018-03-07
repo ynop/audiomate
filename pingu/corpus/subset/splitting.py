@@ -5,7 +5,7 @@ This module contains functionality for splitting a corpus.
 import collections
 import random
 
-from pingu.corpus import subview
+from pingu.corpus.subset import subview
 
 
 class Splitter(object):

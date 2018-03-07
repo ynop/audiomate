@@ -3,7 +3,7 @@ import tempfile
 
 import pingu
 from pingu.corpus import assets
-from pingu.corpus import subview
+from pingu.corpus.subset import subview
 
 
 def dummy_wav_path_and_name():
