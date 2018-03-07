@@ -38,6 +38,15 @@ Splitter
    :members:
    :inherited-members:
 
+
+SubsetGenerator
+---------------
+
+.. autoclass:: SubsetGenerator
+   :members:
+   :inherited-members:
+
+
 Utils
 -----
 
@@ -53,3 +62,4 @@ from .subview import MatchingLabelFilter  # noqa: F401
 from .subview import Subview  # noqa: F401
 
 from .splitting import Splitter  # noqa: F401
+from .selection import SubsetGenerator  # noqa: F401

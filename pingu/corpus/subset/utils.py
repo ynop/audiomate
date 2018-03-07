@@ -1,4 +1,7 @@
 import collections
+import random
+
+import numpy as np
 
 
 def absolute_proportions(proportions, count):
@@ -168,3 +171,87 @@ def get_identifiers_splitted_by_weights(identifiers={}, proportions={}):
             current_weights_per_part[target_part][category] += weight
 
     return result
+
+
+def select_balanced_subset(items, select_count, categories, select_count_values=None, seed=None):
+    """
+    Select items so the summed category weights are balanced.
+    Each item has a dictionary containing the category weights.
+    Items are selected until ``select_count`` is reached.
+    The value that is added to ``select_count`` for an item can be defined in the dictionary ``select_count_values``.
+    If this is not defined it is assumed to be 1, which means `select_count` items are selected.
+
+    Args:
+        items (dict): Dictionary containing items with category weights.
+        select_count (float): Value to reach for selected items.
+        categories (list): List of all categories.
+        select_count_values (dict): The select_count values to be used.
+
+    Returns:
+        list: List of item ids, containing ``number_of_items`` (or ``len(items)`` if smaller).
+
+    Example:
+        >>> items = {
+        >>>    'utt-1' : {'m': 1, 's': 0, 'n': 0},
+        >>>    'utt-2' : {'m': 0, 's': 2, 'n': 1},
+        >>>    ...
+        >>> }
+        >>> select_balanced_subset(items, 5)
+        >>> ['utt-1', 'utt-3', 'utt-9', 'utt-33', 'utt-34']
+    """
+
+    rand = random.Random()
+    rand.seed(seed)
+
+    if select_count_values is None:
+        select_count_values = {item_id: 1 for item_id in items.keys()}
+
+    if sum(select_count_values.values()) < select_count:
+        return list(items.keys())
+
+    available_item_ids = sorted(list(items.keys()))
+    weight_per_category = np.zeros(len(categories))
+    selected_item_ids = []
+    available_item_weights = []
+    current_select_count = 0
+
+    rand.shuffle(available_item_ids)
+
+    # Create dict with weights as vectors
+    for item_id in available_item_ids:
+        weights = items[item_id]
+        all_weights = np.zeros(len(categories))
+
+        for category, weight in weights.items():
+            all_weights[categories.index(category)] = float(weight)
+
+        available_item_weights.append(all_weights)
+
+    # Always add best next item
+    while current_select_count < select_count:
+        best_item_index = 0
+        best_item_id = None
+        best_item_dist = float('inf')
+        current_item_index = 0
+
+        while current_item_index < len(available_item_ids) and best_item_dist > 0:
+            item_id = available_item_ids[current_item_index]
+            item_weights = available_item_weights[current_item_index]
+            temp_total_weights = weight_per_category + item_weights
+
+            dist = temp_total_weights.var()
+
+            if dist < best_item_dist:
+                best_item_index = current_item_index
+                best_item_dist = dist
+                best_item_id = item_id
+
+            current_item_index += 1
+
+        weight_per_category += available_item_weights[best_item_index]
+        selected_item_ids.append(best_item_id)
+        del available_item_ids[best_item_index]
+        del available_item_weights[best_item_index]
+        current_select_count += select_count_values[best_item_id]
+
+    return selected_item_ids

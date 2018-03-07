@@ -1,3 +1,5 @@
+import statistics
+
 from pingu.corpus.subset import utils
 
 
@@ -75,3 +77,34 @@ class TestUtils:
         assert len(res['test']) > 0
         assert len(res['dev']) > 0
         assert len(identifiers) == sum([len(x) for x in res.values()])
+
+    def test_select_balanced_subset(self):
+        categories = ['a', 'b', 'c']
+        items = {
+            'utt-1': {'a': 1, 'b': 0, 'c': 0},
+            'utt-2': {'a': 1, 'c': 2},
+            'utt-3': {'a': 1, 'b': 1, 'c': 1},
+            'utt-4': {'a': 1, 'b': 1, 'c': 0},
+            'utt-5': {'b': 1, 'c': 0},
+            'utt-6': {'b': 2, 'c': 1},
+            'utt-7': {'a': 1, 'b': 0, 'c': 1},
+            'utt-8': {'a': 1, 'b': 1, 'c': 0},
+            'utt-9': {'a': 1, 'b': 0, 'c': 0},
+            'utt-10': {'c': 2},
+            'utt-11': {'a': 1, 'b': 1, 'c': 1},
+            'utt-12': {'b': 1, 'c': 0},
+            'utt-13': {'b': 1, 'c': 0},
+            'utt-14': {'b': 2, 'c': 1},
+            'utt-15': {'a': 1, 'b': 0, 'c': 1},
+            'utt-16': {'a': 1, 'b': 1, 'c': 0}
+        }
+
+        item_ids = utils.select_balanced_subset(items, 10, categories, seed=33)
+        weights = [0 for __ in categories]
+
+        for item_id in item_ids:
+            for cat, weight in items[item_id].items():
+                weights[categories.index(cat)] += weight
+
+        assert len(item_ids) == 10
+        assert statistics.variance(weights) <= 1
