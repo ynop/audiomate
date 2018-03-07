@@ -49,3 +49,8 @@ class CorpusViewTest(unittest.TestCase):
 
         assert durations['music'] == pytest.approx(44.0)
         assert durations['speech'] == pytest.approx(45.0)
+
+    def test_duration(self):
+        duration = self.ds.total_duration
+
+        assert duration == pytest.approx(85.190375)
