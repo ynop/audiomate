@@ -38,6 +38,12 @@ Splitter
    :members:
    :inherited-members:
 
+Utils
+-----
+
+.. automodule:: pingu.corpus.subset.utils
+   :members:
+
 """
 
 from .subview import FilterCriterion  # noqa: F401
