@@ -16,6 +16,7 @@ class SubsetGenerator(object):
 
     def __init__(self, corpus, random_seed=None):
         self.corpus = corpus
+        self.random_seed = random_seed
         self.rand = random.Random()
         self.rand.seed(a=random_seed)
 
@@ -95,3 +96,35 @@ class SubsetGenerator(object):
 
         filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utterance_ids))
         return subview.Subview(self.corpus, filter_criteria=[filter])
+
+    def random_subsets(self, relative_sizes, by_duration=False, balance_labels=False):
+        """
+        Create a bunch of subsets with the given sizes relative to the size or duration of the full corpus.
+        Basically the same as calling ``random_subset`` or ``random_subset_by_duration`` multiple times
+        with different values. But this method makes sure that every subset contains only utterances,
+        that are also contained in the next bigger subset.
+
+        Args:
+            relative_sizes (list): A list of numbers between 0 and 1 indicating the sizes of the desired subsets,
+                                   relative to the full corpus.
+            by_duration (bool): If True the size measure is the duration of all utterances in a subset/corpus.
+            balance_labels (bool): If True the labels contained in a subset are chosen to be balanced
+                                   as far as possible.
+
+        Returns:
+            dict : A dictionary containing all subsets with the relative size as key.
+        """
+        resulting_sets = {}
+        next_bigger_subset = self.corpus
+
+        for relative_size in reversed(relative_sizes):
+            generator = SubsetGenerator(next_bigger_subset, random_seed=self.random_seed)
+
+            if by_duration:
+                sv = generator.random_subset_by_duration(relative_size, balance_labels=balance_labels)
+            else:
+                sv = generator.random_subset(relative_size, balance_labels=balance_labels)
+
+            resulting_sets[relative_size] = sv
+
+        return resulting_sets
