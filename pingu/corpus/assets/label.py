@@ -8,11 +8,13 @@ class Label(object):
     """
     Represents a label that describes some part of an utterance.
 
-    Parameters:
+    Args:
         value (str): The text of the label.
         start (float): Start of the label within the utterance in seconds. (default: 0)
         end (float): End of the label within the utterance in seconds. (default: -1) (-1 defines
                      the end of the utterance)
+
+    Attributes:
         label_list (LabelList): The label-list this label is belonging to.
     """
     __slots__ = ['value', 'start', 'end', 'label_list']
