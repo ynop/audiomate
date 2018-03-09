@@ -1,11 +1,6 @@
-"""
-This module provides class for handling subviews.
-This includes the subview class itself and also the FilterCriterion classes, which are used to
-define the data contained in a subview.
-"""
 import abc
 
-from . import base
+from pingu.corpus import base
 
 
 class FilterCriterion(metaclass=abc.ABCMeta):

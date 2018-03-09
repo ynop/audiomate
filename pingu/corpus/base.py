@@ -184,6 +184,22 @@ class CorpusView(metaclass=abc.ABCMeta):
 
         return duration
 
+    #
+    #   Data
+    #
+
+    @property
+    def total_duration(self):
+        """
+        Return the total amount of audio summed over all utterances in the corpus in seconds.
+        """
+        duration = 0
+
+        for utterance in self.utterances.values():
+            duration += utterance.duration
+
+        return duration
+
     def stats(self):
         """
         Return statistics calculated overall samples of all utterances in the corpus.

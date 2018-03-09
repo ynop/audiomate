@@ -28,8 +28,7 @@ This should ease the use of audio datasets for example for machine learning task
     reference/assets
     reference/io
     reference/preprocessing
-    reference/subview
-    reference/restructuring
+    reference/subset
     reference/corpus_utils
     reference/formats
     reference/utils

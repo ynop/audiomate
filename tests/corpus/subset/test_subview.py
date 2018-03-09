@@ -1,9 +1,9 @@
 import unittest
 
 from pingu.corpus import assets
-from pingu.corpus import subview
+from pingu.corpus.subset import subview
 
-from .. import resources
+from tests import resources
 
 
 class MatchingUtteranceIdxFilterTest(unittest.TestCase):

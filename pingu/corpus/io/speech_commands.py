@@ -3,7 +3,7 @@ import os
 
 import pingu
 from pingu.corpus import assets
-from pingu.corpus import subview
+from pingu.corpus.subset import subview
 from pingu.utils import textfile
 from . import base
 

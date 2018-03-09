@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 import pingu
 from pingu.corpus import assets
-from pingu.corpus import subview
+from pingu.corpus.subset import subview
 from . import base
 
 SUBSETS = ['train', 'dev', 'test']
