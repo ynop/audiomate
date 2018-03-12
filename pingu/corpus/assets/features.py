@@ -229,6 +229,11 @@ class PartitioningFeatureIterator(object):
                              bytes.
         shuffle(bool): Indicates whether the features should be returned in random order (``True``) or not (``False``).
         seed(int): Seed to be used for the random number generator.
+        includes(iterable): Iterable of names of data sets that should be included when iterating over the feature
+                            container. Mutually exclusive with ``excludes``. If both are specified, only ``includes``
+                            will be considered.
+        excludes(iterable): Iterable of names of data sets to skip when iterating over the feature container. Mutually
+                            exclusive with ``includes``. If both are specified, only ``includes`` will be considered.
 
     Example:
         >>> import h5py
@@ -248,13 +253,13 @@ class PartitioningFeatureIterator(object):
 
     PARTITION_SIZE_PATTERN = re.compile('^([0-9]+(\.[0-9]+)?)([gmk])?$', re.I)
 
-    def __init__(self, hdf5file, partition_size, shuffle=True, seed=None):
+    def __init__(self, hdf5file, partition_size, shuffle=True, seed=None, includes=None, excludes=None):
         self._file = hdf5file
         self._partition_size = self._parse_partition_size(partition_size)
         self._shuffle = shuffle
         self._seed = seed
 
-        data_sets = list(hdf5file.keys())
+        data_sets = self._filter_data_sets(hdf5file.keys(), includes=includes, excludes=excludes)
         if shuffle:
             _random_state(self._seed).shuffle(data_sets)
 
@@ -397,6 +402,23 @@ class PartitioningFeatureIterator(object):
             return int(float(groups[0]))  # silently dropping the float, because byte is the smallest unit)
 
         return int(float(groups[0]) * units[groups[2].lower()])
+
+    @staticmethod
+    def _filter_data_sets(data_sets, includes=None, excludes=None):
+        if includes is None:
+            includes = frozenset()
+        else:
+            includes = frozenset(includes)
+
+        if excludes is None:
+            excludes = frozenset()
+        else:
+            excludes = frozenset(excludes)
+
+        if len(includes) > 0:
+            return [data_set for data_set in data_sets if data_set in includes]
+
+        return [data_set for data_set in data_sets if data_set not in excludes]
 
 
 class DataSetProperties:
