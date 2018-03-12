@@ -28,10 +28,13 @@ Example:
 
 The label files reference by the *labels.txt* are in the following format. It contains the start and end in seconds.
 The values are **Tab-separated**.
+Optionally additional meta-information can be stored per label.
+This has to be a json string in square brackets with a space separated after the label-value.
+
 
 .. code-block:: bash
 
-    <start> <end>   <value>
+    <start> <end>   <value> [<label-meta>]
 
 Example:
 
@@ -39,4 +42,4 @@ Example:
 
     0	40  hallo
     40.5    100 velo
-    102.4   109.2   auto
+    102.4   109.2   auto [{"lang": "de", "type": 2}]
