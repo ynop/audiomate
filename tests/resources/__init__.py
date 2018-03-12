@@ -77,7 +77,7 @@ def create_dataset():
     utt_5 = ds.new_utterance('utt-5', file_4.idx, issuer_idx=issuer_3.idx)
 
     utt_1.set_label_list(assets.LabelList('default', labels=[assets.Label('who am i')]))
-    utt_2.set_label_list(assets.LabelList('default', labels=[assets.Label('who are you')]))
+    utt_2.set_label_list(assets.LabelList('default', labels=[assets.Label('who are you', meta={'a': 'hey', 'b': 2})]))
     utt_3.set_label_list(assets.LabelList('default', labels=[assets.Label('who is he')]))
     utt_4.set_label_list(assets.LabelList('default', labels=[assets.Label('who are they')]))
     utt_5.set_label_list(assets.LabelList('default', labels=[assets.Label('who is she')]))
