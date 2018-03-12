@@ -232,6 +232,24 @@ class TestLabelList(unittest.TestCase):
 
 
 class TestLabel(object):
+
+    def test_label_creation(self):
+        a = assets.Label('value', 6.2, 8.9)
+
+        assert a.value == 'value'
+        assert a.start == 6.2
+        assert a.end == 8.9
+        assert len(a.meta) == 0
+
+    def test_label_creation_with_info(self):
+        a = assets.Label('value', 6.2, 8.9, meta={'something': 2})
+
+        assert a.value == 'value'
+        assert a.start == 6.2
+        assert a.end == 8.9
+        assert len(a.meta) == 1
+        assert a.meta['something'] == 2
+
     def test_lt_start_time_considered_first(self):
         a = assets.Label('some label', 1.0, 2.0)
         b = assets.Label('some label', 1.1, 2.0)

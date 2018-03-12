@@ -80,3 +80,15 @@ class BroadcastReaderTest(unittest.TestCase):
 
         assert utt_1.label_lists['jingles'].labels[1].start == 80
         assert utt_1.label_lists['jingles'].labels[1].end == 82.4
+
+    def test_load_label_meta(self):
+        ds = self.reader.load(self.test_path)
+
+        utt_1 = ds.utterances['utt-1']
+
+        assert len(utt_1.label_lists['jingles'].labels[0].meta) == 0
+
+        assert len(utt_1.label_lists['jingles'].labels[1].meta) == 3
+        assert utt_1.label_lists['jingles'].labels[1].meta['lang'] == 'de'
+        assert utt_1.label_lists['jingles'].labels[1].meta['prio'] == 4
+        assert utt_1.label_lists['jingles'].labels[1].meta['unique']

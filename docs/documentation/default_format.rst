@@ -68,10 +68,11 @@ Every label-list is saved in a separate file with the prefix *labels_*.
 A single file contains labels of a specific type for all utterances. A label-list of an utterance can contain one or more labels (e.g. in a text segmentation every word could be a label).
 A label optionally can have a start and end time (in seconds within the utterance). For labels without start/end defined 0/-1 is set.
 Every line in the file defines one label. The labels are stored in order per utterance (e.g. 1. word, 2. word, 3. word, ...).
+Optionally addtional meta-information can be stored per label. This has to be a json string in square brackets.
 
 .. code-block:: bash
 
-    <utterance-id> <start> <end> <label-value>
+    <utterance-id> <start> <end> <label-value> [<label-meta>]
 
 Example:
 
@@ -83,8 +84,8 @@ Example:
     1_hello_sam 0 -1 hello
     1_hello_sam 0 -1 sam
     2_this_is 0 -1 this
-    2_this_is 0 -1 is
-    2_this_is 0 -1 me
+    2_this_is 0 -1 is [{"prio": 3}]
+    2_this_is 0 -1 me [{"stress": true}]
     3_goto 0 -1 go
     3_goto 0 -1 to
     3_goto 0 -1 the

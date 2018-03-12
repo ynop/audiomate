@@ -13,16 +13,18 @@ class Label(object):
         start (float): Start of the label within the utterance in seconds. (default: 0)
         end (float): End of the label within the utterance in seconds. (default: -1) (-1 defines
                      the end of the utterance)
+        meta (dict): A dictionary containing additional information for the label.
 
     Attributes:
         label_list (LabelList): The label-list this label is belonging to.
     """
-    __slots__ = ['value', 'start', 'end', 'label_list']
+    __slots__ = ['value', 'start', 'end', 'label_list', 'meta']
 
-    def __init__(self, value, start=0, end=-1):
+    def __init__(self, value, start=0, end=-1, meta=None):
         self.value = value
         self.start = start
         self.end = end
+        self.meta = meta or {}
         self.label_list = None
 
     def __eq__(self, other):

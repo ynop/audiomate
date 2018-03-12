@@ -1,6 +1,8 @@
 import collections
 import glob
 import os
+import re
+import json
 
 import pingu
 from pingu.corpus import assets
@@ -14,6 +16,9 @@ UTT_ISSUER_FILE_NAME = 'utt_issuers.txt'
 LABEL_FILE_PREFIX = 'labels'
 FEAT_CONTAINER_FILE_NAME = 'features.txt'
 SUBVIEW_FILE_PREFIX = 'subview'
+
+LABEL_META_REGEX = r'(.*) \[(\{.*\})\]'
+META_PATTERN = re.compile(LABEL_META_REGEX)
 
 
 class DefaultReader(base.CorpusReader):
@@ -95,6 +100,7 @@ class DefaultReader(base.CorpusReader):
 
     @staticmethod
     def read_labels(path, corpus):
+
         for label_file in glob.glob(os.path.join(path, '{}_*.txt'.format(LABEL_FILE_PREFIX))):
             file_name = os.path.basename(label_file)
             key = file_name[len('{}_'.format(LABEL_FILE_PREFIX)):len(file_name) - len('.txt')]
@@ -107,7 +113,15 @@ class DefaultReader(base.CorpusReader):
                 label = record[3]
                 start = float(record[1])
                 end = float(record[2])
-                utterance_labels[record[0]].append(assets.Label(label, start, end))
+                meta = None
+                meta_match = META_PATTERN.match(label)
+
+                if meta_match is not None:
+                    meta_json = meta_match.group(2)
+                    meta = json.loads(meta_json)
+                    label = meta_match.group(1)
+
+                utterance_labels[record[0]].append(assets.Label(label, start, end, meta=meta))
 
             for utterance_idx, labels in utterance_labels.items():
                 ll = assets.LabelList(idx=key, labels=labels)
@@ -183,7 +197,14 @@ class DefaultWriter(base.CorpusWriter):
 
         for utterance in corpus.utterances.values():
             for label_list_idx, label_list in utterance.label_lists.items():
-                utt_records = [(utterance.idx, l.start, l.end, l.value) for l in label_list]
+                utt_records = []
+                for l in label_list:
+                    if len(l.meta) > 0:
+                        value = '{} [{}]'.format(l.value, json.dumps(l.meta, sort_keys=True))
+                        utt_records.append((utterance.idx, l.start, l.end, value))
+                    else:
+                        utt_records.append((utterance.idx, l.start, l.end, l.value))
+
                 records[label_list_idx].extend(utt_records)
 
         for label_list_idx, label_list_records in records.items():

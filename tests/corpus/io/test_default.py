@@ -76,6 +76,23 @@ class DefaultReaderTest(unittest.TestCase):
         assert utt_4.label_lists['text'].labels[2].start == 3.5
         assert utt_4.label_lists['text'].labels[2].end == 4.2
 
+    def test_load_label_meta(self):
+        ds = self.reader.load(self.test_path)
+
+        utt_2 = ds.utterances['utt-2']
+        utt_3 = ds.utterances['utt-3']
+        utt_4 = ds.utterances['utt-4']
+
+        assert len(utt_2.label_lists['text'].labels[0].meta) == 3
+        assert utt_2.label_lists['text'].labels[0].meta['pron'] == 'huu'
+        assert utt_2.label_lists['text'].labels[0].meta['duration'] == 2.3
+        assert utt_2.label_lists['text'].labels[0].meta['stressed']
+
+        assert len(utt_3.label_lists['text'].labels[0].meta) == 0
+
+        assert len(utt_4.label_lists['text'].labels[2].meta) == 1
+        assert utt_4.label_lists['text'].labels[2].meta['ex.'] == 19
+
     def test_load_features(self):
         ds = self.reader.load(self.test_path)
 
@@ -171,7 +188,7 @@ class DefaultWriterTest(unittest.TestCase):
             file_content = f.read()
 
         assert file_content.strip() == 'utt-1 0 -1 who am i\n' \
-                                       'utt-2 0 -1 who are you\n' \
+                                       'utt-2 0 -1 who are you [{"a": "hey", "b": 2}]\n' \
                                        'utt-3 0 -1 who is he\n' \
                                        'utt-4 0 -1 who are they\n' \
                                        'utt-5 0 -1 who is she'

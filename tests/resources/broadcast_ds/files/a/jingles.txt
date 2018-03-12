@@ -1,2 +1,2 @@
 20	22	hallo
-80	82.4	velo
+80	82.4	velo [{"lang" : "de", "prio": 4, "unique": true}]

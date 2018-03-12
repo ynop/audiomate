@@ -1,7 +1,7 @@
 import os
+import json
 
 import pingu
-from pingu.corpus import assets
 from pingu.formats import audacity
 from pingu.utils import textfile
 from . import base
@@ -12,6 +12,15 @@ UTTERANCE_FILE_NAME = 'utterances.txt'
 UTT_ISSUER_FILE_NAME = 'utt_issuers.txt'
 LABEL_FILE = 'labels.txt'
 FEAT_CONTAINER_FILE_NAME = 'features.txt'
+
+
+def extract_meta_from_label_value(label):
+    meta_match = default.META_PATTERN.match(label.value)
+
+    if meta_match is not None:
+        meta_json = meta_match.group(2)
+        label.meta = json.loads(meta_json)
+        label.value = meta_match.group(1)
 
 
 class BroadcastReader(base.CorpusReader):
@@ -64,8 +73,8 @@ class BroadcastReader(base.CorpusReader):
             if len(record) > 2:
                 label_idx = record[2]
 
-            entries = audacity.read_label_file(label_path)
-            labels = [assets.Label(x[2], x[0], x[1]) for x in entries]
+            ll = audacity.read_label_list(label_path)
+            ll.idx = label_idx
+            ll.apply(extract_meta_from_label_value)
 
-            ll = assets.LabelList(idx=label_idx, labels=labels)
             corpus.utterances[utt_idx].set_label_list(ll)
