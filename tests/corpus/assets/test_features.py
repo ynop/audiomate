@@ -184,6 +184,123 @@ class TestPartitioningFeatureIterator(object):
         self.assert_features_equal(('utt-2', 0, [0.3, 0.3, 0.3, 0.3, 0.3]), features[4])
         self.assert_features_equal(('utt-2', 1, [0.4, 0.4, 0.4, 0.4, 0.4]), features[5])
 
+    def test_next_emits_features_only_from_included_ds_in_sequential_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        file = h5py.File(file_path, 'w')
+        file.create_dataset('utt-1', data=ds1)
+        file.create_dataset('utt-2', data=ds2)
+        file.create_dataset('utt-3', data=ds3)
+
+        features = tuple(PartitioningFeatureIterator(file, 120, shuffle=False, includes=['utt-1', 'utt-3', 'unknown']))
+
+        assert 4 == len(features)
+
+        self.assert_features_equal(('utt-1', 0, [0.1, 0.1, 0.1, 0.1, 0.1]), features[0])
+        self.assert_features_equal(('utt-1', 1, [0.2, 0.2, 0.2, 0.2, 0.2]), features[1])
+        self.assert_features_equal(('utt-3', 0, [0.6, 0.6, 0.6, 0.6, 0.6]), features[2])
+        self.assert_features_equal(('utt-3', 1, [0.7, 0.7, 0.7, 0.7, 0.7]), features[3])
+
+    def test_next_emits_features_only_from_included_ds_in_random_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        file = h5py.File(file_path, 'w')
+        file.create_dataset('utt-1', data=ds1)
+        file.create_dataset('utt-2', data=ds2)
+        file.create_dataset('utt-3', data=ds3)
+
+        features = tuple(PartitioningFeatureIterator(file, 120, shuffle=True, seed=16,
+                                                     includes=['utt-1', 'utt-3', 'unknown']))
+
+        assert 4 == len(features)
+
+        self.assert_features_equal(('utt-3', 0, [0.6, 0.6, 0.6, 0.6, 0.6]), features[0])
+        self.assert_features_equal(('utt-1', 0, [0.1, 0.1, 0.1, 0.1, 0.1]), features[1])
+        self.assert_features_equal(('utt-1', 1, [0.2, 0.2, 0.2, 0.2, 0.2]), features[2])
+        self.assert_features_equal(('utt-3', 1, [0.7, 0.7, 0.7, 0.7, 0.7]), features[3])
+
+    def test_next_emits_features_without_excluded_in_sequential_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        file = h5py.File(file_path, 'w')
+        file.create_dataset('utt-1', data=ds1)
+        file.create_dataset('utt-2', data=ds2)
+        file.create_dataset('utt-3', data=ds3)
+
+        features = tuple(PartitioningFeatureIterator(file, 120, shuffle=False, excludes=['utt-2', 'unknown']))
+
+        assert 4 == len(features)
+
+        self.assert_features_equal(('utt-1', 0, [0.1, 0.1, 0.1, 0.1, 0.1]), features[0])
+        self.assert_features_equal(('utt-1', 1, [0.2, 0.2, 0.2, 0.2, 0.2]), features[1])
+        self.assert_features_equal(('utt-3', 0, [0.6, 0.6, 0.6, 0.6, 0.6]), features[2])
+        self.assert_features_equal(('utt-3', 1, [0.7, 0.7, 0.7, 0.7, 0.7]), features[3])
+
+    def test_next_emits_features_without_excluded_in_random_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        file = h5py.File(file_path, 'w')
+        file.create_dataset('utt-1', data=ds1)
+        file.create_dataset('utt-2', data=ds2)
+        file.create_dataset('utt-3', data=ds3)
+
+        features = tuple(PartitioningFeatureIterator(file, 120, shuffle=True, seed=16, excludes=['utt-2', 'unknown']))
+
+        assert 4 == len(features)
+
+        self.assert_features_equal(('utt-3', 0, [0.6, 0.6, 0.6, 0.6, 0.6]), features[0])
+        self.assert_features_equal(('utt-1', 0, [0.1, 0.1, 0.1, 0.1, 0.1]), features[1])
+        self.assert_features_equal(('utt-1', 1, [0.2, 0.2, 0.2, 0.2, 0.2]), features[2])
+        self.assert_features_equal(('utt-3', 1, [0.7, 0.7, 0.7, 0.7, 0.7]), features[3])
+
+    def test_next_emits_features_only_from_included_ds_ignoring_filter_in_sequential_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        file = h5py.File(file_path, 'w')
+        file.create_dataset('utt-1', data=ds1)
+        file.create_dataset('utt-2', data=ds2)
+        file.create_dataset('utt-3', data=ds3)
+
+        features = tuple(PartitioningFeatureIterator(file, 120, shuffle=False, includes=['utt-1', 'utt-3', 'unknown'],
+                                                     excludes=['utt-1']))
+
+        assert 4 == len(features)
+
+        self.assert_features_equal(('utt-1', 0, [0.1, 0.1, 0.1, 0.1, 0.1]), features[0])
+        self.assert_features_equal(('utt-1', 1, [0.2, 0.2, 0.2, 0.2, 0.2]), features[1])
+        self.assert_features_equal(('utt-3', 0, [0.6, 0.6, 0.6, 0.6, 0.6]), features[2])
+        self.assert_features_equal(('utt-3', 1, [0.7, 0.7, 0.7, 0.7, 0.7]), features[3])
+
+    def test_next_emits_features_only_from_included_ds_ignoring_filter_in_random_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        file = h5py.File(file_path, 'w')
+        file.create_dataset('utt-1', data=ds1)
+        file.create_dataset('utt-2', data=ds2)
+        file.create_dataset('utt-3', data=ds3)
+
+        features = tuple(PartitioningFeatureIterator(file, 120, shuffle=True, seed=16,
+                                                     includes=['utt-1', 'utt-3', 'unknown'], excludes=['utt-1']))
+
+        assert 4 == len(features)
+
+        self.assert_features_equal(('utt-3', 0, [0.6, 0.6, 0.6, 0.6, 0.6]), features[0])
+        self.assert_features_equal(('utt-1', 0, [0.1, 0.1, 0.1, 0.1, 0.1]), features[1])
+        self.assert_features_equal(('utt-1', 1, [0.2, 0.2, 0.2, 0.2, 0.2]), features[2])
+        self.assert_features_equal(('utt-3', 1, [0.7, 0.7, 0.7, 0.7, 0.7]), features[3])
+
     def test_next_emits_all_features_if_partition_spans_multiple_data_sets_in_sequential_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
