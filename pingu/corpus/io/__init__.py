@@ -12,6 +12,7 @@ from .musan import MusanReader  # noqa: F401
 from .speech_commands import SpeechCommandsReader  # noqa: F401
 from .tuda import TudaReader  # noqa: F401
 from .folder import FolderReader  # noqa: F401
+from .esc import ESC50Reader  # noqa: F401
 
 __readers = {}
 for cls in CorpusReader.__subclasses__():

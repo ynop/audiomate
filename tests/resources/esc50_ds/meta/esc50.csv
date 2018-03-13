@@ -1,0 +1,11 @@
+filename,fold,target,category,esc10,src_file,take
+1-119125-A-45.wav,1,45,train,False,119125,A
+1-12654-B-15.wav,1,15,water_drops,False,12654,B
+1-155858-E-25.wav,2,25,footsteps,True,155858,E
+1-155858-F-25.wav,1,25,footsteps,True,155858,F
+1-15689-A-4.wav,2,4,frog,False,15689,A
+1-17124-A-43.wav,1,43,car_horn,True,17124,A
+1-18755-A-4.wav,1,4,frog,False,18755,A
+1-18755-B-4.wav,3,4,frog,False,18755,B
+1-18757-A-4.wav,4,4,frog,False,18757,A
+1-18810-A-49.wav,5,49,hand_saw,False,18810,A
