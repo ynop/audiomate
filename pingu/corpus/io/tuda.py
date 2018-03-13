@@ -11,6 +11,29 @@ from . import base
 SUBSETS = ['train', 'dev', 'test']
 WAV_SUFFIX = '-beamformedSignal'
 
+BAD_FILES = {
+    'train': [
+        '2014-08-05-11-08-34-Parliament'
+        '2014-03-24-13-39-24',
+        '2014-03-18-15-29-23',
+        '2014-03-18-15-28-52',
+        '2014-03-27-11-50-33'
+    ],
+    'dev': [
+
+        '2015-02-09-13-48-26',
+        '2015-02-04-12-29-49',
+        '2015-01-28-11-49-53',
+        '2015-02-09-12-36-46'
+    ],
+    'test': [
+        '2015-02-10-13-45-07',
+        '2015-02-10-14-18-26',
+        '2015-01-27-14-37-33',
+        '2015-02-04-12-36-32'
+    ]
+}
+
 
 class TudaReader(base.CorpusReader):
     """
@@ -37,7 +60,7 @@ class TudaReader(base.CorpusReader):
 
         for part in SUBSETS:
             sub_path = os.path.join(path, part)
-            ids = TudaReader.get_ids_from_folder(sub_path)
+            ids = TudaReader.get_ids_from_folder(sub_path, part)
 
             for idx in ids:
                 TudaReader.load_file(sub_path, idx, corpus)
@@ -49,7 +72,7 @@ class TudaReader(base.CorpusReader):
         return corpus
 
     @staticmethod
-    def get_ids_from_folder(path):
+    def get_ids_from_folder(path, part_name):
         """
         Return all ids from the given folder, which have a corresponding beamformedSignal file.
         """
@@ -58,10 +81,11 @@ class TudaReader(base.CorpusReader):
         for xml_file in glob.glob(os.path.join(path, '*.xml')):
             idx = os.path.splitext(os.path.basename(xml_file))[0]
 
-            beamformed_path = os.path.join(path, '{}{}.wav'.format(idx, WAV_SUFFIX))
+            if idx not in BAD_FILES[part_name]:
+                beamformed_path = os.path.join(path, '{}{}.wav'.format(idx, WAV_SUFFIX))
 
-            if os.path.isfile(beamformed_path):
-                valid_ids.add(idx)
+                if os.path.isfile(beamformed_path):
+                    valid_ids.add(idx)
 
         return valid_ids
 

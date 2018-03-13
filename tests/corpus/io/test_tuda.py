@@ -19,20 +19,24 @@ def data_path():
 class TestTudaReader:
 
     def test_get_ids_from_folder(self, data_path):
-        assert io.TudaReader.get_ids_from_folder(os.path.join(data_path, 'train')) == {
+        assert io.TudaReader.get_ids_from_folder(os.path.join(data_path, 'train'), 'train') == {
             '2014-03-17-09-45-16',
             '2014-03-27-13-39-34',
             '2014-03-27-13-39-53'
         }
-        assert io.TudaReader.get_ids_from_folder(os.path.join(data_path, 'dev')) == {
+        assert io.TudaReader.get_ids_from_folder(os.path.join(data_path, 'dev'), 'dev') == {
             '2015-01-27-11-31-32',
             '2015-01-27-11-31-41'
         }
-        assert io.TudaReader.get_ids_from_folder(os.path.join(data_path, 'test')) == {
+        assert io.TudaReader.get_ids_from_folder(os.path.join(data_path, 'test'), 'test') == {
             '2015-01-27-12-32-58',
             '2015-01-27-12-34-46',
             '2015-01-27-12-34-36'
         }
+
+    def test_get_ids_from_folder_ignore_bad_files(self, data_path):
+        ids = io.TudaReader.get_ids_from_folder(os.path.join(data_path, 'train'), 'train')
+        assert '2014-08-05-11-08-34-Parliament' not in ids
 
     def test_load_files(self, reader, data_path):
         ds = reader.load(data_path)
