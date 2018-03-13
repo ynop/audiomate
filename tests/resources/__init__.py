@@ -23,6 +23,10 @@ def sample_gtzan_ds_path():
     return os.path.join(os.path.dirname(__file__), 'gtzan_ds')
 
 
+def sample_esc50_ds_path():
+    return os.path.join(os.path.dirname(__file__), 'esc50_ds')
+
+
 def sample_kaldi_ds_path():
     return os.path.join(os.path.dirname(__file__), 'kaldi_ds')
 

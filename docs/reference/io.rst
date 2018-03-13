@@ -38,6 +38,7 @@ Implementations
   MUSAN                           x
   Google Speech Commands          x
   TUDA German Distant Speech      x
+  ESC-50                          x
   ==============================  =====  =======
 
 
@@ -86,4 +87,10 @@ TUDA German Distant Speech
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. autoclass:: TudaReader
    :members:
+
+ESC-50
+^^^^^^
+.. autoclass:: ESC50Reader
+   :members:
+
 
