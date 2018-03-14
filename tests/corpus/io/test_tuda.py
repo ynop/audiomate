@@ -37,6 +37,7 @@ class TestTudaReader:
     def test_get_ids_from_folder_ignore_bad_files(self, data_path):
         ids = io.TudaReader.get_ids_from_folder(os.path.join(data_path, 'train'), 'train')
         assert '2014-08-05-11-08-34-Parliament' not in ids
+        assert '2014-03-24-13-39-24' not in ids
 
     def test_load_files(self, reader, data_path):
         ds = reader.load(data_path)
