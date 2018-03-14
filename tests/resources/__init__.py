@@ -95,6 +95,9 @@ def create_dataset():
     ds.import_subview('train', sv_train)
     ds.import_subview('dev', sv_dev)
 
+    ds.new_feature_container('mfcc', '/some/dummy/path')
+    ds.new_feature_container('mel', '/some/dummy/path_mel')
+
     return ds
 
 
@@ -165,6 +168,18 @@ def create_multi_label_corpus():
     utt_8.set_label_list(assets.LabelList(labels=[
         assets.Label('music', 0, 10)
     ]))
+
+    train_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-4', 'utt-5', 'utt-6'})
+    sv_train = subview.Subview(ds, filter_criteria=[train_filter])
+
+    dev_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-7', 'utt-8'})
+    sv_dev = subview.Subview(ds, filter_criteria=[dev_filter])
+
+    ds.import_subview('train', sv_train)
+    ds.import_subview('dev', sv_dev)
+
+    ds.new_feature_container('mfcc', '/some/dummy/path/secondmfcc')
+    ds.new_feature_container('energy', '/some/dummy/path/energy')
 
     return ds
 
