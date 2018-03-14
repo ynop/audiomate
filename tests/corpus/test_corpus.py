@@ -551,3 +551,16 @@ class CorpusTest(unittest.TestCase):
         assert set(main_corpus.feature_containers.keys()) == {'mfcc', 'mel', 'mfcc_1', 'energy'}
         assert main_corpus.feature_containers['mfcc_1'].path == merging_corpus.feature_containers['mfcc'].path
         assert main_corpus.feature_containers['energy'].path == merging_corpus.feature_containers['energy'].path
+
+    def test_merge_corpora(self):
+        ds1 = resources.create_dataset()
+        ds2 = resources.create_multi_label_corpus()
+        ds3 = resources.create_single_label_corpus()
+
+        ds = pingu.Corpus.merge_corpora([ds1, ds2, ds3])
+
+        assert ds.num_files == 12
+        assert ds.num_utterances == 21
+        assert ds.num_issuers == 9
+        assert ds.num_subviews == 4
+        assert ds.num_feature_containers == 4

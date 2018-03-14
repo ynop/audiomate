@@ -476,3 +476,22 @@ class Corpus(base.CorpusView):
             ds.new_feature_container(feat_container_idx, feature_container.path)
 
         return ds
+
+    @classmethod
+    def merge_corpora(cls, corpora):
+        """
+        Merge a list of corpora into one.
+
+        Args:
+            corpora (Iterable): An iterable of :py:class:`pingu.corpus.CorpusView`.
+
+        Returns:
+            Corpus: A corpus with the data from all given corpora merged into one.
+        """
+
+        ds = Corpus()
+
+        for merging_corpus in corpora:
+            ds.merge_corpus(merging_corpus)
+
+        return ds
