@@ -217,6 +217,8 @@ class CorpusTest(unittest.TestCase):
         assert copy.num_files == 4
         assert copy.num_issuers == 3
         assert copy.num_utterances == 5
+        assert copy.num_subviews == 2
+        assert copy.num_feature_containers == 2
 
         original.files['wav-1'].path = '/changed/path.wav'
         assert original.files['wav-1'].path != copy.files['wav-1'].path
@@ -461,3 +463,91 @@ class CorpusTest(unittest.TestCase):
         assert 'text' in tempdir_contents
         assert 'utt2spk' in tempdir_contents
         assert 'wav.scp' in tempdir_contents
+
+    def test_merge_corpus_files(self):
+        main_corpus = resources.create_dataset()
+        merging_corpus = resources.create_multi_label_corpus()
+
+        main_corpus.merge_corpus(merging_corpus)
+
+        assert main_corpus.num_files == 8
+
+        assert set(main_corpus.files.keys()) == {'wav-1', 'wav_2', 'wav_3', 'wav_4',
+                                                 'wav-1_1', 'wav_2_1', 'wav_3_1', 'wav_4_1'}
+
+        assert main_corpus.files['wav-1_1'].idx == 'wav-1_1'
+        assert main_corpus.files['wav-1_1'].path == merging_corpus.files['wav-1'].path
+
+    def test_merge_corpus_issuers(self):
+        main_corpus = resources.create_dataset()
+        merging_corpus = resources.create_multi_label_corpus()
+
+        main_corpus.merge_corpus(merging_corpus)
+
+        assert main_corpus.num_issuers == 6
+
+        assert set(main_corpus.issuers.keys()) == {'spk-1', 'spk-2', 'spk-3',
+                                                   'spk-1_1', 'spk-2_1', 'spk-3_1'}
+
+        assert main_corpus.issuers['spk-1_1'].idx == 'spk-1_1'
+        assert main_corpus.issuers['spk-1_1'].info == merging_corpus.issuers['spk-1'].info
+        assert len(main_corpus.issuers['spk-1_1'].utterances) == 2
+
+    def test_merge_corpus_utterances(self):
+        main_corpus = resources.create_dataset()
+        merging_corpus = resources.create_multi_label_corpus()
+
+        main_corpus.merge_corpus(merging_corpus)
+
+        assert main_corpus.num_utterances == 13
+
+        assert set(main_corpus.utterances.keys()) == {'utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5',
+                                                      'utt-1_1', 'utt-2_1', 'utt-3_1', 'utt-4_1', 'utt-5_1',
+                                                      'utt-6', 'utt-7', 'utt-8'}
+
+        assert main_corpus.utterances['utt-2_1'].file == main_corpus.files['wav_2_1']
+        assert main_corpus.utterances['utt-2_1'].issuer == main_corpus.issuers['spk-1_1']
+        assert main_corpus.utterances['utt-2_1'].start == merging_corpus.utterances['utt-2'].start
+        assert main_corpus.utterances['utt-2_1'].end == merging_corpus.utterances['utt-2'].end
+        assert main_corpus.utterances['utt-2_1'] in main_corpus.issuers['spk-1_1'].utterances
+
+    def test_merge_corpus_label_lists(self):
+        main_corpus = resources.create_dataset()
+        merging_corpus = resources.create_multi_label_corpus()
+
+        main_corpus.merge_corpus(merging_corpus)
+
+        assert set(main_corpus.utterances['utt-2_1'].label_lists.keys()) == {'default'}
+
+        ll = main_corpus.utterances['utt-2_1'].label_lists['default']
+
+        assert len(ll) == 3
+        assert ll.labels[1].value == 'speech'
+        assert ll.labels[1].start == 5
+        assert ll.labels[1].end == 12
+        assert ll.labels[1].meta == {}
+        assert ll.labels[1].label_list == ll
+
+    def test_merge_corpus_subviews(self):
+        main_corpus = resources.create_dataset()
+        merging_corpus = resources.create_multi_label_corpus()
+
+        main_corpus.merge_corpus(merging_corpus)
+
+        assert main_corpus.num_subviews == 4
+
+        assert main_corpus.subviews.keys() == {'train', 'dev', 'train_1', 'dev_1'}
+        assert main_corpus.subviews['train_1'].corpus == main_corpus
+        assert set(main_corpus.subviews['train_1'].filter_criteria[0].utterance_idxs) == {'utt-4_1', 'utt-5_1', 'utt-6'}
+
+    def test_merge_corpus_feature_containers(self):
+        main_corpus = resources.create_dataset()
+        merging_corpus = resources.create_multi_label_corpus()
+
+        main_corpus.merge_corpus(merging_corpus)
+
+        assert main_corpus.num_feature_containers == 4
+
+        assert set(main_corpus.feature_containers.keys()) == {'mfcc', 'mel', 'mfcc_1', 'energy'}
+        assert main_corpus.feature_containers['mfcc_1'].path == merging_corpus.feature_containers['mfcc'].path
+        assert main_corpus.feature_containers['energy'].path == merging_corpus.feature_containers['energy'].path
