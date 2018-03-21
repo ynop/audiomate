@@ -39,6 +39,7 @@ Implementations
   Google Speech Commands          x
   TUDA German Distant Speech      x
   ESC-50                          x
+  Mozilla DeepSpeech                     x
   ==============================  =====  =======
 
 
@@ -91,6 +92,11 @@ TUDA German Distant Speech
 ESC-50
 ^^^^^^
 .. autoclass:: ESC50Reader
+   :members:
+
+Mozilla DeepSpeech
+^^^^^^^^^^^^^^^^^^
+.. autoclass:: MozillaDeepSpeechWriter
    :members:
 
 
