@@ -6,6 +6,15 @@ from pingu.corpus import assets
 from pingu.corpus.subset import subview
 
 
+def sample_voxforge_response():
+    with open(os.path.join(os.path.dirname(__file__), 'voxforge_response.html')) as f:
+        return f.read()
+
+
+def sample_voxforge_file_path():
+    return os.path.join(os.path.dirname(__file__), 'voxforge_sample.tgz')
+
+
 def dummy_wav_path_and_name():
     name = 'test.wav'
     return os.path.join(os.path.dirname(__file__), name), name

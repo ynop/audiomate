@@ -104,4 +104,8 @@ Mozilla DeepSpeech
 .. autoclass:: MozillaDeepSpeechWriter
    :members:
 
+VoxForge
+^^^^^^^^
 
+.. autoclass:: VoxforgeDownloader
+   :members:

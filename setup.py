@@ -25,7 +25,8 @@ setup(name='pingu',
           'h5py==2.7.1',
           'networkx==2.0',
           'beautifulsoup4==4.6.0',
-          'lxml==4.1.1'
+          'lxml==4.1.1',
+          'requests==2.18.4'
       ],
       include_package_data=True,
       zip_safe=False,
