@@ -1,6 +1,54 @@
 import abc
 
 
+class FailedDownloadException(Exception):
+    pass
+
+
+class CorpusDownloader(metaclass=abc.ABCMeta):
+    """
+    Abstract class for downloading a corpus.
+
+    To implement a downloader for a custom format, programmers are expected to subclass this class and to implement all
+    abstract methods. The documentation of each abstract methods details the requirements that have to be met by an
+    implementation.
+    """
+
+    def download(self, target_path):
+        """
+        Downloads the data of the corpus and saves it to the given path.
+        The data has to be saved in a way, so that the corresponding ``CorpusReader`` can load the corpus.
+
+        Args:
+            target_path (str): The path to save the data to.
+        """
+        return self._download(target_path)
+
+    @classmethod
+    @abc.abstractmethod
+    def type(cls):
+        """
+        Returns a string that uniquely identifies the downloader. This is usually the name of the corpus, for example
+        `musan` or `timit`. Users can use this string to obtain an instance of the desired reader through
+        :meth:`~pingu.corpus.io.create_downloader_of_type` or get a list of all built-in downloaders with
+        :meth:`~pingu.corpus.io.available_downloaders`.
+
+        Returns:
+            str: Name of the downloader
+        """
+        return 'not_implemented'
+
+    @abc.abstractmethod
+    def _download(self, target_path):
+        """
+        Performs the actual downloading of the corpus.
+
+        Args:
+            target_path (str): Path to a directory where the data should be saved to.
+        """
+        pass
+
+
 class CorpusReader(metaclass=abc.ABCMeta):
     """
     Abstract class for reading a corpus.
