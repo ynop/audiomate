@@ -46,6 +46,7 @@ Implementations
   TUDA German Distant Speech                x
   ESC-50                                    x
   Mozilla DeepSpeech                               x
+  VoxForge                        x         x
   ==============================  ========  =====  =======
 
 Broadcast
@@ -108,4 +109,7 @@ VoxForge
 ^^^^^^^^
 
 .. autoclass:: VoxforgeDownloader
+   :members:
+
+.. autoclass:: VoxforgeReader
    :members:

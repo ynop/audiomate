@@ -1,0 +1,210 @@
+VoxForge speech segmentation script log
+
+Changes made to Text file
+-------------------------
+converted number:240: to two hundred and forty
+converted number:1: to one
+converted number:2: to two
+converted number:3: to three
+converted date:1686: to sixteen eighty six
+converted number:7: to seven
+converted date:1843: to eighteen forty three
+converted date:1843: to eighteen forty three
+converted date:1846: to eighteen forty six
+converted date:1842: to eighteen forty two
+converted date:1843: to eighteen forty three
+
+Words with period (".") removed from body of word - please review:
+------------------------------------------------------------------
+
+Words with single quotes (no change made to word, unless otherwise stated) - please review:
+-------------------------------------------------------------------------------------------
+WORLD'S
+changed:'MOLECULAR to:MOLECULAR
+changed:'FORCES to:FORCES
+changed:'ELEMENTS' to:ELEMENTS
+changed:'ETHER' to:ETHER
+changed:'ATOMS' to:ATOMS
+changed:'MOLECULE' to:MOLECULE
+changed:'ATOMS to:ATOMS
+changed:'TYPES' to:TYPES
+changed:'TYPES to:TYPES
+changed:'ORGANIC' to:ORGANIC
+changed:'AT to:AT
+LIEBIG'S
+changed:'NEW to:NEW
+changed:CHEMISTRY' to:CHEMISTRY
+changed:'BONDS' to:BONDS
+changed:'VALENCY' to:VALENCY
+changed:'ATOMICITY to:ATOMICITY
+changed:'ATOMS' to:ATOMS
+changed:'MOLECULES' to:MOLECULES
+changed:'ELEMENTARY' to:ELEMENTARY
+changed:'ELEMENTS' to:ELEMENTS
+changed:'ELEMENTS' to:ELEMENTS
+changed:'VORTEX to:VORTEX
+changed:RING' to:RING
+changed:'ELEMENTARY' to:ELEMENTARY
+changed:'VORTEX to:VORTEX
+changed:RINGS' to:RINGS
+changed:'TOURBILLONS' to:TOURBILLONS
+changed:'URSTOFF' to:URSTOFF
+changed:'MANUFACTURED to:MANUFACTURED
+changed:ARTICLES' to:ARTICLES
+changed:'MANUFACTURED to:MANUFACTURED
+changed:ARTICLES' to:ARTICLES
+EARTH'S
+changed:'MASTER to:MASTER
+changed:'PRINCIPIA' to:PRINCIPIA
+changed:'FORCE' to:FORCE
+changed:'FORCE' to:FORCE
+NEWTON'S
+changed:'ABSURDITY' to:ABSURDITY
+changed:'ATTRACTIVE to:ATTRACTIVE
+changed:'FORMS to:FORMS
+changed:'MASS to:MASS
+changed:'MASS' to:MASS
+changed:'MASS' to:MASS
+changed:'QUANTITY to:QUANTITY
+NEWTON'S
+BACON'S
+RUMFORD'S
+DAVY'S
+changed:'FORCES' to:FORCES
+changed:'CORRELATION to:CORRELATION
+changed:FORCES' to:FORCES
+changed:'HISTORY to:HISTORY
+changed:'CORRELATION to:CORRELATION
+changed:FORCES' to:FORCES
+AMPERE'S
+BACON'S
+changed:'THAT to:THAT
+changed:'ALTHOUGH to:ALTHOUGH
+BACON'S
+BACON'S
+
+Missing Words that need to be added to Pronunciation Dictionary, with suggested pronunciations:
+-----------------------------------------------------------------------------------------------
+ACQUIREMENTS    [ACQUIREMENTS]  ax k w ay r m ax n t s
+AGGREGATION     [AGGREGATION]   ae g r ax g ey sh ax n
+ALCHEMISTS      [ALCHEMISTS]    ae l k eh m ax s t s
+AMPERE          [AMPERE]        ae m p er
+AMPERE'S        [AMPERE'S]      ae m p er z
+APPREHENSIBLE   [APPREHENSIBLE] ae p r ix hh eh n s ax b ax l
+ASCERTAINMENT   [ASCERTAINMENT] ae s er t ey n m ax n t
+ATOMICITY       [ATOMICITY]     ae dx ax m ax s ax dx iy
+ATOMISM         [ATOMISM]       ae dx ax m ih z ax m
+AVOGADRO        [AVOGADRO]      ae v ax g ax d r ow
+CHEOPS          [CHEOPS]        ch iy aa p s
+CLASSIFICATORY [CLASSIFICATORY] k l ae s ax f ax k ey dx er iy
+COLLIGATE       [COLLIGATE]     k aa l ix g ey t
+COMMONEST       [COMMONEST]     k aa m ax n ax s t
+CONTRADISTINCTION [CONTRADISTINCTION] k aa n t r ax d ix s t ih ng k sh ax n
+CONTROVERTED    [CONTROVERTED]  k aa n t r ax v er dx ix d
+DALTONIAN       [DALTONIAN]     d aa l t ow n iy ax n
+DAVY'S          [DAVY'S]        d ey v iy z
+DEDUCIBLE       [DEDUCIBLE]     d ix d uw s ax b ax l
+DEMOCRITIC      [DEMOCRITIC]    d eh m ax k r ih dx ix k
+DEMOCRITUS      [DEMOCRITUS]    d ix m aa k r ax dx ax s
+DIALECTICS      [DIALECTICS]    d ay ax l eh k t ix k s
+DIFFUSIBILITY   [DIFFUSIBILITY] d ix f y uw s ix b ih l ix dx
+DISCONTINUOUS   [DISCONTINUOUS] d ih s k ax n t ih n y uw ax s
+DISSOCIATED     [DISSOCIATED]   d ix s ow s iy ey dx ax d
+DISSOCIATIVE    [DISSOCIATIVE]  d ix s ow s iy ey dx ix v
+DIVERSITIES     [DIVERSITIES]   d ay v er s ax dx iy z
+DIVISIBILITY    [DIVISIBILITY]  d ix v ih z ax b ih l ax dx iy
+DYNAMICAL       [DYNAMICAL]     d ay n ae m ix k ax l
+DYSTELEOLOGIES [DYSTELEOLOGIES] d ih s t iy l iy ax l ow jh iy z
+EXPRESSIBLE     [EXPRESSIBLE]   ix k s p r eh s ax b ax l
+FORGETFULNESS   [FORGETFULNESS] f er g eh t f ax l n ax s
+HARMONISED      [HARMONISED]    hh aa r m ax n ay z d
+HESCHHATE       [HESCHHATE]     hh eh sh hh ax t
+HYDROSTATICS    [HYDROSTATICS]  hh ay d r ow s t ae dx ix k s
+HYPOSTATISED    [HYPOSTATISED]  hh ay p ow s t ae dx ax s t
+HYPOTHESI       [HYPOTHESI]     hh ay p ax th eh s iy
+INDIVIDUALISED [INDIVIDUALISED] ih n d ix v ih jh uw ax l ay z d
+INDIVISIBILITY [INDIVISIBILITY] ih n d ix v ih z ax b ih l ax dx iy
+INGENERABLE     [INGENERABLE]   ix n jh eh n er ax b ax l
+INTERATOMIC     [INTERATOMIC]   ih n t er ax t aa m ix k
+ISOMERIC        [ISOMERIC]      ay s ow m eh r ix k
+LIEBIG'S        [LIEBIG'S]      l iy b ix g z
+LINNAEUS        [LINNAEUS]      l ih n iy ax s
+MACROCOSM       [MACROCOSM]     m ae k r ax k aa z ax m
+MATERIA         [MATERIA]       m ax t ih r iy ax
+MATTERLESS      [MATTERLESS]    m ae dx er l ax s
+MEDIAEVAL       [MEDIAEVAL]     m iy dx iy ey v ae l
+MELLONI         [MELLONI]       m eh l ow n iy
+MOLAR           [MOLAR]         m ow l er
+PERCEPTIBILITY [PERCEPTIBILITY] p er s eh p t ax b ih l ax dx iy
+PONDERABLE      [PONDERABLE]    p aa n d er ax b ax l
+PRHOTE          [PRHOTE]        p r ow t
+PRODUCIBLE      [PRODUCIBLE]    p r ax d uw s ax b ax l
+PROPOS          [PROPOS]        p r ax p ow
+RECOGNISED      [RECOGNISED]    r eh k ax g n ay z d
+RUMFORD'S       [RUMFORD'S]     r ah m f er d z
+SCHEMATISM      [SCHEMATISM]    sh eh m ax t ih z ax m
+SEPARABLE       [SEPARABLE]     s eh p er ax b ax l
+SPECIALISED     [SPECIALISED]   s p eh sh ax l ay z d
+STATICAL        [STATICAL]      s t ae dx ix k ax l
+SYMBOLICAL      [SYMBOLICAL]    s ix m b aa l ix k ax l
+TOURBILLONS     [TOURBILLONS]   t uh r b ih l ax n z
+TRANSMUTABILITY [TRANSMUTABILITY] t r ae n z m uw dx ax b ih l ix dx iy
+UNCHANGEABLE    [UNCHANGEABLE]  ax n ch ey n jh ax b ax l
+URSTOFF         [URSTOFF]       er s t ao f
+VALENCY         [VALENCY]       v ax l eh n s iy
+VOLTAIC         [VOLTAIC]       v ow l t ey ix k
+VORTICES        [VORTICES]      v ao r dx ax s ax z
+WANNED          [WANNED]        w aa n d
+ZOOELOGY        [ZOOELOGY]      z uw l ax jh iy
+
+Audio Segmenting summary:
+-------------------------
+Settings:average_sentence_length: 15
+         max_sentence_length: 20
+         pause length: 1250000 (0.125 seconds)
+
+Sentence Length: min:adv0233: 4
+                 max:adv0234: 35
+
+Prompt lines with more than max_sentence_length of 20 words:
+	adv0002:22
+	adv0007:27
+	adv0027:23
+	adv0119:24
+	adv0129:22
+	adv0130:22
+	adv0137:24
+	adv0153:31
+	adv0155:22
+	adv0212:23
+	adv0214:22
+	adv0224:24
+	adv0234:35
+	adv0246:29
+	adv0254:22
+	adv0276:32
+	adv0282:22
+	adv0315:24
+	adv0328:26
+	adv0330:27
+	adv0357:28
+	adv0364:23
+
+Top 15 prompts with the lowest average log likelihood per frame
+(confirm anything with an avg log likelihood of less than 60):
+---------------------------------------------------------------
+59.8283 adv0169 TO QUESTIONS OF MECHANICS IN
+61.1962 adv0208 COLUMN ONE D C B A W COLUMN TWO CAPITAL D CAPITAL C CAPITAL B CAPITAL A
+61.2440 adv0209 W PLUS X COLUMN THREE DELTA GAMMA BETA ALPHA W PLUS X PLUS Y
+61.3785 adv0197 A B D E F G H I K ETCETERA BUT A B C D
+62.1565 adv0198 CAPITAL A CAPITAL B CAPITAL C CAPITAL D ALPHA BETA GAMMA DELTA ETCETERA SO
+62.4186 adv0030 THE THIRD IS THE DOCTRINE OF EVOLUTION EACH OF THESE WAS FORESHADOWED
+62.4953 adv0016 HAS FOR A TIME EXCLUDED SPECULATION
+62.6946 adv0314 TO THIS THE NAME OF MASS HAS BEEN GIVEN AND
+62.7154 adv0199 THAT IT IS SAID TO EXPRESS A PERIODIC LAW OF RECURRENT SIMILARITIES
+62.7317 adv0145 HERE AGAIN HYPOTHESIS PROVED TO BE OF GREAT VALUE NOT
+62.7438 adv0132 AND ANIMALS GAVE RISE TO THE NOTION OF BIOLOGICAL TYPES
+62.8550 adv0159 BUT SOME OF THESE HYPOTHESES HAVE DONE YET FURTHER SERVICE COMBINING THEM WITH THE MECHANICAL THEORY OF HEAT
+62.8789 adv0004 THIS IS NATURAL HISTORY IN THE ORIGINAL SENSE OF THE TERM
+62.9743 adv0125 BY TAKING OUT SOME OF THE COMPONENT UNITS AND REPLACING THEM BY OTHERS THE
+62.9969 adv0008 THE LAST TWO STAGES CONSTITUTE NATURAL PHILOSOPHY IN ITS ORIGINAL SENSE IN THIS REGION

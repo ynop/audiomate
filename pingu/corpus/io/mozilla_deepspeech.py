@@ -2,7 +2,7 @@ import os
 import collections
 
 import numpy as np
-import librosa
+import scipy
 
 from . import base
 from pingu.utils import textfile
@@ -47,7 +47,7 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
 
                 data = (data * 32768).astype(np.int16)
 
-                librosa.output.write_wav(audio_path, data, sampling_rate)
+                scipy.io.wavfile.write(audio_path, sampling_rate, data)
 
             size = os.stat(audio_path).st_size
             transcript = utterance.label_lists[self.transcription_label_list_idx][0].value

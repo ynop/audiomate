@@ -21,7 +21,7 @@ setup(name='pingu',
       install_requires=[
           'numpy==1.13.3',
           'scipy==1.0.0',
-          'librosa==0.5.1',
+          'librosa==0.6.0',
           'h5py==2.7.1',
           'networkx==2.0',
           'beautifulsoup4==4.6.0',

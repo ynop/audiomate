@@ -5,12 +5,21 @@ import shutil
 
 import requests
 
+import pingu
 from . import base
+from pingu.corpus import assets
+from pingu.utils import textfile
 
 DOWNLOAD_URL = {
     'de': 'http://www.repository.voxforge1.org/downloads/de/Trunk/Audio/Main/16kHz_16bit/',
     'en': 'http://www.repository.voxforge1.org/downloads/SpeechCorpus/Trunk/Audio/Main/16kHz_16bit/'
 }
+
+BAD_UTTERANCES = [
+    'anonymous-20081112-ssu-de10-024',
+    'rwunsch-20090706-any-de2-26',
+    'john_doe-20160503-gaj-de7-082'
+]
 
 
 class VoxforgeDownloader(base.CorpusDownloader):
@@ -102,3 +111,133 @@ class VoxforgeDownloader(base.CorpusDownloader):
             extracted.append(os.path.join(target_path, file_name))
 
         return extracted
+
+
+class VoxforgeReader(base.CorpusReader):
+    """
+    Reader for collections of voxforge audio data. The reader expects extracted .tgz files in the given folder.
+
+    .. seealso::
+
+       `<http://www.voxforge.org/>`_
+          Download page
+    """
+
+    @classmethod
+    def type(cls):
+        return 'voxforge'
+
+    def _check_for_missing_files(self, path):
+        return []
+
+    def _load(self, path):
+        corpus = pingu.Corpus(path=path)
+
+        for dir_path in VoxforgeReader.data_folders(path):
+            item = os.path.basename(dir_path)
+            etc_folder = os.path.join(dir_path, 'etc')
+            wav_folder = os.path.join(dir_path, 'wav')
+            readme_path = os.path.join(etc_folder, 'README')
+
+            # LOAD ISSUER
+            issuer_idx, gender = VoxforgeReader.parse_speaker_info(readme_path)
+
+            if issuer_idx is None or issuer_idx == 'anonymous':
+                issuer_idx = item
+
+            issuer_info = {}
+
+            if gender is not None:
+                issuer_info['gender'] = gender
+
+            # LOAD TRANSCRIPTIONS
+            prompts, prompts_orig = VoxforgeReader.parse_prompts(etc_folder)
+
+            # LOAD FILES/UTTS
+            for file_name in os.listdir(wav_folder):
+                wav_path = os.path.join(wav_folder, file_name)
+                basename, ext = os.path.splitext(file_name)
+                idx = '{}-{}'.format(item, basename)
+
+                is_valid_wav = os.path.isfile(wav_path) and ext == '.wav' and idx not in BAD_UTTERANCES
+                has_transcription = basename in prompts.keys()
+
+                if is_valid_wav and has_transcription:
+                    if issuer_idx not in corpus.issuers.keys():
+                        corpus.new_issuer(issuer_idx, info=issuer_info)
+
+                    corpus.new_file(wav_path, idx)
+                    utt = corpus.new_utterance(idx, idx, issuer_idx)
+                    utt.set_label_list(assets.LabelList(idx='transcription', labels=[
+                        assets.Label(prompts[basename])
+                    ]))
+
+                    if basename in prompts_orig.keys():
+                        utt.set_label_list(assets.LabelList(idx='transcription_raw', labels=[
+                            assets.Label(prompts_orig[basename])
+                        ]))
+
+        return corpus
+
+    @staticmethod
+    def data_folders(path):
+        """ Generator which yields a list of valid data directories (corresponds to the content of one .tgz). """
+        for item in os.listdir(path):
+            dir_path = os.path.join(path, item)
+            wav_folder = os.path.join(dir_path, 'wav')
+
+            if os.path.isdir(dir_path) and os.path.isdir(wav_folder):
+                yield dir_path
+
+    @staticmethod
+    def parse_speaker_info(readme_path):
+        """ Parse speaker info and return tuple (idx, gender). """
+        idx = None
+        gender = None
+
+        with open(readme_path, 'r', errors='ignore') as f:
+            for raw_line in f:
+                line = raw_line.strip()
+
+                if line is not None and line is not '':
+                    line = line.rstrip(';.')
+                    parts = line.split(':', maxsplit=1)
+
+                    if len(parts) > 1:
+                        key = parts[0].strip()
+                        value = parts[1].strip()
+
+                        if key == 'User Name':
+                            idx = value
+
+                        if key == 'Gender':
+                            if value in ['Männlich', 'Male', 'Mnnlich', 'male']:
+                                gender = 'male'
+                            elif value in ['Weiblich', 'Female', 'female', '[female]']:
+                                gender = 'female'
+
+        return idx, gender
+
+    @staticmethod
+    def parse_prompts(etc_folder):
+        """ Read prompts and prompts-orignal and return as dictionary (id as key). """
+        prompts_path = os.path.join(etc_folder, 'PROMPTS')
+        prompts_orig_path = os.path.join(etc_folder, 'prompts-original')
+
+        prompts = textfile.read_key_value_lines(prompts_path, separator=' ')
+        prompts_orig = textfile.read_key_value_lines(prompts_orig_path, separator=' ')
+
+        prompts_key_fixed = {}
+
+        for k, v in prompts.items():
+            parts = k.split('/')
+            key = k
+
+            if len(parts) > 1:
+                key = parts[-1]
+
+            prompts_key_fixed[key] = v
+
+        prompts = prompts_key_fixed
+
+        return prompts, prompts_orig
