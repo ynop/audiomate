@@ -1,4 +1,5 @@
 import unittest
+import collections
 
 import pytest
 
@@ -26,6 +27,32 @@ class SplitterTest(unittest.TestCase):
         assert set(train_utt_ids).union(test_utt_ids) == set(self.corpus.utterances.keys())
         assert train_duration / test_duration == pytest.approx(3, rel=0.1)
 
+    def test_split_by_length_of_utterances_issuer_separated(self):
+        res = self.splitter.split_by_length_of_utterances({
+            'train': 1.0,
+            'test': 1.2
+        }, separate_issuers=True)
+
+        train_utt_ids = res['train'].utterances.keys()
+        test_utt_ids = res['test'].utterances.keys()
+
+        train_duration = sum([utt.duration for utt in res['train'].utterances.values()])
+        test_duration = sum([utt.duration for utt in res['test'].utterances.values()])
+
+        subsets_of_issuers = collections.defaultdict(set)
+
+        for utt in res['train'].utterances.values():
+            subsets_of_issuers[utt.issuer.idx].add('train')
+
+        for utt in res['test'].utterances.values():
+            subsets_of_issuers[utt.issuer.idx].add('test')
+
+        assert set(train_utt_ids).union(test_utt_ids) == set(self.corpus.utterances.keys())
+        assert train_duration / test_duration == pytest.approx(1.0/1.2, rel=0.1)
+
+        for issuer_idx, subset_list in subsets_of_issuers.items():
+            assert len(subset_list) == 1
+
     def test_split_by_number_of_utterances(self):
         res = self.splitter.split_by_number_of_utterances({
             'train': 0.6,
@@ -34,6 +61,28 @@ class SplitterTest(unittest.TestCase):
 
         self.assertEqual(6, res['train'].num_utterances)
         self.assertEqual(2, res['test'].num_utterances)
+
+    def test_split_by_number_of_utterances_issuer_separated(self):
+        res = self.splitter.split_by_number_of_utterances({
+            'train': 0.6,
+            'test': 0.2
+        }, separate_issuers=True)
+
+        subsets_of_issuers = collections.defaultdict(set)
+
+        for utt in res['train'].utterances.values():
+            subsets_of_issuers[utt.issuer.idx].add('train')
+
+        for utt in res['test'].utterances.values():
+            subsets_of_issuers[utt.issuer.idx].add('test')
+
+        print(subsets_of_issuers)
+
+        self.assertEqual(6, res['train'].num_utterances)
+        self.assertEqual(2, res['test'].num_utterances)
+
+        for issuer_idx, subset_list in subsets_of_issuers.items():
+            self.assertEqual(1, len(subset_list))
 
     def test_split_by_number_of_utterances_seed(self):
         self.corpus = resources.create_multi_label_corpus()
