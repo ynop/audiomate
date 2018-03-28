@@ -8,6 +8,11 @@ pingu.corpus.io
 Base Classes
 ------------
 
+.. autoclass:: CorpusDownloader
+   :members:
+   :inherited-members:
+   :private-members:
+
 .. autoclass:: CorpusReader
    :members:
    :inherited-members:
@@ -27,20 +32,22 @@ Implementations
 
 .. table:: Support for Reading and Writing by Format
 
-  ==============================  =====  =======
-  Format                          Read   Write
-  ==============================  =====  =======
-  Broadcast                       x
-  Default                         x      x
-  Folder                          x
-  GTZAN                           x
-  Kaldi                           x      x
-  MUSAN                           x
-  Google Speech Commands          x
-  TUDA German Distant Speech      x
-  ESC-50                          x
-  ==============================  =====  =======
 
+  ==============================  ========  =====  =======
+  Format                          Download  Read   Write
+  ==============================  ========  =====  =======
+  Broadcast                                 x
+  Default                                   x      x
+  Folder                                    x
+  GTZAN                                     x
+  Kaldi                                     x      x
+  MUSAN                                     x
+  Google Speech Commands                    x
+  TUDA German Distant Speech                x
+  ESC-50                                    x
+  Mozilla DeepSpeech                               x
+  VoxForge                        x         x
+  ==============================  ========  =====  =======
 
 Broadcast
 ^^^^^^^^^
@@ -93,4 +100,16 @@ ESC-50
 .. autoclass:: ESC50Reader
    :members:
 
+Mozilla DeepSpeech
+^^^^^^^^^^^^^^^^^^
+.. autoclass:: MozillaDeepSpeechWriter
+   :members:
 
+VoxForge
+^^^^^^^^
+
+.. autoclass:: VoxforgeDownloader
+   :members:
+
+.. autoclass:: VoxforgeReader
+   :members:

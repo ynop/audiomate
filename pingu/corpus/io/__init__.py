@@ -3,7 +3,7 @@ This module contains classes to read and write corpora from the filesystem in a 
 used to convert between formats.
 """
 
-from .base import CorpusReader, CorpusWriter
+from .base import CorpusDownloader, CorpusReader, CorpusWriter
 from .broadcast import BroadcastReader  # noqa: F401
 from .default import DefaultReader, DefaultWriter  # noqa: F401
 from .gtzan import GtzanReader  # noqa: F401
@@ -13,6 +13,12 @@ from .speech_commands import SpeechCommandsReader  # noqa: F401
 from .tuda import TudaReader  # noqa: F401
 from .folder import FolderReader  # noqa: F401
 from .esc import ESC50Reader  # noqa: F401
+from .mozilla_deepspeech import MozillaDeepSpeechWriter  # noqa: F401
+from .voxforge import VoxforgeDownloader, VoxforgeReader  # noqa: F401
+
+__downloaders = {}
+for cls in CorpusDownloader.__subclasses__():
+    __downloaders[cls.type()] = cls
 
 __readers = {}
 for cls in CorpusReader.__subclasses__():
@@ -23,12 +29,33 @@ for cls in CorpusWriter.__subclasses__():
     __writers[cls.type()] = cls
 
 
+class UnknownDownloaderException(Exception):
+    pass
+
+
 class UnknownReaderException(Exception):
     pass
 
 
 class UnknownWriterException(Exception):
     pass
+
+
+def available_downloaders():
+    """
+    Get a mapping of all available downloaders.
+
+    Returns:
+        dict: A dictionary with downloader classes with the name of these downloaders as key.
+
+    Example::
+
+        >>> available_downloaders()
+        {
+            "voxforge" : pingu.corpus.io.VoxforgeDownloader
+        }
+    """
+    return __downloaders
 
 
 def available_readers():
@@ -65,6 +92,24 @@ def available_writers():
         }
     """
     return __writers
+
+
+def create_downloader_of_type(type_name):
+    """
+        Create an instance of the downloader with the given name.
+
+        Args:
+            type_name: The name of a downloader.
+
+        Returns:
+            An instance of the downloader with the given type.
+    """
+    downloaders = available_downloaders()
+
+    if type_name not in downloaders.keys():
+        raise UnknownDownloaderException('Unknown downloader: %s' % (type_name,))
+
+    return downloaders[type_name]()
 
 
 def create_reader_of_type(type_name):

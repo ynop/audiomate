@@ -1,4 +1,5 @@
 import random
+import collections
 
 from pingu.corpus.subset import subview
 from pingu.corpus.subset import utils
@@ -21,7 +22,7 @@ class Splitter(object):
         self.rand = random.Random()
         self.rand.seed(a=random_seed)
 
-    def split_by_length_of_utterances(self, proportions={}):
+    def split_by_length_of_utterances(self, proportions={}, separate_issuers=False):
         """
         Split the corpus into subsets where the total duration of subsets are proportional to the given proportions.
         The corpus gets splitted into len(proportions) parts, so the number of utterances are
@@ -29,7 +30,8 @@ class Splitter(object):
 
         Args:
             proportions (dict): A dictionary containing the relative size of the target subsets.
-            The key is an identifier for the subset.
+                                The key is an identifier for the subset.
+            separate_issuers (bool): If True it makes sure that all utterances of an issuer are in the same subset.
 
         Returns:
             (dict): A dictionary containing the subsets with the identifier from the input as key.
@@ -55,14 +57,37 @@ class Splitter(object):
         """
 
         utterance_to_duration = {}
-        for utterance in self.corpus.utterances.values():
-            utterance_to_duration[utterance.idx] = {'length': int(utterance.duration * 100)}
 
-        splits = utils.get_identifiers_splitted_by_weights(utterance_to_duration, proportions=proportions)
+        if separate_issuers:
+            # Count total length of utterances per issuer
+            issuer_utts_total_duration = collections.defaultdict(float)
+            issuer_utts = collections.defaultdict(list)
+
+            for utterance in self.corpus.utterances.values():
+                issuer_utts_total_duration[utterance.issuer.idx] += utterance.duration
+                issuer_utts[utterance.issuer.idx].append(utterance.idx)
+
+            issuer_utts_total_duration = {k: {'duration': int(v)} for k, v in issuer_utts_total_duration.items()}
+
+            # Split with total utt duration per issuer as weight
+            issuer_splits = utils.get_identifiers_splitted_by_weights(issuer_utts_total_duration,
+                                                                      proportions=proportions)
+
+            # Collect utterances of all issuers per split
+            splits = collections.defaultdict(list)
+
+            for split_idx, issuer_ids in issuer_splits.items():
+                for issuer_idx in issuer_ids:
+                    splits[split_idx].extend(issuer_utts[issuer_idx])
+        else:
+            for utterance in self.corpus.utterances.values():
+                utterance_to_duration[utterance.idx] = {'length': int(utterance.duration * 100)}
+
+            splits = utils.get_identifiers_splitted_by_weights(utterance_to_duration, proportions=proportions)
 
         return self._subviews_from_utterance_splits(splits)
 
-    def split_by_number_of_utterances(self, proportions={}):
+    def split_by_number_of_utterances(self, proportions={}, separate_issuers=False):
         """
         Split the corpus into subsets with the given number of utterances.
         The corpus gets splitted into len(proportions) parts, so the number of utterances are
@@ -71,6 +96,7 @@ class Splitter(object):
         Args:
             proportions (dict): A dictionary containing the relative size of the target subsets.
                                 The key is an identifier for the subset.
+            separate_issuers (bool): If True it makes sure that all utterances of an issuer are in the same subset.
 
         Returns:
             (dict): A dictionary containing the subsets with the identifier from the input as key.
@@ -95,10 +121,32 @@ class Splitter(object):
             20
         """
 
-        utterance_idxs = sorted(list(self.corpus.utterances.keys()))
-        self.rand.shuffle(utterance_idxs)
-        splits = utils.split_identifiers(identifiers=utterance_idxs,
-                                         proportions=proportions)
+        if separate_issuers:
+            # Count number of utterances per issuer
+            issuer_utt_count = collections.defaultdict(int)
+            issuer_utts = collections.defaultdict(list)
+
+            for utterance in self.corpus.utterances.values():
+                issuer_utt_count[utterance.issuer.idx] += 1
+                issuer_utts[utterance.issuer.idx].append(utterance.idx)
+
+            issuer_utt_count = {k: {'count': int(v)} for k, v in issuer_utt_count.items()}
+
+            # Split with total utt duration per issuer as weight
+            issuer_splits = utils.get_identifiers_splitted_by_weights(issuer_utt_count,
+                                                                      proportions=proportions)
+
+            # Collect utterances of all issuers per split
+            splits = collections.defaultdict(list)
+
+            for split_idx, issuer_ids in issuer_splits.items():
+                for issuer_idx in issuer_ids:
+                    splits[split_idx].extend(issuer_utts[issuer_idx])
+        else:
+            utterance_idxs = sorted(list(self.corpus.utterances.keys()))
+            self.rand.shuffle(utterance_idxs)
+            splits = utils.split_identifiers(identifiers=utterance_idxs,
+                                             proportions=proportions)
 
         return self._subviews_from_utterance_splits(splits)
 

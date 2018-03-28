@@ -8,7 +8,7 @@ from pingu.corpus.preprocessing.pipeline import offline
 
 class MelSpectrogramTest(unittest.TestCase):
     def test_compute(self):
-        samples = np.arange(8096)
+        samples = np.arange(8096).astype(np.float32)
         D = np.abs(librosa.core.stft(samples, n_fft=2048, hop_length=512, center=False)) ** 2
         expected = librosa.feature.melspectrogram(S=D, sr=16000, n_mels=128).T
 
@@ -21,7 +21,7 @@ class MelSpectrogramTest(unittest.TestCase):
 
 class MFCCTest(unittest.TestCase):
     def test_compute(self):
-        samples = np.arange(8096)
+        samples = np.arange(8096).astype(np.float32)
         D = np.abs(librosa.core.stft(samples, n_fft=2048, hop_length=512, center=False)) ** 2
         mel = librosa.feature.melspectrogram(S=D, sr=16000, n_mels=128)
         expected = librosa.feature.mfcc(S=librosa.power_to_db(mel), n_mfcc=13).T

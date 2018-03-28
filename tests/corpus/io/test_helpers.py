@@ -1,11 +1,34 @@
 import unittest
 
+from pingu.corpus.io import CorpusDownloader, available_downloaders, create_downloader_of_type
 from pingu.corpus.io import CorpusReader, available_readers, create_reader_of_type
 from pingu.corpus.io import CorpusWriter, available_writers, create_writer_of_type
-from pingu.corpus.io import UnknownReaderException, UnknownWriterException
+from pingu.corpus.io import UnknownDownloaderException, UnknownReaderException, UnknownWriterException
 
 
 class HelpersTest(unittest.TestCase):
+
+    def test_all_downloaders_registered(self):
+        expected_downloaders = CorpusDownloader.__subclasses__()
+        actual_downloaders = available_downloaders()
+
+        self.assertEqual(len(expected_downloaders), len(actual_downloaders),
+                         'Number of registered downloaders does not match number of present downloaders')
+
+        for expected_downloader in expected_downloaders:
+            self.assertIn(expected_downloader, actual_downloaders.values(), 'Downloader not registered')
+            self.assertIn(expected_downloader.type(), actual_downloaders.keys(),
+                          'Downloader not available under its type()')
+
+    def test_all_downloaders_creatable(self):
+        expected_downloaders = CorpusDownloader.__subclasses__()
+
+        for expected_downloader in expected_downloaders:
+            self.assertIsInstance(create_downloader_of_type(expected_downloader.type()), expected_downloader)
+
+    def test_unknown_downloader_creation_throws(self):
+        with self.assertRaises(UnknownDownloaderException, msg='Unknown downloader: does_not_exist'):
+            create_downloader_of_type('does_not_exist')
 
     def test_all_readers_registered(self):
         expected_readers = CorpusReader.__subclasses__()

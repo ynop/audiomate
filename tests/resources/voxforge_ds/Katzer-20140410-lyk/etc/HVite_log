@@ -1,0 +1,63 @@
+/usr/local/bin/HVite -A -D -T 1 -l * -a -b SENT-END -m -C /data/svn-mirror/Main/VoxForge/lib/Corpus/Quarantine/Submission/Audio/wav_config -H /data/svn-mirror/Main/VoxForge/lib/Corpus/Quarantine/Submission/Audio/HTK_AcousticModel-2012-07-24_16kHz_16bit_MFCC_O_D/macros -H /data/svn-mirror/Main/VoxForge/lib/Corpus/Quarantine/Submission/Audio/HTK_AcousticModel-2012-07-24_16kHz_16bit_MFCC_O_D/hmmdefs -m -t 250.0 150.0 1000.0 -I /tmp/Utbm2VmU0a/words.mlf -i /tmp/Utbm2VmU0a/aligned.out -S /tmp/Utbm2VmU0a/fileList /data/svn-mirror/SpeechCorpus/Trunk/Lexicon/VoxForge/VoxForgeDict /data/svn-mirror/Main/VoxForge/lib/Corpus/Quarantine/Submission/Audio/HTK_AcousticModel-2012-07-24_16kHz_16bit_MFCC_O_D/tiedlist 
+
+HTK Configuration Parameters[11]
+  Module/Tool     Parameter                  Value
+#                 NUMCEPS                       12
+#                 CEPLIFTER                     22
+#                 NUMCHANS                      26
+#                 PREEMCOEF               0.970000
+#                 USEHAMMING                  TRUE
+#                 WINDOWSIZE         250000.000000
+#                 SAVEWITHCRC                 TRUE
+#                 SAVECOMPRESSED              TRUE
+#                 TARGETRATE         100000.000000
+#                 TARGETKIND          MFCC_D_N_Z_0
+#                 SOURCEFORMAT                 WAV
+
+Read 8294 physical / 9429 logical HMMs
+Label file will be used to align each file
+Aligning File: /tmp/Utbm2VmU0a/Katzer-20140410-lyk/b0167.wav
+Created lattice with 14 nodes / 13 arcs from label file
+SENT-END A LITTLE BEFORE DAWN OF THE DAY FOLLOWING THE FIRE RELIEF CAME SENT-END  ==  [611 frames] -58.8684 [Ac=-35968.6 LM=0.0] (Act=15.5)
+Aligning File: /tmp/Utbm2VmU0a/Katzer-20140410-lyk/b0168.wav
+Created lattice with 13 nodes / 12 arcs from label file
+SENT-END THE INDIAN FELT THE WORSHIP OF HER WARM IN HIS HEART SENT-END  ==  [648 frames] -58.8103 [Ac=-38109.1 LM=0.0] (Act=12.9)
+Aligning File: /tmp/Utbm2VmU0a/Katzer-20140410-lyk/b0169.wav
+Created lattice with 13 nodes / 12 arcs from label file
+SENT-END HE DREW IN A DEEP BREATH AS HE LOOKED AT THEM SENT-END  ==  [586 frames] -56.9016 [Ac=-33344.4 LM=0.0] (Act=12.9)
+Aligning File: /tmp/Utbm2VmU0a/Katzer-20140410-lyk/b0170.wav
+Created lattice with 7 nodes / 6 arcs from label file
+SENT-END THEN HE SHOUTED SHUT UP SENT-END  ==  [423 frames] -54.1054 [Ac=-22886.6 LM=0.0] (Act=9.6)
+Aligning File: /tmp/Utbm2VmU0a/Katzer-20140410-lyk/b0171.wav
+Created lattice with 11 nodes / 10 arcs from label file
+SENT-END HE CHANGED HIS SEAT FOR A STEAMER RECLINING CHAIR SENT-END  ==  [648 frames] -56.3141 [Ac=-36491.5 LM=0.0] (Act=12.6)
+Aligning File: /tmp/Utbm2VmU0a/Katzer-20140410-lyk/b0172.wav
+Created lattice with 13 nodes / 12 arcs from label file
+SENT-END ON THE FAR CORNER OF THE COMPOUND FENCE A HAWK BROODED SENT-END  ==  [623 frames] -59.0605 [Ac=-36794.7 LM=0.0] (Act=13.0)
+Aligning File: /tmp/Utbm2VmU0a/Katzer-20140410-lyk/b0173.wav
+Created lattice with 8 nodes / 7 arcs from label file
+SENT-END TO THESE HE GAVE CASTOR OIL SENT-END  ==  [423 frames] -56.0725 [Ac=-23718.7 LM=0.0] (Act=10.6)
+Aligning File: /tmp/Utbm2VmU0a/Katzer-20140410-lyk/b0174.wav
+Created lattice with 13 nodes / 12 arcs from label file
+SENT-END HATRED AND MURDER AND LUST FOR REVENGE THEY POSSESSED TO OVERFLOWING SENT-END  ==  [761 frames] -58.8224 [Ac=-44763.8 LM=0.0] (Act=14.3)
+Aligning File: /tmp/Utbm2VmU0a/Katzer-20140410-lyk/b0175.wav
+Created lattice with 7 nodes / 6 arcs from label file
+SENT-END SHELDON GLANCED AT THE THERMOMETER SENT-END  ==  [511 frames] -57.1466 [Ac=-29201.9 LM=0.0] (Act=12.2)
+Aligning File: /tmp/Utbm2VmU0a/Katzer-20140410-lyk/b0176.wav
+Created lattice with 7 nodes / 6 arcs from label file
+SENT-END I'LL SEE TO POOR HUGHIE SENT-END  ==  [423 frames] -55.6742 [Ac=-23550.2 LM=0.0] (Act=9.7)
+
+HTK Configuration Parameters[11]
+  Module/Tool     Parameter                  Value
+                  NUMCEPS                       12
+                  CEPLIFTER                     22
+                  NUMCHANS                      26
+                  PREEMCOEF               0.970000
+                  USEHAMMING                  TRUE
+                  WINDOWSIZE         250000.000000
+                  SAVEWITHCRC                 TRUE
+                  SAVECOMPRESSED              TRUE
+                  TARGETRATE         100000.000000
+                  TARGETKIND          MFCC_D_N_Z_0
+                  SOURCEFORMAT                 WAV
+

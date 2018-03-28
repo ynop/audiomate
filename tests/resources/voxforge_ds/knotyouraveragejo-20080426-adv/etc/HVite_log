@@ -1,0 +1,1147 @@
+HVite -A -D -T 1 -l * -o SWT -b silence -C /data/svn-mirror/Main/Trunk/Scripts/AcousticModel_scripts/HTK/AMCreate_scripts/input_files/config -H ./interim_files/hmm7/macros -H ./interim_files/hmm7/hmmdefs -i ./interim_files/aligned.mlf -m -t 250.0 150.0 1000.0 -y lab -a -I ./interim_files/words.mlf -S ./interim_files/train.scp ./interim_files/dict1 ./interim_files/monophones1 
+
+HTK Configuration Parameters[10]
+  Module/Tool     Parameter                  Value
+#                 NUMCEPS                       12
+#                 CEPLIFTER                     22
+#                 NUMCHANS                      26
+#                 PREEMCOEF               0.970000
+#                 USEHAMMING                  TRUE
+#                 WINDOWSIZE         250000.000000
+#                 SAVEWITHCRC                 TRUE
+#                 SAVECOMPRESSED              TRUE
+#                 TARGETRATE         100000.000000
+#                 TARGETKIND          MFCC_0_D_N_Z
+
+Read 44 physical / 44 logical HMMs
+Label file will be used to align each file
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0001.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence SECTION TWO OF THE ADVANCE OF SCIENCE IN THE LAST HALF CENTURY silence  ==  [468 frames] -58.2801 [Ac=-27275.1 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0002.mfc
+Created lattice with 24 nodes / 23 arcs from label file
+silence BY T H HUXLEY THE DEVELOPMENT OF EVERY BRANCH OF PHYSICAL KNOWLEDGE PRESENTS THREE STAGES WHICH IN THEIR LOGICAL RELATION ARE SUCCESSIVE silence  ==  [984 frames] -57.5443 [Ac=-56623.6 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0003.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence THE FIRST IS THE DETERMINATION OF THE SENSIBLE CHARACTER AND ORDER OF THE PHENOMENA silence  ==  [524 frames] -57.6142 [Ac=-30189.8 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0004.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence THIS IS NATURAL HISTORY IN THE ORIGINAL SENSE OF THE TERM silence  ==  [469 frames] -56.7248 [Ac=-26603.9 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0005.mfc
+Created lattice with 11 nodes / 10 arcs from label file
+silence AND HERE NOTHING BUT OBSERVATION AND EXPERIMENT AVAIL US silence  ==  [472 frames] -55.6908 [Ac=-26286.1 LM=0.0] (Act=7.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0006.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence THE SECOND IS THE DETERMINATION OF THE CONSTANT RELATIONS OF THE PHENOMENA THUS DEFINED silence  ==  [582 frames] -56.4400 [Ac=-32848.1 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0007.mfc
+Created lattice with 29 nodes / 28 arcs from label file
+silence AND THEIR EXPRESSION IN RULES OR LAWS THE THIRD IS THE EXPLICATION OF THESE PARTICULAR LAWS BY DEDUCTION FROM THE MOST GENERAL LAWS OF MATTER AND MOTION silence  ==  [1041 frames] -57.7886 [Ac=-60158.0 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0008.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence THE LAST TWO STAGES CONSTITUTE NATURAL PHILOSOPHY IN ITS ORIGINAL SENSE IN THIS REGION silence  ==  [713 frames] -57.2313 [Ac=-40805.9 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0009.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence THE INVENTION OF VERIFIABLE HYPOTHESES IS NOT ONLY PERMISSIBLE BUT IS ONE OF THE CONDITIONS OF PROGRESS silence  ==  [772 frames] -57.3462 [Ac=-44271.3 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0010.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence HISTORICALLY NO BRANCH OF SCIENCE HAS FOLLOWED THIS ORDER OF GROWTH BUT silence  ==  [511 frames] -58.4265 [Ac=-29856.0 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0011.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence FROM THE DAWN OF EXACT KNOWLEDGE TO THE PRESENT DAY OBSERVATION EXPERIMENT AND SPECULATION silence  ==  [587 frames] -60.6468 [Ac=-35599.7 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0012.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence HAVE GONE HAND IN HAND AND WHENEVER SCIENCE HAS HALTED OR STRAYED FROM THE RIGHT PATH IT HAS BEEN silence  ==  [599 frames] -59.7146 [Ac=-35769.0 LM=0.0] (Act=12.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0013.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence EITHER BECAUSE ITS VOTARIES HAVE BEEN CONTENT WITH MERE UNVERIFIED OR UNVERIFIABLE SPECULATION silence  ==  [607 frames] -60.0149 [Ac=-36429.1 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0014.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence AND THIS IS THE COMMONEST CASE BECAUSE OBSERVATION AND EXPERIMENT ARE HARD WORK silence  ==  [509 frames] -59.5112 [Ac=-30291.2 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0015.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence WHILE SPECULATION IS AMUSING OR IT HAS BEEN BECAUSE THE ACCUMULATION OF DETAILS OF OBSERVATION silence  ==  [662 frames] -59.6700 [Ac=-39501.5 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0016.mfc
+Created lattice with 8 nodes / 7 arcs from label file
+silence HAS FOR A TIME EXCLUDED SPECULATION silence  ==  [372 frames] -56.2515 [Ac=-20925.6 LM=0.0] (Act=7.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0017.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence THE PROGRESS OF PHYSICAL SCIENCE SINCE THE REVIVAL OF LEARNING IS LARGELY DUE TO THE FACT THAT MEN HAVE GRADUALLY LEARNED silence  ==  [751 frames] -58.9600 [Ac=-44279.0 LM=0.0] (Act=9.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0018.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence TO LAY ASIDE THE CONSIDERATION OF UNVERIFIABLE HYPOTHESES TO GUIDE OBSERVATION AND EXPERIMENT BY VERIFIABLE HYPOTHESES silence  ==  [893 frames] -57.8634 [Ac=-51672.1 LM=0.0] (Act=7.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0019.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence AND TO CONSIDER THE LATTER NOT AS IDEAL TRUTHS THE REAL ENTITIES OF AN INTELLIGIBLE WORLD BEHIND PHENOMENA silence  ==  [767 frames] -58.2552 [Ac=-44681.7 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0020.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence BUT AS A SYMBOLICAL LANGUAGE BY THE AID OF WHICH NATURE CAN BE INTERPRETED IN TERMS silence  ==  [565 frames] -59.5246 [Ac=-33631.4 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0021.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence APPREHENSIBLE BY OUR INTELLECTS AND IF PHYSICAL SCIENCE DURING THE LAST FIFTY YEARS HAS silence  ==  [615 frames] -57.7157 [Ac=-35495.1 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0022.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence ATTAINED DIMENSIONS BEYOND ALL FORMER PRECEDENT AND CAN EXHIBIT ACHIEVEMENTS OF GREATER IMPORTANCE THAN ANY FORMER SUCH PERIOD CAN SHOW silence  ==  [903 frames] -58.8910 [Ac=-53178.5 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0023.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence IT IS BECAUSE ABLE MEN ANIMATED BY THE TRUE SCIENTIFIC SPIRIT CAREFULLY TRAINED IN THE METHOD OF SCIENCE silence  ==  [746 frames] -57.7236 [Ac=-43061.8 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0024.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence AND HAVING AT THEIR DISPOSAL IMMENSELY IMPROVED APPLIANCES HAVE DEVOTED THEMSELVES TO THE ENLARGEMENT OF THE BOUNDARIES OF NATURAL KNOWLEDGE silence  ==  [804 frames] -59.6085 [Ac=-47925.3 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0025.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence IN GREATER NUMBER THAN DURING ANY PREVIOUS HALF CENTURY OF THE WORLD'S HISTORY silence  ==  [568 frames] -56.5216 [Ac=-32104.3 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0026.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence I HAVE SAID THAT OUR EPOCH CAN PRODUCE ACHIEVEMENTS IN PHYSICAL SCIENCE OF GREATER MOMENT silence  ==  [610 frames] -57.8330 [Ac=-35278.2 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0027.mfc
+Created lattice with 25 nodes / 24 arcs from label file
+silence THAN ANY OTHER HAS TO SHOW ADVISEDLY AND I THINK THAT THERE ARE THREE GREAT PRODUCTS OF OUR TIME WHICH JUSTIFY THE ASSERTION silence  ==  [913 frames] -57.5047 [Ac=-52501.8 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0028.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence ONE OF THESE IS THAT DOCTRINE CONCERNING THE CONSTITUTION OF MATTER WHICH FOR WANT OF A BETTER NAME silence  ==  [598 frames] -58.4038 [Ac=-34925.5 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0029.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence I WILL CALL MOLECULAR THE SECOND IS THE DOCTRINE OF CONSERVATION OF ENERGY silence  ==  [552 frames] -56.6860 [Ac=-31290.7 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0030.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence THE THIRD IS THE DOCTRINE OF EVOLUTION EACH OF THESE WAS FORESHADOWED silence  ==  [545 frames] -56.0734 [Ac=-30560.0 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0031.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence MORE OR LESS DISTINCTLY IN FORMER PERIODS OF THE HISTORY OF SCIENCE silence  ==  [403 frames] -59.1034 [Ac=-23818.7 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0032.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence AND SO FAR IS EITHER FROM BEING THE OUTCOME OF PURELY INDUCTIVE REASONING silence  ==  [486 frames] -60.7194 [Ac=-29509.6 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0033.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence THAT IT WOULD BE HARD TO OVERRATE THE INFLUENCE OF METAPHYSICAL silence  ==  [380 frames] -59.8257 [Ac=-22733.8 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0034.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence AND EVEN OF THEOLOGICAL CONSIDERATIONS UPON THE DEVELOPMENT OF ALL THREE THE PECULIAR MERIT OF OUR EPOCH silence  ==  [773 frames] -58.6000 [Ac=-45297.8 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0035.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence IS THAT IT HAS SHOWN HOW THESE HYPOTHESES CONNECT A VAST NUMBER OF SEEMINGLY INDEPENDENT silence  ==  [555 frames] -57.9902 [Ac=-32184.6 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0036.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence PARTIAL GENERALISATIONS THAT IT HAS GIVEN THEM THAT PRECISION OF EXPRESSION silence  ==  [532 frames] -57.8981 [Ac=-30801.8 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0037.mfc
+Created lattice with 10 nodes / 9 arcs from label file
+silence WHICH IS NECESSARY FOR THEIR EXACT VERIFICATION AND silence  ==  [340 frames] -58.6154 [Ac=-19929.2 LM=0.0] (Act=9.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0038.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence THAT IT HAS PRACTICALLY PROVED THEIR VALUE AS GUIDES TO THE DISCOVERY OF NEW TRUTH ALL THREE DOCTRINES ARE INTIMATELY CONNECTED silence  ==  [847 frames] -58.8261 [Ac=-49825.7 LM=0.0] (Act=10.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0039.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence AND EACH IS APPLICABLE TO THE WHOLE PHYSICAL COSMOS BUT AS MIGHT HAVE BEEN EXPECTED FROM THE NATURE OF THE CASE silence  ==  [680 frames] -58.6313 [Ac=-39869.3 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0040.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence THE FIRST TWO GREW MAINLY OUT OF THE CONSIDERATION OF PHYSICO CHEMICAL PHENOMENA WHILE silence  ==  [527 frames] -58.7302 [Ac=-30950.8 LM=0.0] (Act=9.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0041.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence THE THIRD IN GREAT MEASURE OWES ITS REHABILITATION IF NOT ITS ORIGIN silence  ==  [530 frames] -58.6826 [Ac=-31101.8 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0042.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence TO THE STUDY OF BIOLOGICAL PHENOMENA IN THE EARLY DECADES OF THIS CENTURY A NUMBER OF IMPORTANT TRUTHS APPLICABLE IN PART silence  ==  [941 frames] -56.5798 [Ac=-53241.6 LM=0.0] (Act=10.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0043.mfc
+Created lattice with 9 nodes / 8 arcs from label file
+silence TO MATTER IN GENERAL AND IN PART silence  ==  [239 frames] -57.9470 [Ac=-13849.3 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0044.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence TO PARTICULAR FORMS OF MATTER HAD BEEN ASCERTAINED BY THE PHYSICISTS AND CHEMISTS THE LAWS OF MOTION OF VISIBLE AND TANGIBLE silence  ==  [852 frames] -58.0631 [Ac=-49469.7 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0045.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence OR MOLAR MATTER HAD BEEN WORKED OUT TO A GREAT DEGREE OF REFINEMENT silence  ==  [396 frames] -59.9687 [Ac=-23747.6 LM=0.0] (Act=11.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0046.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence AND EMBODIED IN THE BRANCHES OF SCIENCE KNOWN AS MECHANICS HYDROSTATICS AND PNEUMATICS silence  ==  [581 frames] -57.3829 [Ac=-33339.5 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0047.mfc
+Created lattice with 10 nodes / 9 arcs from label file
+silence THESE LAWS HAD BEEN SHOWN TO HOLD GOOD silence  ==  [292 frames] -55.7094 [Ac=-16267.2 LM=0.0] (Act=7.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0048.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence SO FAR AS THEY COULD BE CHECKED BY OBSERVATION AND EXPERIMENT THROUGHOUT THE UNIVERSE silence  ==  [508 frames] -58.2883 [Ac=-29610.5 LM=0.0] (Act=7.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0049.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence ON THE ASSUMPTION THAT ALL SUCH MASSES OF MATTER POSSESSED INERTIA AND WERE SUSCEPTIBLE OF ACQUIRING MOTION silence  ==  [675 frames] -58.1479 [Ac=-39249.8 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0050.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence IN TWO WAYS FIRSTLY BY IMPACT OR IMPULSE FROM WITHOUT AND SECONDLY silence  ==  [535 frames] -58.1699 [Ac=-31120.9 LM=0.0] (Act=7.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0051.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence BY THE OPERATION OF CERTAIN HYPOTHETICAL CAUSES OF MOTION TERMED FORCES silence  ==  [500 frames] -57.6752 [Ac=-28837.6 LM=0.0] (Act=7.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0052.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence WHICH WERE USUALLY SUPPOSED TO BE RESIDENT IN THE PARTICLES OF THE MASSES THEMSELVES silence  ==  [502 frames] -58.9607 [Ac=-29598.2 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0053.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence AND TO OPERATE AT A DISTANCE IN SUCH A WAY AS TO TEND TO DRAW ANY TWO SUCH MASSES TOGETHER silence  ==  [609 frames] -58.6997 [Ac=-35748.1 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0054.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence OR TO SEPARATE THEM MORE WIDELY WITH RESPECT TO THE ULTIMATE CONSTITUTION OF THESE MASSES silence  ==  [677 frames] -57.3795 [Ac=-38845.9 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0055.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence THE SAME TWO ANTAGONISTIC OPINIONS WHICH HAD EXISTED SINCE THE TIME OF DEMOCRITUS AND OF ARISTOTLE WERE STILL FACE TO FACE silence  ==  [813 frames] -58.9503 [Ac=-47926.6 LM=0.0] (Act=9.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0056.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence ACCORDING TO THE ONE MATTER WAS DISCONTINUOUS AND CONSISTED OF MINUTE INDIVISIBLE PARTICLES OR ATOMS silence  ==  [725 frames] -58.6198 [Ac=-42499.3 LM=0.0] (Act=10.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0057.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence SEPARATED BY A UNIVERSAL VACUUM ACCORDING TO THE OTHER IT WAS CONTINUOUS silence  ==  [562 frames] -58.0369 [Ac=-32616.8 LM=0.0] (Act=7.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0058.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence AND THE FINEST DISTINGUISHABLE OR IMAGINABLE PARTICLES WERE SCATTERED THROUGH THE ATTENUATED GENERAL SUBSTANCE OF THE PLENUM silence  ==  [784 frames] -59.2403 [Ac=-46444.4 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0059.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence A ROUGH ANALOGY TO THE LATTER CASE WOULD BE AFFORDED BY GRANULES OF ICE silence  ==  [491 frames] -57.9496 [Ac=-28453.2 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0060.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence DIFFUSED THROUGH WATER TO THE FORMER SUCH GRANULES DIFFUSED THROUGH ABSOLUTELY EMPTY SPACE IN silence  ==  [712 frames] -56.7656 [Ac=-40417.1 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0061.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence THE LATTER PART OF THE EIGHTEENTH CENTURY THE CHEMISTS HAD ARRIVED AT SEVERAL VERY IMPORTANT GENERALISATIONS silence  ==  [665 frames] -58.8649 [Ac=-39145.2 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0062.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence RESPECTING THOSE PROPERTIES OF MATTER WITH WHICH THEY WERE ESPECIALLY CONCERNED silence  ==  [521 frames] -57.3308 [Ac=-29869.3 LM=0.0] (Act=6.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0063.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence HOWEVER PLAINLY PONDERABLE MATTER SEEMED TO BE ORIGINATED AND DESTROYED IN THEIR OPERATIONS THEY PROVED THAT silence  ==  [700 frames] -57.8842 [Ac=-40518.9 LM=0.0] (Act=7.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0064.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence AS MASS OR BODY IT REMAINED INDESTRUCTIBLE AND INGENERABLE AND THAT SO FAR silence  ==  [574 frames] -58.2364 [Ac=-33427.7 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0065.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence IT VARIED ONLY IN ITS PERCEPTIBILITY BY OUR SENSES THE COURSE OF INVESTIGATION FURTHER PROVED silence  ==  [694 frames] -57.6669 [Ac=-40020.8 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0066.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence THAT A CERTAIN NUMBER OF THE CHEMICALLY SEPARABLE KINDS OF MATTER WERE UNALTERABLE BY ANY KNOWN MEANS silence  ==  [613 frames] -59.7521 [Ac=-36628.0 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0067.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence EXCEPT IN SO FAR AS THEY MIGHT BE MADE TO CHANGE THEIR STATE silence  ==  [348 frames] -59.5923 [Ac=-20738.1 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0068.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence FROM SOLID TO FLUID OR VICE VERSA UNLESS THEY WERE BROUGHT INTO CONTACT WITH OTHER KINDS OF MATTER silence  ==  [682 frames] -57.7474 [Ac=-39383.7 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0069.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence AND THAT THE PROPERTIES OF THESE SEVERAL KINDS OF MATTER WERE ALWAYS THE SAME silence  ==  [444 frames] -57.3385 [Ac=-25458.3 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0070.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence WHATEVER THEIR ORIGIN ALL OTHER BODIES WERE FOUND TO CONSIST OF TWO OR MORE OF THESE silence  ==  [587 frames] -56.9955 [Ac=-33456.3 LM=0.0] (Act=9.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0071.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence WHICH THUS TOOK THE PLACE OF THE FOUR ELEMENTS OF THE ANCIENT PHILOSOPHERS FURTHER silence  ==  [638 frames] -57.8906 [Ac=-36934.2 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0072.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence IT WAS PROVED THAT IN FORMING CHEMICAL COMPOUNDS BODIES ALWAYS UNITE IN A DEFINITE PROPORTION BY WEIGHT silence  ==  [674 frames] -59.3891 [Ac=-40028.3 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0073.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence OR IN SIMPLE MULTIPLES OF THAT PROPORTION AND THAT IF ANY ONE BODY WERE TAKEN AS A STANDARD silence  ==  [635 frames] -58.2481 [Ac=-36987.5 LM=0.0] (Act=9.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0074.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence EVERY OTHER COULD HAVE A NUMBER ASSIGNED TO IT AS ITS PROPORTIONAL COMBINING WEIGHT silence  ==  [519 frames] -58.0712 [Ac=-30139.0 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0075.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence IT WAS ON THIS FOUNDATION OF FACT THAT DALTON BASED HIS RE ESTABLISHMENT silence  ==  [488 frames] -57.7092 [Ac=-28162.1 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0076.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence OF THE OLD ATOMIC HYPOTHESIS ON A NEW EMPIRICAL FOUNDATION IT IS OBVIOUS silence  ==  [613 frames] -56.6865 [Ac=-34748.8 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0077.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence THAT IF ELEMENTARY MATTER CONSISTS OF INDESTRUCTIBLE AND INDIVISIBLE PARTICLES EACH OF WHICH CONSTANTLY PRESERVES THE SAME WEIGHT silence  ==  [763 frames] -59.9607 [Ac=-45750.0 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0078.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence RELATIVELY TO ALL THE OTHERS COMPOUNDS FORMED BY THE AGGREGATION OF TWO THREE silence  ==  [523 frames] -59.0638 [Ac=-30890.4 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0079.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence FOUR OR MORE SUCH PARTICLES MUST EXEMPLIFY THE RULE OF COMBINATION IN DEFINITE PROPORTIONS DEDUCED FROM OBSERVATION IN silence  ==  [844 frames] -57.5979 [Ac=-48612.6 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0080.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence THE MEANWHILE THE GRADUAL RECEPTION OF THE UNDULATORY THEORY OF LIGHT silence  ==  [511 frames] -57.4470 [Ac=-29355.4 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0081.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence NECESSITATED THE ASSUMPTION OF THE EXISTENCE OF AN ETHER FILLING ALL SPACE silence  ==  [549 frames] -58.1864 [Ac=-31944.3 LM=0.0] (Act=7.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0082.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence BUT WHETHER THIS ETHER WAS TO BE REGARDED AS A STRICTLY MATERIAL AND CONTINUOUS SUBSTANCE silence  ==  [568 frames] -60.2523 [Ac=-34223.3 LM=0.0] (Act=9.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0083.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence WAS AN UNDECIDED POINT AND HENCE THE REVIVED ATOMISM ESCAPED STRANGLING IN ITS BIRTH FOR IT IS CLEAR silence  ==  [752 frames] -59.0730 [Ac=-44422.9 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0084.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence THAT IF THE ETHER IS ADMITTED TO BE A CONTINUOUS MATERIAL SUBSTANCE DEMOCRITIC ATOMISM IS AT AN END silence  ==  [681 frames] -60.5361 [Ac=-41225.1 LM=0.0] (Act=9.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0085.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence AND CARTESIAN CONTINUITY TAKES ITS PLACE THE REAL VALUE OF THE NEW ATOMIC HYPOTHESIS HOWEVER silence  ==  [764 frames] -56.2199 [Ac=-42952.0 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0086.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence DID NOT LIE IN THE TWO POINTS WHICH DEMOCRITUS AND HIS FOLLOWERS WOULD HAVE CONSIDERED ESSENTIAL silence  ==  [579 frames] -58.8231 [Ac=-34058.6 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0087.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence NAMELY THE INDIVISIBILITY OF THE ATOMS AND THE PRESENCE OF AN INTERATOMIC VACUUM silence  ==  [634 frames] -57.1617 [Ac=-36240.5 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0088.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence BUT IN THE ASSUMPTION THAT TO THE EXTENT TO WHICH OUR MEANS OF ANALYSIS TAKE US silence  ==  [555 frames] -58.6921 [Ac=-32574.1 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0089.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence MATERIAL BODIES CONSIST OF DEFINITE MINUTE MASSES EACH OF WHICH SO FAR AS PHYSICAL AND CHEMICAL PROCESSES OF DIVISION GO silence  ==  [853 frames] -59.3195 [Ac=-50599.5 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0090.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence MAY BE REGARDED AS A UNIT HAVING A PRACTICALLY PERMANENT INDIVIDUALITY silence  ==  [545 frames] -57.6128 [Ac=-31399.0 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0091.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence JUST AS A MAN IS THE UNIT OF SOCIOLOGY WITHOUT REFERENCE TO THE ACTUAL FACT OF HIS DIVISIBILITY silence  ==  [690 frames] -58.0266 [Ac=-40038.4 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0092.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence SO SUCH A MINUTE MASS IS THE UNIT OF PHYSICO CHEMICAL SCIENCE THAT SMALLEST MATERIAL PARTICLE silence  ==  [701 frames] -58.4915 [Ac=-41002.5 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0093.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence WHICH UNDER ANY GIVEN CIRCUMSTANCES ACTS AS A WHOLE MOLECULE WOULD BE THE MORE APPROPRIATE NAME FOR SUCH A PARTICLE silence  ==  [739 frames] -60.1261 [Ac=-44433.2 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0094.mfc
+Created lattice with 11 nodes / 10 arcs from label file
+silence UNFORTUNATELY CHEMISTS EMPLOY THIS TERM IN A SPECIAL SENSE silence  ==  [400 frames] -59.1490 [Ac=-23659.6 LM=0.0] (Act=7.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0095.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence AS A NAME FOR AN AGGREGATION OF THEIR SMALLEST PARTICLES FOR WHICH THEY RETAIN THE DESIGNATION OF ATOMS silence  ==  [698 frames] -57.1503 [Ac=-39890.9 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0096.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence THE DOCTRINE OF SPECIFIC HEAT ORIGINATED IN THE EIGHTEENTH CENTURY IT MEANS THAT THE SAME MASS OF A BODY silence  ==  [701 frames] -58.1207 [Ac=-40742.6 LM=0.0] (Act=9.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0097.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence UNDER THE SAME CIRCUMSTANCES ALWAYS REQUIRES THE SAME QUANTITY OF HEAT TO RAISE IT TO A GIVEN TEMPERATURE silence  ==  [689 frames] -57.7683 [Ac=-39802.4 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0098.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence BUT THAT EQUAL MASSES OF DIFFERENT BODIES REQUIRE DIFFERENT QUANTITIES ULTIMATELY IT WAS FOUND silence  ==  [725 frames] -56.9256 [Ac=-41271.1 LM=0.0] (Act=7.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0099.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence THAT THE QUANTITIES OF HEAT REQUIRED TO RAISE EQUAL MASSES OF THE MORE PERFECT GASES THROUGH EQUAL RANGES OF TEMPERATURE silence  ==  [709 frames] -59.2861 [Ac=-42033.8 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0100.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence WERE INVERSELY PROPORTIONAL TO THEIR COMBINING WEIGHTS THUS A DEFINITE RELATION WAS ESTABLISHED BETWEEN THE HYPOTHETICAL UNITS silence  ==  [835 frames] -59.4859 [Ac=-49670.7 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0101.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence AND HEAT THE PHENOMENA OF ELECTROLYTIC DECOMPOSITION SHOWED THAT THERE WAS A LIKE silence  ==  [589 frames] -58.8970 [Ac=-34690.3 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0102.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence CLOSE RELATION BETWEEN THESE UNITS AND ELECTRICITY THE QUANTITY OF ELECTRICITY GENERATED BY THE COMBINATION OF ANY TWO UNITS silence  ==  [850 frames] -59.7061 [Ac=-50750.2 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0103.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence IS SUFFICIENT TO SEPARATE ANY OTHER TWO WHICH ARE SUSCEPTIBLE OF SUCH DECOMPOSITION THE PHENOMENA OF ISOMORPHISM silence  ==  [844 frames] -57.5470 [Ac=-48569.7 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0104.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence SHOWED A RELATION BETWEEN THE UNITS AND CRYSTALLINE FORMS CERTAIN UNITS ARE THUS ABLE TO REPLACE OTHERS silence  ==  [663 frames] -60.8084 [Ac=-40316.0 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0105.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence IN A CRYSTALLINE BODY WITHOUT ALTERING ITS FORM AND OTHERS ARE NOT silence  ==  [550 frames] -57.3357 [Ac=-31534.7 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0106.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence AGAIN THE LAWS OF THE EFFECT OF PRESSURE AND HEAT ON GASEOUS BODIES silence  ==  [521 frames] -57.0168 [Ac=-29705.7 LM=0.0] (Act=7.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0107.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence THE FACT THAT THEY COMBINE IN DEFINITE PROPORTIONS BY VOLUME silence  ==  [376 frames] -57.5868 [Ac=-21652.6 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0108.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence AND THAT SUCH PROPORTION BEARS A SIMPLE RELATION TO THEIR COMBINING WEIGHTS ALL HARMONISED silence  ==  [582 frames] -58.9159 [Ac=-34289.1 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0109.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence WITH THE DALTONIAN HYPOTHESIS AND LED TO THE BOLD SPECULATION KNOWN AS THE LAW OF AVOGADRO silence  ==  [639 frames] -59.4853 [Ac=-38011.1 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0110.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence THAT ALL GASEOUS BODIES UNDER THE SAME PHYSICAL CONDITIONS CONTAIN THE SAME NUMBER OF UNITS silence  ==  [677 frames] -56.3526 [Ac=-38150.7 LM=0.0] (Act=7.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0111.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence IN THE FORM IN WHICH IT WAS FIRST ENUNCIATED THIS HYPOTHESIS WAS INCORRECT silence  ==  [544 frames] -56.3273 [Ac=-30642.0 LM=0.0] (Act=7.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0112.mfc
+Created lattice with 11 nodes / 10 arcs from label file
+silence PERHAPS IT IS NOT EXACTLY TRUE IN ANY FORM silence  ==  [353 frames] -57.7140 [Ac=-20373.0 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0113.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence BUT IT IS HARDLY TOO MUCH TO SAY THAT CHEMISTRY AND MOLECULAR PHYSICS silence  ==  [442 frames] -60.4061 [Ac=-26699.5 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0114.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence WOULD NEVER HAVE ADVANCED TO THEIR PRESENT CONDITION UNLESS IT HAD BEEN ASSUMED TO BE TRUE silence  ==  [565 frames] -57.4363 [Ac=-32451.5 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0115.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence ANOTHER IMMENSE SERVICE RENDERED BY DALTON AS A COROLLARY OF THE NEW ATOMIC DOCTRINE silence  ==  [598 frames] -57.1333 [Ac=-34165.7 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0116.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence WAS THE CREATION OF A SYSTEM OF SYMBOLIC NOTATION WHICH NOT ONLY MADE THE NATURE OF CHEMICAL COMPOUNDS silence  ==  [631 frames] -59.0791 [Ac=-37278.9 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0117.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence AND PROCESSES EASILY INTELLIGIBLE AND EASY OF RECOLLECTION BUT BY ITS VERY FORM silence  ==  [641 frames] -58.2831 [Ac=-37359.5 LM=0.0] (Act=7.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0118.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence SUGGESTED NEW LINES OF INQUIRY THE ATOMIC NOTATION WAS AS SERVICEABLE TO CHEMISTRY silence  ==  [607 frames] -58.4463 [Ac=-35476.9 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0119.mfc
+Created lattice with 26 nodes / 25 arcs from label file
+silence AS THE BINOMIAL NOMENCLATURE AND THE CLASSIFICATORY SCHEMATISM OF LINNAEUS WERE TO ZOOELOGY AND BOTANY SIDE BY SIDE WITH THESE ADVANCES AROSE IN ANOTHER silence  ==  [1187 frames] -57.9134 [Ac=-68743.2 LM=0.0] (Act=7.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0120.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence WHICH ALSO HAS A CLOSE PARALLEL IN THE HISTORY OF BIOLOGICAL SCIENCE silence  ==  [448 frames] -58.3837 [Ac=-26155.9 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0121.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence IF THE UNIT OF A COMPOUND IS MADE UP BY THE AGGREGATION OF ELEMENTARY UNITS silence  ==  [526 frames] -59.0475 [Ac=-31059.0 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0122.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence THE NOTION THAT THESE MUST HAVE SOME SORT OF DEFINITE ARRANGEMENT silence  ==  [381 frames] -58.5700 [Ac=-22315.2 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0123.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence INEVITABLY SUGGESTS ITSELF AND SUCH PHENOMENA AS DOUBLE DECOMPOSITION POINTED NOT ONLY TO THE EXISTENCE OF A MOLECULAR ARCHITECTURE silence  ==  [888 frames] -59.1331 [Ac=-52510.2 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0124.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence BUT TO THE POSSIBILITY OF MODIFYING A MOLECULAR FABRIC WITHOUT DESTROYING IT silence  ==  [508 frames] -58.4356 [Ac=-29685.3 LM=0.0] (Act=9.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0125.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence BY TAKING OUT SOME OF THE COMPONENT UNITS AND REPLACING THEM BY OTHERS THE silence  ==  [543 frames] -57.1805 [Ac=-31049.0 LM=0.0] (Act=9.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0126.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence CLASS OF NEUTRAL SALTS FOR EXAMPLE INCLUDES A GREAT NUMBER OF BODIES IN MANY WAYS SIMILAR silence  ==  [555 frames] -59.8664 [Ac=-33225.9 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0127.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence IN WHICH THE BASIC MOLECULES OR THE ACID MOLECULES MAY BE REPLACED BY OTHER BASIC silence  ==  [623 frames] -58.2037 [Ac=-36260.9 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0128.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence AND OTHER ACID MOLECULES WITHOUT ALTERING THE NEUTRALITY OF THE SALT JUST AS A CUBE OF BRICKS silence  ==  [638 frames] -58.4725 [Ac=-37305.4 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0129.mfc
+Created lattice with 24 nodes / 23 arcs from label file
+silence REMAINS A CUBE SO LONG AS ANY BRICK THAT IS TAKEN OUT IS REPLACED BY ANOTHER OF THE SAME SHAPE AND DIMENSIONS silence  ==  [640 frames] -59.7741 [Ac=-38255.4 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0130.mfc
+Created lattice with 24 nodes / 23 arcs from label file
+silence WHATEVER ITS WEIGHT OR OTHER PROPERTIES MAY BE FACTS OF THIS KIND GAVE RISE TO THE CONCEPTION OF TYPES OF MOLECULAR STRUCTURE silence  ==  [911 frames] -57.1450 [Ac=-52059.1 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0131.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence JUST AS THE RECOGNITION OF THE UNITY IN DIVERSITY OF THE STRUCTURE OF THE SPECIES OF PLANTS silence  ==  [536 frames] -60.5722 [Ac=-32466.7 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0132.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence AND ANIMALS GAVE RISE TO THE NOTION OF BIOLOGICAL TYPES silence  ==  [490 frames] -56.5744 [Ac=-27721.5 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0133.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence THE NOTATION OF CHEMISTRY ENABLED THESE IDEAS TO BE REPRESENTED WITH PRECISION silence  ==  [533 frames] -57.8468 [Ac=-30832.4 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0134.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence AND THEY ACQUIRED AN IMMENSE IMPORTANCE WHEN THE IMPROVEMENT OF METHODS OF ANALYSIS silence  ==  [546 frames] -57.4941 [Ac=-31391.8 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0135.mfc
+Created lattice with 11 nodes / 10 arcs from label file
+silence WHICH TOOK PLACE ABOUT THE BEGINNING OF OUR PERIOD silence  ==  [294 frames] -58.8282 [Ac=-17295.5 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0136.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence ENABLED THE COMPOSITION OF THE SO CALLED ORGANIC BODIES TO BE DETERMINED WITH RAPIDITY silence  ==  [523 frames] -60.5145 [Ac=-31649.1 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0137.mfc
+Created lattice with 26 nodes / 25 arcs from label file
+silence AND PRECISION G AT PRESENT MORE ORGANIC ANALYSES ARE MADE IN A SINGLE DAY THAN WERE ACCOMPLISHED BEFORE LIEBIG'S TIME IN A WHOLE YEAR silence  ==  [921 frames] -58.2775 [Ac=-53673.6 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0138.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence A LARGE PROPORTION OF THESE COMPOUNDS CONTAIN NOT MORE THAN THREE OR FOUR ELEMENTS silence  ==  [581 frames] -57.5420 [Ac=-33431.9 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0139.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence OF WHICH CARBON IS THE CHIEF BUT THEIR NUMBER IS VERY GREAT silence  ==  [418 frames] -56.9746 [Ac=-23815.4 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0140.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence AND THE DIVERSITY OF THEIR PHYSICAL AND CHEMICAL PROPERTIES IS ASTONISHING silence  ==  [469 frames] -57.4134 [Ac=-26926.9 LM=0.0] (Act=7.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0141.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence THE ASCERTAINMENT OF THE PROPORTION OF EACH ELEMENT IN THESE COMPOUNDS AFFORDS LITTLE OR NO HELP silence  ==  [612 frames] -58.1507 [Ac=-35588.2 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0142.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence TOWARDS ACCOUNTING FOR THEIR DIVERSITIES WIDELY DIFFERENT BODIES BEING OFTEN VERY SIMILAR OR EVEN IDENTICAL IN THAT RESPECT silence  ==  [782 frames] -58.4520 [Ac=-45709.4 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0143.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence AND IN THE LAST CASE THAT OF ISOMERIC COMPOUNDS THE APPEAL silence  ==  [481 frames] -57.8212 [Ac=-27812.0 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0144.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence TO DIVERSITY OF ARRANGEMENT OF THE IDENTICAL COMPONENT UNITS WAS THE ONLY OBVIOUS WAY OUT OF THE DIFFICULTY silence  ==  [686 frames] -58.8967 [Ac=-40403.1 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0145.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence HERE AGAIN HYPOTHESIS PROVED TO BE OF GREAT VALUE NOT silence  ==  [430 frames] -56.9896 [Ac=-24505.5 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0146.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence ONLY WAS THE SEARCH FOR EVIDENCE OF DIVERSITY OF MOLECULAR STRUCTURE SUCCESSFUL silence  ==  [522 frames] -58.8428 [Ac=-30715.9 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0147.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence BUT THE STUDY OF THE PROCESS OF TAKING TO PIECES silence  ==  [324 frames] -58.2486 [Ac=-18872.6 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0148.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence LED TO THE DISCOVERY OF THE WAY TO PUT TOGETHER silence  ==  [328 frames] -58.2514 [Ac=-19106.5 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0149.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence AND VAST NUMBERS OF COMPOUNDS SOME OF THEM PREVIOUSLY KNOWN ONLY AS PRODUCTS OF THE LIVING ECONOMY silence  ==  [656 frames] -58.8443 [Ac=-38601.9 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0150.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence HAVE THUS BEEN ARTIFICIALLY CONSTRUCTED CHEMICAL WORK AT THE PRESENT DAY IS TO A LARGE EXTENT silence  ==  [687 frames] -57.6361 [Ac=-39596.0 LM=0.0] (Act=9.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0151.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence SYNTHETIC OR CREATIVE THAT IS TO SAY THE CHEMIST DETERMINES THEORETICALLY silence  ==  [527 frames] -58.1620 [Ac=-30651.4 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0152.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence THAT CERTAIN NON EXISTENT COMPOUNDS OUGHT TO BE PRODUCIBLE AND HE PROCEEDS TO PRODUCE THEM silence  ==  [594 frames] -58.2994 [Ac=-34629.8 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0153.mfc
+Created lattice with 33 nodes / 32 arcs from label file
+silence IT IS LARGELY BECAUSE THE CHEMICAL THEORY AND PRACTICE OF OUR EPOCH HAVE PASSED INTO THIS DEDUCTIVE AND SYNTHETIC STAGE THAT THEY ARE ENTITLED TO THE NAME OF THE NEW CHEMISTRY silence  ==  [937 frames] -60.7890 [Ac=-56959.3 LM=0.0] (Act=10.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0154.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence WHICH THEY COMMONLY RECEIVE BUT THIS NEW CHEMISTRY HAS GROWN UP BY THE HELP OF HYPOTHESES silence  ==  [662 frames] -57.9568 [Ac=-38367.4 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0155.mfc
+Created lattice with 24 nodes / 23 arcs from label file
+silence SUCH AS THOSE OF DALTON AND OF AVOGADRO AND THAT SINGULAR CONCEPTION OF BONDS INVENTED TO COLLIGATE THE FACTS OF VALENCY OR silence  ==  [779 frames] -59.6457 [Ac=-46464.0 LM=0.0] (Act=9.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0156.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence ATOMICITY THE FIRST OF WHICH TOOK SOME TIME TO MAKE ITS WAY silence  ==  [456 frames] -58.4108 [Ac=-26635.3 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0157.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence WHILE THE SECOND FELL INTO OBLIVION FOR MANY YEARS AFTER IT WAS PROPOUNDED FOR LACK OF EMPIRICAL JUSTIFICATION silence  ==  [782 frames] -58.0668 [Ac=-45408.2 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0158.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence AS FOR THE THIRD IT MAY BE DOUBTED IF ANYONE REGARDS IT AS MORE THAN A TEMPORARY CONTRIVANCE silence  ==  [725 frames] -56.9056 [Ac=-41256.6 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0159.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence BUT SOME OF THESE HYPOTHESES HAVE DONE YET FURTHER SERVICE COMBINING THEM WITH THE MECHANICAL THEORY OF HEAT silence  ==  [747 frames] -56.4562 [Ac=-42172.8 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0160.mfc
+Created lattice with 10 nodes / 9 arcs from label file
+silence AND THE DOCTRINE OF THE CONSERVATION OF ENERGY silence  ==  [273 frames] -59.9169 [Ac=-16357.3 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0161.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence WHICH ARE ALSO PRODUCTS OF OUR TIME PHYSICISTS HAVE ARRIVED AT AN ENTIRELY NEW CONCEPTION OF THE NATURE OF GASEOUS BODIES silence  ==  [722 frames] -59.4183 [Ac=-42900.0 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0162.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence AND OF THE RELATION OF THE PHYSICO CHEMICAL UNITS OF MATTER TO THE DIFFERENT FORMS OF ENERGY silence  ==  [605 frames] -56.7814 [Ac=-34352.8 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0163.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence THE CONDUCT OF GASES UNDER VARYING PRESSURE AND TEMPERATURE THEIR DIFFUSIBILITY THEIR RELATION TO RADIANT HEAT AND TO LIGHT silence  ==  [818 frames] -57.8575 [Ac=-47327.5 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0164.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence THE EVOLUTION OF HEAT WHEN BODIES COMBINE THE ABSORPTION OF HEAT WHEN THEY ARE DISSOCIATED silence  ==  [609 frames] -58.2998 [Ac=-35504.6 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0165.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence AND A HOST OF OTHER MOLECULAR PHENOMENA HAVE BEEN SHOWN TO BE DEDUCIBLE FROM THE DYNAMICAL silence  ==  [635 frames] -57.4515 [Ac=-36481.7 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0166.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence AND STATICAL PRINCIPLES WHICH APPLY TO MOLAR MOTION AND REST silence  ==  [438 frames] -58.1865 [Ac=-25485.7 LM=0.0] (Act=7.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0167.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence AND THE TENDENCY OF PHYSICO CHEMICAL SCIENCE IS CLEARLY TOWARDS THE REDUCTION OF THE PROBLEMS OF THE WORLD silence  ==  [642 frames] -59.3380 [Ac=-38095.0 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0168.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence OF THE INFINITELY LITTLE AS IT ALREADY HAS REDUCED THOSE OF THE INFINITELY GREAT WORLD silence  ==  [528 frames] -60.3120 [Ac=-31844.7 LM=0.0] (Act=11.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0169.mfc
+Created lattice with 6 nodes / 5 arcs from label file
+silence TO QUESTIONS OF MECHANICS silence  ==  [271 frames] -56.1640 [Ac=-15220.5 LM=0.0] (Act=7.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0170.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence IN THE MEANTIME THE PRIMITIVE ATOMIC THEORY WHICH HAS SERVED AS THE SCAFFOLDING FOR THE EDIFICE OF MODERN PHYSICS AND CHEMISTRY silence  ==  [827 frames] -58.0258 [Ac=-47987.4 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0171.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence HAS BEEN QUIETLY DISMISSED I CANNOT DISCOVER THAT ANY CONTEMPORARY PHYSICIST OR CHEMIST silence  ==  [612 frames] -58.9904 [Ac=-36102.1 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0172.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence BELIEVES IN THE REAL INDIVISIBILITY OF ATOMS OR IN AN INTERATOMIC MATTERLESS VACUUM silence  ==  [615 frames] -58.1966 [Ac=-35790.9 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0173.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence ATOMS APPEAR TO BE USED AS MERE NAMES FOR PHYSICO CHEMICAL UNITS silence  ==  [473 frames] -58.6787 [Ac=-27755.0 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0174.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence WHICH HAVE NOT YET BEEN SUBDIVIDED AND MOLECULES FOR PHYSICO CHEMICAL UNITS silence  ==  [502 frames] -58.5562 [Ac=-29395.2 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0175.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence WHICH ARE AGGREGATES OF THE FORMER AND THESE INDIVIDUALISED PARTICLES ARE SUPPOSED TO MOVE IN AN ENDLESS OCEAN OF silence  ==  [707 frames] -58.4267 [Ac=-41307.6 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0176.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence A VASTLY MORE SUBTLE MATTER THE ETHER IF THIS ETHER IS A CONTINUOUS SUBSTANCE THEREFORE silence  ==  [640 frames] -58.7115 [Ac=-37575.4 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0177.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence WE HAVE GOT BACK FROM THE HYPOTHESIS OF DALTON TO THAT OF DESCARTES silence  ==  [451 frames] -57.5852 [Ac=-25970.9 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0178.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence BUT THERE IS MUCH REASON TO BELIEVE THAT SCIENCE IS GOING TO MAKE A STILL FURTHER JOURNEY silence  ==  [512 frames] -58.9877 [Ac=-30201.7 LM=0.0] (Act=7.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0179.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence AND IN FORM IF NOT ALTOGETHER IN SUBSTANCE TO RETURN TO THE POINT OF VIEW OF ARISTOTLE silence  ==  [641 frames] -57.1103 [Ac=-36607.7 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0180.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence THE GREATER NUMBER OF THE SO CALLED ELEMENTARY BODIES NOW KNOWN silence  ==  [467 frames] -54.5219 [Ac=-25461.7 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0181.mfc
+Created lattice with 11 nodes / 10 arcs from label file
+silence HAD BEEN DISCOVERED BEFORE THE COMMENCEMENT OF OUR EPOCH silence  ==  [317 frames] -56.9064 [Ac=-18039.3 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0182.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence AND IT HAD BECOME APPARENT THAT THEY WERE BY NO MEANS EQUALLY SIMILAR OR DISSIMILAR silence  ==  [492 frames] -57.8772 [Ac=-28475.6 LM=0.0] (Act=10.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0183.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence BUT THAT SOME OF THEM AT ANY RATE CONSTITUTED GROUPS silence  ==  [355 frames] -57.1620 [Ac=-20292.5 LM=0.0] (Act=9.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0184.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence THE SEVERAL MEMBERS OF WHICH WERE AS MUCH LIKE ONE ANOTHER AS THEY WERE UNLIKE THE REST silence  ==  [565 frames] -57.4304 [Ac=-32448.2 LM=0.0] (Act=9.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0185.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence CHLORINE IODINE BROMINE AND FLUORINE THUS FORMED A VERY DISTINCT GROUP SULPHUR AND SELENIUM ANOTHER silence  ==  [759 frames] -57.5426 [Ac=-43674.8 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0186.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence BORON AND SILICON ANOTHER POTASSIUM SODIUM AND LITHIUM ANOTHER AND SO ON silence  ==  [637 frames] -55.7223 [Ac=-35495.1 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0187.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence IN SOME CASES THE ATOMIC WEIGHTS OF SUCH ALLIED BODIES WERE NEARLY THE SAME silence  ==  [508 frames] -56.4523 [Ac=-28677.7 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0188.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence OR COULD BE ARRANGED IN SERIES WITH LIKE DIFFERENCES BETWEEN THE SEVERAL TERMS IN FACT silence  ==  [675 frames] -56.0871 [Ac=-37858.8 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0189.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence THE ELEMENTS AFFORDED INDICATIONS THAT THEY WERE SUSCEPTIBLE OF A CLASSIFICATION IN NATURAL GROUPS silence  ==  [543 frames] -59.5262 [Ac=-32322.8 LM=0.0] (Act=9.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0190.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence SUCH AS THOSE INTO WHICH ANIMALS AND PLANTS FALL RECENTLY THIS SUBJECT HAS BEEN TAKEN UP AFRESH WITH silence  ==  [676 frames] -57.4631 [Ac=-38845.0 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0191.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence A RESULT WHICH MAY BE STATED ROUGHLY IN THE FOLLOWING TERMS IF silence  ==  [372 frames] -59.2118 [Ac=-22026.8 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0192.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence THE SIXTY FIVE OR SIXTY EIGHT RECOGNISED ELEMENTS ARE ARRANGED IN THE ORDER OF THEIR ATOMIC WEIGHTS silence  ==  [638 frames] -60.2061 [Ac=-38411.5 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0193.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence FROM HYDROGEN THE LIGHTEST AS UNITY TO URANIUM THE HEAVIEST AS TWO HUNDRED AND FORTY silence  ==  [589 frames] -58.8345 [Ac=-34653.5 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0194.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence THE SERIES DOES NOT EXHIBIT ONE CONTINUOUS PROGRESSIVE MODIFICATION IN THE PHYSICAL AND CHEMICAL CHARACTERS OF ITS SEVERAL TERMS silence  ==  [787 frames] -57.2127 [Ac=-45026.4 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0195.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence BUT BREAKS UP INTO A NUMBER OF SECTIONS IN EACH OF WHICH THE SEVERAL TERMS PRESENT ANALOGIES silence  ==  [644 frames] -56.5220 [Ac=-36400.2 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0196.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence WITH THE CORRESPONDING TERMS OF THE OTHER SERIES THUS THE WHOLE SERIES DOES NOT RUN silence  ==  [698 frames] -54.2457 [Ac=-37863.5 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0197.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence A B D E F G H I K ETCETERA BUT A B C D silence  ==  [688 frames] -57.9421 [Ac=-39864.2 LM=0.0] (Act=9.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0198.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence CAPITAL A CAPITAL B CAPITAL C CAPITAL D ALPHA BETA GAMMA DELTA ETCETERA SO silence  ==  [728 frames] -55.2795 [Ac=-40243.4 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0199.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence THAT IT IS SAID TO EXPRESS A PERIODIC LAW OF RECURRENT SIMILARITIES silence  ==  [614 frames] -52.0724 [Ac=-31972.4 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0200.mfc
+Created lattice with 11 nodes / 10 arcs from label file
+silence OR THE RELATION MAY BE EXPRESSED IN ANOTHER WAY silence  ==  [422 frames] -52.5147 [Ac=-22161.2 LM=0.0] (Act=7.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0201.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence IN EACH SECTION OF THE SERIES THE ATOMIC WEIGHT IS GREATER THAN IN THE PRECEDING SECTION silence  ==  [566 frames] -56.3404 [Ac=-31888.7 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0202.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence SO THAT IF W IS THE ATOMIC WEIGHT OF ANY ELEMENT IN THE FIRST SEGMENT silence  ==  [495 frames] -57.0566 [Ac=-28243.0 LM=0.0] (Act=9.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0203.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence W PLUS X WILL REPRESENT THE ATOMIC WEIGHT OF ANY ELEMENT IN THE NEXT silence  ==  [529 frames] -57.6590 [Ac=-30501.6 LM=0.0] (Act=9.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0204.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence AND W PLUS X PLUS Y THE ATOMIC WEIGHT OF ANY ELEMENT IN THE NEXT AND SO ON silence  ==  [662 frames] -56.5085 [Ac=-37408.6 LM=0.0] (Act=9.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0205.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence THEREFORE THE SECTIONS MAY BE REPRESENTED AS PARALLEL SERIES THE CORRESPONDING TERMS OF WHICH HAVE ANALOGOUS PROPERTIES silence  ==  [839 frames] -55.7346 [Ac=-46761.3 LM=0.0] (Act=7.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0206.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence EACH SUCCESSIVE SERIES STARTING WITH A BODY THE ATOMIC WEIGHT OF WHICH silence  ==  [445 frames] -56.3912 [Ac=-25094.1 LM=0.0] (Act=7.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0207.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence IS GREATER THAN THAT OF ANY IN THE PRECEDING SERIES IN THE FOLLOWING FASHION silence  ==  [570 frames] -52.9934 [Ac=-30206.2 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0208.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence COLUMN ONE D C B A W COLUMN TWO CAPITAL D CAPITAL C CAPITAL B CAPITAL A silence  ==  [1099 frames] -53.9174 [Ac=-59255.3 LM=0.0] (Act=10.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0209.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence W PLUS X COLUMN THREE DELTA GAMMA BETA ALPHA W PLUS X PLUS Y silence  ==  [892 frames] -53.9613 [Ac=-48133.5 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0210.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence THIS IS A CONCEPTION WITH WHICH BIOLOGISTS ARE VERY FAMILIAR silence  ==  [468 frames] -51.2922 [Ac=-24004.8 LM=0.0] (Act=7.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0211.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence ANIMAL AND PLANT GROUPS CONSTANTLY APPEARING AS SERIES OF PARALLEL MODIFICATIONS OF SIMILAR silence  ==  [638 frames] -59.2646 [Ac=-37810.8 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0212.mfc
+Created lattice with 25 nodes / 24 arcs from label file
+silence AND YET DIFFERENT PRIMARY FORMS IN THE LIVING WORLD FACTS OF THIS KIND ARE NOW UNDERSTOOD TO MEAN EVOLUTION FROM A COMMON PROTOTYPE silence  ==  [945 frames] -57.3482 [Ac=-54194.0 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0213.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence IT IS DIFFICULT TO IMAGINE THAT IN THE NOT LIVING WORLD THEY ARE DEVOID OF SIGNIFICANCE silence  ==  [571 frames] -56.1508 [Ac=-32062.1 LM=0.0] (Act=9.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0214.mfc
+Created lattice with 24 nodes / 23 arcs from label file
+silence IS IT NOT POSSIBLE NAY PROBABLE THAT THEY MAY MEAN THE EVOLUTION OF OUR ELEMENTS FROM A PRIMARY UNDIFFERENTIATED FORM OF MATTER silence  ==  [930 frames] -55.4716 [Ac=-51588.6 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0215.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence FIFTY YEARS AGO SUCH A SUGGESTION WOULD HAVE BEEN SCOUTED AS A REVIVAL OF THE DREAMS silence  ==  [574 frames] -55.6189 [Ac=-31925.2 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0216.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence OF THE ALCHEMISTS AT PRESENT IT MAY BE SAID TO BE THE BURNING QUESTION OF PHYSICO CHEMICAL SCIENCE silence  ==  [748 frames] -53.3439 [Ac=-39901.2 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0217.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence IN FACT THE SO CALLED VORTEX RING HYPOTHESIS IS A VERY SERIOUS AND REMARKABLE ATTEMPT silence  ==  [669 frames] -54.2494 [Ac=-36292.8 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0218.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence TO DEAL WITH MATERIAL UNITS FROM A POINT OF VIEW WHICH IS CONSISTENT WITH THE DOCTRINE OF EVOLUTION silence  ==  [655 frames] -54.4490 [Ac=-35664.1 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0219.mfc
+Created lattice with 11 nodes / 10 arcs from label file
+silence IT SUPPOSES THE ETHER TO BE A UNIFORM SUBSTANCE silence  ==  [431 frames] -49.0880 [Ac=-21156.9 LM=0.0] (Act=6.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0220.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence AND THAT THE ELEMENTARY UNITS ARE BROADLY SPEAKING PERMANENT WHIRLPOOLS OR VORTICES OF THIS ETHER silence  ==  [678 frames] -59.8189 [Ac=-40557.2 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0221.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence THE PROPERTIES OF WHICH DEPEND ON THEIR ACTUAL AND POTENTIAL MODES OF MOTION silence  ==  [500 frames] -54.0935 [Ac=-27046.8 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0222.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence IT IS CURIOUS AND HIGHLY INTERESTING TO REMARK THAT THIS HYPOTHESIS REMINDS US NOT ONLY OF THE SPECULATIONS OF DESCARTES silence  ==  [819 frames] -56.6517 [Ac=-46397.7 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0223.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence BUT OF THOSE OF ARISTOTLE THE RESEMBLANCE OF THE VORTEX RINGS TO THE TOURBILLONS OF DESCARTES silence  ==  [695 frames] -56.7867 [Ac=-39466.8 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0224.mfc
+Created lattice with 26 nodes / 25 arcs from label file
+silence IS LITTLE MORE THAN NOMINAL BUT THE CORRESPONDENCE BETWEEN THE MODERN AND THE ANCIENT NOTION OF A DISTINCTION BETWEEN PRIMARY AND DERIVATIVE MATTER IS silence  ==  [891 frames] -58.7119 [Ac=-52312.3 LM=0.0] (Act=10.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0225.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence TO A CERTAIN EXTENT REAL FOR THIS ETHEREAL URSTOFF OF THE MODERN CORRESPONDS VERY CLOSELY silence  ==  [649 frames] -58.3055 [Ac=-37840.3 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0226.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence WITH THE PRHOTE HYLE OF ARISTOTLE THE MATERIA PRIMA OF HIS MEDIAEVAL FOLLOWERS silence  ==  [694 frames] -56.9051 [Ac=-39492.2 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0227.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence WHILE MATTER DIFFERENTIATED INTO OUR ELEMENTS IS THE EQUIVALENT OF THE FIRST STAGE OF PROGRESS TOWARDS THE HESCHHATE HYLE silence  ==  [771 frames] -58.4277 [Ac=-45047.8 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0228.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence OR FINISHED MATTER OF THE ANCIENT PHILOSOPHY IF THE MATERIAL UNITS OF THE EXISTING ORDER OF NATURE ARE SPECIALISED PORTIONS silence  ==  [845 frames] -57.7260 [Ac=-48778.5 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0229.mfc
+Created lattice with 8 nodes / 7 arcs from label file
+silence OF A RELATIVELY HOMOGENEOUS MATERIA PRIMA silence  ==  [409 frames] -53.9576 [Ac=-22068.7 LM=0.0] (Act=7.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0230.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence WHICH WERE ORIGINATED UNDER CONDITIONS THAT HAVE LONG CEASED TO EXIST AND WHICH REMAIN UNCHANGED AND UNCHANGEABLE UNDER ALL CONDITIONS silence  ==  [861 frames] -57.0722 [Ac=-49139.2 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0231.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence WHETHER NATURAL OR ARTIFICIAL HITHERTO KNOWN TO US IT FOLLOWS THAT THE SPECULATION THAT THEY MAY BE INDEFINITELY ALTERED silence  ==  [783 frames] -58.1462 [Ac=-45528.5 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0232.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence OR THAT NEW UNITS MAY BE GENERATED UNDER CONDITIONS YET TO BE DISCOVERED IS PERFECTLY LEGITIMATE silence  ==  [641 frames] -57.3540 [Ac=-36763.9 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0233.mfc
+Created lattice with 6 nodes / 5 arcs from label file
+silence THEORETICALLY AT ANY RATE silence  ==  [227 frames] -53.5021 [Ac=-12145.0 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0234.mfc
+Created lattice with 37 nodes / 36 arcs from label file
+silence THE TRANSMUTABILITY OF THE ELEMENTS IS A VERIFIABLE SCIENTIFIC HYPOTHESIS AND SUCH INQUIRIES AS THOSE WHICH HAVE BEEN SET AFOOT INTO THE POSSIBLE DISSOCIATIVE ACTION OF THE GREAT HEAT OF THE SUN UPON OUR ELEMENTS silence  ==  [1249 frames] -59.5754 [Ac=-74409.7 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0235.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence ARE NOT ONLY LEGITIMATE BUT ARE LIKELY TO YIELD RESULTS WHICH WHETHER AFFIRMATIVE OR NEGATIVE silence  ==  [582 frames] -58.9092 [Ac=-34285.2 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0236.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence WILL BE OF GREAT IMPORTANCE THE IDEA THAT ATOMS ARE ABSOLUTELY INGENERABLE AND IMMUTABLE MANUFACTURED ARTICLES silence  ==  [732 frames] -59.5724 [Ac=-43607.0 LM=0.0] (Act=9.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0237.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence STANDS ON THE SAME SORT OF FOUNDATION AS THE IDEA THAT BIOLOGICAL SPECIES ARE MANUFACTURED ARTICLES STOOD THIRTY YEARS AGO silence  ==  [802 frames] -59.7195 [Ac=-47895.0 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0238.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence AND THE SUPPOSED CONSTANCY OF THE ELEMENTARY ATOMS DURING THE ENORMOUS LAPSE OF TIME MEASURED BY THE EXISTENCE OF OUR UNIVERSE silence  ==  [851 frames] -57.1976 [Ac=-48675.2 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0239.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence IS OF NO MORE WEIGHT AGAINST THE POSSIBILITY OF CHANGE IN THEM silence  ==  [358 frames] -58.6953 [Ac=-21012.9 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0240.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence IN THE INFINITY OF ANTECEDENT TIME THAN THE CONSTANCY OF SPECIES IN EGYPT SINCE THE DAYS OF RAMESES OR CHEOPS silence  ==  [786 frames] -59.0427 [Ac=-46407.6 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0241.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence IS EVIDENCE OF THEIR IMMUTABILITY DURING ALL PAST EPOCHS OF THE EARTH'S HISTORY silence  ==  [601 frames] -53.9861 [Ac=-32445.6 LM=0.0] (Act=7.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0242.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence IT SEEMS SAFE TO PROPHESY THAT THE HYPOTHESIS OF THE EVOLUTION OF THE ELEMENTS FROM A PRIMITIVE MATTER WILL IN FUTURE silence  ==  [770 frames] -57.5561 [Ac=-44318.2 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0243.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence PLAY NO LESS A PART IN THE HISTORY OF SCIENCE silence  ==  [279 frames] -56.6446 [Ac=-15803.8 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0244.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence THAN THE ATOMIC HYPOTHESIS WHICH TO BEGIN WITH HAD NO GREATER IF SO GREAT AN EMPIRICAL FOUNDATION silence  ==  [693 frames] -57.0129 [Ac=-39509.9 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0245.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence IT MAY PERHAPS OCCUR TO THE READER THAT THE BOASTED PROGRESS OF PHYSICAL SCIENCE DOES NOT COME TO MUCH silence  ==  [605 frames] -57.6725 [Ac=-34891.8 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0246.mfc
+Created lattice with 31 nodes / 30 arcs from label file
+silence IF OUR PRESENT CONCEPTIONS OF THE FUNDAMENTAL NATURE OF MATTER ARE EXPRESSIBLE IN TERMS EMPLOYED MORE THAN TWO THOUSAND YEARS AGO BY THE OLD MASTER OF THOSE THAT KNOW silence  ==  [1036 frames] -59.1929 [Ac=-61323.9 LM=0.0] (Act=9.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0247.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence SUCH A CRITICISM HOWEVER WOULD INVOLVE FORGETFULNESS OF THE FACT silence  ==  [463 frames] -56.4140 [Ac=-26119.7 LM=0.0] (Act=7.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0248.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence THAT THE CONNOTATION OF THESE TERMS IN THE MIND OF THE MODERN IS ALMOST INFINITELY DIFFERENT silence  ==  [608 frames] -56.7848 [Ac=-34525.1 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0249.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence FROM THAT WHICH THEY POSSESSED IN THE MIND OF THE ANCIENT PHILOSOPHER silence  ==  [416 frames] -55.1334 [Ac=-22935.5 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0250.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence IN ANTIQUITY THEY MEANT LITTLE MORE THAN VAGUE SPECULATION AT THE PRESENT DAY THEY INDICATE DEFINITE PHYSICAL CONCEPTIONS silence  ==  [828 frames] -57.1827 [Ac=-47347.3 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0251.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence SUSCEPTIBLE OF MATHEMATICAL TREATMENT AND GIVING RISE TO INNUMERABLE DEDUCTIONS THE VALUE OF WHICH CAN BE EXPERIMENTALLY TESTED silence  ==  [884 frames] -57.0474 [Ac=-50429.9 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0252.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence THE OLD NOTIONS PRODUCED LITTLE MORE THAN FLOODS OF DIALECTICS silence  ==  [479 frames] -56.0169 [Ac=-26832.1 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0253.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence THE NEW ARE POWERFUL AIDS TOWARDS THE INCREASE OF SOLID KNOWLEDGE EVERYDAY OBSERVATION SHOWS THAT silence  ==  [730 frames] -58.2068 [Ac=-42491.0 LM=0.0] (Act=7.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0254.mfc
+Created lattice with 24 nodes / 23 arcs from label file
+silence OF THE BODIES WHICH COMPOSE THE MATERIAL WORLD SOME ARE IN MOTION AND SOME ARE OR APPEAR TO BE AT REST OF silence  ==  [759 frames] -57.9802 [Ac=-44007.0 LM=0.0] (Act=10.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0255.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence THE BODIES IN MOTION SOME LIKE THE SUN AND STARS EXHIBIT A CONSTANT MOVEMENT silence  ==  [591 frames] -55.1689 [Ac=-32604.8 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0256.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence REGULAR IN AMOUNT AND DIRECTION FOR WHICH NO EXTERNAL CAUSE APPEARS OTHERS AS STONES AND SMOKE silence  ==  [698 frames] -58.7826 [Ac=-41030.2 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0257.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence SEEM ALSO TO MOVE OF THEMSELVES WHEN EXTERNAL IMPEDIMENTS ARE TAKEN AWAY silence  ==  [506 frames] -55.4192 [Ac=-28042.1 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0258.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence BUT THESE APPEAR TO TEND TO MOVE IN OPPOSITE DIRECTIONS THE BODIES WE CALL HEAVY SUCH AS STONES DOWNWARDS silence  ==  [759 frames] -55.7280 [Ac=-42297.5 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0259.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence AND THE BODIES WE CALL LIGHT AT LEAST SUCH AS SMOKE AND STEAM UPWARDS silence  ==  [514 frames] -55.7762 [Ac=-28669.0 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0260.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence AND AS WE FURTHER NOTICE THAT THE EARTH BELOW OUR FEET IS MADE UP OF HEAVY MATTER silence  ==  [519 frames] -57.1722 [Ac=-29672.4 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0261.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence WHILE THE AIR ABOVE OUR HEADS IS EXTREMELY LIGHT MATTER IT IS EASY TO REGARD THIS FACT AS EVIDENCE silence  ==  [658 frames] -60.4792 [Ac=-39795.3 LM=0.0] (Act=10.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0262.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence THAT THE LOWER REGION IS THE PLACE TO WHICH HEAVY THINGS TEND THEIR PROPER PLACE IN SHORT silence  ==  [545 frames] -58.1707 [Ac=-31703.1 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0263.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence WHILE THE UPPER REGION IS THE PROPER PLACE OF LIGHT THINGS silence  ==  [360 frames] -58.2672 [Ac=-20976.2 LM=0.0] (Act=7.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0264.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence AND TO GENERALISE THE FACTS OBSERVED BY SAYING THAT BODIES WHICH ARE FREE TO MOVE silence  ==  [505 frames] -58.5408 [Ac=-29563.1 LM=0.0] (Act=7.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0265.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence TEND TOWARDS THEIR PROPER PLACES ALL THESE SEEM TO BE NATURAL MOTIONS DEPENDENT ON THE INHERENT FACULTIES OR TENDENCIES silence  ==  [719 frames] -58.7481 [Ac=-42239.9 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0266.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence OF BODIES THEMSELVES BUT THERE ARE OTHER MOTIONS WHICH ARE ARTIFICIAL OR VIOLENT silence  ==  [542 frames] -57.4343 [Ac=-31129.4 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0267.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence AS WHEN A STONE IS THROWN FROM THE HAND OR IS KNOCKED BY ANOTHER STONE IN MOTION silence  ==  [562 frames] -54.2552 [Ac=-30491.4 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0268.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence IN SUCH CASES AS THESE FOR EXAMPLE WHEN A STONE IS CAST FROM THE HAND silence  ==  [542 frames] -55.1220 [Ac=-29876.1 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0269.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence THE DISTANCE TRAVELLED BY THE STONE APPEARS TO DEPEND PARTLY ON ITS WEIGHT silence  ==  [421 frames] -59.5884 [Ac=-25086.7 LM=0.0] (Act=9.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0270.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence AND PARTLY UPON THE EXERTION OF THE THROWER SO THAT THE WEIGHT OF THE STONE REMAINING THE SAME silence  ==  [614 frames] -56.9420 [Ac=-34962.4 LM=0.0] (Act=9.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0271.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence IT LOOKS AS IF THE MOTIVE POWER COMMUNICATED TO IT WERE MEASURED BY THE DISTANCE TO WHICH THE STONE TRAVELS silence  ==  [653 frames] -58.8601 [Ac=-38435.6 LM=0.0] (Act=9.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0272.mfc
+Created lattice with 7 nodes / 6 arcs from label file
+silence AS IF IN OTHER WORDS silence  ==  [219 frames] -53.7283 [Ac=-11766.5 LM=0.0] (Act=7.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0273.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence THE POWER NEEDED TO SEND IT A HUNDRED YARDS WAS TWICE AS GREAT AS THAT NEEDED TO SEND IT FIFTY YARDS silence  ==  [670 frames] -56.4239 [Ac=-37804.0 LM=0.0] (Act=9.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0274.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence THESE APPARENTLY OBVIOUS CONCLUSIONS FROM THE EVERYDAY APPEARANCES OF REST AND MOTION FAIRLY REPRESENT THE STATE OF OPINION UPON THE SUBJECT silence  ==  [944 frames] -57.4169 [Ac=-54201.5 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0275.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence WHICH PREVAILED AMONG THE ANCIENT GREEKS AND REMAINED DOMINANT UNTIL THE AGE OF GALILEO silence  ==  [612 frames] -55.6637 [Ac=-34066.2 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0276.mfc
+Created lattice with 34 nodes / 33 arcs from label file
+silence THE PUBLICATION OF THE PRINCIPIA OF NEWTON IN SIXTEEN EIGHTY SIX SEVEN MARKS THE EPOCH AT WHICH THE PROGRESS OF MECHANICAL PHYSICS HAD EFFECTED A COMPLETE REVOLUTION OF THOUGHT ON THESE SUBJECTS silence  ==  [1310 frames] -57.2562 [Ac=-75005.6 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0277.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence BY THIS TIME IT HAD BEEN MADE CLEAR THAT THE OLD GENERALISATIONS WERE EITHER INCOMPLETE OR TOTALLY ERRONEOUS silence  ==  [789 frames] -55.7830 [Ac=-44012.8 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0278.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence THAT A BODY ONCE SET IN MOTION WILL CONTINUE TO MOVE IN A STRAIGHT LINE silence  ==  [454 frames] -56.0682 [Ac=-25454.9 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0279.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence FOR ANY CONCEIVABLE TIME OR DISTANCE UNLESS IT IS INTERFERED WITH silence  ==  [491 frames] -56.9471 [Ac=-27961.0 LM=0.0] (Act=7.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0280.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence THAT ANY CHANGE OF MOTION IS PROPORTIONAL TO THE FORCE WHICH CAUSES IT silence  ==  [521 frames] -56.4199 [Ac=-29394.8 LM=0.0] (Act=7.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0281.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence AND TAKES PLACE IN THE DIRECTION IN WHICH THAT FORCE IS EXERTED AND THAT silence  ==  [541 frames] -57.7951 [Ac=-31267.2 LM=0.0] (Act=7.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0282.mfc
+Created lattice with 24 nodes / 23 arcs from label file
+silence WHEN A BODY IN MOTION ACTS AS A CAUSE OF MOTION ON ANOTHER THE LATTER GAINS AS MUCH AS THE FORMER LOSES silence  ==  [675 frames] -58.9502 [Ac=-39791.4 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0283.mfc
+Created lattice with 11 nodes / 10 arcs from label file
+silence AND VICE VERSA IT IS TO BE NOTED HOWEVER silence  ==  [376 frames] -56.4516 [Ac=-21225.8 LM=0.0] (Act=11.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0284.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence THAT WHILE IN CONTRADISTINCTION TO THE ANCIENT IDEA OF THE INHERENT TENDENCY TO MOTION OF BODIES silence  ==  [586 frames] -58.6259 [Ac=-34354.8 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0285.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence THE ABSENCE OF ANY SUCH SPONTANEOUS POWER OF MOTION WAS ACCEPTED AS A PHYSICAL AXIOM BY THE MODERNS silence  ==  [664 frames] -56.8341 [Ac=-37737.8 LM=0.0] (Act=7.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0286.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence THE OLD CONCEPTION VIRTUALLY MAINTAINED ITSELF IS A NEW SHAPE silence  ==  [474 frames] -52.0793 [Ac=-24685.6 LM=0.0] (Act=7.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0287.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence FOR IN SPITE OF NEWTON'S WELL KNOWN WARNING AGAINST THE ABSURDITY OF SUPPOSING THAT ONE BODY CAN ACT ON ANOTHER silence  ==  [699 frames] -56.5465 [Ac=-39526.0 LM=0.0] (Act=9.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0288.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence AT A DISTANCE THROUGH A VACUUM THE ULTIMATE PARTICLES OF MATTER WERE GENERALLY ASSUMED TO BE THE SEATS OF PERENNIAL CAUSES silence  ==  [716 frames] -59.0484 [Ac=-42278.7 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0289.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence OF MOTION TERMED ATTRACTIVE AND REPULSIVE FORCES IN VIRTUE OF WHICH ANY TWO SUCH PARTICLES silence  ==  [722 frames] -56.6076 [Ac=-40870.7 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0290.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence WITHOUT ANY EXTERNAL IMPRESSION OF MOTION OR INTERMEDIATE MATERIAL AGENT silence  ==  [549 frames] -55.9949 [Ac=-30741.2 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0291.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence WERE SUPPOSED TO TEND TO APPROACH OR REMOVE FROM ONE ANOTHER silence  ==  [407 frames] -55.9147 [Ac=-22757.3 LM=0.0] (Act=9.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0292.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence AND THIS VIEW OF THE DUALITY OF THE CAUSES OF MOTION silence  ==  [336 frames] -58.0690 [Ac=-19511.2 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0293.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence IS VERY WIDELY HELD AT THE PRESENT DAY ANOTHER IMPORTANT RESULT OF INVESTIGATION ATTAINED IN THE SEVENTEENTH CENTURY WAS silence  ==  [752 frames] -58.1956 [Ac=-43763.1 LM=0.0] (Act=10.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0294.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence THE PROOF AND QUANTITATIVE ESTIMATION OF PHYSICAL INERTIA IN THE OLD PHILOSOPHY A CURIOUS CONJUNCTION OF ETHICAL AND PHYSICAL PREJUDICES silence  ==  [952 frames] -58.1011 [Ac=-55312.3 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0295.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence HAD LED TO THE NOTION THAT THERE WAS SOMETHING ETHICALLY BAD AND PHYSICALLY OBSTRUCTIVE ABOUT MATTER silence  ==  [625 frames] -57.3853 [Ac=-35865.8 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0296.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence ARISTOTLE ATTRIBUTES ALL IRREGULARITIES AND APPARENT DYSTELEOLOGIES IN NATURE TO THE DISOBEDIENCE OR SLUGGISH YIELDING silence  ==  [813 frames] -58.6832 [Ac=-47709.4 LM=0.0] (Act=7.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0297.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence OF MATTER TO THE SHAPING AND GUIDING INFLUENCE OF THOSE REASONS AND CAUSES silence  ==  [489 frames] -56.6817 [Ac=-27717.4 LM=0.0] (Act=7.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0298.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence WHICH WERE HYPOTHESIZED IN HIS IDEAL FORMS IN MODERN SCIENCE THE CONCEPTION OF THE INERTIA silence  ==  [614 frames] -58.5627 [Ac=-35957.5 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0299.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence OR RESISTANCE TO CHANGE OF MATTER IS COMPLEX IN PART IT CONTAINS A COROLLARY FROM THE LAW OF CAUSATION silence  ==  [853 frames] -56.7605 [Ac=-48416.7 LM=0.0] (Act=9.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0300.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence A BODY CANNOT CHANGE ITS STATE IN RESPECT OF REST OR MOTION WITHOUT A SUFFICIENT CAUSE silence  ==  [618 frames] -55.7791 [Ac=-34471.5 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0301.mfc
+Created lattice with 10 nodes / 9 arcs from label file
+silence BUT IN PART IT CONTAINS GENERALISATIONS FROM EXPERIENCE silence  ==  [480 frames] -53.8691 [Ac=-25857.2 LM=0.0] (Act=7.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0302.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence ONE OF THESE IS THAT THERE IS NO SUCH SUFFICIENT CAUSE RESIDENT IN ANY BODY silence  ==  [531 frames] -55.3261 [Ac=-29378.2 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0303.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence AND THAT THEREFORE IT WILL REST OR CONTINUE IN MOTION silence  ==  [382 frames] -55.7533 [Ac=-21297.8 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0304.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence SO LONG AS NO EXTERNAL CAUSE OF CHANGE ACTS UPON IT THE OTHER silence  ==  [537 frames] -57.2154 [Ac=-30724.7 LM=0.0] (Act=9.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0305.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence IS THAT THE EFFECT WHICH THE IMPACT OF A BODY IN MOTION PRODUCES UPON THE BODY ON WHICH IT IMPINGES silence  ==  [584 frames] -58.8912 [Ac=-34392.5 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0306.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence DEPENDS OTHER THINGS BEING ALIKE ON THE RELATION OF A CERTAIN QUALITY OF EACH WHICH IS CALLED MASS silence  ==  [769 frames] -54.7808 [Ac=-42126.5 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0307.mfc
+Created lattice with 11 nodes / 10 arcs from label file
+silence GIVEN A CAUSE OF MOTION OF A CERTAIN VALUE silence  ==  [353 frames] -52.0832 [Ac=-18385.4 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0308.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence THE AMOUNT OF MOTION MEASURED BY DISTANCE TRAVELLED IN A CERTAIN TIME WHICH IT silence  ==  [429 frames] -59.3278 [Ac=-25451.6 LM=0.0] (Act=9.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0309.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence WILL PRODUCE IN A GIVEN QUANTITY OF MATTER SAY A CUBIC INCH silence  ==  [429 frames] -59.4013 [Ac=-25483.2 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0310.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence IS NOT ALWAYS THE SAME BUT DEPENDS ON WHAT THAT MATTER IS silence  ==  [432 frames] -57.7110 [Ac=-24931.2 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0311.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence A CUBIC INCH OF IRON WILL GO FASTER THAN A CUBIC INCH OF GOLD silence  ==  [495 frames] -56.3063 [Ac=-27871.6 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0312.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence HENCE IT APPEARS THAT SINCE EQUAL AMOUNTS OF MOTION HAVE EX HYPOTHESI BEEN PRODUCED silence  ==  [705 frames] -58.9869 [Ac=-41585.7 LM=0.0] (Act=9.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0313.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence THE AMOUNT OF MOTION IN A BODY DOES NOT DEPEND ON ITS SPEED ALONE BUT ON SOME PROPERTY OF THE BODY silence  ==  [645 frames] -58.1391 [Ac=-37499.7 LM=0.0] (Act=9.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0314.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence TO THIS THE NAME OF MASS HAS BEEN GIVEN AND silence  ==  [363 frames] -51.5704 [Ac=-18720.1 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0315.mfc
+Created lattice with 26 nodes / 25 arcs from label file
+silence SINCE IT SEEMS REASONABLE TO SUPPOSE THAT A LARGE QUANTITY OF MATTER MOVING SLOWLY POSSESSES AS MUCH MOTION AS A SMALL QUANTITY MOVING FASTER silence  ==  [924 frames] -58.8533 [Ac=-54380.4 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0316.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence MASS HAS BEEN HELD TO EXPRESS QUANTITY OF MATTER IT IS FURTHER DEMONSTRABLE THAT AT ANY GIVEN TIME AND PLACE silence  ==  [815 frames] -57.9388 [Ac=-47220.1 LM=0.0] (Act=9.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0317.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence THE RELATIVE MASS OF ANY TWO BODIES IS EXPRESSED BY THE RATIO OF THEIR WEIGHTS silence  ==  [628 frames] -53.7932 [Ac=-33782.1 LM=0.0] (Act=7.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0318.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence WHEN ALL THESE GREAT TRUTHS RESPECTING MOLAR MOTION OR THE MOVEMENTS OF VISIBLE AND TANGIBLE MASSES silence  ==  [741 frames] -55.0708 [Ac=-40807.5 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0319.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence HAD BEEN SHOWN TO HOLD GOOD NOT ONLY OF TERRESTRIAL BODIES silence  ==  [390 frames] -58.3844 [Ac=-22769.9 LM=0.0] (Act=9.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0320.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence BUT OF ALL THOSE WHICH CONSTITUTE THE VISIBLE UNIVERSE AND THE MOVEMENTS OF THE MACROCOSM HAD THUS BEEN EXPRESSED silence  ==  [696 frames] -58.4661 [Ac=-40692.4 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0321.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence BY A GENERAL MECHANICAL THEORY THERE REMAINED A VAST NUMBER OF PHENOMENA SUCH AS THOSE OF LIGHT silence  ==  [584 frames] -58.8000 [Ac=-34339.2 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0322.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence HEAT ELECTRICITY MAGNETISM AND THOSE OF THE PHYSICAL AND CHEMICAL CHANGES WHICH DO NOT INVOLVE MOLAR MOTION silence  ==  [849 frames] -56.0640 [Ac=-47598.3 LM=0.0] (Act=8.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0323.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence NEWTON'S CORPUSCULAR THEORY OF LIGHT WAS AN ATTEMPT TO DEAL WITH ONE GREAT SERIES OF THESE PHENOMENA ON MECHANICAL PRINCIPLES silence  ==  [797 frames] -56.3931 [Ac=-44945.3 LM=0.0] (Act=9.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0324.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence AND IT MAINTAINED ITS GROUND UNTIL AT THE BEGINNING OF THE NINETEENTH CENTURY silence  ==  [458 frames] -59.2570 [Ac=-27139.7 LM=0.0] (Act=10.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0325.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence THE UNDULATORY THEORY PROVED ITSELF TO BE A MUCH BETTER WORKING HYPOTHESIS silence  ==  [496 frames] -60.3844 [Ac=-29950.6 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0326.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence HEAT UP TO THAT TIME AND INDEED MUCH LATER WAS REGARDED AS AN IMPONDERABLE SUBSTANCE silence  ==  [546 frames] -59.9647 [Ac=-32740.7 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0327.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence CALORIC AS A THING WHICH WAS ABSORBED BY BODIES WHEN THEY WERE WARMED silence  ==  [480 frames] -58.6896 [Ac=-28171.0 LM=0.0] (Act=10.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0328.mfc
+Created lattice with 28 nodes / 27 arcs from label file
+silence AND WAS GIVEN OUT AS THEY COOLED AND WHICH MOREOVER WAS CAPABLE OF ENTERING INTO A SORT OF CHEMICAL COMBINATION WITH THEM AND SO BECOMING LATENT silence  ==  [922 frames] -58.9468 [Ac=-54349.0 LM=0.0] (Act=10.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0329.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence RUMFORD AND DAVY HAD GIVEN A GREAT BLOW TO THIS VIEW OF HEAT silence  ==  [419 frames] -55.6598 [Ac=-23321.4 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0330.mfc
+Created lattice with 29 nodes / 28 arcs from label file
+silence BY PROVING THAT THE QUANTITY OF HEAT WHICH TWO PORTIONS OF THE SAME BODY COULD BE MADE TO GIVE OUT BY RUBBING THEM TOGETHER WAS PRACTICALLY ILLIMITABLE silence  ==  [917 frames] -59.2077 [Ac=-54293.5 LM=0.0] (Act=9.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0331.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence THIS RESULT BROUGHT PHILOSOPHERS FACE TO FACE WITH THE CONTRADICTION OF SUPPOSING THAT silence  ==  [474 frames] -57.9730 [Ac=-27479.2 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0332.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence A FINITE BODY COULD CONTAIN AN INFINITE QUANTITY OF ANOTHER BODY silence  ==  [478 frames] -55.3451 [Ac=-26455.0 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0333.mfc
+Created lattice with 10 nodes / 9 arcs from label file
+silence BUT IT WAS NOT UNTIL EIGHTEEN FORTY THREE silence  ==  [317 frames] -54.8801 [Ac=-17397.0 LM=0.0] (Act=8.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0334.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence THAT CLEAR AND UNQUESTIONABLE EXPERIMENTAL PROOF WAS GIVEN OF THE FACT THAT THERE IS A DEFINITE RELATION BETWEEN MECHANICAL WORK silence  ==  [783 frames] -60.2285 [Ac=-47158.9 LM=0.0] (Act=9.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0335.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence AND HEAT THAT SO MUCH WORK ALWAYS GIVES RISE UNDER THE SAME CONDITIONS TO SO MUCH HEAT silence  ==  [657 frames] -57.5480 [Ac=-37809.0 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0336.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence AND SO MUCH HEAT TO SO MUCH MECHANICAL WORK THUS ORIGINATED THE MECHANICAL THEORY OF HEAT silence  ==  [688 frames] -57.3015 [Ac=-39423.4 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0337.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence WHICH BECAME THE STARTING POINT OF THE MODERN DOCTRINE OF THE CONSERVATION OF ENERGY silence  ==  [534 frames] -55.8752 [Ac=-29837.4 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0338.mfc
+Created lattice with 19 nodes / 18 arcs from label file
+silence MOLAR MOTION HAD APPEARED TO BE DESTROYED BY FRICTION IT WAS PROVED THAT NO DESTRUCTION TOOK PLACE silence  ==  [674 frames] -56.6112 [Ac=-38156.0 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0339.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence BUT THAT AN EXACT EQUIVALENT OF THE ENERGY OF THE LOST MOLAR MOTION silence  ==  [449 frames] -56.8395 [Ac=-25520.9 LM=0.0] (Act=9.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0340.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence APPEARS AS THAT OF THE MOLECULAR MOTION OR MOTION OF THE SMALLEST PARTICLES OF A BODY silence  ==  [560 frames] -57.8738 [Ac=-32409.3 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0341.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence WHICH CONSTITUTES HEAT THE LOSS OF THE MASSES IS THE GAIN OF THEIR PARTICLES silence  ==  [656 frames] -54.0395 [Ac=-35449.9 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0342.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence BEFORE EIGHTEEN FORTY THREE HOWEVER THE DOCTRINE OF CONSERVATION OF ENERGY HAD BEEN APPROACHED silence  ==  [640 frames] -53.0456 [Ac=-33949.2 LM=0.0] (Act=7.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0343.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence BACON'S CHIEF CONTRIBUTION TO POSITIVE SCIENCE IS THE HAPPY GUESS FOR THE CONTEXT SHOWS THAT IT WAS LITTLE MORE silence  ==  [738 frames] -57.9658 [Ac=-42778.8 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0344.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence THAT HEAT MAY BE A MODE OF MOTION DESCARTES AFFIRMED THE QUANTITY OF MOTION IN THE WORLD TO BE CONSTANT silence  ==  [681 frames] -56.4933 [Ac=-38471.9 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0345.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence NEWTON NEARLY GAVE EXPRESSION TO THE COMPLETE THEOREM WHILE RUMFORD'S AND DAVY'S EXPERIMENTS SUGGESTED silence  ==  [645 frames] -59.1496 [Ac=-38151.5 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0346.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence THOUGH THEY DID NOT PROVE THE EQUIVALENCY OF MECHANICAL AND THERMAL ENERGY AGAIN silence  ==  [671 frames] -55.5598 [Ac=-37280.6 LM=0.0] (Act=7.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0347.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence THE DISCOVERY OF VOLTAIC ELECTRICITY AND THE MARVELLOUS DEVELOPMENT OF KNOWLEDGE IN THAT FIELD silence  ==  [591 frames] -59.4853 [Ac=-35155.8 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0348.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence EFFECTED BY SUCH MEN AS DAVY FARADAY OERSTED AMPERE AND MELLONI silence  ==  [545 frames] -57.2074 [Ac=-31178.0 LM=0.0] (Act=7.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0349.mfc
+Created lattice with 14 nodes / 13 arcs from label file
+silence HAD BROUGHT TO LIGHT A NUMBER OF FACTS WHICH TENDED TO SHOW silence  ==  [380 frames] -57.1030 [Ac=-21699.1 LM=0.0] (Act=9.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0350.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence THAT THE SO CALLED FORCES AT WORK IN LIGHT HEAT ELECTRICITY AND MAGNETISM IN silence  ==  [532 frames] -57.3779 [Ac=-30525.0 LM=0.0] (Act=9.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0351.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence CHEMICAL AND IN MECHANICAL OPERATIONS WERE INTIMATELY AND IN VARIOUS CASES QUANTITATIVELY RELATED silence  ==  [723 frames] -59.6010 [Ac=-43091.5 LM=0.0] (Act=10.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0352.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence IT WAS DEMONSTRATED THAT ANY ONE COULD BE OBTAINED AT THE EXPENSE OF ANY OTHER silence  ==  [477 frames] -59.7797 [Ac=-28514.9 LM=0.0] (Act=10.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0353.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence AND APPARATUS WAS DEVISED WHICH EXHIBITED THE EVOLUTION OF ALL THESE KINDS OF ACTION FROM ONE SOURCE OF ENERGY silence  ==  [686 frames] -57.9527 [Ac=-39755.5 LM=0.0] (Act=8.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0354.mfc
+Created lattice with 23 nodes / 22 arcs from label file
+silence HENCE THE IDEA OF THE CORRELATION OF FORCES WHICH WAS THE IMMEDIATE FORERUNNER OF THE DOCTRINE OF THE CONSERVATION OF ENERGY silence  ==  [899 frames] -55.5515 [Ac=-49940.8 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0355.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence IT IS A REMARKABLE EVIDENCE OF THE GREATNESS OF THE PROGRESS IN THIS DIRECTION silence  ==  [497 frames] -56.2004 [Ac=-27931.6 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0356.mfc
+Created lattice with 21 nodes / 20 arcs from label file
+silence WHICH HAS BEEN EFFECTED IN OUR TIME THAT EVEN THE SECOND EDITION OF THE HISTORY OF THE INDUCTIVE SCIENCES silence  ==  [593 frames] -58.7378 [Ac=-34831.5 LM=0.0] (Act=9.4)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0357.mfc
+Created lattice with 30 nodes / 29 arcs from label file
+silence WHICH WAS PUBLISHED IN EIGHTEEN FORTY SIX CONTAINS NO ALLUSION EITHER TO THE GENERAL VIEW OF THE CORRELATION OF FORCES PUBLISHED IN ENGLAND IN EIGHTEEN FORTY TWO OR silence  ==  [978 frames] -59.2668 [Ac=-57962.9 LM=0.0] (Act=8.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0358.mfc
+Created lattice with 9 nodes / 8 arcs from label file
+silence TO THE PUBLICATION IN EIGHTEEN FORTY THREE silence  ==  [309 frames] -57.0409 [Ac=-17625.6 LM=0.0] (Act=8.2)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0359.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence OF THE FIRST OF THE SERIES OF EXPERIMENTS BY WHICH THE MECHANICAL EQUIVALENT OF HEAT WAS CORRECTLY ASCERTAINED silence  ==  [719 frames] -57.5244 [Ac=-41360.0 LM=0.0] (Act=8.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0360.mfc
+Created lattice with 10 nodes / 9 arcs from label file
+silence THIS IS THE MORE CURIOUS AS AMPERE'S HYPOTHESIS silence  ==  [374 frames] -55.0318 [Ac=-20581.9 LM=0.0] (Act=7.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0361.mfc
+Created lattice with 18 nodes / 17 arcs from label file
+silence THAT VIBRATIONS OF MOLECULES CAUSING AND CAUSED BY VIBRATIONS OF THE ETHER CONSTITUTE HEAT IS DISCUSSED silence  ==  [776 frames] -56.3343 [Ac=-43715.4 LM=0.0] (Act=7.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0362.mfc
+Created lattice with 22 nodes / 21 arcs from label file
+silence WHEWELL REMARKS A PROPOS OF BACON'S DEFINITION OF HEAT THAT IT IS AN EXPANSIVE RESTRAINED MOTION MODIFIED IN CERTAIN WAYS silence  ==  [875 frames] -56.9842 [Ac=-49861.2 LM=0.0] (Act=8.6)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0363.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence AND EXERTED IN THE SMALLER PARTICLES OF THE BODY THAT silence  ==  [396 frames] -55.3941 [Ac=-21936.0 LM=0.0] (Act=7.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0364.mfc
+Created lattice with 25 nodes / 24 arcs from label file
+silence ALTHOUGH THE EXACT NATURE OF HEAT IS STILL AN OBSCURE AND CONTROVERTED MATTER THE SCIENCE OF HEAT NOW CONSISTS OF MANY IMPORTANT TRUTHS silence  ==  [791 frames] -59.4136 [Ac=-46996.2 LM=0.0] (Act=8.9)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0365.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence AND THAT TO NONE OF THESE TRUTHS IS THERE ANY APPROXIMATION IN BACON'S ESSAY IN silence  ==  [564 frames] -55.0653 [Ac=-31056.8 LM=0.0] (Act=8.3)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0366.mfc
+Created lattice with 12 nodes / 11 arcs from label file
+silence POINT OF FACT BACON'S STATEMENT HOWEVER MUCH OPEN TO CRITICISM silence  ==  [429 frames] -55.6011 [Ac=-23852.9 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0367.mfc
+Created lattice with 15 nodes / 14 arcs from label file
+silence DOES CONTAIN A DISTINCT APPROXIMATION TO THE MOST IMPORTANT OF ALL THE TRUTHS silence  ==  [458 frames] -58.6988 [Ac=-26884.1 LM=0.0] (Act=9.0)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0368.mfc
+Created lattice with 20 nodes / 19 arcs from label file
+silence RESPECTING HEAT WHICH HAD BEEN DISCOVERED WHEN WHEWELL WROTE SUCH A FAILURE ON THE PART OF A CONTEMPORARY silence  ==  [711 frames] -58.0922 [Ac=-41303.6 LM=0.0] (Act=9.5)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0369.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence OF GREAT ACQUIREMENTS AND REMARKABLE INTELLECTUAL POWERS TO READ THE SIGNS OF THE TIMES silence  ==  [561 frames] -60.3015 [Ac=-33829.1 LM=0.0] (Act=8.8)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0370.mfc
+Created lattice with 13 nodes / 12 arcs from label file
+silence IS A LESSON AND A WARNING WORTHY OF BEING DEEPLY PONDERED silence  ==  [379 frames] -59.2857 [Ac=-22469.3 LM=0.0] (Act=10.7)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0371.mfc
+Created lattice with 17 nodes / 16 arcs from label file
+silence BY ANYONE WHO ATTEMPTS TO PROGNOSTICATE THE COURSE OF SCIENTIFIC PROGRESS END OF SECTION TWO silence  ==  [798 frames] -56.1451 [Ac=-44803.8 LM=0.0] (Act=9.1)
+Aligning File: /data/UserSubmissions/Quarantine/knotyouraveragejo-20080426-adv/mfc/adv0372.mfc
+Created lattice with 16 nodes / 15 arcs from label file
+silence THIS HAS BEEN A LIBRIVOX RECORDING ALL LIBRIVOX RECORDINGS ARE IN THE PUBLIC DOMAIN silence  ==  [703 frames] -54.1400 [Ac=-38060.4 LM=0.0] (Act=9.1)
+
+HTK Configuration Parameters[10]
+  Module/Tool     Parameter                  Value
+                  NUMCEPS                       12
+                  CEPLIFTER                     22
+                  NUMCHANS                      26
+                  PREEMCOEF               0.970000
+                  USEHAMMING                  TRUE
+                  WINDOWSIZE         250000.000000
+                  SAVEWITHCRC                 TRUE
+                  SAVECOMPRESSED              TRUE
+                  TARGETRATE         100000.000000
+                  TARGETKIND          MFCC_0_D_N_Z
+
