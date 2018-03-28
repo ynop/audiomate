@@ -28,6 +28,10 @@ def sample_broadcast_ds_path():
     return os.path.join(os.path.dirname(__file__), 'broadcast_ds')
 
 
+def sample_aed_ds_path():
+    return os.path.join(os.path.dirname(__file__), 'aed_ds')
+
+
 def sample_gtzan_ds_path():
     return os.path.join(os.path.dirname(__file__), 'gtzan_ds')
 
