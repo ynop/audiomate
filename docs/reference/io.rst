@@ -36,18 +36,24 @@ Implementations
   ==============================  ========  =====  =======
   Format                          Download  Read   Write
   ==============================  ========  =====  =======
+  Acoustic Event Dataset                    x
   Broadcast                                 x
   Default                                   x      x
+  ESC-50                                    x
   Folder                                    x
+  Google Speech Commands                    x
   GTZAN                                     x
   Kaldi                                     x      x
-  MUSAN                                     x
-  Google Speech Commands                    x
-  TUDA German Distant Speech                x
-  ESC-50                                    x
   Mozilla DeepSpeech                               x
+  MUSAN                                     x
+  TUDA German Distant Speech                x
   VoxForge                        x         x
   ==============================  ========  =====  =======
+
+Acoustic Event Dataset
+^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: AEDReader
+   :members:
 
 Broadcast
 ^^^^^^^^^
