@@ -19,6 +19,7 @@ setup(name='pingu',
       license='MIT',
       packages=find_packages(exclude=['tests']),
       install_requires=[
+          'audioread==2.1.5',
           'numpy==1.13.3',
           'scipy==1.0.0',
           'librosa==0.6.0',
