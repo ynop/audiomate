@@ -23,7 +23,7 @@ class Urbansound8kReader(base.CorpusReader):
         return 'urbansound8k'
 
     def _check_for_missing_files(self, path):
-        meta_file_path = os.path.join(path, 'metadata', 'UrbanSound8k.csv')
+        meta_file_path = os.path.join(path, 'metadata', 'UrbanSound8K.csv')
 
         if os.path.isfile(meta_file_path):
             return []
@@ -33,7 +33,7 @@ class Urbansound8kReader(base.CorpusReader):
     def _load(self, path):
         corpus = pingu.Corpus(path=path)
 
-        meta_file_path = os.path.join(path, 'metadata', 'UrbanSound8k.csv')
+        meta_file_path = os.path.join(path, 'metadata', 'UrbanSound8K.csv')
         meta_data = textfile.read_separated_lines(meta_file_path, separator=',', max_columns=8)[1:]
 
         folds = collections.defaultdict(set)
