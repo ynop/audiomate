@@ -16,6 +16,7 @@ build:
     pull: true
     
   ci:
+    - sudo apt-get install -y libav-tools
     - "pip install -e .[dev,ci]"
     - "flake8"
     
