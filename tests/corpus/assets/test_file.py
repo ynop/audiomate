@@ -1,5 +1,4 @@
 import os
-import unittest
 
 import pytest
 import numpy as np
@@ -7,51 +6,122 @@ import librosa
 
 from pingu.corpus import assets
 
-MONO_16K_16BIT_9 = os.path.join(os.path.dirname(__file__), 'mono_16k_16bit_9.wav')
-STEREO_22050_32BIT_13 = os.path.join(os.path.dirname(__file__), 'stereo_22050_32bit_13.wav')
+from tests import resources
 
 
-class FileTest(unittest.TestCase):
-    def setUp(self):
-        self.mono_file = assets.File('fileid', MONO_16K_16BIT_9)
-        self.stereo_file = assets.File('fileid', STEREO_22050_32BIT_13)
+@pytest.fixture()
+def audio_path():
+    return os.path.join(os.path.dirname(resources.__file__), 'audio_formats')
 
-    def test_wave_info(self):
-        assert self.mono_file.sampling_rate == 16000
-        assert self.stereo_file.sampling_rate == 22050
 
-    def test_num_channels(self):
-        assert self.mono_file.num_channels == 1
-        assert self.stereo_file.num_channels == 2
+class TestFile:
 
-    def test_bytes_per_sample(self):
-        assert self.mono_file.bytes_per_sample == 2
-        assert self.stereo_file.bytes_per_sample == 4
+    @pytest.mark.parametrize('name,sampling_rate', [
+        ('flac_1_16k_16b.flac', 16000),
+        ('mp3_2_44_1k_16b.mp3', 44100),
+        ('wav_1_16k_24b.wav', 16000),
+        ('wav_2_44_1k_16b.wav', 44100),
+        ('wavex_2_48k_24b.wav', 48000)
+    ])
+    def test_sampling_rate(self, name, sampling_rate, audio_path):
+        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
 
-    def test_num_samples(self):
-        assert self.mono_file.num_samples == 9
-        assert self.stereo_file.num_samples == 13
+        assert file_obj.sampling_rate == sampling_rate
 
-    def test_duration(self):
-        assert self.mono_file.duration == pytest.approx(0.0005625)
-        assert self.stereo_file.duration == pytest.approx(0.000589569161)
+    @pytest.mark.parametrize('name,num_channels', [
+        ('flac_1_16k_16b.flac', 1),
+        ('mp3_2_44_1k_16b.mp3', 2),
+        ('wav_1_16k_24b.wav', 1),
+        ('wav_2_44_1k_16b.wav', 2),
+        ('wavex_2_48k_24b.wav', 2)
+    ])
+    def test_num_channels(self, name, num_channels, audio_path):
+        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
 
-    def test_read_samples_mono(self):
-        expected, __ = librosa.core.load(MONO_16K_16BIT_9, sr=None)
-        actual = self.mono_file.read_samples()
+        assert file_obj.num_channels == num_channels
+
+    @pytest.mark.parametrize('name,num_samples', [
+        ('wav_1_16k_24b.wav', 41523),
+        ('wav_2_44_1k_16b.wav', 176400),
+        ('wavex_2_48k_24b.wav', 192000)
+    ])
+    def test_num_samples(self, name, num_samples, audio_path):
+        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
+
+        assert file_obj.num_samples == num_samples
+
+    @pytest.mark.parametrize('name,num_samples', [
+        ('flac_1_16k_16b.flac', 103424),
+        ('mp3_2_44_1k_16b.mp3', 222336)
+    ])
+    def test_num_samples_compressed_formats(self, name, num_samples, audio_path):
+        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
+
+        assert file_obj.num_samples == pytest.approx(num_samples, abs=2000)
+
+    @pytest.mark.parametrize('name,duration', [
+        ('wav_1_16k_24b.wav', 2.5951875),
+        ('wav_2_44_1k_16b.wav', 4.0),
+        ('wavex_2_48k_24b.wav', 4.0)
+    ])
+    def test_num_duration(self, name, duration, audio_path):
+        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
+
+        assert file_obj.duration == pytest.approx(duration)
+
+    @pytest.mark.parametrize('name,duration', [
+        ('flac_1_16k_16b.flac', 6.464),
+        ('mp3_2_44_1k_16b.mp3', 5.0416326531)
+    ])
+    def test_num_duration_compressed_formats(self, name, duration, audio_path):
+        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
+
+        assert file_obj.duration == pytest.approx(duration, abs=0.1)
+
+    @pytest.mark.parametrize('name', [
+        ('flac_1_16k_16b.flac'),
+        ('mp3_2_44_1k_16b.mp3'),
+        ('wav_1_16k_24b.wav'),
+        ('wav_2_44_1k_16b.wav'),
+        ('wavex_2_48k_24b.wav')
+    ])
+    def test_read_samples(self, name, audio_path):
+        audio_path = os.path.join(audio_path, name)
+        file_obj = assets.File('some_idx', audio_path)
+
+        expected, __ = librosa.core.load(audio_path, sr=None, mono=True)
+        actual = file_obj.read_samples()
+
         assert np.array_equal(actual, expected)
 
-    def test_read_samples_stereo(self):
-        expected, __ = librosa.core.load(STEREO_22050_32BIT_13, sr=None)
-        actual = self.stereo_file.read_samples()
+    @pytest.mark.parametrize('name', [
+        ('flac_1_16k_16b.flac'),
+        ('mp3_2_44_1k_16b.mp3'),
+        ('wav_1_16k_24b.wav'),
+        ('wav_2_44_1k_16b.wav'),
+        ('wavex_2_48k_24b.wav')
+    ])
+    def test_read_samples_fix_sampling_rate(self, name, audio_path):
+        audio_path = os.path.join(audio_path, name)
+        file_obj = assets.File('some_idx', audio_path)
+
+        expected, __ = librosa.core.load(audio_path, sr=16000, mono=True)
+        actual = file_obj.read_samples(sr=16000)
+
         assert np.array_equal(actual, expected)
 
-    def test_read_samples_mono_downsampling(self):
-        expected, __ = librosa.core.load(MONO_16K_16BIT_9, sr=8000)
-        actual = self.mono_file.read_samples(sr=8000)
-        assert np.array_equal(actual, expected)
+    @pytest.mark.parametrize('name', [
+        ('flac_1_16k_16b.flac'),
+        ('mp3_2_44_1k_16b.mp3'),
+        ('wav_1_16k_24b.wav'),
+        ('wav_2_44_1k_16b.wav'),
+        ('wavex_2_48k_24b.wav')
+    ])
+    def test_read_samples_range(self, name, audio_path):
+        audio_path = os.path.join(audio_path, name)
+        file_obj = assets.File('some_idx', audio_path)
 
-    def test_read_samples_mono_upsampling(self):
-        expected, __ = librosa.core.load(MONO_16K_16BIT_9, sr=22050)
-        actual = self.mono_file.read_samples(sr=22050)
+        expected, __ = librosa.core.load(audio_path, sr=None, mono=True, offset=1.0, duration=1.7)
+        actual = file_obj.read_samples(offset=1.0, duration=1.7)
+
         assert np.array_equal(actual, expected)

@@ -1,5 +1,5 @@
-import wave
 import librosa
+import audioread
 
 
 class File(object):
@@ -21,40 +21,32 @@ class File(object):
         """
         Return the sampling rate.
         """
-        with wave.open(self.path, 'r') as f:
-            return f.getframerate()
+        with audioread.audio_open(self.path) as f:
+            return f.samplerate
 
     @property
     def num_channels(self):
         """
         Return the number of channels.
         """
-        with wave.open(self.path, 'r') as f:
-            return f.getnchannels()
-
-    @property
-    def bytes_per_sample(self):
-        """
-        Return the number of bytes per sample.
-        """
-        with wave.open(self.path, 'r') as f:
-            return f.getsampwidth()
+        with audioread.audio_open(self.path) as f:
+            return f.channels
 
     @property
     def num_samples(self):
         """
         Return the total number of samples.
         """
-        with wave.open(self.path, 'r') as f:
-            return f.getnframes()
+        with audioread.audio_open(self.path) as f:
+            return int(f.duration * f.samplerate)
 
     @property
     def duration(self):
         """
         Return the duration in seconds.
         """
-        with wave.open(self.path, 'r') as f:
-            return f.getnframes() / f.getframerate()
+        with audioread.audio_open(self.path) as f:
+            return f.duration
 
     def read_samples(self, sr=None, offset=0, duration=None):
         """
