@@ -32,6 +32,10 @@ def sample_aed_ds_path():
     return os.path.join(os.path.dirname(__file__), 'aed_ds')
 
 
+def sample_urbansound8k_ds_path():
+    return os.path.join(os.path.dirname(__file__), 'urbansound8k_ds')
+
+
 def sample_gtzan_ds_path():
     return os.path.join(os.path.dirname(__file__), 'gtzan_ds')
 

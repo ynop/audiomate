@@ -1,0 +1,6 @@
+slice_file_name,fsID,start,end,salience,fold,classID,class
+100032-3-0-0.wav,100032,0.0,0.317551,1,5,3,dog_bark
+100263-2-0-117.wav,100263,58.5,62.5,1,5,2,children_playing
+145612-6-3-0.wav,145612,7.127715,8.253866,2,8,6,gun_shot
+145683-6-5-0.wav,145683,26.109938,26.612052,2,9,6,gun_shot
+79377-9-0-4.wav,79377,2.0,6.0,2,2,9,street_music

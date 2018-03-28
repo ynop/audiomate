@@ -47,6 +47,7 @@ Implementations
   Mozilla DeepSpeech                               x
   MUSAN                                     x
   TUDA German Distant Speech                x
+  Urbansound8k                              x
   VoxForge                        x         x
   ==============================  ========  =====  =======
 
@@ -109,6 +110,11 @@ ESC-50
 Mozilla DeepSpeech
 ^^^^^^^^^^^^^^^^^^
 .. autoclass:: MozillaDeepSpeechWriter
+   :members:
+
+Urbansound8k
+^^^^^^^^^^^^
+.. autoclass:: Urbansound8kReader
    :members:
 
 VoxForge
