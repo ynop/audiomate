@@ -46,6 +46,7 @@ Implementations
   Kaldi                                     x      x
   Mozilla DeepSpeech                               x
   MUSAN                                     x
+  TIMIT                                     x
   TUDA German Distant Speech                x
   Urbansound8k                              x
   VoxForge                        x         x
@@ -95,6 +96,11 @@ MUSAN
 Google Speech Commands
 ^^^^^^^^^^^^^^^^^^^^^^
 .. autoclass:: SpeechCommandsReader
+   :members:
+
+DARPA TIMIT Acoustic-Phonetic Continuous Speech Corpus
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: TimitReader
    :members:
 
 TUDA German Distant Speech
