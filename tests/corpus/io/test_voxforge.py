@@ -4,6 +4,7 @@ import pytest
 import requests_mock
 
 from pingu.corpus.io import voxforge
+from pingu.corpus import assets
 
 from tests import resources
 
@@ -177,16 +178,28 @@ class TestVoxforgeReader:
         assert ds.num_issuers == 4
 
         assert ds.issuers['1337ad'].idx == '1337ad'
-        assert ds.issuers['1337ad'].info['gender'] == 'female'
+        assert type(ds.issuers['1337ad']) == assets.Speaker
+        assert ds.issuers['1337ad'].gender == assets.Gender.FEMALE
+        assert ds.issuers['1337ad'].age_group == assets.AgeGroup.ADULT
+        assert ds.issuers['1337ad'].native_language == 'deu'
 
         assert ds.issuers['anonymous-20081027-njq'].idx == 'anonymous-20081027-njq'
-        assert ds.issuers['anonymous-20081027-njq'].info['gender'] == 'male'
+        assert type(ds.issuers['anonymous-20081027-njq']) == assets.Speaker
+        assert ds.issuers['anonymous-20081027-njq'].gender == assets.Gender.MALE
+        assert ds.issuers['anonymous-20081027-njq'].age_group == assets.AgeGroup.ADULT
+        assert ds.issuers['anonymous-20081027-njq'].native_language == 'eng'
 
         assert ds.issuers['Katzer'].idx == 'Katzer'
-        assert ds.issuers['Katzer'].info['gender'] == 'male'
+        assert type(ds.issuers['Katzer']) == assets.Speaker
+        assert ds.issuers['Katzer'].gender == assets.Gender.MALE
+        assert ds.issuers['Katzer'].age_group == assets.AgeGroup.YOUTH
+        assert ds.issuers['Katzer'].native_language == 'eng'
 
         assert ds.issuers['knotyouraveragejo'].idx == 'knotyouraveragejo'
-        assert ds.issuers['knotyouraveragejo'].info['gender'] == 'female'
+        assert type(ds.issuers['knotyouraveragejo']) == assets.Speaker
+        assert ds.issuers['knotyouraveragejo'].gender == assets.Gender.FEMALE
+        assert ds.issuers['knotyouraveragejo'].age_group == assets.AgeGroup.ADULT
+        assert ds.issuers['knotyouraveragejo'].native_language == 'eng'
 
     def test_load_utterances(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)
