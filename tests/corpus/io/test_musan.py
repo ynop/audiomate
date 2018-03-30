@@ -2,6 +2,7 @@ import unittest
 import os
 
 from pingu.corpus import io
+from pingu.corpus import assets
 from tests import resources
 
 
@@ -38,19 +39,19 @@ class MusanReaderTest(unittest.TestCase):
         assert ds.num_issuers == 3
 
         assert 'speech-librivox-0000' in ds.issuers.keys()
+        assert type(ds.issuers['speech-librivox-0000']) == assets.Speaker
         assert ds.issuers['speech-librivox-0000'].idx == 'speech-librivox-0000'
-        assert ds.issuers['speech-librivox-0000'].info['gender'] == 'm'
-        assert ds.issuers['speech-librivox-0000'].info['language'] == 'english'
+        assert ds.issuers['speech-librivox-0000'].gender == assets.Gender.MALE
 
         assert 'speech-librivox-0001' in ds.issuers.keys()
+        assert type(ds.issuers['speech-librivox-0001']) == assets.Speaker
         assert ds.issuers['speech-librivox-0001'].idx == 'speech-librivox-0001'
-        assert ds.issuers['speech-librivox-0001'].info['gender'] == 'f'
-        assert ds.issuers['speech-librivox-0001'].info['language'] == 'french'
+        assert ds.issuers['speech-librivox-0001'].gender == assets.Gender.FEMALE
 
         assert 'Quiet_Music_for_Tiny_Robots' in ds.issuers.keys()
+        assert type(ds.issuers['Quiet_Music_for_Tiny_Robots']) == assets.Artist
         assert ds.issuers['Quiet_Music_for_Tiny_Robots'].idx == 'Quiet_Music_for_Tiny_Robots'
-
-        assert ds.issuers['Quiet_Music_for_Tiny_Robots'].info is None
+        assert ds.issuers['Quiet_Music_for_Tiny_Robots'].name == 'Quiet_Music_for_Tiny_Robots'
 
     def test_load_utterances(self):
         ds = self.reader.load(self.test_path)
