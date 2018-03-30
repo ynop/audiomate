@@ -50,6 +50,7 @@ class KaldiReader(base.CorpusReader):
 
     def _load(self, path):
         wav_file_path = os.path.join(path, WAV_FILE_NAME)
+        spk2gender_path = os.path.join(path, SPK2GENDER_FILE_NAME)
         utt2spk_path = os.path.join(path, UTT2SPK_FILE_NAME)
         segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
@@ -57,11 +58,26 @@ class KaldiReader(base.CorpusReader):
         corpus = pingu.Corpus(path=path)
 
         default.DefaultReader.read_files(wav_file_path, corpus)
+        KaldiReader.read_genders(spk2gender_path, corpus)
         utt2spk = default.DefaultReader.read_utt_to_issuer_mapping(utt2spk_path, corpus)
         KaldiReader.read_utterances(segments_path, corpus, utt2spk)
         KaldiReader.read_transcriptions(text_path, corpus)
 
         return corpus
+
+    @staticmethod
+    def read_genders(genders_path, corpus):
+        if os.path.isfile(genders_path):
+            speakers = textfile.read_key_value_lines(genders_path, separator=' ')
+
+            for speaker_idx, gender_str in speakers.items():
+                if gender_str == 'm':
+                    gender = assets.Gender.MALE
+                else:
+                    gender = assets.Gender.FEMALE
+
+                speaker = assets.Speaker(speaker_idx, gender=gender)
+                corpus.import_issuers(speaker)
 
     @staticmethod
     def read_utterances(segments_path, corpus, utt2spk):
@@ -124,6 +140,7 @@ class KaldiWriter(base.CorpusWriter):
 
     def _save(self, corpus, path):
         wav_file_path = os.path.join(path, WAV_FILE_NAME)
+        spk2gender_path = os.path.join(path, SPK2GENDER_FILE_NAME)
         utt2spk_path = os.path.join(path, UTT2SPK_FILE_NAME)
         segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
@@ -132,8 +149,22 @@ class KaldiWriter(base.CorpusWriter):
         default.DefaultWriter.write_utterances(segments_path, corpus)
         default.DefaultWriter.write_utt_to_issuer_mapping(utt2spk_path, corpus)
 
+        self._write_genders(spk2gender_path, corpus)
         self._write_transcriptions(text_path, corpus)
         self._write_features(path, corpus)
+
+    def _write_genders(self, gender_path, corpus):
+        genders = {}
+
+        for issuer in corpus.issuers.values():
+            if type(issuer) == assets.Speaker:
+                if issuer.gender == assets.Gender.MALE:
+                    genders[issuer.idx] = 'm'
+                elif issuer.gender == assets.Gender.FEMALE:
+                    genders[issuer.idx] = 'f'
+
+        if len(genders) > 0:
+            textfile.write_separated_lines(gender_path, genders, separator=' ', sort_by_column=0)
 
     def _write_transcriptions(self, text_path, corpus):
         transcriptions = {}
