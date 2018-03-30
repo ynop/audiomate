@@ -87,9 +87,11 @@ def create_dataset():
     file_3 = ds.new_file(wav_3_path, file_idx='wav_3')
     file_4 = ds.new_file(wav_4_path, file_idx='wav_4')
 
-    issuer_1 = ds.new_issuer('spk-1')
-    issuer_2 = ds.new_issuer('spk-2')
-    issuer_3 = ds.new_issuer('spk-3')
+    issuer_1 = assets.Speaker('spk-1', gender=assets.Gender.MALE)
+    issuer_2 = assets.Speaker('spk-2', gender=assets.Gender.FEMALE)
+    issuer_3 = assets.Issuer('spk-3')
+
+    ds.import_issuers([issuer_1, issuer_2, issuer_3])
 
     utt_1 = ds.new_utterance('utt-1', file_1.idx, issuer_idx=issuer_1.idx)
     utt_2 = ds.new_utterance('utt-2', file_2.idx, issuer_idx=issuer_1.idx)

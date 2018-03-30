@@ -8,9 +8,11 @@ import pingu
 from pingu.corpus import assets
 from pingu.corpus.subset import subview
 from pingu.utils import textfile
+from pingu.utils import jsonfile
 from . import base
 
 FILES_FILE_NAME = 'files.txt'
+ISSUER_FILE_NAME = 'issuers.json'
 UTTERANCE_FILE_NAME = 'utterances.txt'
 UTT_ISSUER_FILE_NAME = 'utt_issuers.txt'
 LABEL_FILE_PREFIX = 'labels'
@@ -44,6 +46,7 @@ class DefaultReader(base.CorpusReader):
 
     def _load(self, path):
         file_path = os.path.join(path, FILES_FILE_NAME)
+        issuer_path = os.path.join(path, ISSUER_FILE_NAME)
         utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
         utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
         feat_path = os.path.join(path, FEAT_CONTAINER_FILE_NAME)
@@ -51,6 +54,7 @@ class DefaultReader(base.CorpusReader):
         corpus = pingu.Corpus(path=path)
 
         DefaultReader.read_files(file_path, corpus)
+        DefaultReader.read_issuers(issuer_path, corpus)
         utt_id_to_issuer = DefaultReader.read_utt_to_issuer_mapping(utt_issuer_path, corpus)
         DefaultReader.read_utterances(utterance_path, corpus, utt_id_to_issuer)
         DefaultReader.read_labels(path, corpus)
@@ -64,6 +68,38 @@ class DefaultReader(base.CorpusReader):
         path = os.path.dirname(file_path)
         for file_idx, file_path in textfile.read_key_value_lines(file_path, separator=' ').items():
             corpus.new_file(os.path.join(path, file_path), file_idx=file_idx, copy_file=False)
+
+    @staticmethod
+    def read_issuers(file_path, corpus):
+        if not os.path.isfile(file_path):
+            return
+
+        data = jsonfile.read_json_file(file_path)
+
+        for issuer_idx, issuer_data in data.items():
+            issuer_type = issuer_data.get('type', None)
+            issuer_info = issuer_data.get('info', {})
+
+            if issuer_type == 'speaker':
+                gender = assets.Gender(issuer_data.get('gender', 'unknown').lower())
+                age_group = assets.AgeGroup(issuer_data.get('age_group', 'unknown').lower())
+                native_language = issuer_data.get('native_language', None)
+
+                issuer = assets.Speaker(issuer_idx,
+                                        gender=gender,
+                                        age_group=age_group,
+                                        native_language=native_language,
+                                        info=issuer_info)
+            elif issuer_type == 'artist':
+                name = issuer_data.get('name', None)
+
+                issuer = assets.Artist(issuer_idx,
+                                       name=name,
+                                       info=issuer_info)
+            else:
+                issuer = assets.Issuer(issuer_idx, info=issuer_info)
+
+            corpus.import_issuers(issuer)
 
     @staticmethod
     def read_utt_to_issuer_mapping(utt_issuer_path, corpus):
@@ -159,11 +195,13 @@ class DefaultWriter(base.CorpusWriter):
 
     def _save(self, corpus, path):
         file_path = os.path.join(path, FILES_FILE_NAME)
+        issuer_path = os.path.join(path, ISSUER_FILE_NAME)
         utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
         utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
         container_path = os.path.join(path, FEAT_CONTAINER_FILE_NAME)
 
         DefaultWriter.write_files(file_path, corpus, path)
+        DefaultWriter.write_issuers(issuer_path, corpus)
         DefaultWriter.write_utterances(utterance_path, corpus)
         DefaultWriter.write_utt_to_issuer_mapping(utt_issuer_path, corpus)
         DefaultWriter.write_labels(path, corpus)
@@ -174,6 +212,36 @@ class DefaultWriter(base.CorpusWriter):
     def write_files(file_path, corpus, path):
         file_records = [[file.idx, os.path.relpath(file.path, path)] for file in corpus.files.values()]
         textfile.write_separated_lines(file_path, file_records, separator=' ', sort_by_column=0)
+
+    @staticmethod
+    def write_issuers(file_path, corpus):
+        data = {}
+
+        for issuer in corpus.issuers.values():
+            issuer_data = {}
+
+            if issuer.info is not None and len(issuer.info) > 0:
+                issuer_data['info'] = issuer.info
+
+            if type(issuer) == assets.Speaker:
+                issuer_data['type'] = 'speaker'
+
+                if issuer.gender != assets.Gender.UNKNOWN:
+                    issuer_data['gender'] = issuer.gender.value
+
+                if issuer.age_group != assets.AgeGroup.UNKNOWN:
+                    issuer_data['age_group'] = issuer.age_group.value
+
+                if issuer.native_language not in ['', None]:
+                    issuer_data['native_language'] = issuer.native_language
+
+            elif type(issuer) == assets.Artist:
+                if issuer.name not in ['', None]:
+                    issuer_data['name'] = issuer.name
+
+            data[issuer.idx] = issuer_data
+
+        jsonfile.write_json_to_file(file_path, data)
 
     @staticmethod
     def write_utterances(utterance_path, corpus):

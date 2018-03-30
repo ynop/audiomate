@@ -320,9 +320,10 @@ class CorpusTest(unittest.TestCase):
         corpus.save()
 
         tempdir_contents = os.listdir(self.tempdir)
-        assert len(tempdir_contents) == 8
+        assert len(tempdir_contents) == 9
 
         assert 'files.txt' in tempdir_contents
+        assert 'issuers.json' in tempdir_contents
         assert 'labels_raw_text.txt' in tempdir_contents
         assert 'labels_text.txt' in tempdir_contents
         assert 'utt_issuers.txt' in tempdir_contents
@@ -408,9 +409,10 @@ class CorpusTest(unittest.TestCase):
         corpus.save_at(self.tempdir)
 
         tempdir_contents = os.listdir(self.tempdir)
-        assert len(tempdir_contents) == 8
+        assert len(tempdir_contents) == 9
 
         assert 'files.txt' in tempdir_contents
+        assert 'issuers.json' in tempdir_contents
         assert 'labels_raw_text.txt' in tempdir_contents
         assert 'labels_text.txt' in tempdir_contents
         assert 'utt_issuers.txt' in tempdir_contents

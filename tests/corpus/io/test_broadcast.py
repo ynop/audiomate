@@ -2,6 +2,7 @@ import os
 import unittest
 
 from pingu.corpus import io
+from pingu.corpus import assets
 from tests import resources
 
 
@@ -22,6 +23,26 @@ class BroadcastReaderTest(unittest.TestCase):
         assert ds.files['file-3'].path == os.path.join(self.test_path, 'files', 'c', 'wav_3.wav')
         assert ds.files['file-4'].idx == 'file-4'
         assert ds.files['file-4'].path == os.path.join(self.test_path, 'files', 'd', 'wav_4.wav')
+
+    def test_load_issuers(self):
+        ds = self.reader.load(self.test_path)
+
+        assert ds.num_issuers == 3
+
+        assert ds.issuers['speaker-1'].idx == 'speaker-1'
+        assert len(ds.issuers['speaker-1'].info) == 0
+        assert type(ds.issuers['speaker-1']) == assets.Speaker
+        assert ds.issuers['speaker-1'].gender == assets.Gender.FEMALE
+        assert ds.issuers['speaker-1'].age_group == assets.AgeGroup.CHILD
+        assert ds.issuers['speaker-1'].native_language == 'eng'
+
+        assert ds.issuers['speaker-2'].idx == 'speaker-2'
+        assert len(ds.issuers['speaker-2'].info) == 0
+        assert type(ds.issuers['speaker-2']) == assets.Artist
+        assert ds.issuers['speaker-2'].name is None
+
+        assert ds.issuers['speaker-3'].idx == 'speaker-3'
+        assert len(ds.issuers['speaker-3'].info) == 0
 
     def test_load_utterances(self):
         ds = self.reader.load(self.test_path)
