@@ -25,6 +25,18 @@ Issuer
    :members:
    :inherited-members:
 
+Speaker
+-------
+
+.. autoclass:: Speaker
+   :members:
+
+Artist
+------
+
+.. autoclass:: Artist
+   :members:
+
 Label
 -----
 
