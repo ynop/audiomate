@@ -22,7 +22,7 @@ def writer():
 
 @pytest.fixture()
 def sample_corpus_path():
-    return resources.sample_default_ds_path()
+    return resources.sample_corpus_path('default')
 
 
 @pytest.fixture()
@@ -160,7 +160,6 @@ class TestDefaultWriter:
     def setUp(self):
         self.writer = io.DefaultWriter()
         self.ds = resources.create_dataset()
-        self.test_path = resources.sample_default_ds_path()
         self.path = tempfile.mkdtemp()
 
     def tearDown(self):
@@ -187,10 +186,10 @@ class TestDefaultWriter:
 
         writer.save(sample_corpus, out_path)
 
-        file_1_path = os.path.relpath(resources.get_wav_file_path('wav_1.wav'), out_path)
-        file_2_path = os.path.relpath(resources.get_wav_file_path('wav_2.wav'), out_path)
-        file_3_path = os.path.relpath(resources.get_wav_file_path('wav_3.wav'), out_path)
-        file_4_path = os.path.relpath(resources.get_wav_file_path('wav_4.wav'), out_path)
+        file_1_path = os.path.relpath(resources.sample_wav_file('wav_1.wav'), out_path)
+        file_2_path = os.path.relpath(resources.sample_wav_file('wav_2.wav'), out_path)
+        file_3_path = os.path.relpath(resources.sample_wav_file('wav_3.wav'), out_path)
+        file_4_path = os.path.relpath(resources.sample_wav_file('wav_4.wav'), out_path)
 
         with open(os.path.join(out_path, 'files.txt'), 'r') as f:
             file_content = f.read()

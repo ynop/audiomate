@@ -12,7 +12,7 @@ from tests import resources
 
 class FeatureContainerTest(unittest.TestCase):
     def setUp(self):
-        self.container = assets.FeatureContainer(resources.get_feat_container_path())
+        self.container = assets.FeatureContainer(resources.get_resource_path(['sample_files', 'feat_container']))
         self.container.open()
 
     def tearDown(self):

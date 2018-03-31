@@ -9,7 +9,7 @@ from tests import resources
 class BroadcastReaderTest(unittest.TestCase):
     def setUp(self):
         self.reader = io.BroadcastReader()
-        self.test_path = resources.sample_broadcast_ds_path()
+        self.test_path = resources.sample_corpus_path('broadcast')
 
     def test_load_files(self):
         ds = self.reader.load(self.test_path)

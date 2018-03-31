@@ -13,7 +13,7 @@ def reader():
 
 @pytest.fixture
 def data_path():
-    return resources.sample_gtzan_ds_path()
+    return resources.sample_corpus_path('gtzan')
 
 
 class TestGtzanReader:

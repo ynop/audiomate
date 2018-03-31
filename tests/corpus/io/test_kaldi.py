@@ -11,7 +11,7 @@ from tests import resources
 class KaldiReaderTest(unittest.TestCase):
     def setUp(self):
         self.reader = io.KaldiReader()
-        self.test_path = resources.sample_kaldi_ds_path()
+        self.test_path = resources.sample_corpus_path('kaldi')
 
     def test_load_files(self):
         ds = self.reader.load(self.test_path)
@@ -110,7 +110,6 @@ class KaldiReaderTest(unittest.TestCase):
 class KaldiWriterTest(unittest.TestCase):
     def setUp(self):
         self.writer = io.KaldiWriter()
-        self.test_path = resources.sample_kaldi_ds_path()
 
     def test_save(self):
         ds = resources.create_dataset()

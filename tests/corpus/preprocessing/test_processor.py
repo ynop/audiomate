@@ -63,7 +63,7 @@ class OfflineProcessorTest(unittest.TestCase):
     def test_process_utterance(self):
         processor = OfflineProcessorDummy()
         feat_path = os.path.join(self.tempdir, 'feats')
-        file = assets.File('test_file', resources.get_wav_file_path('wav_1.wav'))
+        file = assets.File('test_file', resources.sample_wav_file('wav_1.wav'))
         utterance = assets.Utterance('test', file)
         feat_container = assets.FeatureContainer(feat_path)
         feat_container.open()
@@ -100,7 +100,7 @@ class OfflineProcessorTest(unittest.TestCase):
     def test_process_empty_utterance_raises_error(self):
         processor = OfflineProcessorDummy()
         feat_path = os.path.join(self.tempdir, 'feats')
-        file = assets.File('test_file', resources.get_wav_file_path('empty.wav'))
+        file = assets.File('test_file', resources.sample_wav_file('empty.wav'))
         utterance = assets.Utterance('test', file)
         feat_container = assets.FeatureContainer(feat_path)
         feat_container.open()
@@ -113,7 +113,7 @@ class OfflineProcessorTest(unittest.TestCase):
     def test_process_utterance_smaller_than_frame_size(self):
         processor = OfflineProcessorDummy()
         feat_path = os.path.join(self.tempdir, 'feats')
-        file = assets.File('test_file', resources.get_wav_file_path('wav_200_samples.wav'))
+        file = assets.File('test_file', resources.sample_wav_file('wav_200_samples.wav'))
         utterance = assets.Utterance('test', file)
         feat_container = assets.FeatureContainer(feat_path)
         feat_container.open()

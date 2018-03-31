@@ -14,7 +14,7 @@ def reader():
 
 @pytest.fixture
 def data_path():
-    return resources.sample_tuda_ds_path()
+    return resources.sample_corpus_path('tuda')
 
 
 class TestTudaReader:

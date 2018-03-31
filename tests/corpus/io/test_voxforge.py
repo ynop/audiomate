@@ -10,8 +10,14 @@ from tests import resources
 
 
 @pytest.fixture()
+def sample_response():
+    with open(resources.get_resource_path(['sample_files', 'voxforge_response.html']), 'r') as f:
+        return f.read()
+
+
+@pytest.fixture()
 def sample_tgz_content():
-    with open(resources.sample_voxforge_file_path(), 'rb') as f:
+    with open(resources.get_resource_path(['sample_files', 'voxforge_sample.tgz']), 'rb') as f:
         return f.read()
 
 
@@ -22,7 +28,7 @@ def reader():
 
 @pytest.fixture()
 def sample_corpus_path():
-    return os.path.join(os.path.dirname(resources.__file__), 'voxforge_ds')
+    return resources.sample_corpus_path('voxforge')
 
 
 class TestVoxforgeDownloader:
@@ -79,10 +85,10 @@ class TestVoxforgeDownloader:
         assert os.path.isfile(os.path.join(wav_folder, 'b0027.wav'))
         assert os.path.isfile(os.path.join(wav_folder, 'b0028.wav'))
 
-    def test_available_files(self):
+    def test_available_files(self, sample_response):
         with requests_mock.Mocker() as mock:
             url = 'http://someurl.com/some/download/dir'
-            mock.get(url, text=resources.sample_voxforge_response())
+            mock.get(url, text=sample_response)
             files = voxforge.VoxforgeDownloader.available_files(url)
 
             assert set(files) == {
@@ -124,7 +130,8 @@ class TestVoxforgeDownloader:
             assert file_path in file_paths
 
     def test_extract_files(self, tmpdir):
-        extracted = voxforge.VoxforgeDownloader.extract_files([resources.sample_voxforge_file_path()], tmpdir.strpath)
+        sample_file_path = resources.get_resource_path(['sample_files', 'voxforge_sample.tgz'])
+        extracted = voxforge.VoxforgeDownloader.extract_files([sample_file_path], tmpdir.strpath)
 
         base_folder = os.path.join(tmpdir.strpath, 'Aaron-20080318-kdl')
         etc_folder = os.path.join(base_folder, 'etc')

@@ -10,7 +10,7 @@ class SpeechCommandsReaderTest(unittest.TestCase):
     def setUp(self):
         self.reader = SpeechCommandsReader()
 
-        self.ds_path = resources.sample_speech_commands_ds_path()
+        self.ds_path = resources.sample_corpus_path('speech_commands')
 
     def test_read_files(self):
         ds = self.reader.load(self.ds_path)

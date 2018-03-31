@@ -9,7 +9,7 @@ from tests import resources
 class MusanReaderTest(unittest.TestCase):
     def setUp(self):
         self.reader = io.MusanReader()
-        self.test_path = resources.sample_musan_ds_path()
+        self.test_path = resources.sample_corpus_path('musan')
 
     def test_load_files(self):
         ds = self.reader.load(self.test_path)

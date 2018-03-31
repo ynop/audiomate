@@ -12,7 +12,7 @@ from tests import resources
 class TestLabelList(unittest.TestCase):
 
     def setUp(self):
-        file = assets.File('wav', resources.get_wav_file_path('wav_1.wav'))
+        file = assets.File('wav', resources.sample_wav_file('wav_1.wav'))
         utt = assets.Utterance('utt', file, start=0.3, end=-1)
         ll = assets.LabelList()
         self.test_label = assets.Label('a', start=0.5, end=-1)
@@ -311,7 +311,7 @@ class TestLabel(object):
         assert not a > b
 
     def test_read_samples(self):
-        file = assets.File('wav', resources.get_wav_file_path('wav_1.wav'))
+        file = assets.File('wav', resources.sample_wav_file('wav_1.wav'))
         issuer = assets.Issuer('toni')
         utt = assets.Utterance('test', file, issuer=issuer, start=1.0, end=2.30)
 
@@ -328,7 +328,7 @@ class TestLabel(object):
         assert np.array_equal(l2.read_samples(), expected)
 
     def test_read_samples_no_utterance_and_label_end(self):
-        file = assets.File('wav', resources.get_wav_file_path('wav_1.wav'))
+        file = assets.File('wav', resources.sample_wav_file('wav_1.wav'))
         issuer = assets.Issuer('toni')
         utt = assets.Utterance('test', file, issuer=issuer, start=1.0, end=-1)
 
