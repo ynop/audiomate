@@ -13,7 +13,7 @@ def reader():
 
 @pytest.fixture
 def data_path():
-    return resources.sample_urbansound8k_ds_path()
+    return resources.sample_corpus_path('urbansound8k')
 
 
 class TestUrbansound8kReader:

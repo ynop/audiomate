@@ -140,15 +140,10 @@ class VoxforgeReader(base.CorpusReader):
             readme_path = os.path.join(etc_folder, 'README')
 
             # LOAD ISSUER
-            issuer_idx, gender = VoxforgeReader.parse_speaker_info(readme_path)
+            issuer = VoxforgeReader.parse_speaker_info(readme_path)
 
-            if issuer_idx is None or issuer_idx == 'anonymous':
-                issuer_idx = item
-
-            issuer_info = {}
-
-            if gender is not None:
-                issuer_info['gender'] = gender
+            if issuer.idx is None or issuer.idx == 'anonymous':
+                issuer.idx = item
 
             # LOAD TRANSCRIPTIONS
             prompts, prompts_orig = VoxforgeReader.parse_prompts(etc_folder)
@@ -163,11 +158,11 @@ class VoxforgeReader(base.CorpusReader):
                 has_transcription = basename in prompts.keys()
 
                 if is_valid_wav and has_transcription:
-                    if issuer_idx not in corpus.issuers.keys():
-                        corpus.new_issuer(issuer_idx, info=issuer_info)
+                    if issuer.idx not in corpus.issuers.keys():
+                        corpus.import_issuers([issuer])
 
                     corpus.new_file(wav_path, idx)
-                    utt = corpus.new_utterance(idx, idx, issuer_idx)
+                    utt = corpus.new_utterance(idx, idx, issuer.idx)
                     utt.set_label_list(assets.LabelList(idx='transcription', labels=[
                         assets.Label(prompts[basename])
                     ]))
@@ -193,7 +188,9 @@ class VoxforgeReader(base.CorpusReader):
     def parse_speaker_info(readme_path):
         """ Parse speaker info and return tuple (idx, gender). """
         idx = None
-        gender = None
+        gender = assets.Gender.UNKNOWN
+        age_group = assets.AgeGroup.UNKNOWN
+        native_lang = None
 
         with open(readme_path, 'r', errors='ignore') as f:
             for raw_line in f:
@@ -204,19 +201,37 @@ class VoxforgeReader(base.CorpusReader):
                     parts = line.split(':', maxsplit=1)
 
                     if len(parts) > 1:
-                        key = parts[0].strip()
+                        key = parts[0].strip().lower()
                         value = parts[1].strip()
 
-                        if key == 'User Name':
+                        if key == 'user name':
                             idx = value
 
-                        if key == 'Gender':
-                            if value in ['Männlich', 'Male', 'Mnnlich', 'male']:
-                                gender = 'male'
-                            elif value in ['Weiblich', 'Female', 'female', '[female]']:
-                                gender = 'female'
+                        value = value.lower()
 
-        return idx, gender
+                        if key == 'gender':
+                            if value in ['männlich', 'male', 'mnnlich']:
+                                gender = assets.Gender.MALE
+                            elif value in ['weiblich', 'female', '[female]']:
+                                gender = assets.Gender.FEMALE
+
+                        if key == 'age range':
+                            if value in ['erwachsener', 'adult', '[adult]', '[erwachsener]']:
+                                age_group = assets.AgeGroup.ADULT
+                            elif value in ['senior', '[senior']:
+                                age_group = assets.AgeGroup.SENIOR
+                            elif value in ['youth', 'jugendlicher', '[youth]', '[jugendlicher]']:
+                                age_group = assets.AgeGroup.YOUTH
+                            elif value in ['kind', 'child']:
+                                age_group = assets.AgeGroup.CHILD
+
+                        if key == 'language':
+                            if value in ['de', 'ger', 'deu', '[de]']:
+                                native_lang = 'deu'
+                            elif value in ['en', 'eng', '[en]']:
+                                native_lang = 'eng'
+
+        return assets.Speaker(idx, gender=gender, age_group=age_group, native_language=native_lang)
 
     @staticmethod
     def parse_prompts(etc_folder):

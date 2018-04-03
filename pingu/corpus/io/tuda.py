@@ -285,10 +285,32 @@ class TudaReader(base.CorpusReader):
         transcription = soup.recording.cleaned_sentence.string
         transcription_raw = soup.recording.sentence.string
         gender = soup.recording.gender.string
+        is_native = soup.recording.muttersprachler.string
+        age_class = soup.recording.ageclass.string
         speaker_idx = soup.recording.speaker_id.string
 
         if speaker_idx not in corpus.issuers.keys():
-            corpus.new_issuer(speaker_idx, info={'gender': gender})
+            start_age_class = int(age_class.split('-')[0])
+
+            if start_age_class < 12:
+                age_group = assets.AgeGroup.CHILD
+            elif start_age_class < 18:
+                age_group = assets.AgeGroup.YOUTH
+            elif start_age_class < 65:
+                age_group = assets.AgeGroup.ADULT
+            else:
+                age_group = assets.AgeGroup.SENIOR
+
+            native_lang = None
+
+            if is_native == 'Ja':
+                native_lang = 'deu'
+
+            issuer = assets.Speaker(speaker_idx,
+                                    gender=assets.Gender(gender),
+                                    age_group=age_group,
+                                    native_language=native_lang)
+            corpus.import_issuers(issuer)
 
         corpus.new_file(wav_path, idx)
         utt = corpus.new_utterance(idx, idx, speaker_idx)

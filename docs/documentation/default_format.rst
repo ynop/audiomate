@@ -61,6 +61,46 @@ Example:
     2_this_is sam
     3_goto jenny
 
+
+**issuers.json**
+
+This file contains additional information about the issuers.
+Depending on the type of the issuer (Issuer, Speaker, Artist which are defined via `type` parameter) different parameters can be set.
+
+Issuer:
+    * info: An arbitrary info dictionary.
+
+Speaker:
+    * gender (MALE/FEMALE): The gender of a speaker
+    * age_group (child, youth, adult, senior): The age group of a speaker
+    * native_language (language code ISO 639-3): The language natively spoken
+
+Artist:
+    * name: The name of the artist/band/group
+
+.. code-block:: json
+
+    {
+      "speaker-1": {
+        "info": {},
+        "type": "speaker",
+        "gender": "MALE",
+        "age_group": "ADULT",
+        "native_language": "deu"
+      },
+      "speaker-2": {
+        "info": {},
+        "type": "artist",
+        "name": "Ohooo"
+      },
+      "speaker-3": {
+        "info": {
+          "region": "zh"
+        }
+      }
+    }
+
+
 **labels_[x].txt**
 
 There can be multiple label-lists in a corpus (e.g. text-transcription, raw-text-transcription - with punctuation, audio classification type, ...).

@@ -4,13 +4,14 @@ import tempfile
 import unittest
 
 from pingu.corpus import io
+from pingu.corpus import assets
 from tests import resources
 
 
 class KaldiReaderTest(unittest.TestCase):
     def setUp(self):
         self.reader = io.KaldiReader()
-        self.test_path = resources.sample_kaldi_ds_path()
+        self.test_path = resources.sample_corpus_path('kaldi')
 
     def test_load_files(self):
         ds = self.reader.load(self.test_path)
@@ -25,6 +26,29 @@ class KaldiReaderTest(unittest.TestCase):
         assert ds.files['file-3'].path == os.path.join(self.test_path, 'files', 'wav_3.wav')
         assert ds.files['file-4'].idx == 'file-4'
         assert ds.files['file-4'].path == os.path.join(self.test_path, 'files', 'wav_4.wav')
+
+    def test_load_issuers(self):
+        ds = self.reader.load(self.test_path)
+
+        assert ds.num_issuers == 3
+
+        assert ds.issuers['speaker-1'].idx == 'speaker-1'
+        assert type(ds.issuers['speaker-1']) == assets.Speaker
+        assert ds.issuers['speaker-1'].gender == assets.Gender.MALE
+        assert ds.issuers['speaker-1'].age_group == assets.AgeGroup.UNKNOWN
+        assert ds.issuers['speaker-1'].native_language is None
+
+        assert ds.issuers['speaker-2'].idx == 'speaker-2'
+        assert type(ds.issuers['speaker-2']) == assets.Speaker
+        assert ds.issuers['speaker-2'].gender == assets.Gender.MALE
+        assert ds.issuers['speaker-2'].age_group == assets.AgeGroup.UNKNOWN
+        assert ds.issuers['speaker-2'].native_language is None
+
+        assert ds.issuers['speaker-3'].idx == 'speaker-3'
+        assert type(ds.issuers['speaker-3']) == assets.Speaker
+        assert ds.issuers['speaker-3'].gender == assets.Gender.FEMALE
+        assert ds.issuers['speaker-3'].age_group == assets.AgeGroup.UNKNOWN
+        assert ds.issuers['speaker-3'].native_language is None
 
     def test_load_utterances(self):
         ds = self.reader.load(self.test_path)
@@ -86,7 +110,6 @@ class KaldiReaderTest(unittest.TestCase):
 class KaldiWriterTest(unittest.TestCase):
     def setUp(self):
         self.writer = io.KaldiWriter()
-        self.test_path = resources.sample_kaldi_ds_path()
 
     def test_save(self):
         ds = resources.create_dataset()
@@ -96,6 +119,7 @@ class KaldiWriterTest(unittest.TestCase):
         assert 'segments' in os.listdir(path)
         assert 'text' in os.listdir(path)
         assert 'utt2spk' in os.listdir(path)
+        assert 'spk2gender' in os.listdir(path)
         assert 'wav.scp' in os.listdir(path)
 
         shutil.rmtree(path, ignore_errors=True)

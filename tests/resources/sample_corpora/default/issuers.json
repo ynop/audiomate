@@ -1,0 +1,20 @@
+{
+  "speaker-1": {
+    "info": {},
+    "type": "speaker",
+    "gender": "MALE",
+    "age_group": "ADULT",
+    "native_language": "deu"
+  },
+  "speaker-2": {
+    "info": {},
+    "type": "artist",
+    "name": "Ohooo"
+  },
+  "speaker-3": {
+    "info": {
+      "region": "zh"
+    }
+  }
+}
+

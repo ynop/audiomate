@@ -94,7 +94,8 @@ class MusanReader(base.CorpusReader):
         issuer_idx = annotations[file_idx][2]
 
         if issuer_idx not in corpus.issuers:
-            corpus.new_issuer(issuer_idx)
+            issuer = assets.Artist(issuer_idx, name=issuer_idx)
+            corpus.import_issuers(issuer)
 
         return issuer_idx
 
@@ -103,10 +104,14 @@ class MusanReader(base.CorpusReader):
         if file_idx not in annotations:
             return None
 
+        issuer = assets.Speaker(file_idx)
+
         if file_idx in annotations:
-            corpus.new_issuer(file_idx, {'gender': annotations[file_idx][0],
-                                         'language': annotations[file_idx][1]})
-        else:
-            corpus.new_issuer(file_idx, {'gender': None, 'language': None})
+            if annotations[file_idx][0] == 'm':
+                issuer.gender = assets.Gender.MALE
+            elif annotations[file_idx][0] == 'f':
+                issuer.gender = assets.Gender.FEMALE
+
+        corpus.import_issuers(issuer)
 
         return file_idx

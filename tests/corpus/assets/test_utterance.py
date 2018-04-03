@@ -37,7 +37,7 @@ class UtteranceTest(unittest.TestCase):
             assets.Label('g', 4.2, 7.9)
         ])
 
-        self.file = assets.File('wav', resources.get_wav_file_path('wav_1.wav'))
+        self.file = assets.File('wav', resources.sample_wav_file('wav_1.wav'))
         self.issuer = assets.Issuer('toni')
         self.utt = assets.Utterance('test', self.file, issuer=self.issuer, start=1.25, end=1.30, label_lists=[
             self.ll_1,

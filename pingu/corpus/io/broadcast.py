@@ -8,6 +8,7 @@ from . import base
 from . import default
 
 FILES_FILE_NAME = 'files.txt'
+ISSUER_FILE_NAME = 'issuers.json'
 UTTERANCE_FILE_NAME = 'utterances.txt'
 UTT_ISSUER_FILE_NAME = 'utt_issuers.txt'
 LABEL_FILE = 'labels.txt'
@@ -46,6 +47,7 @@ class BroadcastReader(base.CorpusReader):
 
     def _load(self, path):
         file_path = os.path.join(path, FILES_FILE_NAME)
+        issuer_path = os.path.join(path, ISSUER_FILE_NAME)
         utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
         utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
         feat_path = os.path.join(path, FEAT_CONTAINER_FILE_NAME)
@@ -53,6 +55,7 @@ class BroadcastReader(base.CorpusReader):
         corpus = pingu.Corpus(path=path)
 
         default.DefaultReader.read_files(file_path, corpus)
+        default.DefaultReader.read_issuers(issuer_path, corpus)
         utt_id_to_issuer = default.DefaultReader.read_utt_to_issuer_mapping(utt_issuer_path, corpus)
         default.DefaultReader.read_utterances(utterance_path, corpus, utt_id_to_issuer)
         BroadcastReader.read_labels(path, corpus)

@@ -1,0 +1,17 @@
+{
+  "speaker-1": {
+    "type": "speaker",
+    "gender": "FEMALE",
+    "age_group": "CHILD",
+    "native_language": "eng"
+  },
+  "speaker-2": {
+    "info": {},
+    "type": "artist"
+  },
+  "speaker-3": {
+    "info": {
+    }
+  }
+}
+

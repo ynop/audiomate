@@ -18,7 +18,7 @@ class CorpusViewTest(unittest.TestCase):
         assert self.ds.label_count() == {'music': 11, 'speech': 7}
 
     def test_stats(self):
-        ds = pingu.Corpus.load(resources.sample_default_ds_path(), reader='default')
+        ds = pingu.Corpus.load(resources.sample_corpus_path('default'), reader='default')
         stats = ds.stats()
 
         assert stats.min == pytest.approx(-1.0)
@@ -27,7 +27,7 @@ class CorpusViewTest(unittest.TestCase):
         assert stats.var == pytest.approx(0.015060359)
 
     def test_stats_per_utterance(self):
-        ds = pingu.Corpus.load(resources.sample_default_ds_path(), reader='default')
+        ds = pingu.Corpus.load(resources.sample_corpus_path('default'), reader='default')
         stats = ds.stats_per_utterance()
 
         assert set(list(stats.keys())) == {'utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5'}

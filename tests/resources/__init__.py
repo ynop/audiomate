@@ -6,70 +6,19 @@ from pingu.corpus import assets
 from pingu.corpus.subset import subview
 
 
-def sample_voxforge_response():
-    with open(os.path.join(os.path.dirname(__file__), 'voxforge_response.html')) as f:
-        return f.read()
+def get_resource_path(sub_path_components):
+    """ Get the absolute path of a file in the resources folder with its relative path components. """
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), *sub_path_components))
 
 
-def sample_voxforge_file_path():
-    return os.path.join(os.path.dirname(__file__), 'voxforge_sample.tgz')
+def sample_wav_file(name):
+    """ Return the path to a wav file of the `wav_files` folder with its name. """
+    return get_resource_path(['wav_files', name])
 
 
-def dummy_wav_path_and_name():
-    name = 'test.wav'
-    return os.path.join(os.path.dirname(__file__), name), name
-
-
-def sample_default_ds_path():
-    return os.path.join(os.path.dirname(__file__), 'default_ds')
-
-
-def sample_broadcast_ds_path():
-    return os.path.join(os.path.dirname(__file__), 'broadcast_ds')
-
-
-def sample_aed_ds_path():
-    return os.path.join(os.path.dirname(__file__), 'aed_ds')
-
-
-def sample_urbansound8k_ds_path():
-    return os.path.join(os.path.dirname(__file__), 'urbansound8k_ds')
-
-
-def sample_gtzan_ds_path():
-    return os.path.join(os.path.dirname(__file__), 'gtzan_ds')
-
-
-def sample_esc50_ds_path():
-    return os.path.join(os.path.dirname(__file__), 'esc50_ds')
-
-
-def sample_kaldi_ds_path():
-    return os.path.join(os.path.dirname(__file__), 'kaldi_ds')
-
-
-def sample_musan_ds_path():
-    return os.path.join(os.path.dirname(__file__), 'musan_ds')
-
-
-def sample_speech_commands_ds_path():
-    return os.path.join(os.path.dirname(__file__), 'speech_commands_ds')
-
-
-def sample_tuda_ds_path():
-    return os.path.join(os.path.dirname(__file__), 'tuda_ds')
-
-
-def get_wav_folder():
-    return os.path.join(os.path.dirname(__file__), 'wav_files')
-
-
-def get_wav_file_path(name):
-    return os.path.join(get_wav_folder(), name)
-
-
-def get_feat_container_path():
-    return os.path.join(os.path.dirname(__file__), 'feat_container')
+def sample_corpus_path(name):
+    """ Return the path to a sample corpus path with its name. """
+    return get_resource_path(['sample_corpora', name])
 
 
 def create_dataset():
@@ -77,19 +26,21 @@ def create_dataset():
 
     ds = pingu.Corpus(temp_path)
 
-    wav_1_path = get_wav_file_path('wav_1.wav')
-    wav_2_path = get_wav_file_path('wav_2.wav')
-    wav_3_path = get_wav_file_path('wav_3.wav')
-    wav_4_path = get_wav_file_path('wav_4.wav')
+    wav_1_path = sample_wav_file('wav_1.wav')
+    wav_2_path = sample_wav_file('wav_2.wav')
+    wav_3_path = sample_wav_file('wav_3.wav')
+    wav_4_path = sample_wav_file('wav_4.wav')
 
     file_1 = ds.new_file(wav_1_path, file_idx='wav-1')
     file_2 = ds.new_file(wav_2_path, file_idx='wav_2')
     file_3 = ds.new_file(wav_3_path, file_idx='wav_3')
     file_4 = ds.new_file(wav_4_path, file_idx='wav_4')
 
-    issuer_1 = ds.new_issuer('spk-1')
-    issuer_2 = ds.new_issuer('spk-2')
-    issuer_3 = ds.new_issuer('spk-3')
+    issuer_1 = assets.Speaker('spk-1', gender=assets.Gender.MALE)
+    issuer_2 = assets.Speaker('spk-2', gender=assets.Gender.FEMALE)
+    issuer_3 = assets.Issuer('spk-3')
+
+    ds.import_issuers([issuer_1, issuer_2, issuer_3])
 
     utt_1 = ds.new_utterance('utt-1', file_1.idx, issuer_idx=issuer_1.idx)
     utt_2 = ds.new_utterance('utt-2', file_2.idx, issuer_idx=issuer_1.idx)
@@ -121,10 +72,10 @@ def create_dataset():
 def create_multi_label_corpus():
     ds = pingu.Corpus()
 
-    wav_1_path = get_wav_file_path('wav_1.wav')
-    wav_2_path = get_wav_file_path('wav_2.wav')
-    wav_3_path = get_wav_file_path('wav_3.wav')
-    wav_4_path = get_wav_file_path('wav_4.wav')
+    wav_1_path = sample_wav_file('wav_1.wav')
+    wav_2_path = sample_wav_file('wav_2.wav')
+    wav_3_path = sample_wav_file('wav_3.wav')
+    wav_4_path = sample_wav_file('wav_4.wav')
 
     file_1 = ds.new_file(wav_1_path, file_idx='wav-1')
     file_2 = ds.new_file(wav_2_path, file_idx='wav_2')
@@ -204,10 +155,10 @@ def create_multi_label_corpus():
 def create_single_label_corpus():
     ds = pingu.Corpus()
 
-    wav_1_path = get_wav_file_path('wav_1.wav')
-    wav_2_path = get_wav_file_path('wav_2.wav')
-    wav_3_path = get_wav_file_path('wav_3.wav')
-    wav_4_path = get_wav_file_path('wav_4.wav')
+    wav_1_path = sample_wav_file('wav_1.wav')
+    wav_2_path = sample_wav_file('wav_2.wav')
+    wav_3_path = sample_wav_file('wav_3.wav')
+    wav_4_path = sample_wav_file('wav_4.wav')
 
     file_1 = ds.new_file(wav_1_path, file_idx='wav-1')
     file_2 = ds.new_file(wav_2_path, file_idx='wav_2')

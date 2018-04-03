@@ -8,7 +8,7 @@ from tests import resources
 class FolderReaderTest(unittest.TestCase):
 
     def test_load(self):
-        path = resources.get_wav_folder()
+        path = resources.sample_corpus_path('folder')
         reader = io.FolderReader()
 
         ds = reader.load(path)
