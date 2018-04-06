@@ -108,6 +108,14 @@ class UtteranceTest(unittest.TestCase):
         expected, __ = librosa.core.load(self.file.path, sr=None, offset=1.25, duration=0.05)
         assert np.array_equal(self.utt.read_samples(), expected)
 
+    def test_read_samples_with_offset(self):
+        expected, __ = librosa.core.load(self.file.path, sr=None, offset=1.27, duration=0.03)
+        assert np.array_equal(self.utt.read_samples(offset=0.02), expected)
+
+    def test_read_samples_with_duration(self):
+        expected, __ = librosa.core.load(self.file.path, sr=None, offset=1.26, duration=0.03)
+        assert np.array_equal(self.utt.read_samples(offset=0.01, duration=0.03), expected)
+
     def test_num_samples(self):
         assert self.utt.num_samples() == 800
 

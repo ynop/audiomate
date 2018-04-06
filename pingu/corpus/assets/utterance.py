@@ -80,22 +80,31 @@ class Utterance(object):
     #   Signal
     #
 
-    def read_samples(self, sr=None):
+    def read_samples(self, sr=None, offset=0, duration=None):
         """
         Read the samples of the utterance.
 
         Args:
             sr (int): If None uses the sampling rate given by the file, otherwise resamples to the given sampling rate.
+            offset (float): Offset in seconds to read samples from.
+            duration (float): If not None read only this number of seconds in maximum.
 
         Returns:
             np.ndarray: A numpy array containing the samples as a floating point (numpy.float32) time series.
         """
-        duration = None
+
+        read_duration = None
 
         if self.end >= 0:
-            duration = self.duration
+            read_duration = self.duration
 
-        return self.file.read_samples(sr=sr, offset=self.start, duration=duration)
+        if offset > 0:
+            read_duration -= offset
+
+        if duration is not None:
+            read_duration = min(duration, read_duration)
+
+        return self.file.read_samples(sr=sr, offset=self.start + offset, duration=read_duration)
 
     @property
     def sampling_rate(self):
