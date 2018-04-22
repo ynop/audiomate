@@ -1,0 +1,4 @@
+slice_file_name,fsID,start,end,salience,fold,classID,class
+18581-3-1-1.wav,18581,64.21059,68.21059,2,2,3,dog_bark
+204773-3-8-0.wav,204773,32.595476,36.595476,1,2,3,dog_bark
+14772-7-2-0.wav,14772,8.715439,9.86442,1,7,7,jackhammer
