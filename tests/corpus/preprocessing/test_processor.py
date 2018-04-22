@@ -13,7 +13,12 @@ from tests import resources
 
 
 class OfflineProcessorDummy(preprocessing.OfflineProcessor):
+
+    def __init__(self):
+        self.called_with_sr = None
+
     def process_sequence(self, frames, sampling_rate, utterance=None, corpus=None):
+        self.called_with_sr = sampling_rate
         return frames
 
 
@@ -124,3 +129,15 @@ class OfflineProcessorTest(unittest.TestCase):
         assert feat_container.get('test').shape == (1, 4096)
 
         feat_container.close()
+
+    def test_process_sequence_is_called_with_correct_sampling_rate(self):
+        processor = OfflineProcessorDummy()
+        feat_path = os.path.join(self.tempdir, 'feats')
+        file = assets.File('test_file', resources.sample_wav_file('wav_1.wav'))
+        utterance = assets.Utterance('test', file)
+        feat_container = assets.FeatureContainer(feat_path)
+        feat_container.open()
+
+        processor.process_utterance(utterance, feat_container, frame_size=4096, hop_size=2048, sr=8000)
+
+        assert processor.called_with_sr == 8000

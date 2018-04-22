@@ -126,8 +126,11 @@ class OfflineProcessor(Processor, metaclass=abc.ABCMeta):
         if num_pad_samples > samples.size:
             samples = np.pad(samples, (0, num_pad_samples - samples.size), mode='constant', constant_values=0)
 
+        # Get sampling-rate if not given
+        sampling_rate = sr or utterance.sampling_rate
+
         frames = librosa.util.frame(samples, frame_length=frame_size, hop_length=hop_size).T
-        processed = self.process_sequence(frames, utterance.sampling_rate, utterance=utterance, corpus=corpus)
+        processed = self.process_sequence(frames, sampling_rate, utterance=utterance, corpus=corpus)
         feature_container.set(utterance.idx, processed)
 
     @abc.abstractmethod
