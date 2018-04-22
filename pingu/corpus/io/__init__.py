@@ -12,7 +12,7 @@ from .musan import MusanReader  # noqa: F401
 from .speech_commands import SpeechCommandsReader  # noqa: F401
 from .tuda import TudaReader  # noqa: F401
 from .folder import FolderReader  # noqa: F401
-from .esc import ESC50Reader  # noqa: F401
+from .esc import ESC50Downloader, ESC50Reader  # noqa: F401
 from .mozilla_deepspeech import MozillaDeepSpeechWriter  # noqa: F401
 from .voxforge import VoxforgeDownloader, VoxforgeReader  # noqa: F401
 from .aed import AEDReader  # noqa: F401

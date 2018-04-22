@@ -1,5 +1,9 @@
 import os
 import collections
+import zipfile
+import shutil
+
+import requests
 
 import pingu
 from pingu.corpus import assets
@@ -7,7 +11,55 @@ from pingu.corpus import subset
 from . import base
 from pingu.utils import textfile
 
+DOWNLOAD_URL = 'https://github.com/karoldvl/ESC-50/archive/master.zip'
 META_FILE_PATH = os.path.join('meta', 'esc50.csv')
+
+
+class ESC50Downloader(base.CorpusDownloader):
+    """
+    Downloader for the ESC-50 dataset.
+
+    Args:
+        url (str): The url to download the dataset from. If not given the default URL is used.
+    """
+
+    def __init__(self, url=None):
+        if url is None:
+            self.url = DOWNLOAD_URL
+        else:
+            self.url = url
+
+    @classmethod
+    def type(cls):
+        return 'esc-50'
+
+    def _download(self, target_path):
+        temp_file = os.path.join(target_path, 'esc_50.zip')
+
+        ESC50Downloader.download_file_chunked(self.url, temp_file)
+        ESC50Downloader.extract_zip(temp_file, target_path)
+
+        root_folder = os.path.join(target_path, 'ESC-50-master')
+
+        for element in os.listdir(root_folder):
+            shutil.move(os.path.join(root_folder, element), target_path)
+
+        shutil.rmtree(root_folder)
+        os.remove(temp_file)
+
+    @staticmethod
+    def download_file_chunked(url, to):
+        """ Downloads the file from `url` to the local path `to`."""
+        r = requests.get(url, stream=True)
+        with open(to, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+
+    @staticmethod
+    def extract_zip(path, to):
+        with zipfile.ZipFile(path) as archive:
+            archive.extractall(to)
 
 
 class ESC50Reader(base.CorpusReader):
