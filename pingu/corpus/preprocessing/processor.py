@@ -61,11 +61,12 @@ class Processor(metaclass=abc.ABCMeta):
         for utterance in corpus.utterances.values():
             utt_sampling_rate = utterance.sampling_rate
 
-            if sampling_rate > 0 and sampling_rate != utt_sampling_rate:
-                raise ValueError(
-                    'File {} has a different sampling-rate than the previous ones!'.format(utterance.file.idx))
+            if sr is None:
+                if sampling_rate > 0 and sampling_rate != utt_sampling_rate:
+                    raise ValueError(
+                        'File {} has a different sampling-rate than the previous ones!'.format(utterance.file.idx))
 
-            sampling_rate = utt_sampling_rate
+                sampling_rate = utt_sampling_rate
 
             self.process_utterance(utterance, feat_container,
                                    corpus=corpus,
