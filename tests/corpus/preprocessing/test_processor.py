@@ -4,6 +4,7 @@ import shutil
 import os
 
 import h5py
+import numpy as np
 import pytest
 
 from pingu.corpus import assets
@@ -64,6 +65,37 @@ class OfflineProcessorTest(unittest.TestCase):
             assert f['utt-3'].shape == (5, 4096)
             assert f['utt-4'].shape == (3, 4096)
             assert f['utt-5'].shape == (10, 4096)
+
+    def test_process_corpus_from_feature_container(self):
+        ds = resources.create_dataset()
+        processor = OfflineProcessorDummy()
+
+        in_feat_path = os.path.join(self.tempdir, 'in_feats')
+        out_feat_path = os.path.join(self.tempdir, 'out_feats')
+
+        in_feats = assets.FeatureContainer(in_feat_path)
+        utt_feats = np.arange(30).reshape(5, 6)
+
+        with in_feats:
+            in_feats.sampling_rate = 16000
+            in_feats.frame_size = 400
+            in_feats.hop_size = 160
+
+            for utt_idx in ds.utterances.keys():
+                in_feats.set(utt_idx, utt_feats)
+
+        processor.process_corpus_from_feature_container(ds, in_feats, out_feat_path)
+
+        out_feats = assets.FeatureContainer(out_feat_path)
+
+        with out_feats:
+            assert len(out_feats.keys()) == 5
+
+            assert np.array_equal(out_feats.get('utt-1', mem_map=False), utt_feats)
+            assert np.array_equal(out_feats.get('utt-2', mem_map=False), utt_feats)
+            assert np.array_equal(out_feats.get('utt-3', mem_map=False), utt_feats)
+            assert np.array_equal(out_feats.get('utt-4', mem_map=False), utt_feats)
+            assert np.array_equal(out_feats.get('utt-5', mem_map=False), utt_feats)
 
     def test_process_utterance(self):
         processor = OfflineProcessorDummy()

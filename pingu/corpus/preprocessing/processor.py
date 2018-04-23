@@ -82,6 +82,36 @@ class Processor(metaclass=abc.ABCMeta):
 
         return feat_container
 
+    def process_corpus_from_feature_container(self, corpus, input_features, output_path):
+        """
+        Process the given corpus and save the processed features in a feature-container at the given path.
+        Instead of using the framed signal, use the features from from the given feature-container.
+
+        Args:
+            corpus (Corpus): The corpus to process the utterances from.
+            input_features (FeatureContainer): The feature-container to process the frames from.
+            output_path (str): A path to save the feature-container to.
+
+        Returns:
+            FeatureContainer: The feature-container containing the processed features.
+        """
+
+        feat_container = assets.FeatureContainer(output_path)
+        feat_container.open()
+
+        input_features.open()
+
+        for utterance in corpus.utterances.values():
+            self.process_utterance_from_feature_container(utterance, input_features, feat_container, corpus)
+
+        feat_container.frame_size = input_features.frame_size
+        feat_container.hop_size = input_features.hop_size
+        feat_container.sampling_rate = input_features.sampling_rate
+
+        feat_container.close()
+
+        return feat_container
+
     @abc.abstractmethod
     def process_utterance(self, utterance, feature_container, corpus=None, frame_size=400, hop_size=160, sr=None):
         """
@@ -94,6 +124,20 @@ class Processor(metaclass=abc.ABCMeta):
             frame_size (int): The number of samples per frame.
             hop_size (int): The number of samples between two frames.
             sr (int): Use the given sampling rate. If None uses the native sampling rate from the file.
+        """
+        pass
+
+    @abc.abstractmethod
+    def process_utterance_from_feature_container(self, utterance, in_feat_container, out_feat_container, corpus=None):
+        """
+        Process the feature of the given utterance from the given input feature-container and put it
+        to the given output feature-container.
+
+        Args:
+            utterance (Utterance): The utterance to process.
+            in_feat_container (FeatureContainer): The feature-container to read the input frames.
+            out_feat_container (FeatureContainer): The feature-container to store the output.
+            corpus (Corpus): The corpus where the utterance is from, if available.
         """
         pass
 
@@ -132,6 +176,12 @@ class OfflineProcessor(Processor, metaclass=abc.ABCMeta):
         frames = librosa.util.frame(samples, frame_length=frame_size, hop_length=hop_size).T
         processed = self.process_sequence(frames, sampling_rate, utterance=utterance, corpus=corpus)
         feature_container.set(utterance.idx, processed)
+
+    def process_utterance_from_feature_container(self, utterance, in_feat_container, out_feat_container, corpus=None):
+        sampling_rate = in_feat_container.sampling_rate
+        frames = in_feat_container.get(utterance.idx, mem_map=False)
+        processed = self.process_sequence(frames, sampling_rate, utterance=utterance, corpus=corpus)
+        out_feat_container.set(utterance.idx, processed)
 
     @abc.abstractmethod
     def process_sequence(self, frames, sampling_rate, utterance=None, corpus=None):
