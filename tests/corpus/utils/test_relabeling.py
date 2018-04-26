@@ -3,8 +3,7 @@ import os.path
 import pytest
 
 from pingu.corpus import assets
-from pingu.corpus.utils import labellist
-from pingu.corpus.utils.labellist import UnmappedLabelsException
+from pingu.corpus.utils import relabeling
 
 
 class TestLabelListUtilities(object):
@@ -14,7 +13,7 @@ class TestLabelListUtilities(object):
             assets.Label('a', 3.2, 4.5)
         ])
 
-        actual = labellist.relabel(label_list, {('a',): 'b'})
+        actual = relabeling.relabel(label_list, {('a',): 'b'})
 
         assert len(actual) == 1
         assert actual[0].start == 3.2
@@ -37,7 +36,7 @@ class TestLabelListUtilities(object):
             assets.Label('c', 4.2, 5.1)
         ])
 
-        actual = labellist.relabel(label_list, projections)
+        actual = relabeling.relabel(label_list, projections)
 
         assert len(actual) == 5
 
@@ -73,7 +72,7 @@ class TestLabelListUtilities(object):
             assets.Label('b', 3.9, 4.5)
         ])
 
-        actual = labellist.relabel(label_list, projections)
+        actual = relabeling.relabel(label_list, projections)
 
         assert len(actual) == 3
 
@@ -100,7 +99,7 @@ class TestLabelListUtilities(object):
             assets.Label('b', 4.4, 5.1)
         ])
 
-        actual = labellist.relabel(label_list, projections)
+        actual = relabeling.relabel(label_list, projections)
 
         assert len(actual) == 1
 
@@ -120,7 +119,7 @@ class TestLabelListUtilities(object):
             assets.Label('b', 4.2, 4.7)
         ])
 
-        actual = labellist.relabel(label_list, projections)
+        actual = relabeling.relabel(label_list, projections)
 
         assert len(actual) == 2
 
@@ -142,8 +141,8 @@ class TestLabelListUtilities(object):
         unmapped_combinations = [('a', 'b'), ('a', 'b', 'c'), ('a', 'c')]
         expected_message = 'Unmapped combinations: {}'.format(unmapped_combinations)
 
-        with pytest.raises(UnmappedLabelsException) as ex:
-            labellist.relabel(label_list, {('a',): 'foo'})
+        with pytest.raises(relabeling.UnmappedLabelsException) as ex:
+            relabeling.relabel(label_list, {('a',): 'foo'})
 
         assert ex.value.message == expected_message
 
@@ -154,7 +153,7 @@ class TestLabelListUtilities(object):
             assets.Label('c', 4.3, 4.8)
         ])
 
-        actual = labellist.relabel(label_list, {('a',): 'new_label_a', ('**',): 'catch_all'})
+        actual = relabeling.relabel(label_list, {('a',): 'new_label_a', ('**',): 'catch_all'})
 
         assert len(actual) == 5
 
@@ -180,7 +179,7 @@ class TestLabelListUtilities(object):
 
     def test_load_projections_from_file(self):
         path = os.path.join(os.path.dirname(__file__), 'projections.txt')
-        projections = labellist.load_projections(path)
+        projections = relabeling.load_projections(path)
 
         assert len(projections) == 3
 
@@ -200,7 +199,7 @@ class TestLabelListUtilities(object):
             assets.Label('c', 4.2, 5.1)
         ])
 
-        unmapped_combinations = labellist.find_missing_projections(label_list, {})
+        unmapped_combinations = relabeling.find_missing_projections(label_list, {})
 
         assert len(unmapped_combinations) == 5
         assert ('b',) in unmapped_combinations
@@ -221,7 +220,7 @@ class TestLabelListUtilities(object):
             assets.Label('c', 4.2, 5.1)
         ])
 
-        unmapped_combinations = labellist.find_missing_projections(label_list, projections)
+        unmapped_combinations = relabeling.find_missing_projections(label_list, projections)
 
         assert len(unmapped_combinations) == 3
         assert ('b',) in unmapped_combinations
@@ -236,7 +235,7 @@ class TestLabelListUtilities(object):
             assets.Label('a', 3.5, 4.5),
         ])
 
-        unmapped_combinations = labellist.find_missing_projections(label_list, {})
+        unmapped_combinations = relabeling.find_missing_projections(label_list, {})
 
         assert len(unmapped_combinations) == 3
         assert ('b',) in unmapped_combinations
@@ -258,7 +257,7 @@ class TestLabelListUtilities(object):
             assets.Label('c', 4.2, 5.1)
         ])
 
-        unmapped_combinations = labellist.find_missing_projections(label_list, projections)
+        unmapped_combinations = relabeling.find_missing_projections(label_list, projections)
 
         assert len(unmapped_combinations) == 0
 
@@ -274,7 +273,7 @@ class TestLabelListUtilities(object):
             assets.Label('c', 4.2, 5.1)
         ])
 
-        unmapped_combinations = labellist.find_missing_projections(label_list, projections)
+        unmapped_combinations = relabeling.find_missing_projections(label_list, projections)
 
         assert len(unmapped_combinations) == 0
 
@@ -284,7 +283,7 @@ class TestLabelListUtilities(object):
             assets.Label('a', 1.5, 2.5),
         ])
 
-        unmapped_combinations = labellist.find_missing_projections(label_list, {})
+        unmapped_combinations = relabeling.find_missing_projections(label_list, {})
 
         assert len(unmapped_combinations) == 3
         assert unmapped_combinations[0] == ('a',)

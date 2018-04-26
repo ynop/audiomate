@@ -27,13 +27,9 @@ class Encoder(object):
         pass
 
 
-class SequenceHotEncoder(Encoder):
-    pass
-
-
-class FrameHotEncoder(Encoder):
+class FrameOneHotEncoder(Encoder):
     """
-    The FrameHotEncoder is used to encode the labels per frame.
+    The FrameOneHotEncoder is used to encode the labels per frame.
     It creates a matrix with dimension num-frames x len(labels).
     The vector (2nd dim) has an entry for every label in the passed labels-list.
     If the sequence contains a given label within a frame it is set to 1.
@@ -54,7 +50,7 @@ class FrameHotEncoder(Encoder):
         >>> ])
         >>> labels = ['speech', 'music', 'noise']
         >>> fs = units.FrameSettings(16000, 16000)
-        >>> encoder = FrameHotEncoder(labels, frame_settings=fs)
+        >>> encoder = FrameOneHotEncoder(labels, frame_settings=fs)
         >>> encoder.encode(ll)
         array([
             [0, 1, 0],
