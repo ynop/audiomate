@@ -1,6 +1,6 @@
 import re
 
-from pingu.corpus.assets import Label, LabelList
+from pingu.corpus import assets
 from pingu.utils import textfile
 
 __TIME_JUNK_PATTERN = re.compile(r'[^0-9.\-]')
@@ -63,7 +63,12 @@ def read_label_file(path):
     labels = []
 
     for record in textfile.read_separated_lines_generator(path, separator='\t', max_columns=3):
-        labels.append([float(_clean_time(record[0])), float(_clean_time(record[1])), str(record[2])])
+        value = ''
+
+        if len(record) > 2:
+            value = str(record[2])
+
+        labels.append([float(_clean_time(record[0])), float(_clean_time(record[1])), value])
 
     return labels
 
@@ -78,12 +83,12 @@ def read_label_list(path):
     Returns:
         pingu.corpus.assets.LabelList: Label list containing the labels
     """
-    labels = []
-    for record in textfile.read_separated_lines_generator(path, separator='\t', max_columns=3):
-        labels.append(
-            Label(str(record[2]), float(_clean_time(record[0])), float(_clean_time(record[1]))))
+    ll = assets.LabelList()
 
-    return LabelList(labels=labels)
+    for record in read_label_file(path):
+        ll.append(assets.Label(record[2], start=record[0], end=record[1]))
+
+    return ll
 
 
 def _clean_time(time_str):

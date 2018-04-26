@@ -33,6 +33,24 @@ class TestAudacityFormat(object):
         assert labels[1][1] == 43531.343483
         assert labels[1][2] == 'speech_male'
 
+    def test_read_label_file_with_empty_value(self):
+        path = os.path.join(os.path.dirname(__file__), 'audacity_labels_empty_value.txt')
+        labels = read_label_file(path)
+
+        assert len(labels) == 3
+
+        assert labels[0][0] == 1
+        assert labels[0][1] == 4
+        assert labels[0][2] == 'music'
+
+        assert labels[1][0] == 4
+        assert labels[1][1] == 7
+        assert labels[1][2] == ''
+
+        assert labels[2][0] == 7
+        assert labels[2][1] == 9
+        assert labels[2][2] == 'speech_male'
+
     def test_read_label_list_en(self):
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_en.txt')
         ll = read_label_list(path)
@@ -60,6 +78,24 @@ class TestAudacityFormat(object):
         assert ll[1].start == 43512.446969
         assert ll[1].end == 43531.343483
         assert ll[1].value == 'speech_male'
+
+    def test_read_label_list_with_empty_value(self):
+        path = os.path.join(os.path.dirname(__file__), 'audacity_labels_empty_value.txt')
+        ll = read_label_list(path)
+
+        assert len(ll) == 3
+
+        assert ll[0].start == 1
+        assert ll[0].end == 4
+        assert ll[0].value == 'music'
+
+        assert ll[1].start == 4
+        assert ll[1].end == 7
+        assert ll[1].value == ''
+
+        assert ll[2].start == 7
+        assert ll[2].end == 9
+        assert ll[2].value == 'speech_male'
 
     def test_write_label_file(self, tmpdir):
         path = os.path.join(tmpdir.strpath, 'audacity_labels.txt')
