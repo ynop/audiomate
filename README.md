@@ -5,7 +5,8 @@
 
 Pingu is a library for easy access to audio datasets. It provides the datastructures for accessing/loading different datasets in a generic way. This should ease the use of audio datasets for example for machine learning tasks.
 
-Documentation: https://ynop.github.io/pingu/
+Documentation: https://ynop.github.io/pingu/   
+Examples: https://github.com/ynop/pingu/tree/master/examples
 
 ## Installation
 
