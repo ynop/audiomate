@@ -39,7 +39,7 @@ Implementations
   Acoustic Event Dataset                    x
   Broadcast                                 x
   Default                                   x      x
-  ESC-50                                    x
+  ESC-50                          x         x
   Folder                                    x
   Google Speech Commands                    x
   GTZAN                                     x
@@ -104,6 +104,9 @@ TUDA German Distant Speech
 
 ESC-50
 ^^^^^^
+.. autoclass:: ESC50Downloader
+   :members:
+
 .. autoclass:: ESC50Reader
    :members:
 
