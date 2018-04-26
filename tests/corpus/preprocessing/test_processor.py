@@ -4,6 +4,7 @@ import shutil
 import os
 
 import h5py
+import numpy as np
 import pytest
 
 from pingu.corpus import assets
@@ -13,7 +14,12 @@ from tests import resources
 
 
 class OfflineProcessorDummy(preprocessing.OfflineProcessor):
+
+    def __init__(self):
+        self.called_with_sr = None
+
     def process_sequence(self, frames, sampling_rate, utterance=None, corpus=None):
+        self.called_with_sr = sampling_rate
         return frames
 
 
@@ -59,6 +65,37 @@ class OfflineProcessorTest(unittest.TestCase):
             assert f['utt-3'].shape == (5, 4096)
             assert f['utt-4'].shape == (3, 4096)
             assert f['utt-5'].shape == (10, 4096)
+
+    def test_process_corpus_from_feature_container(self):
+        ds = resources.create_dataset()
+        processor = OfflineProcessorDummy()
+
+        in_feat_path = os.path.join(self.tempdir, 'in_feats')
+        out_feat_path = os.path.join(self.tempdir, 'out_feats')
+
+        in_feats = assets.FeatureContainer(in_feat_path)
+        utt_feats = np.arange(30).reshape(5, 6)
+
+        with in_feats:
+            in_feats.sampling_rate = 16000
+            in_feats.frame_size = 400
+            in_feats.hop_size = 160
+
+            for utt_idx in ds.utterances.keys():
+                in_feats.set(utt_idx, utt_feats)
+
+        processor.process_corpus_from_feature_container(ds, in_feats, out_feat_path)
+
+        out_feats = assets.FeatureContainer(out_feat_path)
+
+        with out_feats:
+            assert len(out_feats.keys()) == 5
+
+            assert np.array_equal(out_feats.get('utt-1', mem_map=False), utt_feats)
+            assert np.array_equal(out_feats.get('utt-2', mem_map=False), utt_feats)
+            assert np.array_equal(out_feats.get('utt-3', mem_map=False), utt_feats)
+            assert np.array_equal(out_feats.get('utt-4', mem_map=False), utt_feats)
+            assert np.array_equal(out_feats.get('utt-5', mem_map=False), utt_feats)
 
     def test_process_utterance(self):
         processor = OfflineProcessorDummy()
@@ -124,3 +161,15 @@ class OfflineProcessorTest(unittest.TestCase):
         assert feat_container.get('test').shape == (1, 4096)
 
         feat_container.close()
+
+    def test_process_sequence_is_called_with_correct_sampling_rate(self):
+        processor = OfflineProcessorDummy()
+        feat_path = os.path.join(self.tempdir, 'feats')
+        file = assets.File('test_file', resources.sample_wav_file('wav_1.wav'))
+        utterance = assets.Utterance('test', file)
+        feat_container = assets.FeatureContainer(feat_path)
+        feat_container.open()
+
+        processor.process_utterance(utterance, feat_container, frame_size=4096, hop_size=2048, sr=8000)
+
+        assert processor.called_with_sr == 8000
