@@ -1,10 +1,10 @@
 import abc
-import math
 
 import librosa
 import numpy as np
 
 from pingu.corpus import assets
+from pingu.utils import units
 
 
 class Processor(metaclass=abc.ABCMeta):
@@ -158,13 +158,14 @@ class OfflineProcessor(Processor, metaclass=abc.ABCMeta):
     """
 
     def process_utterance(self, utterance, feature_container, corpus=None, frame_size=400, hop_size=160, sr=None):
+        frame_settings = units.FrameSettings(frame_size, hop_size)
         samples = utterance.read_samples(sr=sr)
 
         if samples.size <= 0:
             raise ValueError('Utterance {} has no samples'.format(utterance.idx))
 
         # Pad with zeros to match frames
-        num_frames = math.ceil(max(samples.size - frame_size, 0) / hop_size + 1)
+        num_frames = frame_settings.num_frames(samples.size)
         num_pad_samples = (num_frames - 1) * hop_size + frame_size
 
         if num_pad_samples > samples.size:
