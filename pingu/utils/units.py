@@ -53,6 +53,7 @@ class FrameSettings(object):
     By default the framing is done as follows:
         * The first frame starts at sample 0
         * The end of the last frame is higher than the last sample.
+        * The end of the last frame is smaller than the last sample + hop_size
 
     Args:
         frame_size (int): Number of samples used per frame.
@@ -67,12 +68,12 @@ class FrameSettings(object):
         """
         Return the number of frames that will be used for a signal with the length of ``num_samples``.
         """
-        return math.ceil(max(num_samples - self.frame_size, 0) / self.hop_size + 1)
+        return math.ceil(float(max(num_samples - self.frame_size, 0)) / float(self.hop_size)) + 1
 
     def sample_to_frame_range(self, sample_index):
         """
         Return a tuple containing the indices of the first frame containing the sample with the given index and
-        the last frame (exclusive, doesn't contain the sample anymor).
+        the last frame (exclusive, doesn't contain the sample anymore).
         """
         start = max(0, int((sample_index - self.frame_size) / self.hop_size) + 1)
         end = int(sample_index / self.hop_size) + 1
@@ -86,6 +87,13 @@ class FrameSettings(object):
         start = frame_index * self.hop_size
         end = start + self.frame_size
         return start, end
+
+    def frame_to_seconds(self, frame_index, sr):
+        """
+        Return a tuple containing the start and end of the frame in seconds.
+        """
+        start_sample, end_sample = self.frame_to_sample(frame_index)
+        return sample_to_seconds(start_sample, sampling_rate=sr), sample_to_seconds(end_sample, sampling_rate=sr)
 
     def time_range_to_frame_range(self, start, end, sr):
         """
@@ -103,4 +111,4 @@ class FrameSettings(object):
         start_sample = seconds_to_sample(start, sr)
         end_sample = seconds_to_sample(end, sr)
 
-        return self.sample_to_frame_range(start_sample)[0], self.sample_to_frame_range(end_sample-1)[1]
+        return self.sample_to_frame_range(start_sample)[0], self.sample_to_frame_range(end_sample - 1)[1]

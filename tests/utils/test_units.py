@@ -1,9 +1,9 @@
-import unittest
+import pytest
 
 from pingu.utils import units
 
 
-class UnitsTest(unittest.TestCase):
+class TestUnits:
     def test_seconds_to_sample(self):
         assert units.seconds_to_sample(0, 16000) == 0
         assert units.seconds_to_sample(4.5, 22050) == 99225
@@ -13,30 +13,50 @@ class UnitsTest(unittest.TestCase):
         assert units.sample_to_seconds(3000, 8000) == 0.375
 
 
-class FrameSettingsTest(unittest.TestCase):
+class TestFrameSettings:
 
-    def test_num_frames(self):
-        f = units.FrameSettings(4, 2)
-        assert f.num_frames(12) == 5
-        assert f.num_frames(13) == 6
-        assert f.num_frames(15) == 7
+    @pytest.mark.parametrize('frame_size,hop_size,num_samples,num_frames', [
+        (4, 2, 12, 5),
+        (4, 2, 13, 6),
+        (4, 2, 15, 7),
+        (4, 2, 16, 7),
+        (4096, 2048, 41523, 20),
+        (32000, 16000, 240000, 14)
+    ])
+    def test_num_frames(self, frame_size, hop_size, num_samples, num_frames):
+        f = units.FrameSettings(frame_size, hop_size)
+        assert f.num_frames(num_samples) == num_frames
 
-    def test_frame_to_start_sample(self):
-        f = units.FrameSettings(400, 160)
-        assert f.frame_to_sample(0) == (0, 400)
-        assert f.frame_to_sample(5) == (800, 1200)
+    @pytest.mark.parametrize('frame_size,hop_size,frame_index,start_sample,end_sample', [
+        (400, 160, 0, 0, 400),
+        (400, 160, 5, 800, 1200),
+    ])
+    def test_frame_to_sample(self, frame_size, hop_size, frame_index, start_sample, end_sample):
+        f = units.FrameSettings(frame_size, hop_size)
+        assert f.frame_to_sample(frame_index) == (start_sample, end_sample)
 
-    def test_sample_to_frame_range(self):
-        f = units.FrameSettings(4, 2)
-        assert f.sample_to_frame_range(0) == (0, 1)
-        assert f.sample_to_frame_range(1) == (0, 1)
-        assert f.sample_to_frame_range(2) == (0, 2)
-        assert f.sample_to_frame_range(5) == (1, 3)
+    @pytest.mark.parametrize('frame_size,hop_size,sample_index,start_frame,end_frame', [
+        (4, 2, 0, 0, 1),
+        (4, 2, 1, 0, 1),
+        (4, 2, 2, 0, 2),
+        (4, 2, 5, 1, 3)
+    ])
+    def test_sample_to_frame_range(self, frame_size, hop_size, sample_index, start_frame, end_frame):
+        f = units.FrameSettings(frame_size, hop_size)
+        assert f.sample_to_frame_range(sample_index) == (start_frame, end_frame)
 
-    def test_time_range_to_frame_range(self):
-        f = units.FrameSettings(400, 160)
-        assert f.time_range_to_frame_range(0.37, 2.84, 8000) == (17, 142)
+    @pytest.mark.parametrize('frame_size,hop_size,frame_index,sr,start,end', [
+        (400, 160, 13, 16000, 0.13, 0.155)
+    ])
+    def test_frame_to_seconds(self, frame_size, hop_size, frame_index, sr, start, end):
+        f = units.FrameSettings(frame_size, hop_size)
+        assert f.frame_to_seconds(frame_index, sr) == (start, end)
 
-    def test_time_range_to_frame_range_on_frame_boundary(self):
-        f = units.FrameSettings(32000, 16000)
-        assert f.time_range_to_frame_range(0, 5, 16000) == (0, 5)
+    @pytest.mark.parametrize('frame_size,hop_size,start_time,end_time,sr,start_index,end_index', [
+        (400, 160, 0.37, 2.84, 8000, 17, 142),
+        (32000, 16000, 0.0, 5.0, 16000, 0, 5),
+        (32000, 16000, 13.0, 15.0, 16000, 12, 15),
+    ])
+    def test_time_range_to_frame_range(self, frame_size, hop_size, start_time, end_time, sr, start_index, end_index):
+        f = units.FrameSettings(frame_size, hop_size)
+        assert f.time_range_to_frame_range(start_time, end_time, sr) == (start_index, end_index)
