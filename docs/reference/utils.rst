@@ -30,3 +30,9 @@ Units
 
 .. automodule:: pingu.utils.units
     :members:
+
+Misc
+----
+
+.. automodule:: pingu.utils.misc
+    :members:
