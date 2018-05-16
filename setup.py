@@ -4,7 +4,7 @@ from setuptools import setup
 PYTEST_VERSION_ = '3.3.0'
 
 setup(name='audiomate',
-      version='0.1',
+      version='0.0.0',
       description='Handling of audio datasets/corpora.',
       url='',
       author='Matthias Buechi',
