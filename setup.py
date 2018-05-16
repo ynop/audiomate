@@ -5,9 +5,13 @@ PYTEST_VERSION_ = '3.3.0'
 
 setup(name='audiomate',
       version='0.0.0',
-      description='Handling of audio datasets/corpora.',
-      url='',
-      author='Matthias Buechi',
+      description='Audiomate is a library for working with audio datasets.',
+      long_description='Audiomate is a library for easy access to audio datasets. '
+                       'It provides the datastructures for accessing/loading different datasets in a generic way. '
+                       'This should ease the use of audio datasets for example for machine learning tasks.',
+      url='https://github.com/ynop/audiomate',
+      download_url='https://github.com/ynop/audiomate/releases',
+      author='Matthias Buechi, Andreas Ahlenstorf',
       author_email='buec@zhaw.ch',
       classifiers=[
           'Intended Audience :: Science/Research',
@@ -15,7 +19,7 @@ setup(name='audiomate',
           'Programming Language :: Python :: 3 :: Only',
           'Topic :: Scientific/Engineering :: Human Machine Interfaces'
       ],
-      keywords='',
+      keywords='audio music sound corpus dataset',
       license='MIT',
       packages=find_packages(exclude=['tests']),
       install_requires=[
