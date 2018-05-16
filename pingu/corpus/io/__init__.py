@@ -17,6 +17,7 @@ from .mozilla_deepspeech import MozillaDeepSpeechWriter  # noqa: F401
 from .voxforge import VoxforgeDownloader, VoxforgeReader  # noqa: F401
 from .aed import AEDReader  # noqa: F401
 from .urbansound import Urbansound8kReader  # noqa: F401
+from .timit import TimitReader  # noqa: F401
 
 __downloaders = {}
 for cls in CorpusDownloader.__subclasses__():
