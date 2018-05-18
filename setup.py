@@ -4,10 +4,14 @@ from setuptools import setup
 PYTEST_VERSION_ = '3.3.0'
 
 setup(name='audiomate',
-      version='0.1',
-      description='Handling of audio datasets/corpora.',
-      url='',
-      author='Matthias Buechi',
+      version='0.0.0',
+      description='Audiomate is a library for working with audio datasets.',
+      long_description='Audiomate is a library for easy access to audio datasets. '
+                       'It provides the datastructures for accessing/loading different datasets in a generic way. '
+                       'This should ease the use of audio datasets for example for machine learning tasks.',
+      url='https://github.com/ynop/audiomate',
+      download_url='https://github.com/ynop/audiomate/releases',
+      author='Matthias Buechi, Andreas Ahlenstorf',
       author_email='buec@zhaw.ch',
       classifiers=[
           'Intended Audience :: Science/Research',
@@ -15,19 +19,19 @@ setup(name='audiomate',
           'Programming Language :: Python :: 3 :: Only',
           'Topic :: Scientific/Engineering :: Human Machine Interfaces'
       ],
-      keywords='',
+      keywords='audio music sound corpus dataset',
       license='MIT',
       packages=find_packages(exclude=['tests']),
       install_requires=[
-          'audioread==2.1.5',
-          'numpy==1.13.3',
-          'scipy==1.0.0',
-          'librosa==0.6.0',
-          'h5py==2.7.1',
-          'networkx==2.0',
-          'beautifulsoup4==4.6.0',
-          'lxml==4.1.1',
-          'requests==2.18.4'
+          'audioread >= 2.1.0',
+          'numpy >= 1.14.0',
+          'scipy >= 1.1.0',
+          'librosa >= 0.6.0',
+          'h5py >= 2.7.1',
+          'networkx >= 2.0',
+          'beautifulsoup4 >= 4.6.0',
+          'lxml >= 4.1.1',
+          'requests >= 2.18.4'
       ],
       include_package_data=True,
       zip_safe=False,

@@ -67,6 +67,10 @@ target/
 # JetBrains
 .idea
 
+# venv
+venv/
+.venv/
+
 playground
 
 pages-clone/
