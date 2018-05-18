@@ -1,14 +1,19 @@
 # AUDIOMATE
 
+[![PyPI](https://img.shields.io/pypi/v/audiomate.svg)](https://pypi.python.org/pypi/audiomate)
 [![Run Status](https://api.shippable.com/projects/5a1d31821e6eda0700091230/badge?branch=master)](https://app.shippable.com/github/ynop/audiomate)
 [![Coverage Badge](https://api.shippable.com/projects/5a1d31821e6eda0700091230/coverageBadge?branch=master)](https://app.shippable.com/github/ynop/audiomate)
 
 Audiomate is a library for easy access to audio datasets. It provides the datastructures for accessing/loading different datasets in a generic way. This should ease the use of audio datasets for example for machine learning tasks.
 
-Documentation: https://ynop.github.io/audiomate/
+Documentation: https://ynop.github.io/audiomate/   
 Examples: https://github.com/ynop/audiomate/tree/master/examples
 
 ## Installation
+
+```sh
+pip install audiomate 
+```
 
 Install the latest development version:
 
