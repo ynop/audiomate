@@ -1,8 +1,8 @@
-pingu.corpus
-============
+audiomate.corpus
+================
 
-.. automodule:: pingu.corpus
-.. currentmodule:: pingu.corpus
+.. automodule:: audiomate.corpus
+.. currentmodule:: audiomate.corpus
 
 CorpusView
 ----------

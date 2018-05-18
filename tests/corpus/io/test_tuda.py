@@ -2,8 +2,8 @@ import os
 
 import pytest
 
-from pingu.corpus import io
-from pingu.corpus import assets
+from audiomate.corpus import io
+from audiomate.corpus import assets
 from tests import resources
 
 

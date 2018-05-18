@@ -1,7 +1,7 @@
 Concept
 =======
 
-The major target of pingu is to provide a generic way to read/write different corpus/dataset formats or read specific corpora/datasets.
+The major target of audiomate is to provide a generic way to read/write different corpus/dataset formats or read specific corpora/datasets.
 So, independent of the dataset, one can use the same code to access the data.
 
 .. image:: idea.*

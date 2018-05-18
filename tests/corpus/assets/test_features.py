@@ -5,8 +5,8 @@ import h5py
 import numpy as np
 import pytest
 
-from pingu.corpus import assets
-from pingu.corpus.assets.features import PartitioningFeatureIterator
+from audiomate.corpus import assets
+from audiomate.corpus.assets.features import PartitioningFeatureIterator
 from tests import resources
 
 

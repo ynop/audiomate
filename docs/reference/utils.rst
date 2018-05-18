@@ -1,38 +1,38 @@
-pingu.utils
-===========
+audiomate.utils
+===============
 
 JSON File
 ---------
 
-.. automodule:: pingu.utils.jsonfile
+.. automodule:: audiomate.utils.jsonfile
     :members:
 
 Naming
 ------
 
-.. automodule:: pingu.utils.naming
+.. automodule:: audiomate.utils.naming
     :members:
 
 Text
 ----
 
-.. automodule:: pingu.utils.text
+.. automodule:: audiomate.utils.text
     :members:
 
 Text File
 ---------
 
-.. automodule:: pingu.utils.textfile
+.. automodule:: audiomate.utils.textfile
     :members:
 
 Units
 -----
 
-.. automodule:: pingu.utils.units
+.. automodule:: audiomate.utils.units
     :members:
 
 Misc
 ----
 
-.. automodule:: pingu.utils.misc
+.. automodule:: audiomate.utils.misc
     :members:

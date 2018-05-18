@@ -3,7 +3,7 @@ import pytest
 
 import numpy as np
 
-from pingu.utils import stats
+from audiomate.utils import stats
 
 
 class DataStatsTest(unittest.TestCase):

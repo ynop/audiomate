@@ -1,6 +1,6 @@
 import pytest
 
-from pingu.utils import units
+from audiomate.utils import units
 
 
 class TestUnits:

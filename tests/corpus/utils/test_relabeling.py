@@ -2,8 +2,8 @@ import os.path
 
 import pytest
 
-from pingu.corpus import assets
-from pingu.corpus.utils import relabeling
+from audiomate.corpus import assets
+from audiomate.corpus.utils import relabeling
 
 
 class TestLabelListUtilities(object):

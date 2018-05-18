@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# pingu documentation build configuration file, created by
+# audiomate documentation build configuration file, created by
 # sphinx-quickstart on Tue Nov 21 16:54:44 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -22,7 +22,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath('..'))
 
-import pingu
+import audiomate
 
 import sphinx_rtd_theme
 
@@ -57,9 +57,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'pingu'
-copyright = '2017, buec'
-author = 'buec'
+project = 'audiomate'
+copyright = '2017, audiomate'
+author = 'Matthias Büchi, Andreas Ahlenstorf'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -122,7 +122,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'pingudoc'
+htmlhelp_basename = 'audiomatedoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -148,7 +148,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'pingu.tex', 'pingu Documentation',
+    (master_doc, 'audiomate.tex', 'audiomate Documentation',
      'buec', 'manual'),
 ]
 
@@ -157,7 +157,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pingu', 'pingu Documentation',
+    (master_doc, 'audiomate', 'audiomate Documentation',
      [author], 1)
 ]
 
@@ -167,7 +167,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'pingu', 'pingu Documentation',
-     author, 'pingu', 'One line description of project.',
+    (master_doc, 'audiomate', 'audiomate Documentation',
+     author, 'audiomate', 'One line description of project.',
      'Miscellaneous'),
 ]

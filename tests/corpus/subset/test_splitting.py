@@ -3,7 +3,7 @@ import collections
 
 import pytest
 
-from pingu.corpus.subset import splitting
+from audiomate.corpus.subset import splitting
 from tests import resources
 
 

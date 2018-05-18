@@ -2,9 +2,9 @@ import unittest
 
 import numpy as np
 
-from pingu.corpus.utils import label_encoding
-from pingu.corpus import assets
-from pingu.utils import units
+from audiomate.corpus.utils import label_encoding
+from audiomate.corpus import assets
+from audiomate.utils import units
 
 from tests import resources
 

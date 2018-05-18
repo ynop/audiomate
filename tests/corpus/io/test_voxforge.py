@@ -3,8 +3,8 @@ import os
 import pytest
 import requests_mock
 
-from pingu.corpus.io import voxforge
-from pingu.corpus import assets
+from audiomate.corpus.io import voxforge
+from audiomate.corpus import assets
 
 from tests import resources
 

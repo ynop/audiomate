@@ -26,4 +26,4 @@ build:
 
     #Run test and code coverage and output results to the right folder
     - pytest --junitxml=shippable/testresults/tests.xml
-    - pytest --cov=pingu --cov-report=xml:shippable/codecoverage/coverage.xml
+    - pytest --cov=audiomate --cov-report=xml:shippable/codecoverage/coverage.xml

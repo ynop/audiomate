@@ -2,8 +2,8 @@ import os
 import tempfile
 import pytest
 
-from pingu.corpus import io
-from pingu.utils import textfile
+from audiomate.corpus import io
+from audiomate.utils import textfile
 
 from tests import resources
 

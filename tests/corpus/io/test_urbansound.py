@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from pingu.corpus import io
+from audiomate.corpus import io
 from tests import resources
 
 

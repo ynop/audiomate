@@ -1,8 +1,8 @@
-pingu.corpus.assets
-===================
+audiomate.corpus.assets
+=======================
 
-.. automodule:: pingu.corpus.assets
-.. currentmodule:: pingu.corpus.assets
+.. automodule:: audiomate.corpus.assets
+.. currentmodule:: audiomate.corpus.assets
 
 File
 ----

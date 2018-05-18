@@ -1,9 +1,9 @@
 import os
 import tempfile
 
-import pingu
-from pingu.corpus import assets
-from pingu.corpus.subset import subview
+import audiomate
+from audiomate.corpus import assets
+from audiomate.corpus.subset import subview
 
 
 def get_resource_path(sub_path_components):
@@ -24,7 +24,7 @@ def sample_corpus_path(name):
 def create_dataset():
     temp_path = tempfile.mkdtemp()
 
-    ds = pingu.Corpus(temp_path)
+    ds = audiomate.Corpus(temp_path)
 
     wav_1_path = sample_wav_file('wav_1.wav')
     wav_2_path = sample_wav_file('wav_2.wav')
@@ -70,7 +70,7 @@ def create_dataset():
 
 
 def create_multi_label_corpus():
-    ds = pingu.Corpus()
+    ds = audiomate.Corpus()
 
     wav_1_path = sample_wav_file('wav_1.wav')
     wav_2_path = sample_wav_file('wav_2.wav')
@@ -153,7 +153,7 @@ def create_multi_label_corpus():
 
 
 def create_single_label_corpus():
-    ds = pingu.Corpus()
+    ds = audiomate.Corpus()
 
     wav_1_path = sample_wav_file('wav_1.wav')
     wav_2_path = sample_wav_file('wav_2.wav')

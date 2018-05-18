@@ -2,7 +2,7 @@ import os
 import unittest
 import tempfile
 
-from pingu.utils import textfile
+from audiomate.utils import textfile
 
 
 class TextFileUtilsTest(unittest.TestCase):

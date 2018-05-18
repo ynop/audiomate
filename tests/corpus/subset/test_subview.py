@@ -1,7 +1,7 @@
 import unittest
 
-from pingu.corpus import assets
-from pingu.corpus.subset import subview
+from audiomate.corpus import assets
+from audiomate.corpus.subset import subview
 
 from tests import resources
 

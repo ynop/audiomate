@@ -4,9 +4,9 @@ import tempfile
 
 import pytest
 
-from pingu.corpus import io
-from pingu.corpus import assets
-from pingu.utils import jsonfile
+from audiomate.corpus import io
+from audiomate.corpus import assets
+from audiomate.utils import jsonfile
 from tests import resources
 
 

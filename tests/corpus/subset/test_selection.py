@@ -1,6 +1,6 @@
 import pytest
 
-from pingu.corpus import subset
+from audiomate.corpus import subset
 from tests import resources
 
 

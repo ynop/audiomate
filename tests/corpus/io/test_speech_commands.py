@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from pingu.corpus.io import SpeechCommandsReader
+from audiomate.corpus.io import SpeechCommandsReader
 
 from tests import resources
 

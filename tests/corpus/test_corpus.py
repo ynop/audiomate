@@ -5,11 +5,11 @@ import unittest
 
 import pytest
 
-import pingu
-from pingu.corpus import assets
-from pingu.corpus.subset import subview
-from pingu.corpus.io import MusanReader, KaldiWriter
-from pingu.corpus.io import UnknownWriterException, UnknownReaderException
+import audiomate
+from audiomate.corpus import assets
+from audiomate.corpus.subset import subview
+from audiomate.corpus.io import MusanReader, KaldiWriter
+from audiomate.corpus.io import UnknownWriterException, UnknownReaderException
 
 from .. import resources
 
@@ -17,7 +17,7 @@ from .. import resources
 class CorpusTest(unittest.TestCase):
     def setUp(self):
         self.tempdir = tempfile.mkdtemp()
-        self.corpus = pingu.Corpus(self.tempdir)
+        self.corpus = audiomate.Corpus(self.tempdir)
 
         self.ex_file = assets.File('existing_file', '../any/path.wav')
         self.ex_issuer = assets.Issuer('existing_issuer')
@@ -212,7 +212,7 @@ class CorpusTest(unittest.TestCase):
 
     def test_from_corpus(self):
         original = resources.create_dataset()
-        copy = pingu.Corpus.from_corpus(original)
+        copy = audiomate.Corpus.from_corpus(original)
 
         assert copy.num_files == 4
         assert copy.num_issuers == 3
@@ -224,13 +224,13 @@ class CorpusTest(unittest.TestCase):
         assert original.files['wav-1'].path != copy.files['wav-1'].path
 
     def test_from_corpus_only_utterances_and_files(self):
-        ds = pingu.Corpus()
+        ds = audiomate.Corpus()
         ds.new_file('/random/path', 'file_1')
         ds.new_file('/random/path2', 'file_2')
         ds.new_utterance('utt_1', 'file_1')
         ds.new_utterance('utt_2', 'file_2')
 
-        copy = pingu.Corpus.from_corpus(ds)
+        copy = audiomate.Corpus.from_corpus(ds)
 
         assert copy.num_files == 2
         assert copy.num_utterances == 2
@@ -241,13 +241,13 @@ class CorpusTest(unittest.TestCase):
     #
 
     def test_load_throws_exception_when_reader_unknown(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
 
         with pytest.raises(UnknownReaderException):
             corpus.load(resources.sample_corpus_path('default'), reader='does_not_exist')
 
     def test_load_with_default_reader_when_reader_unspecified(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('default'))
 
         assert corpus.name == 'default'
@@ -259,7 +259,7 @@ class CorpusTest(unittest.TestCase):
         assert 'file-4' in corpus.files
 
     def test_load_with_custom_reader_specified_by_name(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('musan'), reader='musan')
 
         assert corpus.name == 'musan'
@@ -272,7 +272,7 @@ class CorpusTest(unittest.TestCase):
         assert 'speech-librivox-0001' in corpus.files
 
     def test_load_with_custom_reader_specified_by_instance(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('musan'), reader=MusanReader())
 
         assert corpus.name == 'musan'
@@ -289,7 +289,7 @@ class CorpusTest(unittest.TestCase):
     #
 
     def test_save_at_corpus_path_throws_exception_when_writer_does_not_exist(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('default'))
 
         assert corpus.name == 'default'
@@ -306,7 +306,7 @@ class CorpusTest(unittest.TestCase):
         assert len(os.listdir(self.tempdir)) == 0
 
     def test_save_at_corpus_path_with_default_writer_when_writer_unspecified(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('default'))
 
         assert corpus.name == 'default'
@@ -330,7 +330,7 @@ class CorpusTest(unittest.TestCase):
         assert 'utterances.txt' in tempdir_contents
 
     def test_save_at_corpus_path_with_writer_specified_by_name(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('kaldi'), reader='kaldi')
 
         assert corpus.name == 'kaldi'
@@ -356,7 +356,7 @@ class CorpusTest(unittest.TestCase):
         assert 'wav.scp' in tempdir_contents
 
     def test_save_at_corpus_path_with_writer_specified_by_instance(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('kaldi'), reader='kaldi')
 
         assert corpus.name == 'kaldi'
@@ -382,7 +382,7 @@ class CorpusTest(unittest.TestCase):
         assert 'wav.scp' in tempdir_contents
 
     def test_save_at_path_throws_exception_when_writer_does_not_exist(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('default'))
 
         assert corpus.name == 'default'
@@ -398,7 +398,7 @@ class CorpusTest(unittest.TestCase):
         assert len(os.listdir(self.tempdir)) == 0
 
     def test_save_at_path_with_default_writer_when_writer_unspecified(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('default'))
 
         assert corpus.name == 'default'
@@ -421,7 +421,7 @@ class CorpusTest(unittest.TestCase):
         assert 'utterances.txt' in tempdir_contents
 
     def test_save_at_path_with_writer_specified_by_name(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('kaldi'), reader='kaldi')
 
         assert corpus.name == 'kaldi'
@@ -446,7 +446,7 @@ class CorpusTest(unittest.TestCase):
         assert 'wav.scp' in tempdir_contents
 
     def test_save_at_path_with_writer_specified_by_instance(self):
-        corpus = pingu.Corpus()
+        corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('kaldi'), reader='kaldi')
 
         assert corpus.name == 'kaldi'
@@ -563,7 +563,7 @@ class CorpusTest(unittest.TestCase):
         ds2 = resources.create_multi_label_corpus()
         ds3 = resources.create_single_label_corpus()
 
-        ds = pingu.Corpus.merge_corpora([ds1, ds2, ds3])
+        ds = audiomate.Corpus.merge_corpora([ds1, ds2, ds3])
 
         assert ds.num_files == 12
         assert ds.num_utterances == 21

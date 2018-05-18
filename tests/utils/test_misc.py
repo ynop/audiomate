@@ -1,6 +1,6 @@
 import pytest
 
-from pingu.utils import misc
+from audiomate.utils import misc
 
 
 class TestMisc:

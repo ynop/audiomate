@@ -1,18 +1,18 @@
-pingu.formats
-=============
+audiomate.formats
+=================
 
-.. automodule:: pingu.formats
-.. currentmodule:: pingu.formats
+.. automodule:: audiomate.formats
+.. currentmodule:: audiomate.formats
 
 Audacity Labels
 ---------------
 
-.. automodule:: pingu.formats.audacity
+.. automodule:: audiomate.formats.audacity
    :members:
 
 CTM Files
 ---------
 
-.. automodule:: pingu.formats.ctm
+.. automodule:: audiomate.formats.ctm
    :members:
 

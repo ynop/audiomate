@@ -1,8 +1,8 @@
-pingu.corpus.preprocessing
-==========================
+audiomate.corpus.preprocessing
+==============================
 
-.. automodule:: pingu.corpus.preprocessing
-.. currentmodule:: pingu.corpus.preprocessing
+.. automodule:: audiomate.corpus.preprocessing
+.. currentmodule:: audiomate.corpus.preprocessing
 
 Processors
 ----------
@@ -16,24 +16,24 @@ Processors
 Pipeline
 --------
 
-.. automodule:: pingu.corpus.preprocessing.pipeline
-.. currentmodule:: pingu.corpus.preprocessing.pipeline
+.. automodule:: audiomate.corpus.preprocessing.pipeline
+.. currentmodule:: audiomate.corpus.preprocessing.pipeline
 
-.. autoclass:: pingu.corpus.preprocessing.pipeline.base.Step
+.. autoclass:: audiomate.corpus.preprocessing.pipeline.base.Step
    :members:
 
-.. autoclass:: pingu.corpus.preprocessing.pipeline.base.Computation
+.. autoclass:: audiomate.corpus.preprocessing.pipeline.base.Computation
    :members:
 
-.. autoclass:: pingu.corpus.preprocessing.pipeline.base.Reduction
+.. autoclass:: audiomate.corpus.preprocessing.pipeline.base.Reduction
    :members:
 
 As for the processor there are different subclasses for either offline or online pipelines.
 
-.. autoclass:: pingu.corpus.preprocessing.pipeline.offline.OfflineComputation
+.. autoclass:: audiomate.corpus.preprocessing.pipeline.offline.OfflineComputation
    :members:
 
-.. autoclass:: pingu.corpus.preprocessing.pipeline.offline.OfflineReduction
+.. autoclass:: audiomate.corpus.preprocessing.pipeline.offline.OfflineReduction
    :members:
 
 Implementations
@@ -56,11 +56,11 @@ Offline
   MFCC                            Extracts MFCC features.
   ==============================  ===========
 
-.. autoclass:: pingu.corpus.preprocessing.pipeline.offline.MeanVarianceNorm
+.. autoclass:: audiomate.corpus.preprocessing.pipeline.offline.MeanVarianceNorm
    :members:
 
-.. autoclass:: pingu.corpus.preprocessing.pipeline.offline.MelSpectrogram
+.. autoclass:: audiomate.corpus.preprocessing.pipeline.offline.MelSpectrogram
    :members:
 
-.. autoclass:: pingu.corpus.preprocessing.pipeline.offline.MFCC
+.. autoclass:: audiomate.corpus.preprocessing.pipeline.offline.MFCC
    :members:
