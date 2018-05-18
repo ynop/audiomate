@@ -9,6 +9,22 @@ Audiomate is a library for easy access to audio datasets. It provides the datast
 Documentation: https://ynop.github.io/audiomate/   
 Examples: https://github.com/ynop/audiomate/tree/master/examples
 
+Currently supported datasets:
+* [Acoustic Event Dataset](https://data.vision.ee.ethz.ch/cvl/ae_dataset/)
+* [ESC-50](https://github.com/karoldvl/ESC-50)
+* [Urbansound8k](http://urbansounddataset.weebly.com/urbansound8k.html)
+* [GTZAN](https://marsyasweb.appspot.com/download/data_sets/)
+* [MUSAN](http://www.openslr.org/17/)
+* [Google Speech Commands](https://research.googleblog.com/2017/08/launching-speech-commands-dataset.html)
+* [TIMIT](https://github.com/philipperemy/timit)
+* [German Distant Speech Corpus](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/acoustic-models.html)
+* [Voxforge](http://www.voxforge.org/de)
+
+Currently supported formats:
+* [Kaldi](http://kaldi-asr.org/)
+* [Mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech)
+* [Custom Formats](https://ynop.github.io/audiomate/documentation/formats.html)
+
 ## Installation
 
 ```sh
