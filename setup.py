@@ -4,7 +4,7 @@ from setuptools import setup
 PYTEST_VERSION_ = '3.3.0'
 
 setup(name='audiomate',
-      version='0.0.0',
+      version='0.1.0',
       description='Audiomate is a library for working with audio datasets.',
       long_description='Audiomate is a library for easy access to audio datasets. '
                        'It provides the datastructures for accessing/loading different datasets in a generic way. '
