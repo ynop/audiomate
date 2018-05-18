@@ -1,7 +1,7 @@
 import os.path
 
-from pingu.corpus.assets import Label, LabelList
-from pingu.formats.audacity import read_label_file, read_label_list, write_label_file, write_label_list
+from audiomate.corpus.assets import Label, LabelList
+from audiomate.formats.audacity import read_label_file, read_label_list, write_label_file, write_label_list
 
 
 class TestAudacityFormat(object):

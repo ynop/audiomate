@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 import librosa
 
-from pingu.corpus.preprocessing.pipeline import offline
+from audiomate.corpus.preprocessing.pipeline import offline
 
 
 class MelSpectrogramTest(unittest.TestCase):

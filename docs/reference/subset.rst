@@ -1,5 +1,5 @@
-pingu.corpus.subset
-====================
+audiomate.corpus.subset
+=======================
 
-.. automodule:: pingu.corpus.subset
-.. currentmodule:: pingu.corpus.subset
+.. automodule:: audiomate.corpus.subset
+.. currentmodule:: audiomate.corpus.subset

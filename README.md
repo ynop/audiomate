@@ -1,19 +1,19 @@
-# PINGU
+# AUDIOMATE
 
-[![Run Status](https://api.shippable.com/projects/5a1d31821e6eda0700091230/badge?branch=master)](https://app.shippable.com/github/ynop/pingu)
-[![Coverage Badge](https://api.shippable.com/projects/5a1d31821e6eda0700091230/coverageBadge?branch=master)](https://app.shippable.com/github/ynop/pingu)
+[![Run Status](https://api.shippable.com/projects/5a1d31821e6eda0700091230/badge?branch=master)](https://app.shippable.com/github/ynop/audiomate)
+[![Coverage Badge](https://api.shippable.com/projects/5a1d31821e6eda0700091230/coverageBadge?branch=master)](https://app.shippable.com/github/ynop/audiomate)
 
-Pingu is a library for easy access to audio datasets. It provides the datastructures for accessing/loading different datasets in a generic way. This should ease the use of audio datasets for example for machine learning tasks.
+Audiomate is a library for easy access to audio datasets. It provides the datastructures for accessing/loading different datasets in a generic way. This should ease the use of audio datasets for example for machine learning tasks.
 
-Documentation: https://ynop.github.io/pingu/   
-Examples: https://github.com/ynop/pingu/tree/master/examples
+Documentation: https://ynop.github.io/audiomate/
+Examples: https://github.com/ynop/audiomate/tree/master/examples
 
 ## Installation
 
 Install the latest development version:
 
 ```sh
-pip install git+https://github.com/ynop/pingu.git
+pip install git+https://github.com/ynop/audiomate.git
 ```
 
 ## Development
@@ -22,13 +22,13 @@ pip install git+https://github.com/ynop/pingu.git
 
 * [A supported version of Python 3](https://docs.python.org/devguide/index.html#status-of-python-branches)
 
-It's recommended to use a virtual environment when developing Pingu. To create one, execute the following command in the project's root directory:
+It's recommended to use a virtual environment when developing audiomate. To create one, execute the following command in the project's root directory:
 
 ```
 python -m venv .
 ```
 
-To install Pingu and all it's dependencies, execute:
+To install audiomate and all it's dependencies, execute:
 
 ```
 pip install -e .

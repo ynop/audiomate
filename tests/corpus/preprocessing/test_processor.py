@@ -7,8 +7,8 @@ import h5py
 import numpy as np
 import pytest
 
-from pingu.corpus import assets
-from pingu.corpus import preprocessing
+from audiomate.corpus import assets
+from audiomate.corpus import preprocessing
 
 from tests import resources
 

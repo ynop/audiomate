@@ -1,6 +1,6 @@
 import statistics
 
-from pingu.corpus.subset import utils
+from audiomate.corpus.subset import utils
 
 
 class TestUtils:

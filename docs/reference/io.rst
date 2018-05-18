@@ -1,9 +1,9 @@
-pingu.corpus.io
-===============
+audiomate.corpus.io
+===================
 
-.. automodule:: pingu.corpus.io
+.. automodule:: audiomate.corpus.io
     :members:
-.. currentmodule:: pingu.corpus.io
+.. currentmodule:: audiomate.corpus.io
 
 Base Classes
 ------------

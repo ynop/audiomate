@@ -4,7 +4,7 @@ import numpy as np
 import librosa
 import pytest
 
-from pingu.corpus import assets
+from audiomate.corpus import assets
 
 from tests import resources
 

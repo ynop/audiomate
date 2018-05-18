@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from pingu.corpus.preprocessing.pipeline import offline
+from audiomate.corpus.preprocessing.pipeline import offline
 
 
 class Multiply(offline.OfflineComputation):

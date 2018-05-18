@@ -1,9 +1,9 @@
 import unittest
 
-from pingu.corpus.io import CorpusDownloader, available_downloaders, create_downloader_of_type
-from pingu.corpus.io import CorpusReader, available_readers, create_reader_of_type
-from pingu.corpus.io import CorpusWriter, available_writers, create_writer_of_type
-from pingu.corpus.io import UnknownDownloaderException, UnknownReaderException, UnknownWriterException
+from audiomate.corpus.io import CorpusDownloader, available_downloaders, create_downloader_of_type
+from audiomate.corpus.io import CorpusReader, available_readers, create_reader_of_type
+from audiomate.corpus.io import CorpusWriter, available_writers, create_writer_of_type
+from audiomate.corpus.io import UnknownDownloaderException, UnknownReaderException, UnknownWriterException
 
 
 class HelpersTest(unittest.TestCase):

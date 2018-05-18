@@ -2,7 +2,7 @@
 
 set -uex
 
-REPO="https://github.com/ynop/pingu.git"
+REPO="https://github.com/ynop/audiomate.git"
 TEMP_DIR="pages-clone"
 
 # Generate contents

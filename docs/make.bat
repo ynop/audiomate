@@ -7,7 +7,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=pingu
+set SPHINXPROJ=audiomate
 
 if "%1" == "" goto help
 

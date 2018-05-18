@@ -1,7 +1,7 @@
-Welcome to pingu's documentation!
-=================================
+Welcome to audiomate's documentation!
+=====================================
 
-Pingu is a library for easy access to audio datasets. It provides the datastructures for accessing/loading different datasets in a generic way.
+Audiomate is a library for easy access to audio datasets. It provides the datastructures for accessing/loading different datasets in a generic way.
 This should ease the use of audio datasets for example for machine learning tasks.
 
 .. toctree::

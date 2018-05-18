@@ -3,7 +3,7 @@ from setuptools import setup
 
 PYTEST_VERSION_ = '3.3.0'
 
-setup(name='pingu',
+setup(name='audiomate',
       version='0.1',
       description='Handling of audio datasets/corpora.',
       url='',

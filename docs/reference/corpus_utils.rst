@@ -1,21 +1,21 @@
-pingu.corpus.utils
-==================
+audiomate.corpus.utils
+======================
 
-.. automodule:: pingu.corpus.utils
-.. currentmodule:: pingu.corpus.utils
+.. automodule:: audiomate.corpus.utils
+.. currentmodule:: audiomate.corpus.utils
 
 Relabeling
 ----------
 
-.. automodule:: pingu.corpus.utils.relabeling
+.. automodule:: audiomate.corpus.utils.relabeling
     :members:
 
 Label Encoding
 --------------
 
-.. automodule:: pingu.corpus.utils.label_encoding
+.. automodule:: audiomate.corpus.utils.label_encoding
     :members:
 
 Exceptions
 ----------
-.. autoexception:: pingu.corpus.utils.relabeling.UnmappedLabelsException
+.. autoexception:: audiomate.corpus.utils.relabeling.UnmappedLabelsException
