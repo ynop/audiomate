@@ -2,6 +2,7 @@
 This module contains any functionality for downloading and extracting data from any remotes.
 """
 
+import zipfile
 import requests
 
 
@@ -16,3 +17,11 @@ def download_file(url, target_path):
         for chunk in r.iter_content(chunk_size=1024):
             if chunk:
                 f.write(chunk)
+
+
+def extract_zip(zip_path, target_folder):
+    """
+    Extract the content of the zip-file at `zip_path` into `target_folder``
+    """
+    with zipfile.ZipFile(zip_path) as archive:
+        archive.extractall(target_folder)
