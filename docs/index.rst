@@ -10,6 +10,7 @@ This should ease the use of audio datasets for example for machine learning task
     :caption: Notes
 
     notes/installation
+    notes/changelog
 
 .. toctree::
     :hidden:
