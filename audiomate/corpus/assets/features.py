@@ -118,6 +118,36 @@ class FeatureContainer(object):
 
         self._file.create_dataset(utterance_idx, data=features)
 
+    def append(self, utterance_idx, features):
+        """
+        Append the given features to possible existing features of the given utterance.
+
+        Args:
+            utterance_idx (str): The id of the utterance.
+            features (numpy.ndarray): A np.ndarray with the features.
+                                      They have to be the same dimension as the existing ones.
+
+        Note:
+            The feature container has to be opened in advance.
+            For updating the h5py-Dataset has to be chunked, so it is not allowed to first add features via ``set``.
+        """
+        existing = self.get(utterance_idx, mem_map=True)
+
+        if existing is not None:
+            num_existing = existing.shape[0]
+
+            if existing.shape[1:] != features.shape[1:]:
+                raise ValueError(
+                    'The features to append need to have the same dimensions ({}).'.format(existing.shape[1:]))
+
+            existing.resize(num_existing + features.shape[0], 0)
+            existing[num_existing:] = features
+        else:
+            max_shape = list(features.shape)
+            max_shape[0] = None
+
+            self._file.create_dataset(utterance_idx, data=features, chunks=True, maxshape=max_shape)
+
     def remove(self, utterance_idx):
         """
         Remove the features stored for the given utterance-id.

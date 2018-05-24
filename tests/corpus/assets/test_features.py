@@ -1,5 +1,4 @@
 import os
-import unittest
 
 import h5py
 import numpy as np
@@ -10,25 +9,27 @@ from audiomate.corpus.assets.features import PartitioningFeatureIterator
 from tests import resources
 
 
-class FeatureContainerTest(unittest.TestCase):
-    def setUp(self):
-        self.container = assets.FeatureContainer(resources.get_resource_path(['sample_files', 'feat_container']))
-        self.container.open()
+@pytest.fixture()
+def sample_feature_container():
+    container = assets.FeatureContainer(resources.get_resource_path(['sample_files', 'feat_container']))
+    container.open()
+    yield container
+    container.close()
 
-    def tearDown(self):
-        self.container.close()
 
-    def test_frame_size(self):
-        assert self.container.frame_size == 400
+class TestFeatureContainer:
 
-    def test_hop_size(self):
-        assert self.container.hop_size == 160
+    def test_frame_size(self, sample_feature_container):
+        assert sample_feature_container.frame_size == 400
 
-    def test_sampling_rate(self):
-        assert self.container.sampling_rate == 16000
+    def test_hop_size(self, sample_feature_container):
+        assert sample_feature_container.hop_size == 160
 
-    def test_stats_per_utterance(self):
-        utt_stats = self.container.stats_per_utterance()
+    def test_sampling_rate(self, sample_feature_container):
+        assert sample_feature_container.sampling_rate == 16000
+
+    def test_stats_per_utterance(self, sample_feature_container):
+        utt_stats = sample_feature_container.stats_per_utterance()
 
         assert utt_stats['utt-1'].min == pytest.approx(0.0071605651933048797)
         assert utt_stats['utt-1'].max == pytest.approx(0.9967182746569494)
@@ -48,25 +49,51 @@ class FeatureContainerTest(unittest.TestCase):
         assert utt_stats['utt-3'].var == pytest.approx(0.071833200069641057)
         assert utt_stats['utt-3'].num == 220
 
-    def test_stats_per_utterance_not_open(self):
-        self.container.close()
+    def test_stats_per_utterance_not_open(self, sample_feature_container):
+        sample_feature_container.close()
 
         with pytest.raises(ValueError):
-            self.container.stats_per_utterance()
+            sample_feature_container.stats_per_utterance()
 
-    def test_stats(self):
-        stats = self.container.stats()
+    def test_stats(self, sample_feature_container):
+        stats = sample_feature_container.stats()
 
         assert stats.min == pytest.approx(0.0071605651933048797)
         assert stats.max == pytest.approx(0.99834417857609881)
         assert stats.mean == pytest.approx(0.50267482489606408)
         assert stats.var == pytest.approx(0.07317811077366114)
 
-    def test_stats_not_open(self):
-        self.container.close()
+    def test_stats_not_open(self, sample_feature_container):
+        sample_feature_container.close()
 
         with pytest.raises(ValueError):
-            self.container.stats()
+            sample_feature_container.stats()
+
+    def test_append(self, tmpdir):
+        container = assets.FeatureContainer(os.path.join(tmpdir.strpath, 'container'))
+        container.open()
+
+        data = np.arange(100).reshape(20, 5)
+
+        container.append('utt-1', data[:8])
+        container.append('utt-1', data[8:])
+
+        res = container.get('utt-1', mem_map=False)
+
+        assert np.array_equal(data, res)
+
+        container.close()
+
+    def test_append_with_different_dimension_raises_error(self, tmpdir):
+        container = assets.FeatureContainer(os.path.join(tmpdir.strpath, 'container'))
+        container.open()
+
+        container.append('utt-1', np.arange(20).reshape(5, 2, 2))
+
+        with pytest.raises(ValueError):
+            container.append('utt-1', np.arange(42).reshape(7, 2, 3))
+
+        container.close()
 
 
 class TestPartitioningFeatureIterator(object):
@@ -93,28 +120,28 @@ class TestPartitioningFeatureIterator(object):
 
         iterator = PartitioningFeatureIterator(file, '2k')
 
-        assert 2*1024 == iterator._partition_size
+        assert 2 * 1024 == iterator._partition_size
 
     def test_partition_size_in_mebibytes(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
         file = h5py.File(file_path, 'w')
 
         iterator = PartitioningFeatureIterator(file, '2m')
-        assert 2*1024*1024 == iterator._partition_size
+        assert 2 * 1024 * 1024 == iterator._partition_size
 
     def test_partition_size_in_gibibytes(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
         file = h5py.File(file_path, 'w')
 
         iterator = PartitioningFeatureIterator(file, '2g')
-        assert 2*1024*1024*1024 == iterator._partition_size
+        assert 2 * 1024 * 1024 * 1024 == iterator._partition_size
 
     def test_partition_size_in_gibibytes_with_capital_g(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
         file = h5py.File(file_path, 'w')
 
         iterator = PartitioningFeatureIterator(file, '2G')
-        assert 2*1024*1024*1024 == iterator._partition_size
+        assert 2 * 1024 * 1024 * 1024 == iterator._partition_size
 
     def test_partition_size_fractions_of_bytes_are_ignored(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
@@ -128,7 +155,7 @@ class TestPartitioningFeatureIterator(object):
         file = h5py.File(file_path, 'w')
 
         iterator = PartitioningFeatureIterator(file, '0.5g')
-        assert 512*1024*1024 == iterator._partition_size
+        assert 512 * 1024 * 1024 == iterator._partition_size
 
     def test_next_emits_no_features_if_file_is_empty(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
