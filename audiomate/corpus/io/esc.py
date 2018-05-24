@@ -1,15 +1,13 @@
 import os
 import collections
-import zipfile
-import shutil
-
-import requests
 
 import audiomate
 from audiomate.corpus import assets
 from audiomate.corpus import subset
 from . import base
 from audiomate.utils import textfile
+from audiomate.utils import download
+from audiomate.utils import files
 
 DOWNLOAD_URL = 'https://github.com/karoldvl/ESC-50/archive/master.zip'
 META_FILE_PATH = os.path.join('meta', 'esc50.csv')
@@ -34,32 +32,15 @@ class ESC50Downloader(base.CorpusDownloader):
         return 'esc-50'
 
     def _download(self, target_path):
-        temp_file = os.path.join(target_path, 'esc_50.zip')
+        os.makedirs(target_path, exist_ok=True)
+        tmp_file = os.path.join(target_path, 'tmp_ark.zip')
 
-        ESC50Downloader.download_file_chunked(self.url, temp_file)
-        ESC50Downloader.extract_zip(temp_file, target_path)
+        download.download_file(self.url, tmp_file)
+        download.extract_zip(tmp_file, target_path)
 
-        root_folder = os.path.join(target_path, 'ESC-50-master')
+        files.move_all_files_from_subfolders_to_top(target_path)
 
-        for element in os.listdir(root_folder):
-            shutil.move(os.path.join(root_folder, element), target_path)
-
-        shutil.rmtree(root_folder)
-        os.remove(temp_file)
-
-    @staticmethod
-    def download_file_chunked(url, to):
-        """ Downloads the file from `url` to the local path `to`."""
-        r = requests.get(url, stream=True)
-        with open(to, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=1024):
-                if chunk:
-                    f.write(chunk)
-
-    @staticmethod
-    def extract_zip(path, to):
-        with zipfile.ZipFile(path) as archive:
-            archive.extractall(to)
+        os.remove(tmp_file)
 
 
 class ESC50Reader(base.CorpusReader):

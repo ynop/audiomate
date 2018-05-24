@@ -40,6 +40,7 @@ Implementations
   Broadcast                                 x
   Default                                   x      x
   ESC-50                          x         x
+  Free-Spoken-Digit-Dataset       x         x
   Folder                                    x
   Google Speech Commands                    x
   GTZAN                                     x
@@ -114,6 +115,14 @@ ESC-50
    :members:
 
 .. autoclass:: ESC50Reader
+   :members:
+
+Free-Spoken-Digit-Dataset
+^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: FreeSpokenDigitDownloader
+   :members:
+
+.. autoclass:: FreeSpokenDigitReader
    :members:
 
 Mozilla DeepSpeech
