@@ -1,8 +1,10 @@
 import os
 
 import pytest
+import requests_mock
 
 from audiomate.corpus import io
+from audiomate.corpus.io import esc
 from tests import resources
 
 
@@ -12,8 +14,34 @@ def reader():
 
 
 @pytest.fixture
+def downloader():
+    return io.ESC50Downloader()
+
+
+@pytest.fixture
 def data_path():
     return resources.sample_corpus_path('esc50')
+
+
+@pytest.fixture()
+def zip_data():
+    with open(resources.get_resource_path(['sample_files', 'zip_sample_with_subfolder.zip']), 'rb') as f:
+        return f.read()
+
+
+class TestESC50Downloader:
+
+    def test_download(self, zip_data, downloader, tmpdir):
+        target_folder = tmpdir.strpath
+
+        with requests_mock.Mocker() as mock:
+            mock.get(esc.DOWNLOAD_URL, content=zip_data)
+
+            downloader.download(target_folder)
+
+        assert os.path.isfile(os.path.join(target_folder, 'a.txt'))
+        assert os.path.isfile(os.path.join(target_folder, 'subsub', 'b.txt'))
+        assert os.path.isfile(os.path.join(target_folder, 'subsub', 'c.txt'))
 
 
 class TestESC50Reader:
