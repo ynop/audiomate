@@ -86,7 +86,7 @@ The generated files are written to `docs/_build/html`.
 Versions is handled using [bump2version](https://github.com/c4urself/bump2version). To bump the version:
 
 ```
-bump2version [major,minor,patch]
+bump2version [major,minor,patch,release,num]
 ```
 
 
