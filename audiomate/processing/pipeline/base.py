@@ -2,8 +2,10 @@ import abc
 
 import networkx as nx
 
+from audiomate import processing
 
-class Step(metaclass=abc.ABCMeta):
+
+class Step(processing.Processor, metaclass=abc.ABCMeta):
     """
     This class is the base class for a step in a processing pipeline.
 
@@ -20,7 +22,7 @@ class Step(metaclass=abc.ABCMeta):
         self.graph = nx.DiGraph()
         self.name = name
 
-    def process(self, data, sampling_rate, **kwargs):
+    def process(self, data, sampling_rate, first_frame_index=0, last=False, utterance=None, corpus=None):
         """
         Execute the processing of this step and all dependent parent steps.
         """
@@ -31,22 +33,29 @@ class Step(metaclass=abc.ABCMeta):
             parent_steps = [edge[0] for edge in self.graph.in_edges(step)]
 
             if len(parent_steps) == 0:
-                res = step.compute(data, sampling_rate, **kwargs)
+                res = step.compute(data, sampling_rate, first_frame_index, last=last, utterance=utterance,
+                                   corpus=corpus)
             elif isinstance(step, Computation):
                 parent_output = step_results[parent_steps[0]]
-                res = step.compute(parent_output, sampling_rate, **kwargs)
+                res = step.compute(parent_output, sampling_rate, first_frame_index, last=last, utterance=utterance,
+                                   corpus=corpus)
             else:
                 # use step.parents to make sure the same order is kept as in the constructor of the reduction
                 parent_outputs = [step_results[parent] for parent in step.parents]
-                res = step.compute(parent_outputs, sampling_rate, **kwargs)
+                res = step.compute(parent_outputs, sampling_rate, first_frame_index, last=last, utterance=utterance,
+                                   corpus=corpus)
 
             if step == self:
                 return res
             else:
                 step_results[step] = res
 
+    def process_frames(self, data, sampling_rate, first_frame_index=0, last=False, utterance=None, corpus=None):
+        return self.process(data, sampling_rate, first_frame_index=first_frame_index, last=last, utterance=utterance,
+                            corpus=corpus)
+
     @abc.abstractmethod
-    def compute(self, data, sampling_rate, **kwargs):
+    def compute(self, data, sampling_rate, first_frame_index=0, last=False, corpus=None, utterance=None):
         pass
 
 

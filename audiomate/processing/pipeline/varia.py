@@ -3,7 +3,7 @@ import librosa
 from . import base
 
 
-class Delta(base.OfflineComputation):
+class Delta(base.Computation):
     """
     Compute delta features.
 
@@ -18,5 +18,5 @@ class Delta(base.OfflineComputation):
         self.axis = axis
         self.mode = mode
 
-    def compute(self, frames, sampling_rate, corpus=None, utterance=None):
-        return librosa.feature.delta(frames.T, width=self.width, order=self.order, axis=self.axis, mode=self.mode).T
+    def compute(self, data, sampling_rate, first_frame_index=None, last=False, corpus=None, utterance=None):
+        return librosa.feature.delta(data.T, width=self.width, order=self.order, axis=self.axis, mode=self.mode).T

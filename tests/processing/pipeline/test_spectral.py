@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 import librosa
 
-from audiomate.corpus.preprocessing.pipeline import offline
+from audiomate.processing import pipeline
 
 
 class MelSpectrogramTest(unittest.TestCase):
@@ -13,7 +13,7 @@ class MelSpectrogramTest(unittest.TestCase):
         expected = librosa.feature.melspectrogram(S=D, sr=16000, n_mels=128).T
 
         frames = librosa.util.frame(samples, frame_length=2048, hop_length=512).T
-        mel = offline.MelSpectrogram(n_mels=128)
+        mel = pipeline.MelSpectrogram(n_mels=128)
         res = mel.process(frames, sampling_rate=16000)
 
         assert np.array_equal(expected, res)
@@ -27,7 +27,7 @@ class MFCCTest(unittest.TestCase):
         expected = librosa.feature.mfcc(S=librosa.power_to_db(mel), n_mfcc=13).T
 
         frames = librosa.util.frame(samples, frame_length=2048, hop_length=512).T
-        mfcc = offline.MFCC(n_mfcc=13, n_mels=128)
+        mfcc = pipeline.MFCC(n_mfcc=13, n_mels=128)
         res = mfcc.process(frames, sampling_rate=16000)
 
         assert np.array_equal(expected, res)

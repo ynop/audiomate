@@ -3,7 +3,7 @@ import librosa
 from . import base
 
 
-class PowerToDb(base.OfflineComputation):
+class PowerToDb(base.Computation):
     """
     Convert a power spectrogram (amplitude squared) to decibel (dB) units.
 
@@ -17,5 +17,5 @@ class PowerToDb(base.OfflineComputation):
         self.amin = amin
         self.top_db = top_db
 
-    def compute(self, frames, sampling_rate, corpus=None, utterance=None):
-        return librosa.power_to_db(frames.T, ref=self.ref, amin=self.amin, top_db=self.top_db).T
+    def compute(self, data, sampling_rate, first_frame_index=None, last=False, corpus=None, utterance=None):
+        return librosa.power_to_db(data.T, ref=self.ref, amin=self.amin, top_db=self.top_db).T
