@@ -14,7 +14,7 @@ class MelSpectrogramTest(unittest.TestCase):
 
         frames = librosa.util.frame(samples, frame_length=2048, hop_length=512).T
         mel = pipeline.MelSpectrogram(n_mels=128)
-        res = mel.process(frames, sampling_rate=16000)
+        res = mel.process_frames(frames, sampling_rate=16000)
 
         assert np.array_equal(expected, res)
 
@@ -28,6 +28,6 @@ class MFCCTest(unittest.TestCase):
 
         frames = librosa.util.frame(samples, frame_length=2048, hop_length=512).T
         mfcc = pipeline.MFCC(n_mfcc=13, n_mels=128)
-        res = mfcc.process(frames, sampling_rate=16000)
+        res = mfcc.process_frames(frames, sampling_rate=16000)
 
         assert np.array_equal(expected, res)

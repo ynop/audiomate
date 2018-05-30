@@ -12,7 +12,7 @@ class MeanVarianceNormTest(unittest.TestCase):
         var = float(np.var(frame))
 
         norm = pipeline.MeanVarianceNorm(mean, var)
-        output = norm.process(frame, 4)
+        output = norm.process_frames(frame, 4)
         expected = (frame - mean) / np.std(frame)
 
         assert np.array_equal(output, expected)
