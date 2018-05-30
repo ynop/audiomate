@@ -108,12 +108,11 @@ class TestVoxforgeDownloader:
             'http://someurl.com/some/download/dir/1337ad-20170321-hii.tgz'
         ]
 
-        mock = requests_mock.Mocker()
+        with requests_mock.Mocker() as mock:
+            for file in files:
+                mock.get(file, content='some content'.encode())
 
-        for file in files:
-            mock.get(file, content='some content'.encode())
-
-        file_paths = voxforge.VoxforgeDownloader.download_files(files, tmpdir.strpath)
+            file_paths = voxforge.VoxforgeDownloader.download_files(files, tmpdir.strpath)
 
         expected_file_paths = [
             os.path.join(tmpdir.strpath, '1337ad-20170321-amr.tgz'),
