@@ -47,7 +47,7 @@ class MelSpectrogram(base.Computation):
     """
     Computation step that extracts mel-spectrogram features from the given frames.
 
-    Based on http://librosa.github.io/librosa/generated/librosa.feature.melspectrogram.html#
+    Based on http://librosa.github.io/librosa/generated/librosa.feature.melspectrogram.html
 
     Args:
         n_mels (int): Number of mel bands to generate.
@@ -69,7 +69,7 @@ class MFCC(base.Computation):
     """
     Computation step that extracts mfcc features from the given frames.
 
-    Based on http: // librosa.github.io / librosa / generated / librosa.feature.mfcc.html
+    Based on http://librosa.github.io/librosa/generated/librosa.feature.mfcc.html
 
     Args:
         n_mels (int): Number of mel bands to generate.

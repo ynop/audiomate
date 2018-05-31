@@ -102,8 +102,7 @@ class LabelList(object):
     Attributes:
         utterance (Utterance): The utterance this label-list is belonging to.
 
-    Example::
-
+    Example:
         >>> label_list = LabelList(idx='transcription', labels=[
         >>>     Label('this', 0, 2),
         >>>     Label('is', 2, 4),

@@ -12,6 +12,7 @@ Every step that is created has his own graph, but inherits all nodes and edges o
 Every pipeline represents a processor and implements the ``process_frames`` method.
 """
 
+from .base import Chunk  # noqa: F401
 from .base import Step  # noqa: F401
 from .base import Computation  # noqa: F401
 from .base import Reduction  # noqa: F401
