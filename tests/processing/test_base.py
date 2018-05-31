@@ -17,15 +17,15 @@ class ProcessorDummy(processing.Processor):
     def __init__(self):
         self.called_with_data = []
         self.called_with_sr = []
-        self.called_with_first_frame_index = []
+        self.called_with_offset = []
         self.called_with_last = []
         self.called_with_utterance = []
         self.called_with_corpus = []
 
-    def process_frames(self, data, sampling_rate, first_frame_index=0, last=False, utterance=None, corpus=None):
+    def process_frames(self, data, sampling_rate, offset=0, last=False, utterance=None, corpus=None):
         self.called_with_data.append(data)
         self.called_with_sr.append(sampling_rate)
-        self.called_with_first_frame_index.append(first_frame_index)
+        self.called_with_offset.append(offset)
         self.called_with_last.append(last)
         self.called_with_utterance.append(utterance)
         self.called_with_corpus.append(corpus)
@@ -60,11 +60,12 @@ class TestProcessor:
         processed = processor.process_file(wav_path, frame_size=4, hop_size=2)
 
         assert processed.shape == (10, 4)
+        assert processed.dtype == np.float32
         assert np.allclose(processed[0], wav_content[0:4], atol=0.0001)
         assert np.allclose(processed[9], wav_content[18:22], atol=0.0001)
 
         assert processor.called_with_sr == [4]
-        assert processor.called_with_first_frame_index == [0]
+        assert processor.called_with_offset == [0]
         assert processor.called_with_last == [True]
         assert processor.called_with_utterance == [None]
         assert processor.called_with_corpus == [None]
@@ -81,7 +82,7 @@ class TestProcessor:
         assert np.allclose(processed[0], np.pad(wav_content, (0, 4074), mode='constant'), atol=0.0001)
 
         assert processor.called_with_sr == [16000]
-        assert processor.called_with_first_frame_index == [0]
+        assert processor.called_with_offset == [0]
         assert processor.called_with_last == [True]
         assert processor.called_with_utterance == [None]
         assert processor.called_with_corpus == [None]
@@ -106,7 +107,7 @@ class TestProcessor:
         assert processed.shape == (5, 4)
 
         assert processor.called_with_sr == [2]
-        assert processor.called_with_first_frame_index == [0]
+        assert processor.called_with_offset == [0]
         assert processor.called_with_last == [True]
         assert processor.called_with_utterance == [None]
         assert processor.called_with_corpus == [None]
@@ -126,9 +127,10 @@ class TestProcessor:
         assert len(chunks) == 3
         assert np.allclose(chunks[0][0], wav_content[0:20], atol=0.0001)
         assert np.allclose(chunks[2][-1], np.pad(wav_content[160:], (0, 6), mode='constant'), atol=0.0001)
+        assert chunks[0].dtype == np.float32
 
         assert processor.called_with_sr == [16000, 16000, 16000]
-        assert processor.called_with_first_frame_index == [0, 8, 16]
+        assert processor.called_with_offset == [0, 8, 16]
         assert processor.called_with_last == [False, False, True]
         assert processor.called_with_utterance == [None, None, None]
         assert processor.called_with_corpus == [None, None, None]
@@ -146,7 +148,7 @@ class TestProcessor:
         assert np.allclose(chunks[1][-1], wav_content[150:], atol=0.0001)
 
         assert processor.called_with_sr == [16000, 16000]
-        assert processor.called_with_first_frame_index == [0, 8]
+        assert processor.called_with_offset == [0, 8]
         assert processor.called_with_last == [False, True]
         assert processor.called_with_utterance == [None, None]
         assert processor.called_with_corpus == [None, None]
@@ -305,6 +307,18 @@ class TestProcessor:
             assert feat_container.hop_size == 2048
             assert feat_container.sampling_rate == 8000
 
+    def test_process_corpus_online_ignore_returning_none(self, processor, tmpdir):
+        ds = resources.create_dataset()
+        feat_path = os.path.join(tmpdir.strpath, 'feats')
+
+        def return_none(*args, **kwargs):
+            return None
+
+        processor.process_frames = return_none
+        processor.process_corpus_online(ds, feat_path, frame_size=4096, hop_size=2048)
+
+        assert True
+
     #
     #   process_features_...
     #
@@ -402,3 +416,28 @@ class TestProcessor:
             assert np.array_equal(out_feats.get('utt-3', mem_map=False), utt_feats)
             assert np.array_equal(out_feats.get('utt-4', mem_map=False), utt_feats)
             assert np.array_equal(out_feats.get('utt-5', mem_map=False), utt_feats)
+
+    def test_process_features_online_ignores_none(self, processor, tmpdir):
+        ds = resources.create_dataset()
+
+        in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
+        out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
+
+        in_feats = assets.FeatureContainer(in_feat_path)
+        utt_feats = np.arange(90).reshape(15, 6)
+
+        with in_feats:
+            in_feats.sampling_rate = 16000
+            in_feats.frame_size = 400
+            in_feats.hop_size = 160
+
+            for utt_idx in ds.utterances.keys():
+                in_feats.set(utt_idx, utt_feats)
+
+        def return_none(*args, **kwargs):
+            return None
+
+        processor.process_frames = return_none
+        processor.process_features_online(ds, in_feats, out_feat_path, chunk_size=4)
+
+        assert True

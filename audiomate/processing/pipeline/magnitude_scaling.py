@@ -17,5 +17,5 @@ class PowerToDb(base.Computation):
         self.amin = amin
         self.top_db = top_db
 
-    def compute(self, data, sampling_rate, first_frame_index=None, last=False, corpus=None, utterance=None):
-        return librosa.power_to_db(data.T, ref=self.ref, amin=self.amin, top_db=self.top_db).T
+    def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        return librosa.power_to_db(chunk.data.T, ref=self.ref, amin=self.amin, top_db=self.top_db).T

@@ -10,8 +10,8 @@ from audiomate.utils import audio
 
 class Processor(metaclass=abc.ABCMeta):
     """
-    The processor base class provides the functionality to process audio data on different levels.
-    (Corpus, Utterance, File) For every level there is an offline and a online method.
+    The processor base class provides the functionality to process audio data on different levels
+    (Corpus, Utterance, File). For every level there is an offline and an online method.
     In the offline mode the data is processed in one step (e.g. the whole file/utterance at once).
     This means the ``process_frames`` method is called with all the frames of the file/utterance.
     In online mode the data is processed in chunks, so the ``process_frames`` method is called multiple times
@@ -96,8 +96,8 @@ class Processor(metaclass=abc.ABCMeta):
         for utterance in corpus.utterances.values():
             sampling_rate = input_features.sampling_rate
             frames = input_features.get(utterance.idx, mem_map=False)
-            processed = self.process_frames(frames, sampling_rate, first_frame_index=0, last=True, utterance=utterance,
-                                            corpus=corpus)
+            processed = self.process_frames(frames, sampling_rate, offset=0, last=True,
+                                            utterance=utterance, corpus=corpus)
             feat_container.set(utterance.idx, processed)
 
         feat_container.frame_size = input_features.frame_size
@@ -141,7 +141,9 @@ class Processor(metaclass=abc.ABCMeta):
 
                 processed = self.process_frames(chunk, sampling_rate, current_frame,
                                                 last=last, utterance=utterance, corpus=corpus)
-                feat_container.append(utterance.idx, processed)
+
+                if processed is not None:
+                    feat_container.append(utterance.idx, processed)
 
                 current_frame += chunk_size
 
@@ -270,7 +272,8 @@ class Processor(metaclass=abc.ABCMeta):
             if len(frames) == chunk_size:
                 processed = self.process_frames(np.array(frames), output_sr, current_frame,
                                                 last=is_last, utterance=utterance, corpus=corpus)
-                yield processed
+                if processed is not None:
+                    yield processed
                 current_frame += chunk_size
                 frames = frames[chunk_size:]
 
@@ -281,7 +284,7 @@ class Processor(metaclass=abc.ABCMeta):
             yield processed
 
     @abc.abstractmethod
-    def process_frames(self, data, sampling_rate, first_frame_index=0, last=False, utterance=None, corpus=None):
+    def process_frames(self, data, sampling_rate, offset=0, last=False, utterance=None, corpus=None):
         """
         Process the given chunk of frames. Depending on online or offline mode,
         the given chunk is either the full data or just part of it.
@@ -289,8 +292,8 @@ class Processor(metaclass=abc.ABCMeta):
         Args:
             data (np.ndarray): nD Array of frames (num-frames x frame-dimensions).
             sampling_rate (int): The sampling rate of the underlying signal.
-            first_frame_index (int): The index of the first frame in the chunk. In offline mode always 0.
-                                     (Relative to the first frame of the utterance/sequence)
+            offset (int): The index of the first frame in the chunk. In offline mode always 0.
+                          (Relative to the first frame of the utterance/sequence)
             last (bool): True indicates that this is the last frame of the sequence/utterance.
                          In offline mode always True.
             utterance (Utterance): The utterance the frame is from, if available.

@@ -1,5 +1,3 @@
-import unittest
-
 import numpy as np
 
 from audiomate.processing import pipeline
@@ -11,8 +9,8 @@ class Multiply(pipeline.Computation):
         super(Multiply, self).__init__(parent=parent, name=name)
         self.factor = factor
 
-    def compute(self, data, sampling_rate, first_frame_index=0, last=False, corpus=None, utterance=None):
-        return data * self.factor
+    def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        return chunk.data * self.factor
 
 
 class Add(pipeline.Computation):
@@ -20,45 +18,100 @@ class Add(pipeline.Computation):
         super(Add, self).__init__(parent=parent, name=name)
         self.value = value
 
-    def compute(self, data, sampling_rate, first_frame_index=0, last=False, corpus=None, utterance=None):
-        return data + self.value
-
-
-class OfflineComputationTest(unittest.TestCase):
-    def test_process(self):
-        in_data = np.array([0, 1, 2, 3])
-        step = Multiply(3)
-        out_data = step.process_frames(in_data, 4)
-
-        assert np.array_equal(out_data, np.array([0, 3, 6, 9]))
+    def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        return chunk.data + self.value
 
 
 class Concat(pipeline.Reduction):
-    def compute(self, data, sampling_rate, first_frame_index=0, last=False, corpus=None, utterance=None):
-        return np.concatenate(data, axis=0)
+    def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        return np.hstack(chunk.data)
 
 
-class OfflineReductionTest(unittest.TestCase):
-    def test_process(self):
-        in_data = [np.array([0, 1, 2, 3]), np.array([4, 5, 6])]
-        step = Concat(parents=[])
-        out_data = step.process_frames(in_data, 4)
+class StepDummy(pipeline.Computation):
+    def __init__(self, parent=None, name=None, min_frames=0, left_context=0, right_context=0):
+        super(StepDummy, self).__init__(parent=parent, name=name, min_frames=min_frames,
+                                        left_context=left_context, right_context=right_context)
 
-        assert np.array_equal(out_data, np.array([0, 1, 2, 3, 4, 5, 6]))
+    def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        start = chunk.left_context
+        end = chunk.data.shape[0] - chunk.right_context
+
+        return chunk.data[start:end]
 
 
-class StepTest(unittest.TestCase):
+class TestStep:
     def test_process(self):
         add_a = Add(5)
         mul = Multiply(2, parent=add_a)
         add_b = Add(2)
+        add_c = Add(3, parent=add_a)
 
-        concat = Concat(parents=[mul, add_b])
+        concat = Concat(parents=[mul, add_b, add_c])
 
-        in_data = np.array([0, 1, 2, 3])
+        in_data = np.array([[0, 1, 2, 3]])
         out_data = concat.process_frames(in_data, 4)
 
-        assert np.array_equal(out_data, np.array([10, 12, 14, 16, 2, 3, 4, 5]))
+        assert np.array_equal(out_data, np.array([[10, 12, 14, 16, 2, 3, 4, 5, 8, 9, 10, 11]]))
+
+    def test_process_with_single_step_and_context(self):
+        context = StepDummy(min_frames=2, left_context=2, right_context=1)
+
+        out_data = context.process_frames(np.array([[0, 1, 2, 3]]), 4, offset=0, last=False)
+        assert out_data is None
+
+        out_data = context.process_frames(np.array([[4, 5, 6, 7]]), 4, offset=1, last=False)
+        assert out_data is None
+
+        out_data = context.process_frames(np.array([[8, 9, 10, 11]]), 4, offset=2, last=False)
+        assert np.array_equal(out_data, np.array([[0, 1, 2, 3],
+                                                  [4, 5, 6, 7]]))
+
+        out_data = context.process_frames(np.array([[12, 13, 14, 15]]), 4, offset=3, last=True)
+        assert np.array_equal(out_data, np.array([[8, 9, 10, 11],
+                                                  [12, 13, 14, 15]]))
+
+    def test_process_with_reduction_and_context(self):
+        context = StepDummy(name='DummyContext', min_frames=2, left_context=2, right_context=1)
+        add_a = Add(5, name='Add5')
+
+        concat = Concat(parents=[context, add_a], name='Concat')
+
+        out_data = concat.process_frames(np.array([[0, 1, 2, 3]]), 4, offset=0, last=False)
+        assert out_data is None
+
+        out_data = concat.process_frames(np.array([[4, 5, 6, 7]]), 4, offset=1, last=False)
+        assert out_data is None
+
+        out_data = concat.process_frames(np.array([[8, 9, 10, 11]]), 4, offset=2, last=False)
+        assert np.array_equal(out_data, np.array([[0, 1, 2, 3, 5, 6, 7, 8],
+                                                  [4, 5, 6, 7, 9, 10, 11, 12]]))
+
+        out_data = concat.process_frames(np.array([[12, 13, 14, 15]]), 4, offset=3, last=True)
+        assert np.array_equal(out_data, np.array([[8, 9, 10, 11, 13, 14, 15, 16],
+                                                  [12, 13, 14, 15, 17, 18, 19, 20]]))
+
+    def test_process_with_context(self):
+        context = StepDummy(min_frames=2, left_context=2, right_context=1)
+        add_a = Add(5)
+        mul = Multiply(2, parent=add_a)
+        add_b = Add(2, parent=context)
+        add_c = Add(3, parent=add_a)
+
+        concat = Concat(parents=[mul, add_b, add_c])
+
+        out_data = concat.process_frames(np.array([[0, 1, 2, 3]]), 4, offset=0, last=False)
+        assert out_data is None
+
+        out_data = concat.process_frames(np.array([[4, 5, 6, 7]]), 4, offset=1, last=False)
+        assert out_data is None
+
+        out_data = concat.process_frames(np.array([[8, 9, 10, 11]]), 4, offset=2, last=False)
+        assert np.array_equal(out_data, np.array([[10, 12, 14, 16, 2, 3, 4, 5, 8, 9, 10, 11],
+                                                  [18, 20, 22, 24, 6, 7, 8, 9, 12, 13, 14, 15]]))
+
+        out_data = concat.process_frames(np.array([[12, 13, 14, 15]]), 4, offset=3, last=True)
+        assert np.array_equal(out_data, np.array([[26, 28, 30, 32, 10, 11, 12, 13, 16, 17, 18, 19],
+                                                  [34, 36, 38, 40, 14, 15, 16, 17, 20, 21, 22, 23]]))
 
 
 class TestBuffer:

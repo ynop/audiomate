@@ -226,42 +226,124 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
         self.left_context = left_context
         self.right_context = right_context
 
-    def process_frames(self, data, sampling_rate, first_frame_index=0, last=False, utterance=None, corpus=None):
+        self.steps_sorted = []
+        self.buffers = {}
+        self.target_buffers = {}
+
+    def process_frames(self, data, sampling_rate, offset=0, last=False, utterance=None, corpus=None):
         """
         Execute the processing of this step and all dependent parent steps.
         """
-        steps = nx.algorithms.dag.topological_sort(self.graph)
-        step_results = {}
 
-        for step in steps:
+        if offset == 0:
+            self.steps_sorted = list(nx.algorithms.dag.topological_sort(self.graph))
+            self._create_buffers()
+            self._define_output_buffers()
+
+        # Update buffers with input data
+        self._update_buffers(None, data, offset, last)
+
+        # Go through the ordered (by dependencies) steps
+        for step in self.steps_sorted:
+
+            chunk = self.buffers[step].get()
+
+            if chunk is not None:
+                res = step.compute(chunk, sampling_rate, utterance=utterance, corpus=corpus)
+
+                # If step is self, we know its the last step so return the data
+                if step == self:
+                    return res
+
+                # Otherwise update buffers of child steps
+                else:
+                    self._update_buffers(step, res, chunk.offset + chunk.left_context, chunk.is_last)
+
+    @abc.abstractmethod
+    def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        """
+        Do the computation of the step. If the step uses context, the result has to be returned without context.
+
+        Args:
+            chunk (Chunk): The chunk containing data and info about context, offset, ...
+            sampling_rate (int): The sampling rate of the underlying signal.
+            corpus (Corpus): The corpus the data is from, if available.
+            utterance (Utterance): The utterance the data is from, if available.
+
+        Returns:
+            np.ndarray: The array of processed frames, without context.
+        """
+        pass
+
+    def _update_buffers(self, from_step, data, offset, is_last):
+        """
+        Update the buffers of all steps that need data from ``from_step``.
+        If ``from_step`` is None it means the data is the input data.
+        """
+
+        for to_step, buffer in self.target_buffers[from_step]:
+            parent_index = 0
+
+            # if there multiple inputs we have to get the correct index, to keep the ordering
+            if isinstance(to_step, Reduction):
+                parent_index = to_step.parents.index(from_step)
+
+            buffer.update(data, offset, is_last, buffer_index=parent_index)
+
+    def _define_output_buffers(self):
+        """
+        Prepare a dictionary so we know what buffers have to be update with the the output of every step.
+        """
+
+        # First define buffers that need input data
+        self.target_buffers = {
+            None: [(step, self.buffers[step]) for step in self._get_input_steps()]
+        }
+
+        # Go through all steps and append the buffers of their child nodes
+        for step in self.steps_sorted:
+            if step != self:
+                child_steps = [edge[1] for edge in self.graph.out_edges(step)]
+                self.target_buffers[step] = [(child_step, self.buffers[child_step]) for child_step in child_steps]
+
+    def _get_input_steps(self):
+        """
+        Search and return all steps that have no parents. These are the steps that are get the input data.
+        """
+        input_steps = []
+
+        for step in self.steps_sorted:
             parent_steps = [edge[0] for edge in self.graph.in_edges(step)]
 
             if len(parent_steps) == 0:
-                res = step.compute(data, sampling_rate, first_frame_index, last=last, utterance=utterance,
-                                   corpus=corpus)
-            elif isinstance(step, Computation):
-                parent_output = step_results[parent_steps[0]]
-                res = step.compute(parent_output, sampling_rate, first_frame_index, last=last, utterance=utterance,
-                                   corpus=corpus)
-            else:
-                # use step.parents to make sure the same order is kept as in the constructor of the reduction
-                parent_outputs = [step_results[parent] for parent in step.parents]
-                res = step.compute(parent_outputs, sampling_rate, first_frame_index, last=last, utterance=utterance,
-                                   corpus=corpus)
+                input_steps.append(step)
 
-            if step == self:
-                return res
-            else:
-                step_results[step] = res
+        return input_steps
 
-    @abc.abstractmethod
-    def compute(self, data, sampling_rate, first_frame_index=0, last=False, corpus=None, utterance=None):
-        pass
+    def _create_buffers(self):
+        """
+        Create a buffer for every step in the pipeline.
+        """
+
+        self.buffers = {}
+
+        for step in self.graph.nodes:
+            num_buffers = 1
+
+            if isinstance(step, Reduction):
+                num_buffers = len(step.parents)
+
+            self.buffers[step] = Buffer(step.min_frames, step.left_context, step.right_context, num_buffers)
+
+        return self.buffers
 
 
 class Computation(Step, metaclass=abc.ABCMeta):
     """
     Base class for a computation step.
+    To implement a computation step for pipeline the ``compute`` method has to be implemented.
+    This method gets the frames from its parent step including context frames if defined.
+    It has to return the same number of frames but without context frames.
 
     Args:
         parent (Step, optional): The parent step this step depends on.
@@ -289,6 +371,8 @@ class Computation(Step, metaclass=abc.ABCMeta):
 class Reduction(Step, metaclass=abc.ABCMeta):
     """
     Base class for a reduction step.
+    It gets the frames of all its parent steps as a list.
+    It has to return a single chunk of frames.
 
     Args:
         parents (list): List of parent steps this step depends on.

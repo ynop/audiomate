@@ -21,5 +21,5 @@ class MeanVarianceNorm(base.Computation):
         self.variance = variance
         self.std = math.sqrt(variance)
 
-    def compute(self, data, sampling_rate, first_frame_index=None, last=False, corpus=None, utterance=None):
-        return (data - self.mean) / self.std
+    def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        return (chunk.data - self.mean) / self.std

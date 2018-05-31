@@ -58,8 +58,8 @@ class MelSpectrogram(base.Computation):
 
         self.n_mels = n_mels
 
-    def compute(self, data, sampling_rate, first_frame_index=None, last=False, corpus=None, utterance=None):
-        power_spec = np.abs(stft_from_frames(data.T)) ** 2
+    def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        power_spec = np.abs(stft_from_frames(chunk.data.T)) ** 2
         mel = librosa.feature.melspectrogram(S=power_spec, n_mels=self.n_mels, sr=sampling_rate)
 
         return mel.T
@@ -82,8 +82,8 @@ class MFCC(base.Computation):
         self.n_mfcc = n_mfcc
         self.n_mels = n_mels
 
-    def compute(self, data, sampling_rate, first_frame_index=None, last=False, corpus=None, utterance=None):
-        power_spec = np.abs(stft_from_frames(data.T)) ** 2
+    def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        power_spec = np.abs(stft_from_frames(chunk.data.T)) ** 2
 
         mel = librosa.feature.melspectrogram(S=power_spec, n_mels=self.n_mels, sr=sampling_rate)
         mel_power = librosa.power_to_db(mel)
