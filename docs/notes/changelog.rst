@@ -4,6 +4,10 @@ Changelog
 Next Version
 ------------
 
+
+v1.0.0
+------
+
 **Breaking Changes**
 
 * The (pre)processing module has moved to :mod:`audiomate.processing`. It now supports online processing in chunks.
