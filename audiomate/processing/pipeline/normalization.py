@@ -3,7 +3,7 @@ import math
 from . import base
 
 
-class MeanVarianceNorm(base.OfflineComputation):
+class MeanVarianceNorm(base.Computation):
     """
     Pre-processing step to normalize mean and variance.
 
@@ -21,5 +21,5 @@ class MeanVarianceNorm(base.OfflineComputation):
         self.variance = variance
         self.std = math.sqrt(variance)
 
-    def compute(self, frames, sampling_rate, corpus=None, utterance=None):
-        return (frames - self.mean) / self.std
+    def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        return (chunk.data - self.mean) / self.std

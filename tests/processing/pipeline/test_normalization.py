@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from audiomate.corpus.preprocessing.pipeline import offline
+from audiomate.processing import pipeline
 
 
 class MeanVarianceNormTest(unittest.TestCase):
@@ -11,8 +11,8 @@ class MeanVarianceNormTest(unittest.TestCase):
         mean = float(np.mean(frame))
         var = float(np.var(frame))
 
-        norm = offline.MeanVarianceNorm(mean, var)
-        output = norm.process(frame, 4)
+        norm = pipeline.MeanVarianceNorm(mean, var)
+        output = norm.process_frames(frame, 4)
         expected = (frame - mean) / np.std(frame)
 
         assert np.array_equal(output, expected)
