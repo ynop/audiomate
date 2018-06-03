@@ -7,7 +7,7 @@
 
 Audiomate is a library for easy access to audio datasets. It provides the datastructures for accessing/loading different datasets in a generic way. This should ease the use of audio datasets for example for machine learning tasks.
 
-Documentation: https://audiomate.readthedocs.io/
+Documentation: https://audiomate.readthedocs.io/  
 Examples: https://github.com/ynop/audiomate/tree/master/examples
 
 Currently supported datasets:
@@ -20,6 +20,7 @@ Currently supported datasets:
 * [TIMIT](https://github.com/philipperemy/timit)
 * [German Distant Speech Corpus](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/acoustic-models.html)
 * [Voxforge](http://www.voxforge.org/de)
+* [Free Spoken Digit Dataset](https://github.com/Jakobovski/free-spoken-digit-dataset)
 
 Currently supported formats:
 * [Kaldi](http://kaldi-asr.org/)
