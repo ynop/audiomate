@@ -4,8 +4,10 @@ Welcome to audiomate's documentation!
 Audiomate is a library for easy access to audio datasets. It provides the datastructures for accessing/loading different datasets in a generic way.
 This should ease the use of audio datasets for example for machine learning tasks.
 
+.. image:: documentation/idea.*
+
+
 .. toctree::
-    :hidden:
     :maxdepth: 1
     :caption: Notes
 
@@ -13,15 +15,15 @@ This should ease the use of audio datasets for example for machine learning task
     notes/changelog
 
 .. toctree::
-    :hidden:
     :maxdepth: 2
     :caption: Documentation
 
-    documentation/concept
+    documentation/structure
     documentation/formats
+    documentation/new_dataset_format
+    documentation/data_mapping
 
 .. toctree::
-    :hidden:
     :maxdepth: 2
     :caption: Package Reference
 

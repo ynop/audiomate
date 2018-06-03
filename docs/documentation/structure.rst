@@ -1,13 +1,5 @@
-Concept
-=======
-
-The major target of audiomate is to provide a generic way to read/write different corpus/dataset formats or read specific corpora/datasets.
-So, independent of the dataset, one can use the same code to access the data.
-
-.. image:: idea.*
-
-Corpus structure
-----------------
+Corpus Structure
+================
 
 To represent any corpus/dataset in a generic way, a structure is needed that can represent the data of any audio dataset as far as possible.
 For this purpose the following structure is used.
@@ -26,6 +18,12 @@ Utterance
 
 Issuer
     The issuer is defined as the person/thing/... who generate/produced the utterance (e.g. The speaker who read a given utterance).
+
+Speaker
+    For spoken audio content a speaker contains specific information for spoken content.
+
+Artitst
+    For musical content an artist contains specific information about the artist.
 
 LabelList
     The label-list is a container for holding all labels of a given type for one utterance.
