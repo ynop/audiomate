@@ -47,6 +47,7 @@ Implementations
   Kaldi                                     x      x
   Mozilla DeepSpeech                               x
   MUSAN                                     x
+  Tatoeba                         x         x
   TIMIT                                     x
   TUDA German Distant Speech                x
   Urbansound8k                              x
@@ -71,9 +72,30 @@ Default
 .. autoclass:: DefaultWriter
    :members:
 
+ESC-50
+^^^^^^
+.. autoclass:: ESC50Downloader
+   :members:
+
+.. autoclass:: ESC50Reader
+   :members:
+
 Folder
 ^^^^^^
 .. autoclass:: FolderReader
+   :members:
+
+Free-Spoken-Digit-Dataset
+^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: FreeSpokenDigitDownloader
+   :members:
+
+.. autoclass:: FreeSpokenDigitReader
+   :members:
+
+Google Speech Commands
+^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: SpeechCommandsReader
    :members:
 
 GTZAN
@@ -89,17 +111,25 @@ Kaldi
 .. autoclass:: KaldiWriter
    :members:
 
+Mozilla DeepSpeech
+^^^^^^^^^^^^^^^^^^
+.. autoclass:: MozillaDeepSpeechWriter
+   :members:
+
 MUSAN
 ^^^^^
 .. autoclass:: MusanReader
    :members:
 
-Google Speech Commands
-^^^^^^^^^^^^^^^^^^^^^^
-.. autoclass:: SpeechCommandsReader
+Tatoeba
+^^^^^^^
+.. autoclass:: TatoebaDownloader
    :members:
 
-DARPA TIMIT Acoustic-Phonetic Continuous Speech Corpus
+.. autoclass:: TatoebaReader
+   :members:
+
+TIMIT DARPA Acoustic-Phonetic Continuous Speech Corpus
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. autoclass:: TimitReader
    :members:
@@ -107,27 +137,6 @@ DARPA TIMIT Acoustic-Phonetic Continuous Speech Corpus
 TUDA German Distant Speech
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. autoclass:: TudaReader
-   :members:
-
-ESC-50
-^^^^^^
-.. autoclass:: ESC50Downloader
-   :members:
-
-.. autoclass:: ESC50Reader
-   :members:
-
-Free-Spoken-Digit-Dataset
-^^^^^^^^^^^^^^^^^^^^^^^^^
-.. autoclass:: FreeSpokenDigitDownloader
-   :members:
-
-.. autoclass:: FreeSpokenDigitReader
-   :members:
-
-Mozilla DeepSpeech
-^^^^^^^^^^^^^^^^^^
-.. autoclass:: MozillaDeepSpeechWriter
    :members:
 
 Urbansound8k
