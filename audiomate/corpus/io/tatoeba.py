@@ -1,6 +1,8 @@
 import os
 import shutil
 
+import audiomate
+from audiomate.corpus import assets
 from audiomate.utils import download
 from audiomate.utils import textfile
 from . import base
@@ -129,3 +131,50 @@ class TatoebaDownloader(base.CorpusDownloader):
 
             download_url = 'https://audio.tatoeba.org/sentences/{}/{}.mp3'.format(record[2], record[0])
             download.download_file(download_url, audio_file)
+
+
+class TatoebaReader(base.CorpusReader):
+    """
+    Reader for audio data downloaded with the Tatoeba downloader.
+    """
+
+    @classmethod
+    def type(cls):
+        return 'tatoeba'
+
+    def _check_for_missing_files(self, path):
+        meta_file = os.path.join(path, META_FILENAME)
+
+        if os.path.isfile(meta_file):
+            return []
+        else:
+            return [meta_file]
+
+    def _load(self, path):
+        corpus = audiomate.Corpus(path=path)
+
+        meta_file = os.path.join(path, META_FILENAME)
+        records = textfile.read_separated_lines_generator(meta_file, separator='\t', max_columns=4)
+
+        for record in records:
+            idx = record[0]
+            speaker_idx = record[1]
+            language = record[2]
+            transcript = record[3]
+
+            file_path = os.path.join(path, 'audio', language, '{}.mp3'.format(idx))
+            corpus.new_file(file_path, idx)
+
+            if speaker_idx not in corpus.issuers.keys():
+                issuer = assets.Speaker(speaker_idx)
+                corpus.import_issuers(issuer)
+
+            utterance = corpus.new_utterance(idx, idx, speaker_idx)
+            utterance.set_label_list(assets.LabelList(idx='word-transcript-raw', labels=[
+                assets.Label(str(transcript))
+            ]))
+            utterance.set_label_list(assets.LabelList(idx='domain', labels=[
+                assets.Label(str('speech'))
+            ]))
+
+        return corpus
