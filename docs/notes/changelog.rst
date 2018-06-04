@@ -4,6 +4,12 @@ Changelog
 Next Version
 ------------
 
+**New Features**
+
+* Added downloader (:class:`audiomate.corpus.io.TatoebaDownloader`) and
+  reader (:class:`audiomate.corpus.io.TatoebaReader`) for the
+  `Tatoeba platform <https://tatoeba.org/>`_.
+
 
 v1.0.0
 ------

@@ -15,6 +15,11 @@ def sample_zip_data():
 
 
 @pytest.fixture()
+def sample_tar_bz2_path():
+    return resources.get_resource_path(['sample_files', 'sentences.tar.bz2'])
+
+
+@pytest.fixture()
 def sample_zip_path():
     return resources.get_resource_path(['sample_files', 'zip_sample.zip'])
 
@@ -42,3 +47,9 @@ def test_extract_zip(sample_zip_path, tmpdir):
     assert os.path.isfile(os.path.join(target_folder, 'a.txt'))
     assert os.path.isfile(os.path.join(target_folder, 'data', 'dibsdadu.txt'))
     assert os.path.isfile(os.path.join(target_folder, 'data', 'babadu.txt'))
+
+
+def test_extract_tar_bz2(sample_tar_bz2_path, tmpdir):
+    download.extract_tar(sample_tar_bz2_path, tmpdir.strpath)
+
+    assert os.path.isfile(os.path.join(tmpdir.strpath, 'sentences.csv'))
