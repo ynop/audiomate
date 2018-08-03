@@ -38,6 +38,7 @@ Implementations
   ==============================  ========  =====  =======
   Acoustic Event Dataset                    x
   Broadcast                                 x
+  Common Voice                    x         x
   Default                                   x      x
   ESC-50                          x         x
   Free-Spoken-Digit-Dataset       x         x
@@ -62,6 +63,14 @@ Acoustic Event Dataset
 Broadcast
 ^^^^^^^^^
 .. autoclass:: BroadcastReader
+   :members:
+
+Common-Voice
+^^^^^^^^^^^^
+.. autoclass:: CommonVoiceDownloader
+   :members:
+
+.. autoclass:: CommonVoiceReader
    :members:
 
 Default
