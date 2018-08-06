@@ -312,3 +312,11 @@ class LabelList(object):
 
     def __len__(self):
         return self.labels.__len__()
+
+    @classmethod
+    def create_single(cls, value, idx='default'):
+        """ Create a label-list with a single label containing the given value. """
+
+        return LabelList(idx=idx, labels=[
+            Label(value=value)
+        ])

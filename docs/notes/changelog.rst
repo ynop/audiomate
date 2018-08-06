@@ -4,6 +4,11 @@ Changelog
 Next Version
 ------------
 
+**Breaking Changes**
+
+* Update various readers to use the correct label-list identifiers as defined
+  in :ref:`data-mapping`.
+
 **New Features**
 
 * Added downloader (:class:`audiomate.corpus.io.TatoebaDownloader`) and
@@ -13,6 +18,8 @@ Next Version
 * Added downloader (:class:`audiomate.corpus.io.CommonVoiceDownloader`) and
   reader (:class:`audiomate.corpus.io.CommonVoiceReader`) for the
   `Common Voice Corpus <https://voice.mozilla.org/>`_.
+
+* Added constants for common label-list identifiers/keys in :mod:`audiomate.corpus.assets`.
 
 v1.0.0
 ------

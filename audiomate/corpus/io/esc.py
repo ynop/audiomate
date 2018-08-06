@@ -78,9 +78,7 @@ class ESC50Reader(base.CorpusReader):
 
             corpus.new_file(file_path, file_id)
             utt = corpus.new_utterance(file_id, file_id)
-            utt.set_label_list(assets.LabelList(labels=[
-                assets.Label(category)
-            ]))
+            utt.set_label_list(assets.LabelList.create_single(category, idx=assets.LL_SOUND_CLASS))
 
             folds['fold-{}'.format(fold)].append(file_id)
 

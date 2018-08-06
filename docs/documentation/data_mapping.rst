@@ -30,14 +30,19 @@ In the corpus data structures an utterance can have multiple label-lists. In ord
     utterance = ...
     label_list = utterance.label_lists['word-transcription']
 
-The used key should be consistent for all datasets. Audio data can be categorized on different levels of abstraction.
-On top every  dataset/corpus should contain a label-list **domain**, that classifies the content in one of the following classes:
+The used key should be consistent for all datasets. Therefore the identifiers/keys should be selected from below
+if possible. For these predefined keys, constants are defined in :mod:`audiomate.corpus.assets`.
 
-    * speech
-    * music
-    * noise
+general
+^^^^^^^
 
-For every of these categories different label-list maybe defined.
+domain
+    A high-level category for a given audio excerpt. Should be one of the following values:
+
+        * speech
+        * music
+        * noise
+
 
 speech
 ^^^^^^

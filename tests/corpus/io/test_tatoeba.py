@@ -297,44 +297,34 @@ class TestTatoebaReader:
         assert ds.utterances['6921520'].start == 0
         assert ds.utterances['6921520'].end == -1
 
-    def test_load_domain(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
-
-        for utt_id in ['141', '247', '1355', '1881', '6921520']:
-            ll = ds.utterances[utt_id].label_lists['domain']
-            assert len(ll) == 1
-            assert ll[0].value == 'speech'
-            assert ll[0].start == 0
-            assert ll[0].end == -1
-
     def test_load_transcriptions(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)
 
-        ll = ds.utterances['141'].label_lists['word-transcript-raw']
+        ll = ds.utterances['141'].label_lists[assets.LL_WORD_TRANSCRIPT_RAW]
         assert len(ll) == 1
         assert ll[0].value == 'I want you to tell me why you did that.'
         assert ll[0].start == 0
         assert ll[0].end == -1
 
-        ll = ds.utterances['247'].label_lists['word-transcript-raw']
+        ll = ds.utterances['247'].label_lists[assets.LL_WORD_TRANSCRIPT_RAW]
         assert len(ll) == 1
         assert ll[0].value == 'Comment ça, je suis trop vieille pour ce poste ?'
         assert ll[0].start == 0
         assert ll[0].end == -1
 
-        ll = ds.utterances['1355'].label_lists['word-transcript-raw']
+        ll = ds.utterances['1355'].label_lists[assets.LL_WORD_TRANSCRIPT_RAW]
         assert len(ll) == 1
         assert ll[0].value == 'Wer will heiße Schokolade?'
         assert ll[0].start == 0
         assert ll[0].end == -1
 
-        ll = ds.utterances['1881'].label_lists['word-transcript-raw']
+        ll = ds.utterances['1881'].label_lists[assets.LL_WORD_TRANSCRIPT_RAW]
         assert len(ll) == 1
         assert ll[0].value == 'Das ist zu teuer!'
         assert ll[0].start == 0
         assert ll[0].end == -1
 
-        ll = ds.utterances['6921520'].label_lists['word-transcript-raw']
+        ll = ds.utterances['6921520'].label_lists[assets.LL_WORD_TRANSCRIPT_RAW]
         assert len(ll) == 1
         assert ll[0].value == 'He washes his car at least once a week.'
         assert ll[0].start == 0

@@ -230,6 +230,24 @@ class TestLabelList(unittest.TestCase):
         assert res['b'] == pytest.approx(3.8)
         assert res['c'] == pytest.approx(4.3)
 
+    def test_create_single(self):
+        ll = assets.LabelList.create_single('bob')
+
+        assert len(ll) == 1
+        assert ll.idx == 'default'
+        assert ll[0].value == 'bob'
+        assert ll[0].start == 0
+        assert ll[0].end == -1
+
+    def test_create_single_with_custom_idx(self):
+        ll = assets.LabelList.create_single('bob', idx='name')
+
+        assert len(ll) == 1
+        assert ll.idx == 'name'
+        assert ll[0].value == 'bob'
+        assert ll[0].start == 0
+        assert ll[0].end == -1
+
 
 class TestLabel(object):
 

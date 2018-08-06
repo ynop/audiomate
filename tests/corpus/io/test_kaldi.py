@@ -94,17 +94,17 @@ class KaldiReaderTest(unittest.TestCase):
         utt_4 = ds.utterances['utt-4']
         utt_5 = ds.utterances['utt-5']
 
-        assert 'default' in utt_1.label_lists.keys()
-        assert 'default' in utt_2.label_lists.keys()
-        assert 'default' in utt_3.label_lists.keys()
-        assert 'default' in utt_4.label_lists.keys()
-        assert 'default' in utt_5.label_lists.keys()
+        assert assets.LL_WORD_TRANSCRIPT in utt_1.label_lists.keys()
+        assert assets.LL_WORD_TRANSCRIPT in utt_2.label_lists.keys()
+        assert assets.LL_WORD_TRANSCRIPT in utt_3.label_lists.keys()
+        assert assets.LL_WORD_TRANSCRIPT in utt_4.label_lists.keys()
+        assert assets.LL_WORD_TRANSCRIPT in utt_5.label_lists.keys()
 
-        assert len(utt_4.label_lists['default'].labels) == 1
-        assert utt_4.label_lists['default'].labels[0].value == 'who are they'
+        assert len(utt_4.label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert utt_4.label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].value == 'who are they'
 
-        assert utt_4.label_lists['default'].labels[0].start == 0
-        assert utt_4.label_lists['default'].labels[0].end == -1
+        assert utt_4.label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].start == 0
+        assert utt_4.label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].end == -1
 
 
 class KaldiWriterTest(unittest.TestCase):
