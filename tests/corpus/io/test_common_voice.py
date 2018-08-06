@@ -110,12 +110,6 @@ class TestCommonVoiceReader:
         assert ds.utterances[idx].start == 0
         assert ds.utterances[idx].end == -1
 
-    def test_domain_labels(self, reader, data_path):
-        ds = reader.load(data_path)
-
-        for utt in ds.utterances.values():
-            assert utt.label_lists['domain'][0].value == 'speech'
-
     @pytest.mark.parametrize('idx, transcription', [
         ('cv-valid-dev-sample-000000', 'be careful with your prognostications said the stranger'),
         ('cv-valid-dev-sample-000335', 'love required them to stay with the people they loved'),
@@ -128,7 +122,7 @@ class TestCommonVoiceReader:
     def test_load_transcription(self, idx, transcription, reader, data_path):
         ds = reader.load(data_path)
 
-        ll = ds.utterances[idx].label_lists['word-transcript']
+        ll = ds.utterances[idx].label_lists[assets.LL_WORD_TRANSCRIPT]
 
         assert len(ll) == 1
         assert ll[0].value == transcription

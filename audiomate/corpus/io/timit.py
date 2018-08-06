@@ -68,11 +68,10 @@ class TimitReader(base.CorpusReader):
                             corpus.new_file(wav_path, utt_idx)
                             utt = corpus.new_utterance(utt_idx, utt_idx, speaker_idx)
 
-                            utt.set_label_list(assets.LabelList(idx='raw_transcription', labels=[
-                                assets.Label(raw_text)
-                            ]))
+                            raw_ll = assets.LabelList.create_single(raw_text, idx=assets.LL_WORD_TRANSCRIPT_RAW)
+                            utt.set_label_list(raw_ll)
 
-                            word_ll = assets.LabelList(idx='words')
+                            word_ll = assets.LabelList(idx=assets.LL_WORD_TRANSCRIPT)
 
                             for record in words:
                                 start = int(record[0]) / 16000
@@ -81,7 +80,7 @@ class TimitReader(base.CorpusReader):
 
                             utt.set_label_list(word_ll)
 
-                            phone_ll = assets.LabelList(idx='phones')
+                            phone_ll = assets.LabelList(idx=assets.LL_PHONE_TRANSCRIPT)
 
                             for record in phones:
                                 start = int(record[0]) / 16000

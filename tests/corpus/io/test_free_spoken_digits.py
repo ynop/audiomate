@@ -105,7 +105,7 @@ class TestFreeSpokenDigitReader:
     def test_load_transcription(self, idx, transcription, reader, data_path):
         ds = reader.load(data_path)
 
-        ll = ds.utterances[idx].label_lists['transcription']
+        ll = ds.utterances[idx].label_lists[assets.LL_WORD_TRANSCRIPT]
 
         assert len(ll) == 1
         assert ll[0].value == transcription

@@ -4,6 +4,7 @@ import pytest
 import requests_mock
 
 from audiomate.corpus import io
+from audiomate.corpus import assets
 from audiomate.corpus.io import esc
 from tests import resources
 
@@ -154,17 +155,17 @@ class TestESC50Reader:
     def test_load_labels(self, reader, data_path):
         ds = reader.load(data_path)
 
-        assert ds.utterances['1-119125-A-45'].label_lists['default'].labels[0].value == 'train'
-        assert ds.utterances['1-119125-A-45'].label_lists['default'].labels[0].start == 0
-        assert ds.utterances['1-119125-A-45'].label_lists['default'].labels[0].end == -1
+        assert ds.utterances['1-119125-A-45'].label_lists[assets.LL_SOUND_CLASS].labels[0].value == 'train'
+        assert ds.utterances['1-119125-A-45'].label_lists[assets.LL_SOUND_CLASS].labels[0].start == 0
+        assert ds.utterances['1-119125-A-45'].label_lists[assets.LL_SOUND_CLASS].labels[0].end == -1
 
-        assert ds.utterances['1-15689-A-4'].label_lists['default'].labels[0].value == 'frog'
-        assert ds.utterances['1-15689-A-4'].label_lists['default'].labels[0].start == 0
-        assert ds.utterances['1-15689-A-4'].label_lists['default'].labels[0].end == -1
+        assert ds.utterances['1-15689-A-4'].label_lists[assets.LL_SOUND_CLASS].labels[0].value == 'frog'
+        assert ds.utterances['1-15689-A-4'].label_lists[assets.LL_SOUND_CLASS].labels[0].start == 0
+        assert ds.utterances['1-15689-A-4'].label_lists[assets.LL_SOUND_CLASS].labels[0].end == -1
 
-        assert ds.utterances['1-18810-A-49'].label_lists['default'].labels[0].value == 'hand_saw'
-        assert ds.utterances['1-18810-A-49'].label_lists['default'].labels[0].start == 0
-        assert ds.utterances['1-18810-A-49'].label_lists['default'].labels[0].end == -1
+        assert ds.utterances['1-18810-A-49'].label_lists[assets.LL_SOUND_CLASS].labels[0].value == 'hand_saw'
+        assert ds.utterances['1-18810-A-49'].label_lists[assets.LL_SOUND_CLASS].labels[0].start == 0
+        assert ds.utterances['1-18810-A-49'].label_lists[assets.LL_SOUND_CLASS].labels[0].end == -1
 
     def test_load_fold_subsets(self, reader, data_path):
         ds = reader.load(data_path)

@@ -175,7 +175,7 @@ class TestDefaultWriter:
         assert 'issuers.json' in files
         assert 'utterances.txt' in files
         assert 'utt_issuers.txt' in files
-        assert 'labels_default.txt' in files
+        assert 'labels_word-transcript.txt' in files
         assert 'subview_train.txt' in files
         assert 'subview_dev.txt' in files
 
@@ -244,7 +244,7 @@ class TestDefaultWriter:
     def test_save_labels(self, writer, sample_corpus, tmpdir):
         writer.save(sample_corpus, tmpdir.strpath)
 
-        with open(os.path.join(tmpdir.strpath, 'labels_default.txt'), 'r') as f:
+        with open(os.path.join(tmpdir.strpath, 'labels_word-transcript.txt'), 'r') as f:
             file_content = f.read()
 
         assert file_content.strip() == 'utt-1 0 -1 who am i\n' \

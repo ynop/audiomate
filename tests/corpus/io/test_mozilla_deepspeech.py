@@ -3,6 +3,7 @@ import tempfile
 import pytest
 
 from audiomate.corpus import io
+from audiomate.corpus import assets
 from audiomate.utils import textfile
 
 from tests import resources
@@ -43,27 +44,27 @@ class TestMozillaDeepSpeechWriter:
         path = ds.utterances['utt-1'].file.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
-        assert utts[path][1] == ds.utterances['utt-1'].label_lists['default'].labels[0].value
+        assert utts[path][1] == ds.utterances['utt-1'].label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].value
 
         path = ds.utterances['utt-2'].file.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
-        assert utts[path][1] == ds.utterances['utt-2'].label_lists['default'].labels[0].value
+        assert utts[path][1] == ds.utterances['utt-2'].label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].value
 
         path = os.path.join(tmpdir.strpath, 'audio', 'utt-3.wav')
         assert len(utts[path]) == 2
         assert utts[path][0] == '48044'
-        assert utts[path][1] == ds.utterances['utt-3'].label_lists['default'].labels[0].value
+        assert utts[path][1] == ds.utterances['utt-3'].label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].value
 
         path = os.path.join(tmpdir.strpath, 'audio', 'utt-4.wav')
         assert len(utts[path]) == 2
         assert utts[path][0] == '32044'
-        assert utts[path][1] == ds.utterances['utt-4'].label_lists['default'].labels[0].value
+        assert utts[path][1] == ds.utterances['utt-4'].label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].value
 
         path = ds.utterances['utt-5'].file.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
-        assert utts[path][1] == ds.utterances['utt-5'].label_lists['default'].labels[0].value
+        assert utts[path][1] == ds.utterances['utt-5'].label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].value
 
     def test_save_subset_train(self, writer, tmpdir):
         ds = resources.create_dataset()
@@ -88,17 +89,17 @@ class TestMozillaDeepSpeechWriter:
         path = ds.utterances['utt-1'].file.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
-        assert utts[path][1] == ds.utterances['utt-1'].label_lists['default'].labels[0].value
+        assert utts[path][1] == ds.utterances['utt-1'].label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].value
 
         path = ds.utterances['utt-2'].file.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
-        assert utts[path][1] == ds.utterances['utt-2'].label_lists['default'].labels[0].value
+        assert utts[path][1] == ds.utterances['utt-2'].label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].value
 
         path = os.path.join(tmpdir.strpath, 'audio', 'utt-3.wav')
         assert len(utts[path]) == 2
         assert utts[path][0] == '48044'
-        assert utts[path][1] == ds.utterances['utt-3'].label_lists['default'].labels[0].value
+        assert utts[path][1] == ds.utterances['utt-3'].label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].value
 
     def test_save_subset_dev(self, writer, tmpdir):
         ds = resources.create_dataset()
@@ -123,9 +124,9 @@ class TestMozillaDeepSpeechWriter:
         path = os.path.join(tmpdir.strpath, 'audio', 'utt-4.wav')
         assert len(utts[path]) == 2
         assert utts[path][0] == '32044'
-        assert utts[path][1] == ds.utterances['utt-4'].label_lists['default'].labels[0].value
+        assert utts[path][1] == ds.utterances['utt-4'].label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].value
 
         path = ds.utterances['utt-5'].file.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
-        assert utts[path][1] == ds.utterances['utt-5'].label_lists['default'].labels[0].value
+        assert utts[path][1] == ds.utterances['utt-5'].label_lists[assets.LL_WORD_TRANSCRIPT].labels[0].value

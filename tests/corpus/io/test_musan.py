@@ -95,14 +95,14 @@ class MusanReaderTest(unittest.TestCase):
         utt_2 = ds.utterances['noise-free-sound-0000']
         utt_3 = ds.utterances['noise-free-sound-0001']
 
-        assert 'audio_type' in utt_1.label_lists.keys()
-        assert 'audio_type' in utt_2.label_lists.keys()
-        assert 'audio_type' in utt_3.label_lists.keys()
+        assert assets.LL_DOMAIN in utt_1.label_lists.keys()
+        assert assets.LL_DOMAIN in utt_2.label_lists.keys()
+        assert assets.LL_DOMAIN in utt_3.label_lists.keys()
 
-        assert len(utt_1.label_lists['audio_type'].labels) == 1
-        assert len(utt_2.label_lists['audio_type'].labels) == 1
-        assert len(utt_3.label_lists['audio_type'].labels) == 1
+        assert len(utt_1.label_lists[assets.LL_DOMAIN].labels) == 1
+        assert len(utt_2.label_lists[assets.LL_DOMAIN].labels) == 1
+        assert len(utt_3.label_lists[assets.LL_DOMAIN].labels) == 1
 
-        assert utt_1.label_lists['audio_type'].labels[0].value == 'music'
-        assert utt_2.label_lists['audio_type'].labels[0].value == 'noise'
-        assert utt_3.label_lists['audio_type'].labels[0].value == 'noise'
+        assert utt_1.label_lists[assets.LL_DOMAIN].labels[0].value == 'music'
+        assert utt_2.label_lists[assets.LL_DOMAIN].labels[0].value == 'noise'
+        assert utt_3.label_lists[assets.LL_DOMAIN].labels[0].value == 'noise'

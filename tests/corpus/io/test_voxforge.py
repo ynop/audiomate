@@ -233,17 +233,17 @@ class TestVoxforgeReader:
     def test_load_transcriptions(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)
 
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].label_lists['transcription'][0].value == \
+        assert ds.utterances['1337ad-20170321-czb-de11-096'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == \
             'ES HANDELT SICH UM GETRENNTE RECHTSSYSTEME UND NUR EINES IST ANWENDBAR'
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].label_lists['transcription_raw'][0].value == \
+        assert ds.utterances['1337ad-20170321-czb-de11-096'].label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == \
             'Es handelt sich um getrennte Rechtssysteme und nur eines ist anwendbar.'
 
-        assert ds.utterances['Katzer-20140410-lyk-b0167'].label_lists['transcription'][0].value == \
+        assert ds.utterances['Katzer-20140410-lyk-b0167'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == \
             'A LITTLE BEFORE DAWN OF THE DAY FOLLOWING THE FIRE RELIEF CAME'
-        assert ds.utterances['Katzer-20140410-lyk-b0167'].label_lists['transcription_raw'][0].value == \
+        assert ds.utterances['Katzer-20140410-lyk-b0167'].label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == \
             'A little before dawn of the day following, the fire relief came.'
 
-        assert ds.utterances['anonymous-20081027-njq-a0479'].label_lists['transcription'][0].value == \
+        assert ds.utterances['anonymous-20081027-njq-a0479'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == \
             'I TRIED TO READ GEORGE MOORE LAST NIGHT AND WAS DREADFULLY BORED'
-        assert ds.utterances['anonymous-20081027-njq-a0479'].label_lists['transcription_raw'][0].value == \
+        assert ds.utterances['anonymous-20081027-njq-a0479'].label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == \
             'I tried to read George Moore last night, and was dreadfully bored.'

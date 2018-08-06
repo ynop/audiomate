@@ -115,7 +115,7 @@ class KaldiReader(base.CorpusReader):
     def read_transcriptions(text_path, corpus):
         transcriptions = textfile.read_key_value_lines(text_path, separator=' ')
         for utt_id, transcription in transcriptions.items():
-            ll = assets.LabelList(labels=[assets.Label(transcription)])
+            ll = assets.LabelList.create_single(transcription, idx=assets.LL_WORD_TRANSCRIPT)
             corpus.utterances[utt_id].set_label_list(ll)
 
 
@@ -130,7 +130,7 @@ class KaldiWriter(base.CorpusWriter):
           files.
     """
 
-    def __init__(self, main_label_list_idx='default', main_feature_idx='default'):
+    def __init__(self, main_label_list_idx=assets.LL_WORD_TRANSCRIPT, main_feature_idx='default'):
         self.main_label_list_idx = main_label_list_idx
         self.main_feature_idx = main_feature_idx
 

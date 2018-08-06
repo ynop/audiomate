@@ -48,11 +48,16 @@ def create_dataset():
     utt_4 = ds.new_utterance('utt-4', file_3.idx, issuer_idx=issuer_2.idx, start=1.5, end=2.5)
     utt_5 = ds.new_utterance('utt-5', file_4.idx, issuer_idx=issuer_3.idx)
 
-    utt_1.set_label_list(assets.LabelList('default', labels=[assets.Label('who am i')]))
-    utt_2.set_label_list(assets.LabelList('default', labels=[assets.Label('who are you', meta={'a': 'hey', 'b': 2})]))
-    utt_3.set_label_list(assets.LabelList('default', labels=[assets.Label('who is he')]))
-    utt_4.set_label_list(assets.LabelList('default', labels=[assets.Label('who are they')]))
-    utt_5.set_label_list(assets.LabelList('default', labels=[assets.Label('who is she')]))
+    utt_1.set_label_list(assets.LabelList(assets.LL_WORD_TRANSCRIPT,
+                                          labels=[assets.Label('who am i')]))
+    utt_2.set_label_list(assets.LabelList(assets.LL_WORD_TRANSCRIPT,
+                                          labels=[assets.Label('who are you', meta={'a': 'hey', 'b': 2})]))
+    utt_3.set_label_list(assets.LabelList(assets.LL_WORD_TRANSCRIPT,
+                                          labels=[assets.Label('who is he')]))
+    utt_4.set_label_list(assets.LabelList(assets.LL_WORD_TRANSCRIPT,
+                                          labels=[assets.Label('who are they')]))
+    utt_5.set_label_list(assets.LabelList(assets.LL_WORD_TRANSCRIPT,
+                                          labels=[assets.Label('who is she')]))
 
     train_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-1', 'utt-2', 'utt-3'})
     sv_train = subview.Subview(ds, filter_criteria=[train_filter])

@@ -65,7 +65,7 @@ class MusanReader(base.CorpusReader):
 
                     corpus.new_file(file_path, file_idx=file_idx, copy_file=False)
                     utterance = corpus.new_utterance(utterance_idx, file_idx, issuer_idx)
-                    utterance.set_label_list(assets.LabelList(idx='audio_type', labels=[assets.Label(type_name)]))
+                    utterance.set_label_list(assets.LabelList.create_single(type_name, idx=assets.LL_DOMAIN))
 
         return corpus
 

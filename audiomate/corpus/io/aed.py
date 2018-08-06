@@ -61,10 +61,7 @@ class AEDReader(base.CorpusReader):
 
                 corpus.new_file(wav_path, basename)
                 utt = corpus.new_utterance(basename, basename)
-                utt.set_label_list(assets.LabelList(idx='default', labels=[
-                    assets.Label(label)
-                ]))
-
+                utt.set_label_list(assets.LabelList.create_single(label, assets.LL_SOUND_CLASS))
                 utterance_ids.add(basename)
 
         return utterance_ids

@@ -49,9 +49,7 @@ class Urbansound8kReader(base.CorpusReader):
 
                 corpus.new_file(file_path, basename)
                 utt = corpus.new_utterance(basename, basename)
-                utt.set_label_list(assets.LabelList(idx='default', labels=[
-                    assets.Label(label)
-                ]))
+                utt.set_label_list(assets.LabelList.create_single(label, idx=assets.LL_SOUND_CLASS))
                 folds['fold{}'.format(fold)].add(basename)
 
         for fold_idx, fold_utterance_ids in folds.items():

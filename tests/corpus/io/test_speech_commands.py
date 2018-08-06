@@ -1,6 +1,7 @@
 import os
 import unittest
 
+from audiomate.corpus import assets
 from audiomate.corpus.io import SpeechCommandsReader
 
 from tests import resources
@@ -125,56 +126,56 @@ class SpeechCommandsReaderTest(unittest.TestCase):
         ds = self.reader.load(self.ds_path)
 
         assert len(ds.utterances['0b77ee66_nohash_0_bed'].label_lists) == 1
-        assert len(ds.utterances['0b77ee66_nohash_0_bed'].label_lists['default'].labels) == 1
-        assert ds.utterances['0b77ee66_nohash_0_bed'].label_lists['default'].labels[0].value == 'bed'
+        assert len(ds.utterances['0b77ee66_nohash_0_bed'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['0b77ee66_nohash_0_bed'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'bed'
 
         assert len(ds.utterances['0b77ee66_nohash_1_bed'].label_lists) == 1
-        assert len(ds.utterances['0b77ee66_nohash_1_bed'].label_lists['default'].labels) == 1
-        assert ds.utterances['0b77ee66_nohash_1_bed'].label_lists['default'].labels[0].value == 'bed'
+        assert len(ds.utterances['0b77ee66_nohash_1_bed'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['0b77ee66_nohash_1_bed'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'bed'
 
         assert len(ds.utterances['0b77ee66_nohash_2_bed'].label_lists) == 1
-        assert len(ds.utterances['0b77ee66_nohash_2_bed'].label_lists['default'].labels) == 1
-        assert ds.utterances['0b77ee66_nohash_2_bed'].label_lists['default'].labels[0].value == 'bed'
+        assert len(ds.utterances['0b77ee66_nohash_2_bed'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['0b77ee66_nohash_2_bed'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'bed'
 
         assert len(ds.utterances['0bde966a_nohash_0_bed'].label_lists) == 1
-        assert len(ds.utterances['0bde966a_nohash_0_bed'].label_lists['default'].labels) == 1
-        assert ds.utterances['0bde966a_nohash_0_bed'].label_lists['default'].labels[0].value == 'bed'
+        assert len(ds.utterances['0bde966a_nohash_0_bed'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['0bde966a_nohash_0_bed'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'bed'
 
         assert len(ds.utterances['0bde966a_nohash_1_bed'].label_lists) == 1
-        assert len(ds.utterances['0bde966a_nohash_1_bed'].label_lists['default'].labels) == 1
-        assert ds.utterances['0bde966a_nohash_1_bed'].label_lists['default'].labels[0].value == 'bed'
+        assert len(ds.utterances['0bde966a_nohash_1_bed'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['0bde966a_nohash_1_bed'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'bed'
 
         assert len(ds.utterances['0c40e715_nohash_0_bed'].label_lists) == 1
-        assert len(ds.utterances['0c40e715_nohash_0_bed'].label_lists['default'].labels) == 1
-        assert ds.utterances['0c40e715_nohash_0_bed'].label_lists['default'].labels[0].value == 'bed'
+        assert len(ds.utterances['0c40e715_nohash_0_bed'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['0c40e715_nohash_0_bed'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'bed'
 
         assert len(ds.utterances['d5c41d6a_nohash_0_marvin'].label_lists) == 1
-        assert len(ds.utterances['d5c41d6a_nohash_0_marvin'].label_lists['default'].labels) == 1
-        assert ds.utterances['d5c41d6a_nohash_0_marvin'].label_lists['default'].labels[0].value == 'marvin'
+        assert len(ds.utterances['d5c41d6a_nohash_0_marvin'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['d5c41d6a_nohash_0_marvin'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'marvin'
 
         assert len(ds.utterances['d7a58714_nohash_0_marvin'].label_lists) == 1
-        assert len(ds.utterances['d7a58714_nohash_0_marvin'].label_lists['default'].labels) == 1
-        assert ds.utterances['d7a58714_nohash_0_marvin'].label_lists['default'].labels[0].value == 'marvin'
+        assert len(ds.utterances['d7a58714_nohash_0_marvin'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['d7a58714_nohash_0_marvin'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'marvin'
 
         assert len(ds.utterances['d8a5ace5_nohash_0_marvin'].label_lists) == 1
-        assert len(ds.utterances['d8a5ace5_nohash_0_marvin'].label_lists['default'].labels) == 1
-        assert ds.utterances['d8a5ace5_nohash_0_marvin'].label_lists['default'].labels[0].value == 'marvin'
+        assert len(ds.utterances['d8a5ace5_nohash_0_marvin'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['d8a5ace5_nohash_0_marvin'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'marvin'
 
         assert len(ds.utterances['0a7c2a8d_nohash_0_one'].label_lists) == 1
-        assert len(ds.utterances['0a7c2a8d_nohash_0_one'].label_lists['default'].labels) == 1
-        assert ds.utterances['0a7c2a8d_nohash_0_one'].label_lists['default'].labels[0].value == 'one'
+        assert len(ds.utterances['0a7c2a8d_nohash_0_one'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['0a7c2a8d_nohash_0_one'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'one'
 
         assert len(ds.utterances['0b77ee66_nohash_0_one'].label_lists) == 1
-        assert len(ds.utterances['0b77ee66_nohash_0_one'].label_lists['default'].labels) == 1
-        assert ds.utterances['0b77ee66_nohash_0_one'].label_lists['default'].labels[0].value == 'one'
+        assert len(ds.utterances['0b77ee66_nohash_0_one'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['0b77ee66_nohash_0_one'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'one'
 
         assert len(ds.utterances['c1b7c224_nohash_0_one'].label_lists) == 1
-        assert len(ds.utterances['c1b7c224_nohash_0_one'].label_lists['default'].labels) == 1
-        assert ds.utterances['c1b7c224_nohash_0_one'].label_lists['default'].labels[0].value == 'one'
+        assert len(ds.utterances['c1b7c224_nohash_0_one'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['c1b7c224_nohash_0_one'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'one'
 
         assert len(ds.utterances['c1b7c224_nohash_1_one'].label_lists) == 1
-        assert len(ds.utterances['c1b7c224_nohash_1_one'].label_lists['default'].labels) == 1
-        assert ds.utterances['c1b7c224_nohash_1_one'].label_lists['default'].labels[0].value == 'one'
+        assert len(ds.utterances['c1b7c224_nohash_1_one'].label_lists[assets.LL_WORD_TRANSCRIPT].labels) == 1
+        assert ds.utterances['c1b7c224_nohash_1_one'].label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'one'
 
     def test_read_subvies(self):
         ds = self.reader.load(self.ds_path)

@@ -3,6 +3,7 @@ import os
 import pytest
 
 from audiomate.corpus import io
+from audiomate.corpus import assets
 from tests import resources
 
 
@@ -77,17 +78,17 @@ class TestGtzanReader:
         utt_3 = ds.utterances['acomic']
         utt_4 = ds.utterances['acomic2']
 
-        assert 'audio_type' in utt_1.label_lists.keys()
-        assert 'audio_type' in utt_2.label_lists.keys()
-        assert 'audio_type' in utt_3.label_lists.keys()
-        assert 'audio_type' in utt_4.label_lists.keys()
+        assert assets.LL_DOMAIN in utt_1.label_lists.keys()
+        assert assets.LL_DOMAIN in utt_2.label_lists.keys()
+        assert assets.LL_DOMAIN in utt_3.label_lists.keys()
+        assert assets.LL_DOMAIN in utt_4.label_lists.keys()
 
-        assert len(utt_1.label_lists['audio_type'].labels) == 1
-        assert len(utt_2.label_lists['audio_type'].labels) == 1
-        assert len(utt_3.label_lists['audio_type'].labels) == 1
-        assert len(utt_4.label_lists['audio_type'].labels) == 1
+        assert len(utt_1.label_lists[assets.LL_DOMAIN].labels) == 1
+        assert len(utt_2.label_lists[assets.LL_DOMAIN].labels) == 1
+        assert len(utt_3.label_lists[assets.LL_DOMAIN].labels) == 1
+        assert len(utt_4.label_lists[assets.LL_DOMAIN].labels) == 1
 
-        assert utt_1.label_lists['audio_type'].labels[0].value == 'music'
-        assert utt_2.label_lists['audio_type'].labels[0].value == 'music'
-        assert utt_3.label_lists['audio_type'].labels[0].value == 'speech'
-        assert utt_3.label_lists['audio_type'].labels[0].value == 'speech'
+        assert utt_1.label_lists[assets.LL_DOMAIN].labels[0].value == assets.LL_DOMAIN_MUSIC
+        assert utt_2.label_lists[assets.LL_DOMAIN].labels[0].value == assets.LL_DOMAIN_MUSIC
+        assert utt_3.label_lists[assets.LL_DOMAIN].labels[0].value == assets.LL_DOMAIN_SPEECH
+        assert utt_3.label_lists[assets.LL_DOMAIN].labels[0].value == assets.LL_DOMAIN_SPEECH
