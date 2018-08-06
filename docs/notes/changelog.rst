@@ -10,6 +10,9 @@ Next Version
   reader (:class:`audiomate.corpus.io.TatoebaReader`) for the
   `Tatoeba platform <https://tatoeba.org/>`_.
 
+* Added downloader (:class:`audiomate.corpus.io.CommonVoiceDownloader`) and
+  reader (:class:`audiomate.corpus.io.CommonVoiceReader`) for the
+  `Common Voice Corpus <https://voice.mozilla.org/>`_.
 
 v1.0.0
 ------

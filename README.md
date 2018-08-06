@@ -12,6 +12,7 @@ Examples: https://github.com/ynop/audiomate/tree/master/examples
 
 Currently supported datasets:
 * [Acoustic Event Dataset](https://data.vision.ee.ethz.ch/cvl/ae_dataset/)
+* [Mozilla Common Voice](https://voice.mozilla.org/)
 * [ESC-50](https://github.com/karoldvl/ESC-50)
 * [Free Spoken Digit Dataset](https://github.com/Jakobovski/free-spoken-digit-dataset)
 * [German Distant Speech Corpus](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/acoustic-models.html)
