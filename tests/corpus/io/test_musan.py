@@ -1,9 +1,35 @@
 import unittest
+import pytest
+import requests_mock
 import os
 
 from audiomate.corpus import io
+from audiomate.corpus.io import musan
 from audiomate.corpus import assets
 from tests import resources
+
+
+@pytest.fixture()
+def tar_data():
+    with open(resources.get_resource_path(['sample_files', 'cv_corpus_v1.tar.gz']), 'rb') as f:
+        return f.read()
+
+
+class TestMusanDownloader:
+
+    def test_download(self, tar_data, tmpdir):
+        target_folder = tmpdir.strpath
+        downloader = io.MusanDownloader()
+
+        with requests_mock.Mocker() as mock:
+            mock.get(musan.DOWNLOAD_URL, content=tar_data)
+
+            downloader.download(target_folder)
+
+        assert os.path.isfile(os.path.join(target_folder, 'cv-valid-dev.csv'))
+        assert os.path.isdir(os.path.join(target_folder, 'cv-valid-dev'))
+        assert os.path.isfile(os.path.join(target_folder, 'cv-valid-train.csv'))
+        assert os.path.isdir(os.path.join(target_folder, 'cv-valid-train'))
 
 
 class MusanReaderTest(unittest.TestCase):
