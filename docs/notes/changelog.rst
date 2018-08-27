@@ -23,6 +23,9 @@ Next Version
   :class:`audiomate.processing.pipeline.VarPool` for computing average and variance over
   a given number of sequential frames.
 
+* Added downloader (:class:`audiomate.corpus.io.MusanDownloader`) for the
+  `Musan Corpus <http://www.openslr.org/17/>`_.
+
 * Added constants for common label-list identifiers/keys in :mod:`audiomate.corpus.assets`.
 
 v1.0.0

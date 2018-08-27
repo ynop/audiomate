@@ -47,7 +47,7 @@ Implementations
   GTZAN                                     x
   Kaldi                                     x      x
   Mozilla DeepSpeech                               x
-  MUSAN                                     x
+  MUSAN                           x         x
   Tatoeba                         x         x
   TIMIT                                     x
   TUDA German Distant Speech                x
@@ -127,6 +127,9 @@ Mozilla DeepSpeech
 
 MUSAN
 ^^^^^
+.. autoclass:: MusanDownloader
+   :members:
+
 .. autoclass:: MusanReader
    :members:
 
