@@ -26,3 +26,6 @@ from .magnitude_scaling import PowerToDb  # noqa: F401
 from .varia import Delta  # noqa: F401
 
 from .reduction import Stack  # noqa: F401
+
+from .pool import AvgPool  # noqa: F401
+from .pool import VarPool  # noqa: F401

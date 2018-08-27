@@ -46,6 +46,8 @@ Some processing pipeline steps are already implemented.
   PowerToDb                       Convert power spectrum to Db.
   Delta                           Compute delta features.
   Stack                           Reduce multiple features into one by stacking them on top of each other.
+  AvgPool                         Compute the average (per dimension) over a given number of sequential frames.
+  VarPool                         Compute the variance (per dimension) over a given number of sequential frames.
   ==============================  ===========
 
 .. autoclass:: audiomate.processing.pipeline.MeanVarianceNorm
@@ -64,4 +66,10 @@ Some processing pipeline steps are already implemented.
    :members:
 
 .. autoclass:: audiomate.processing.pipeline.Stack
+   :members:
+
+.. autoclass:: audiomate.processing.pipeline.AvgPool
+   :members:
+
+.. autoclass:: audiomate.processing.pipeline.VarPool
    :members:
