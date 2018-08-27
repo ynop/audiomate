@@ -4,6 +4,9 @@ Changelog
 Next Version
 ------------
 
+v2.0.0
+------
+
 **Breaking Changes**
 
 * Update various readers to use the correct label-list identifiers as defined
