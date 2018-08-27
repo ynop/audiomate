@@ -19,6 +19,10 @@ Next Version
   reader (:class:`audiomate.corpus.io.CommonVoiceReader`) for the
   `Common Voice Corpus <https://voice.mozilla.org/>`_.
 
+* Added processing steps :class:`audiomate.processing.pipeline.AvgPool` and
+  :class:`audiomate.processing.pipeline.VarPool` for computing average and variance over
+  a given number of sequential frames.
+
 * Added constants for common label-list identifiers/keys in :mod:`audiomate.corpus.assets`.
 
 v1.0.0
