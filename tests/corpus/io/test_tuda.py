@@ -2,6 +2,7 @@ import os
 
 import pytest
 
+from audiomate import corpus
 from audiomate.corpus import io
 from audiomate.corpus import assets
 from tests import resources
@@ -163,44 +164,44 @@ class TestTudaReader:
         ds = reader.load(data_path)
 
         utt = ds.utterances['2014-03-17-13-03-33']
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'Ich habe mich'
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == 'Ich habe mich.'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'Ich habe mich'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == 'Ich habe mich.'
 
         utt = ds.utterances['2014-03-19-15-01-56']
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'Felsnester hoch'
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == 'Felsnester hoch.'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'Felsnester hoch'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == 'Felsnester hoch.'
 
         utt = ds.utterances['2014-08-07-13-22-38']
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'Ja'
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == 'Ja.'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'Ja'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == 'Ja.'
 
         utt = ds.utterances['2014-08-14-14-52-00']
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'Ihr graubraunes'
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == 'Ihr graubraunes.'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'Ihr graubraunes'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == 'Ihr graubraunes.'
 
         utt = ds.utterances['2015-01-27-11-31-32']
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'Manche haben dass'
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == 'Manche haben , dass.'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'Manche haben dass'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == 'Manche haben , dass.'
 
         utt = ds.utterances['2015-01-28-11-35-47']
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'Juni neun'
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == 'Juni 1919.'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'Juni neun'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == 'Juni 1919.'
 
         utt = ds.utterances['2015-01-28-12-36-24']
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'enthalten'
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == 'enthalten.'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'enthalten'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == 'enthalten.'
 
         utt = ds.utterances['2015-01-27-12-34-36']
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'Unabhängigkeit'
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == 'Unabhängigkeit .'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'Unabhängigkeit'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == 'Unabhängigkeit .'
 
         utt = ds.utterances['2015-02-03-12-08-13']
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'Was los ist'
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == 'Was los ist?'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'Was los ist'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == 'Was los ist?'
 
         utt = ds.utterances['2015-02-10-14-31-52']
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT][0].value == 'Jetzt kennenlernen'
-        assert utt.label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value == 'Jetzt kennenlernen.'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'Jetzt kennenlernen'
+        assert utt.label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == 'Jetzt kennenlernen.'
 
     def test_load_subviews(self, reader, data_path):
         ds = reader.load(data_path)

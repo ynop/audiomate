@@ -314,5 +314,7 @@ class TudaReader(base.CorpusReader):
 
         corpus.new_file(wav_path, idx)
         utt = corpus.new_utterance(idx, idx, speaker_idx)
-        utt.set_label_list(assets.LabelList.create_single(transcription, idx=assets.LL_WORD_TRANSCRIPT))
-        utt.set_label_list(assets.LabelList.create_single(transcription_raw, idx=assets.LL_WORD_TRANSCRIPT_RAW))
+        utt.set_label_list(assets.LabelList.create_single(transcription,
+                                                          idx=audiomate.corpus.LL_WORD_TRANSCRIPT))
+        utt.set_label_list(assets.LabelList.create_single(transcription_raw,
+                                                          idx=audiomate.corpus.LL_WORD_TRANSCRIPT_RAW))

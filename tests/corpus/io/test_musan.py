@@ -3,6 +3,7 @@ import pytest
 import requests_mock
 import os
 
+from audiomate import corpus
 from audiomate.corpus import io
 from audiomate.corpus.io import musan
 from audiomate.corpus import assets
@@ -121,14 +122,14 @@ class MusanReaderTest(unittest.TestCase):
         utt_2 = ds.utterances['noise-free-sound-0000']
         utt_3 = ds.utterances['noise-free-sound-0001']
 
-        assert assets.LL_DOMAIN in utt_1.label_lists.keys()
-        assert assets.LL_DOMAIN in utt_2.label_lists.keys()
-        assert assets.LL_DOMAIN in utt_3.label_lists.keys()
+        assert corpus.LL_DOMAIN in utt_1.label_lists.keys()
+        assert corpus.LL_DOMAIN in utt_2.label_lists.keys()
+        assert corpus.LL_DOMAIN in utt_3.label_lists.keys()
 
-        assert len(utt_1.label_lists[assets.LL_DOMAIN].labels) == 1
-        assert len(utt_2.label_lists[assets.LL_DOMAIN].labels) == 1
-        assert len(utt_3.label_lists[assets.LL_DOMAIN].labels) == 1
+        assert len(utt_1.label_lists[corpus.LL_DOMAIN].labels) == 1
+        assert len(utt_2.label_lists[corpus.LL_DOMAIN].labels) == 1
+        assert len(utt_3.label_lists[corpus.LL_DOMAIN].labels) == 1
 
-        assert utt_1.label_lists[assets.LL_DOMAIN].labels[0].value == 'music'
-        assert utt_2.label_lists[assets.LL_DOMAIN].labels[0].value == 'noise'
-        assert utt_3.label_lists[assets.LL_DOMAIN].labels[0].value == 'noise'
+        assert utt_1.label_lists[corpus.LL_DOMAIN].labels[0].value == 'music'
+        assert utt_2.label_lists[corpus.LL_DOMAIN].labels[0].value == 'noise'
+        assert utt_3.label_lists[corpus.LL_DOMAIN].labels[0].value == 'noise'

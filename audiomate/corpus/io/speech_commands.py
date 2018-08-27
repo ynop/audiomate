@@ -54,7 +54,7 @@ class SpeechCommandsReader(base.CorpusReader):
 
             utt = corpus.new_utterance(file_idx, file_idx, issuer_idx)
 
-            labels = assets.LabelList.create_single(command, idx=assets.LL_WORD_TRANSCRIPT)
+            labels = assets.LabelList.create_single(command, idx=audiomate.corpus.LL_WORD_TRANSCRIPT)
             utt.set_label_list(labels)
 
     @staticmethod

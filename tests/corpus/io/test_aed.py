@@ -2,8 +2,8 @@ import os
 
 import pytest
 
+from audiomate import corpus
 from audiomate.corpus import io
-from audiomate.corpus import assets
 from tests import resources
 
 
@@ -90,21 +90,21 @@ class TestAEDReader:
 
         utt = ds.utterances['airplane_23']
         assert len(utt.label_lists) == 1
-        assert utt.label_lists[assets.LL_SOUND_CLASS][0].value == 'airplane'
-        assert utt.label_lists[assets.LL_SOUND_CLASS][0].start == 0
-        assert utt.label_lists[assets.LL_SOUND_CLASS][0].end == -1
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].value == 'airplane'
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].start == 0
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == -1
 
         utt = ds.utterances['tone_12']
         assert len(utt.label_lists) == 1
-        assert utt.label_lists[assets.LL_SOUND_CLASS][0].value == 'tone'
-        assert utt.label_lists[assets.LL_SOUND_CLASS][0].start == 0
-        assert utt.label_lists[assets.LL_SOUND_CLASS][0].end == -1
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].value == 'tone'
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].start == 0
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == -1
 
         utt = ds.utterances['acoustic_guitar_16']
         assert len(utt.label_lists) == 1
-        assert utt.label_lists[assets.LL_SOUND_CLASS][0].value == 'acoustic_guitar'
-        assert utt.label_lists[assets.LL_SOUND_CLASS][0].start == 0
-        assert utt.label_lists[assets.LL_SOUND_CLASS][0].end == -1
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].value == 'acoustic_guitar'
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].start == 0
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == -1
 
     def test_load_fold_subsets(self, reader, data_path):
         ds = reader.load(data_path)
