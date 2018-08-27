@@ -80,6 +80,7 @@ class FreeSpokenDigitReader(base.CorpusReader):
                 corpus.import_issuers(issuer)
 
             utterance = corpus.new_utterance(file_idx, file_idx, issuer_idx)
-            utterance.set_label_list(assets.LabelList.create_single(str(digit), idx=assets.LL_WORD_TRANSCRIPT))
+            utterance.set_label_list(assets.LabelList.create_single(str(digit),
+                                                                    idx=audiomate.corpus.LL_WORD_TRANSCRIPT))
 
         return corpus

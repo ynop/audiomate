@@ -26,7 +26,7 @@ Next Version
 * Added downloader (:class:`audiomate.corpus.io.MusanDownloader`) for the
   `Musan Corpus <http://www.openslr.org/17/>`_.
 
-* Added constants for common label-list identifiers/keys in :mod:`audiomate.corpus.assets`.
+* Added constants for common label-list identifiers/keys in :mod:`audiomate.corpus`.
 
 v1.0.0
 ------

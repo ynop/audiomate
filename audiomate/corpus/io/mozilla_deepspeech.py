@@ -4,8 +4,8 @@ import collections
 import numpy as np
 import scipy
 
+import audiomate
 from . import base
-from audiomate.corpus import assets
 from audiomate.utils import textfile
 
 
@@ -21,7 +21,7 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
         transcription_label_list_idx (str): The transcriptions are used from the label-list with this id.
     """
 
-    def __init__(self, transcription_label_list_idx=assets.LL_WORD_TRANSCRIPT):
+    def __init__(self, transcription_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT):
         self.transcription_label_list_idx = transcription_label_list_idx
 
     @classmethod

@@ -2,6 +2,7 @@ import os
 
 import pytest
 
+from audiomate import corpus
 from audiomate.corpus import io
 from audiomate.corpus import assets
 from tests import resources
@@ -102,8 +103,8 @@ class TestTimitReader:
     def test_load_raw_transcriptions(self, utt_id, text, reader, data_path):
         ds = reader.load(data_path)
 
-        assert 1 == len(ds.utterances[utt_id].label_lists[assets.LL_WORD_TRANSCRIPT_RAW])
-        assert text == ds.utterances[utt_id].label_lists[assets.LL_WORD_TRANSCRIPT_RAW][0].value
+        assert 1 == len(ds.utterances[utt_id].label_lists[corpus.LL_WORD_TRANSCRIPT_RAW])
+        assert text == ds.utterances[utt_id].label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value
 
     @pytest.mark.parametrize('utt_id, num_words, index, word, start, end', [
         ('dr1-mkls0-sa1', 11, 0, 'she', 0.210625, 0.4275),
@@ -114,10 +115,10 @@ class TestTimitReader:
     def test_load_words(self, utt_id, num_words, index, word, start, end, reader, data_path):
         ds = reader.load(data_path)
 
-        assert num_words == len(ds.utterances[utt_id].label_lists[assets.LL_WORD_TRANSCRIPT])
-        assert word == ds.utterances[utt_id].label_lists[assets.LL_WORD_TRANSCRIPT][index].value
-        assert pytest.approx(start) == ds.utterances[utt_id].label_lists[assets.LL_WORD_TRANSCRIPT][index].start
-        assert pytest.approx(end) == ds.utterances[utt_id].label_lists[assets.LL_WORD_TRANSCRIPT][index].end
+        assert num_words == len(ds.utterances[utt_id].label_lists[corpus.LL_WORD_TRANSCRIPT])
+        assert word == ds.utterances[utt_id].label_lists[corpus.LL_WORD_TRANSCRIPT][index].value
+        assert pytest.approx(start) == ds.utterances[utt_id].label_lists[corpus.LL_WORD_TRANSCRIPT][index].start
+        assert pytest.approx(end) == ds.utterances[utt_id].label_lists[corpus.LL_WORD_TRANSCRIPT][index].end
 
     @pytest.mark.parametrize('utt_id, num_phones, index, phone, start, end', [
         ('dr1-mkls0-sa1', 42, 0, 'h#', 0.0, 0.210625),
@@ -128,10 +129,10 @@ class TestTimitReader:
     def test_load_phones(self, utt_id, num_phones, index, phone, start, end, reader, data_path):
         ds = reader.load(data_path)
 
-        assert num_phones == len(ds.utterances[utt_id].label_lists[assets.LL_PHONE_TRANSCRIPT])
-        assert phone == ds.utterances[utt_id].label_lists[assets.LL_PHONE_TRANSCRIPT][index].value
-        assert pytest.approx(start) == ds.utterances[utt_id].label_lists[assets.LL_PHONE_TRANSCRIPT][index].start
-        assert pytest.approx(end) == ds.utterances[utt_id].label_lists[assets.LL_PHONE_TRANSCRIPT][index].end
+        assert num_phones == len(ds.utterances[utt_id].label_lists[corpus.LL_PHONE_TRANSCRIPT])
+        assert phone == ds.utterances[utt_id].label_lists[corpus.LL_PHONE_TRANSCRIPT][index].value
+        assert pytest.approx(start) == ds.utterances[utt_id].label_lists[corpus.LL_PHONE_TRANSCRIPT][index].start
+        assert pytest.approx(end) == ds.utterances[utt_id].label_lists[corpus.LL_PHONE_TRANSCRIPT][index].end
 
     def test_load_correct_number_of_subsets(self, reader, data_path):
         ds = reader.load(data_path)

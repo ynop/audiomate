@@ -31,7 +31,7 @@ In the corpus data structures an utterance can have multiple label-lists. In ord
     label_list = utterance.label_lists['word-transcription']
 
 The used key should be consistent for all datasets. Therefore the identifiers/keys should be selected from below
-if possible. For these predefined keys, constants are defined in :mod:`audiomate.corpus.assets`.
+if possible. For these predefined keys, constants are defined in :mod:`audiomate.corpus`.
 
 general
 ^^^^^^^

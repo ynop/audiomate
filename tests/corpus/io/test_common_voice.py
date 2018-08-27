@@ -3,6 +3,7 @@ import os
 import pytest
 import requests_mock
 
+from audiomate import corpus
 from audiomate.corpus.io import common_voice
 from audiomate.corpus import assets
 
@@ -122,7 +123,7 @@ class TestCommonVoiceReader:
     def test_load_transcription(self, idx, transcription, reader, data_path):
         ds = reader.load(data_path)
 
-        ll = ds.utterances[idx].label_lists[assets.LL_WORD_TRANSCRIPT]
+        ll = ds.utterances[idx].label_lists[corpus.LL_WORD_TRANSCRIPT]
 
         assert len(ll) == 1
         assert ll[0].value == transcription

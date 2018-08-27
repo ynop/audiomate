@@ -163,10 +163,12 @@ class VoxforgeReader(base.CorpusReader):
 
                     corpus.new_file(wav_path, idx)
                     utt = corpus.new_utterance(idx, idx, issuer.idx)
-                    utt.set_label_list(assets.LabelList.create_single(prompts[basename], idx=assets.LL_WORD_TRANSCRIPT))
+                    utt.set_label_list(assets.LabelList.create_single(prompts[basename],
+                                                                      idx=audiomate.corpus.LL_WORD_TRANSCRIPT))
 
                     if basename in prompts_orig.keys():
-                        raw = assets.LabelList.create_single(prompts_orig[basename], idx=assets.LL_WORD_TRANSCRIPT_RAW)
+                        raw = assets.LabelList.create_single(prompts_orig[basename],
+                                                             idx=audiomate.corpus.LL_WORD_TRANSCRIPT_RAW)
                         utt.set_label_list(raw)
 
         return corpus
