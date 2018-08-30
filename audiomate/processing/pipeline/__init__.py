@@ -31,3 +31,4 @@ from .pool import AvgPool  # noqa: F401
 from .pool import VarPool  # noqa: F401
 
 from .onset import OnsetStrength  # noqa: F401
+from .rhythm import Tempogram  # noqa: F401
