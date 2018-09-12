@@ -4,6 +4,14 @@ Changelog
 Next Version
 ------------
 
+**New Features**
+
+* Introduced :class:`audiomate.corpus.validation` module, that is used to validate a corpus.
+
+* Added reader (:class:`audiomate.corpus.io.SWCReader`) for the
+  `SWC corpus <https://audiomate.readthedocs.io/en/latest/documentation/indirect_support.html>`_.
+  But it only works for the prepared corpus.
+
 v2.0.0
 ------
 
