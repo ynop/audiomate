@@ -16,6 +16,12 @@ Label Encoding
 .. automodule:: audiomate.corpus.utils.label_encoding
     :members:
 
+Label Cleaning
+--------------
+
+.. automodule:: audiomate.corpus.utils.label_cleaning
+    :members:
+
 Exceptions
 ----------
 .. autoexception:: audiomate.corpus.utils.relabeling.UnmappedLabelsException

@@ -12,6 +12,9 @@ Next Version
   `SWC corpus <https://audiomate.readthedocs.io/en/latest/documentation/indirect_support.html>`_.
   But it only works for the prepared corpus.
 
+* Added function (:func:`audiomate.corpus.utils.label_cleaning.merge_consecutive_labels_with_same_values`)
+  for merging consecutive labels with the same value.
+
 v2.0.0
 ------
 
