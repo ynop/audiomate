@@ -6,6 +6,9 @@ Next Version
 
 **New Features**
 
+* Added processing steps for computing Onset-Strength (:class:`audiomate.processing.pipeline.OnsetStrength`))
+  and Tempogram (:class:`audiomate.processing.pipeline.Tempogram`)).
+
 * Introduced :class:`audiomate.corpus.validation` module, that is used to validate a corpus.
 
 * Added reader (:class:`audiomate.corpus.io.SWCReader`) for the

@@ -48,6 +48,8 @@ Some processing pipeline steps are already implemented.
   Stack                           Reduce multiple features into one by stacking them on top of each other.
   AvgPool                         Compute the average (per dimension) over a given number of sequential frames.
   VarPool                         Compute the variance (per dimension) over a given number of sequential frames.
+  OnsetStrength                   Compute onset strengths.
+  Tempogram                       Compute tempogram features.
   ==============================  ===========
 
 .. autoclass:: audiomate.processing.pipeline.MeanVarianceNorm
@@ -72,4 +74,10 @@ Some processing pipeline steps are already implemented.
    :members:
 
 .. autoclass:: audiomate.processing.pipeline.VarPool
+   :members:
+
+.. autoclass:: audiomate.processing.pipeline.OnsetStrength
+   :members:
+
+.. autoclass:: audiomate.processing.pipeline.Tempogram
    :members:
