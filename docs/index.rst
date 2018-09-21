@@ -32,6 +32,7 @@ This should ease the use of audio datasets for example for machine learning task
     reference/assets
     reference/io
     reference/subset
+    reference/validation
     reference/corpus_utils
     reference/processing
     reference/formats
