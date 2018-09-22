@@ -44,6 +44,12 @@ class AvgPool(base.Computation):
 
         return all_mean
 
+    def frame_transform_step(self, frame_size, hop_size):
+        fs_transformed = frame_size + (self.size - 1) * hop_size
+        hs_transformed = self.size * hop_size
+
+        return fs_transformed, hs_transformed
+
 
 class VarPool(base.Computation):
     """
@@ -85,3 +91,9 @@ class VarPool(base.Computation):
             all_var = np.vstack([all_var, rest_var])
 
         return all_var
+
+    def frame_transform_step(self, frame_size, hop_size):
+        fs_transformed = frame_size + (self.size - 1) * hop_size
+        hs_transformed = self.size * hop_size
+
+        return fs_transformed, hs_transformed

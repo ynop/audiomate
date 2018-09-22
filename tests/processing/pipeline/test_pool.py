@@ -57,6 +57,22 @@ class TestAvgPool:
             [4.5, 4.5]
         ]))
 
+    def test_frame_transform_step(self):
+        avg_pooling = pipeline.AvgPool(3)
+
+        fs, hs = avg_pooling.frame_transform(400, 160)
+
+        assert fs == 400 + 2 * 160
+        assert hs == 3 * 160
+
+    def test_frame_transform_step_full_hop(self):
+        avg_pooling = pipeline.AvgPool(3)
+
+        fs, hs = avg_pooling.frame_transform(400, 400)
+
+        assert fs == 3 * 400
+        assert hs == 3 * 400
+
 
 class TestVarPool:
 
@@ -111,3 +127,11 @@ class TestVarPool:
             [0.6666666666666666, 0.6666666666666666],
             [0.25, 0.25]
         ]))
+
+    def test_frame_transform_step(self):
+        var_pooling = pipeline.VarPool(10)
+
+        fs, hs = var_pooling.frame_transform(400, 160)
+
+        assert fs == 400 + 9 * 160
+        assert hs == 10 * 160
