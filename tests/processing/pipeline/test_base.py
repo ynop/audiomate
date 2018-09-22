@@ -9,8 +9,14 @@ class Multiply(pipeline.Computation):
         super(Multiply, self).__init__(parent=parent, name=name)
         self.factor = factor
 
+        self.frame_scale = 1.0
+        self.hop_scale = 1.0
+
     def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
         return chunk.data * self.factor
+
+    def frame_transform_step(self, frame_size, hop_size):
+        return frame_size * self.frame_scale, hop_size * self.hop_scale
 
 
 class Add(pipeline.Computation):
@@ -18,13 +24,30 @@ class Add(pipeline.Computation):
         super(Add, self).__init__(parent=parent, name=name)
         self.value = value
 
+        self.frame_scale = 1.0
+        self.hop_scale = 1.0
+
     def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
         return chunk.data + self.value
 
+    def frame_transform_step(self, frame_size, hop_size):
+        return frame_size * self.frame_scale, hop_size * self.hop_scale
+
 
 class Concat(pipeline.Reduction):
+
+    def __init__(self, parents, name=None, min_frames=1, left_context=0, right_context=0):
+        super(Concat, self).__init__(parents, name=name, min_frames=min_frames,
+                                     left_context=left_context, right_context=right_context)
+
+        self.frame_scale = 1.0
+        self.hop_scale = 1.0
+
     def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
         return np.hstack(chunk.data)
+
+    def frame_transform_step(self, frame_size, hop_size):
+        return frame_size * self.frame_scale, hop_size * self.hop_scale
 
 
 class StepDummy(pipeline.Computation):
@@ -112,6 +135,23 @@ class TestStep:
         out_data = concat.process_frames(np.array([[12, 13, 14, 15]]), 4, offset=3, last=True)
         assert np.array_equal(out_data, np.array([[26, 28, 30, 32, 10, 11, 12, 13, 16, 17, 18, 19],
                                                   [34, 36, 38, 40, 14, 15, 16, 17, 20, 21, 22, 23]]))
+
+    def test_frame_transform(self):
+        add_a = Add(5)
+        mul = Multiply(2, parent=add_a)
+        concat = Concat(parents=[add_a, mul])
+        add_b = Add(3, parent=concat)
+
+        add_a.frame_scale = 2.0
+        add_a.hop_scale = 1.5
+
+        add_b.frame_scale = 0.75
+        add_b.hop_scale = 1.25
+
+        tf_fs, tf_hs = add_b.frame_transform(200, 120)
+
+        assert tf_fs == 300
+        assert tf_hs == 225
 
 
 class TestBuffer:

@@ -214,6 +214,10 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
 
     Every step has to provide a ``compute`` method which is the actual processing.
 
+    If the implementation of a step does change the frame or hop-size,
+    it is expected to provide a transform via the ``frame_transform_step`` method.
+    Frame-size and hop-size are measured in samples regarding the original audio signal (or simply its sampling rate).
+
     Args:
         name (str, optional): A name for identifying the step.
     """
@@ -259,6 +263,27 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
                 else:
                     self._update_buffers(step, res, chunk.offset + chunk.left_context, chunk.is_last)
 
+    def frame_transform(self, frame_size, hop_size):
+        parent_steps = self._parent_steps(self)
+
+        if len(parent_steps) > 0:
+            parent_frame_size, parent_hop_size = parent_steps[0].frame_transform(frame_size, hop_size)
+
+            if len(parent_steps) > 1:
+                # If there are multiple parents, we ensure that the frame-size is equal from all parents
+                for i in range(1, len(parent_steps)):
+                    next_fs, next_hs = parent_steps[i].frame_transform(frame_size, hop_size)
+
+                    if next_fs != parent_frame_size:
+                        raise ValueError('Frame-size from different differs!')
+
+                    if next_hs != parent_hop_size:
+                        raise ValueError('Hop-size from different differs!')
+
+            return self.frame_transform_step(parent_frame_size, parent_hop_size)
+
+        return self.frame_transform_step(frame_size, hop_size)
+
     @abc.abstractmethod
     def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
         """
@@ -274,6 +299,29 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
             np.ndarray: The array of processed frames, without context.
         """
         pass
+
+    def frame_transform_step(self, frame_size, hop_size):
+        """
+        If the processor changes the number of samples that build up a frame or
+        the number of samples between two consecutive frames (hop-size),
+        this function needs transform the original frame- and/or hop-size.
+
+        This is used to store the frame-size and hop-size in a feature-container.
+        In the end one can calculate start and end time of a frame with this information.
+
+        By default it is assumed that the processor doesn't change the frame-size and the hop-size.
+
+        Note:
+            This function is simply for this step, whereas ``frame_transform()``
+            computes the transformation for the whole pipeline.
+
+        Args:
+            frame_size (int): The original frame-size.
+            hop_size (int): The original hop-size.
+
+        Returns:
+            tuple: The (frame-size, hop-size) after processing.
+        """
 
     def _update_buffers(self, from_step, data, offset, is_last):
         """
@@ -313,7 +361,7 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
         input_steps = []
 
         for step in self.steps_sorted:
-            parent_steps = [edge[0] for edge in self.graph.in_edges(step)]
+            parent_steps = self._parent_steps(step)
 
             if len(parent_steps) == 0:
                 input_steps.append(step)
@@ -336,6 +384,10 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
             self.buffers[step] = Buffer(step.min_frames, step.left_context, step.right_context, num_buffers)
 
         return self.buffers
+
+    def _parent_steps(self, step):
+        """ Return a list of all parent steps. """
+        return [edge[0] for edge in self.graph.in_edges(step)]
 
 
 class Computation(Step, metaclass=abc.ABCMeta):
