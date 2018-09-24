@@ -18,6 +18,11 @@ Next Version
 * Added function (:func:`audiomate.corpus.utils.label_cleaning.merge_consecutive_labels_with_same_values`)
   for merging consecutive labels with the same value.
 
+**Fixes**
+
+* [`#58 <https://github.com/ynop/audiomate/issues/58>`_] Keep track of number of samples per frame and between frames.
+  Now the correct values will be stored in a Feature-Container, if the processor implements it correctly.
+
 v2.0.0
 ------
 
