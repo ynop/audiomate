@@ -20,6 +20,10 @@ class Processor(metaclass=abc.ABCMeta):
     To implement a concrete processor the ``process_frames`` method has to be implemented.
     This method is called in online and offline mode. So it is up to the user to determine
     if a processor can be called in either online or offline mode, maybe both. This differs between use cases.
+
+    If the implementation of a processor does change the frame or hop-size,
+    it is expected to provide a transform via the ``frame_transform`` method.
+    Frame-size and hop-size are measured in samples regarding the original audio signal (or simply its sampling rate).
     """
 
     def process_corpus(self, corpus, output_path, frame_size=400, hop_size=160, sr=None):
@@ -100,8 +104,9 @@ class Processor(metaclass=abc.ABCMeta):
                                             utterance=utterance, corpus=corpus)
             feat_container.set(utterance.idx, processed)
 
-        feat_container.frame_size = input_features.frame_size
-        feat_container.hop_size = input_features.hop_size
+        tf_frame_size, tf_hop_size = self.frame_transform(input_features.frame_size, input_features.hop_size)
+        feat_container.frame_size = tf_frame_size
+        feat_container.hop_size = tf_hop_size
         feat_container.sampling_rate = input_features.sampling_rate
 
         feat_container.close()
@@ -147,8 +152,9 @@ class Processor(metaclass=abc.ABCMeta):
 
                 current_frame += chunk_size
 
-        feat_container.frame_size = input_features.frame_size
-        feat_container.hop_size = input_features.hop_size
+        tf_frame_size, tf_hop_size = self.frame_transform(input_features.frame_size, input_features.hop_size)
+        feat_container.frame_size = tf_frame_size
+        feat_container.hop_size = tf_hop_size
         feat_container.sampling_rate = input_features.sampling_rate
 
         feat_container.close()
@@ -304,6 +310,26 @@ class Processor(metaclass=abc.ABCMeta):
         """
         pass
 
+    def frame_transform(self, frame_size, hop_size):
+        """
+        If the processor changes the number of samples that build up a frame or
+        the number of samples between two consecutive frames (hop-size),
+        this function needs transform the original frame- and/or hop-size.
+
+        This is used to store the frame-size and hop-size in a feature-container.
+        In the end one can calculate start and end time of a frame with this information.
+
+        By default it is assumed that the processor doesn't change the frame-size and the hop-size.
+
+        Args:
+            frame_size (int): The original frame-size.
+            hop_size (int): The original hop-size.
+
+        Returns:
+            tuple: The (frame-size, hop-size) after processing.
+        """
+        return frame_size, hop_size
+
     def _process_corpus(self, corpus, output_path, processing_func, frame_size=400, hop_size=160, sr=None):
         """ Utility function for processing a corpus with a separate processing function. """
         feat_container = assets.FeatureContainer(output_path)
@@ -323,8 +349,9 @@ class Processor(metaclass=abc.ABCMeta):
 
             processing_func(utterance, feat_container, frame_size, hop_size, sr, corpus)
 
-        feat_container.frame_size = frame_size
-        feat_container.hop_size = hop_size
+        tf_frame_size, tf_hop_size = self.frame_transform(frame_size, hop_size)
+        feat_container.frame_size = tf_frame_size
+        feat_container.hop_size = tf_hop_size
         feat_container.sampling_rate = sr or sampling_rate
 
         feat_container.close()

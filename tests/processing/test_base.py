@@ -14,13 +14,16 @@ from tests import resources
 
 class ProcessorDummy(processing.Processor):
 
-    def __init__(self):
+    def __init__(self, frame_size_scale=1.0, hop_size_scale=1.0):
         self.called_with_data = []
         self.called_with_sr = []
         self.called_with_offset = []
         self.called_with_last = []
         self.called_with_utterance = []
         self.called_with_corpus = []
+
+        self.mock_frame_size_scale = frame_size_scale
+        self.mock_hop_size_scale = hop_size_scale
 
     def process_frames(self, data, sampling_rate, offset=0, last=False, utterance=None, corpus=None):
         self.called_with_data.append(data)
@@ -31,6 +34,12 @@ class ProcessorDummy(processing.Processor):
         self.called_with_corpus.append(corpus)
 
         return data
+
+    def frame_transform(self, frame_size, hop_size):
+        tf_frame_size = self.mock_frame_size_scale * frame_size
+        tf_hop_size = self.mock_hop_size_scale * hop_size
+
+        return tf_frame_size, tf_hop_size
 
 
 @pytest.fixture()
@@ -247,6 +256,22 @@ class TestProcessor:
             assert feat_container.hop_size == 2048
             assert feat_container.sampling_rate == 8000
 
+    def test_process_corpus_with_frame_hop_size_change_stores_correct(self, processor, tmpdir):
+        ds = resources.create_dataset()
+        feat_path = os.path.join(tmpdir.strpath, 'feats')
+
+        processor.mock_frame_size_scale = 2.5
+        processor.mock_hop_size_scale = 5
+        processor.process_corpus(ds, feat_path, frame_size=4096, hop_size=2048)
+
+        fc = assets.FeatureContainer(feat_path)
+        fc.open()
+
+        assert fc.frame_size == 10240
+        assert fc.hop_size == 10240
+
+        fc.close()
+
     #
     #   process_corpus_online
     #
@@ -318,6 +343,22 @@ class TestProcessor:
         processor.process_corpus_online(ds, feat_path, frame_size=4096, hop_size=2048)
 
         assert True
+
+    def test_process_corpus_online_with_frame_hop_size_change_stores_correct(self, processor, tmpdir):
+        ds = resources.create_dataset()
+        feat_path = os.path.join(tmpdir.strpath, 'feats')
+
+        processor.mock_frame_size_scale = 0.5
+        processor.mock_hop_size_scale = 0.25
+        processor.process_corpus_online(ds, feat_path, frame_size=4096, hop_size=2048)
+
+        fc = assets.FeatureContainer(feat_path)
+        fc.open()
+
+        assert fc.frame_size == 2048
+        assert fc.hop_size == 512
+
+        fc.close()
 
     #
     #   process_features_...
@@ -441,3 +482,57 @@ class TestProcessor:
         processor.process_features_online(ds, in_feats, out_feat_path, chunk_size=4)
 
         assert True
+
+    def test_process_features_with_frame_hop_size_change_stores_correct(self, processor, tmpdir):
+        ds = resources.create_dataset()
+
+        in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
+        out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
+
+        in_feats = assets.FeatureContainer(in_feat_path)
+        utt_feats = np.arange(30).reshape(5, 6)
+
+        with in_feats:
+            in_feats.sampling_rate = 16000
+            in_feats.frame_size = 400
+            in_feats.hop_size = 160
+
+            for utt_idx in ds.utterances.keys():
+                in_feats.set(utt_idx, utt_feats)
+
+        processor.mock_frame_size_scale = 2.0
+        processor.mock_hop_size_scale = 2.0
+        processor.process_features(ds, in_feats, out_feat_path)
+
+        out_feats = assets.FeatureContainer(out_feat_path)
+
+        with out_feats:
+            assert out_feats.frame_size == 800
+            assert out_feats.hop_size == 320
+
+    def test_process_features_online_with_frame_hop_size_change_stores_correct(self, processor, tmpdir):
+        ds = resources.create_dataset()
+
+        in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
+        out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
+
+        in_feats = assets.FeatureContainer(in_feat_path)
+        utt_feats = np.arange(30).reshape(5, 6)
+
+        with in_feats:
+            in_feats.sampling_rate = 16000
+            in_feats.frame_size = 400
+            in_feats.hop_size = 160
+
+            for utt_idx in ds.utterances.keys():
+                in_feats.set(utt_idx, utt_feats)
+
+        processor.mock_frame_size_scale = 2.0
+        processor.mock_hop_size_scale = 2.0
+        processor.process_features_online(ds, in_feats, out_feat_path)
+
+        out_feats = assets.FeatureContainer(out_feat_path)
+
+        with out_feats:
+            assert out_feats.frame_size == 800
+            assert out_feats.hop_size == 320
