@@ -153,6 +153,28 @@ class TestStep:
         assert tf_fs == 300
         assert tf_hs == 225
 
+    def test_frame_transform_not_mocked_step(self):
+        add_a = Add(5)
+        mul_a = StepDummy(parent=add_a)
+        add_b = Add(3, parent=mul_a)
+        concat = Concat(parents=[add_b, mul_a])
+
+        mul_x = Multiply(3, parent=concat)
+        mul_y = Multiply(4, parent=concat)
+
+        mul_x.frame_scale = 2.0
+        mul_x.hop_scale = 2.0
+
+        mul_y.frame_scale = 2.0
+        mul_y.hop_scale = 2.0
+
+        concat_fin = Concat(parents=[mul_x, mul_y])
+
+        tf_fs, tf_hs = concat_fin.frame_transform(200, 120)
+
+        assert tf_fs == 400
+        assert tf_hs == 240
+
 
 class TestBuffer:
 
