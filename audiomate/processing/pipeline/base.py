@@ -322,6 +322,7 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
         Returns:
             tuple: The (frame-size, hop-size) after processing.
         """
+        return frame_size, hop_size
 
     def _update_buffers(self, from_step, data, offset, is_last):
         """
