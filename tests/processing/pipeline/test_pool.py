@@ -29,7 +29,7 @@ class TestAvgPool:
             [8, 1],
             [9, 1],
         ])
-        chunk_b = pipeline.Chunk(data_b, 0, True)
+        chunk_b = pipeline.Chunk(data_b, 5, True)
 
         out_b = avg_pooling.compute(chunk_b, 16000)
 
@@ -49,6 +49,32 @@ class TestAvgPool:
             [5, 5]
         ])
         chunk_a = pipeline.Chunk(data_a, 0, True)
+
+        out_a = avg_pooling.compute(chunk_a, 16000)
+
+        assert np.allclose(out_a, np.array([
+            [2, 2],
+            [4.5, 4.5]
+        ]))
+
+    def test_compute_cleanup_after_one_utterance(self):
+        avg_pooling = pipeline.AvgPool(3)
+
+        data_a = np.array([
+            [1, 1],
+            [2, 2],
+            [3, 3],
+            [4, 4],
+            [5, 5]
+        ])
+        chunk_a = pipeline.Chunk(data_a, 0, True)
+
+        out_a = avg_pooling.compute(chunk_a, 16000)
+
+        assert np.allclose(out_a, np.array([
+            [2, 2],
+            [4.5, 4.5]
+        ]))
 
         out_a = avg_pooling.compute(chunk_a, 16000)
 
@@ -100,7 +126,7 @@ class TestVarPool:
             [8, 1],
             [9, 1],
         ])
-        chunk_b = pipeline.Chunk(data_b, 0, True)
+        chunk_b = pipeline.Chunk(data_b, 5, True)
 
         out_b = var_pooling.compute(chunk_b, 16000)
 
@@ -121,6 +147,34 @@ class TestVarPool:
         ])
         chunk_a = pipeline.Chunk(data_a, 0, True)
 
+        out_a = var_pooling.compute(chunk_a, 16000)
+
+        assert np.allclose(out_a, np.array([
+            [0.6666666666666666, 0.6666666666666666],
+            [0.25, 0.25]
+        ]))
+
+    def test_compute_cleanup_after_one_utterance(self):
+        var_pooling = pipeline.VarPool(3)
+
+        # FIRST
+        data_a = np.array([
+            [1, 1],
+            [2, 2],
+            [3, 3],
+            [4, 4],
+            [5, 5]
+        ])
+        chunk_a = pipeline.Chunk(data_a, 0, True)
+
+        out_a = var_pooling.compute(chunk_a, 16000)
+
+        assert np.allclose(out_a, np.array([
+            [0.6666666666666666, 0.6666666666666666],
+            [0.25, 0.25]
+        ]))
+
+        # SECOND
         out_a = var_pooling.compute(chunk_a, 16000)
 
         assert np.allclose(out_a, np.array([
