@@ -27,6 +27,10 @@ class Tempogram(base.Computation):
         self.rest = None
 
     def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        # Cleanup rest if it's the first frame
+        if chunk.offset == 0:
+            self.rest = None
+
         # Compute mel-spectrogram
         power_spec = np.abs(spectral.stft_from_frames(chunk.data.T)) ** 2
         mel = np.abs(librosa.feature.melspectrogram(S=power_spec, n_mels=self.n_mels, sr=sampling_rate))
