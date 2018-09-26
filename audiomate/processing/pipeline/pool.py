@@ -19,6 +19,9 @@ class AvgPool(base.Computation):
         self.rest = None
 
     def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        # Get rid of old rest frames
+        if chunk.offset == 0:
+            self.rest = None
 
         # Merge incoming plus rest from previous chunk
         all = chunk.data
@@ -67,6 +70,9 @@ class VarPool(base.Computation):
         self.rest = None
 
     def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        # Get rid of old rest frames
+        if chunk.offset == 0:
+            self.rest = None
 
         # Merge incoming plus rest from previous chunk
         all = chunk.data
