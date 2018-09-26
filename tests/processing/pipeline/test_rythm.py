@@ -48,3 +48,28 @@ class TestTempogram:
         tgrams = np.vstack(chunks)
 
         assert np.allclose(tgrams, exp_tgram)
+
+    def test_compute_cleanup_after_one_utterance(self):
+        test_file_path = resources.sample_wav_file('wav_1.wav')
+        y, sr = librosa.load(test_file_path, sr=None)
+        frames = librosa.util.frame(y, frame_length=2048, hop_length=1024).T
+
+        # EXPECTED
+        S = np.abs(librosa.stft(y, center=False, n_fft=2048, hop_length=1024)) ** 2
+        S = librosa.feature.melspectrogram(S=S, n_mels=128, sr=sr)
+        S = librosa.power_to_db(S)
+        onsets = librosa.onset.onset_strength(S=S, center=False)
+        exp_tgram = librosa.feature.tempogram(onset_envelope=onsets, sr=sr, win_length=11, center=True).T
+
+        # ACTUAL
+        tgram_step = pipeline.Tempogram(win_length=11)
+
+        # FIRST RUN
+        tgrams = tgram_step.process_frames(frames, sr, last=True)
+
+        assert np.allclose(tgrams, exp_tgram)
+
+        # SECOND RUN
+        tgrams = tgram_step.process_frames(frames, sr, last=True)
+
+        assert np.allclose(tgrams, exp_tgram)
