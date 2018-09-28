@@ -186,6 +186,9 @@ def select_balanced_subset(items, select_count, categories, select_count_values=
         select_count (float): Value to reach for selected items.
         categories (list): List of all categories.
         select_count_values (dict): The select_count values to be used.
+                                    For example an utterance with multiple labels:
+                                    The category weights (label-lengths) are used for balance,
+                                    but the utterance-duration is used for reaching the select_count.
 
     Returns:
         list: List of item ids, containing ``number_of_items`` (or ``len(items)`` if smaller).
