@@ -376,7 +376,7 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
 
         self.buffers = {}
 
-        for step in self.graph.nodes:
+        for step in self.graph.nodes():
             num_buffers = 1
 
             if isinstance(step, Reduction):
@@ -410,8 +410,8 @@ class Computation(Step, metaclass=abc.ABCMeta):
         self.graph.add_node(self)
 
         if parent is not None:
-            self.graph.add_nodes_from(parent.graph.nodes)
-            self.graph.add_edges_from(parent.graph.edges)
+            self.graph.add_nodes_from(parent.graph.nodes())
+            self.graph.add_edges_from(parent.graph.edges())
             self.graph.add_edge(parent, self)
 
     def __repr__(self) -> str:
@@ -440,8 +440,8 @@ class Reduction(Step, metaclass=abc.ABCMeta):
         self.graph.add_node(self)
 
         for index, parent in enumerate(parents):
-            self.graph.add_nodes_from(parent.graph.nodes)
-            self.graph.add_edges_from(parent.graph.edges)
+            self.graph.add_nodes_from(parent.graph.nodes())
+            self.graph.add_edges_from(parent.graph.edges())
             self.graph.add_edge(parent, self)
 
     def __repr__(self) -> str:
