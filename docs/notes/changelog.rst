@@ -4,6 +4,11 @@ Changelog
 Next Version
 ------------
 
+**Breaking Changes**
+
+* Moved label-encoding to its own module (:mod:`audiomate.encoding`).
+  It now provides the processing of full corpora and store it in containers.
+
 **New Features**
 
 * Added processing steps for computing Onset-Strength (:class:`audiomate.processing.pipeline.OnsetStrength`))

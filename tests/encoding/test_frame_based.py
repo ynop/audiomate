@@ -1,23 +1,22 @@
-import unittest
-
 import numpy as np
 
-from audiomate.corpus.utils import label_encoding
 from audiomate.corpus import assets
 from audiomate.utils import units
+from audiomate import encoding
 
 from tests import resources
 
 
-class TestFrameOneHotEncoder(unittest.TestCase):
+class TestFrameHotEncoder:
 
     def test_encode_full_utterance(self):
         ds = resources.create_multi_label_corpus()
-        enc = label_encoding.FrameOneHotEncoder(['music', 'speech', 'noise'],
-                                                frame_settings=units.FrameSettings(32000, 16000),
-                                                sr=16000)
+        enc = encoding.FrameHotEncoder(['music', 'speech', 'noise'],
+                                       'default',
+                                       frame_settings=units.FrameSettings(32000, 16000),
+                                       sr=16000)
 
-        actual = enc.encode(ds.utterances['utt-6'])
+        actual = enc.encode_utterance(ds.utterances['utt-6'])
         expected = np.array([
             [1, 0, 0],
             [1, 0, 0],
@@ -42,11 +41,12 @@ class TestFrameOrdinalEncoder:
 
     def test_encode_utterance(self):
         ds = resources.create_multi_label_corpus()
-        enc = label_encoding.FrameOrdinalEncoder(['music', 'speech', 'noise'],
-                                                 frame_settings=units.FrameSettings(32000, 16000),
-                                                 sr=16000)
+        enc = encoding.FrameOrdinalEncoder(['music', 'speech', 'noise'],
+                                           'default',
+                                           frame_settings=units.FrameSettings(32000, 16000),
+                                           sr=16000)
 
-        actual = enc.encode(ds.utterances['utt-6'])
+        actual = enc.encode_utterance(ds.utterances['utt-6'])
         expected = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0]).astype(np.int)
 
         assert np.array_equal(expected, actual)
@@ -60,11 +60,12 @@ class TestFrameOrdinalEncoder:
         ])
         utt.set_label_list(ll)
 
-        enc = label_encoding.FrameOrdinalEncoder(['music', 'speech', 'noise'],
-                                                 frame_settings=units.FrameSettings(32000, 16000),
-                                                 sr=16000)
+        enc = encoding.FrameOrdinalEncoder(['music', 'speech', 'noise'],
+                                           'default',
+                                           frame_settings=units.FrameSettings(32000, 16000),
+                                           sr=16000)
 
-        actual = enc.encode(utt)
+        actual = enc.encode_utterance(utt)
         expected = np.array([0, 0, 0, 0, 1, 1, 1]).astype(np.int)
 
         assert np.array_equal(expected, actual)
@@ -78,11 +79,12 @@ class TestFrameOrdinalEncoder:
         ])
         utt.set_label_list(ll)
 
-        enc = label_encoding.FrameOrdinalEncoder(['speech', 'music', 'noise'],
-                                                 frame_settings=units.FrameSettings(32000, 16000),
-                                                 sr=16000)
+        enc = encoding.FrameOrdinalEncoder(['speech', 'music', 'noise'],
+                                           'default',
+                                           frame_settings=units.FrameSettings(32000, 16000),
+                                           sr=16000)
 
-        actual = enc.encode(utt)
+        actual = enc.encode_utterance(utt)
         expected = np.array([1, 1, 0, 0]).astype(np.int)
 
         assert np.array_equal(expected, actual)

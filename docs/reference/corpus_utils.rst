@@ -10,12 +10,6 @@ Relabeling
 .. automodule:: audiomate.corpus.utils.relabeling
     :members:
 
-Label Encoding
---------------
-
-.. automodule:: audiomate.corpus.utils.label_encoding
-    :members:
-
 Label Cleaning
 --------------
 
