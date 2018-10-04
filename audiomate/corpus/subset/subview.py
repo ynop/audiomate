@@ -61,7 +61,7 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
     A filter criterion that matches utterances based on utterance-ids.
 
     Args:
-        utterance_idxs (set): A list of utterance-ids. Only utterances in the list will pass the
+        utterance_idxs (:class:`set`): A list of utterance-ids. Only utterances in the list will pass the
                                filter
         inverse (bool): If True only utterance not in the list pass the filter.
     """
@@ -97,8 +97,8 @@ class MatchingLabelFilter(FilterCriterion):
     A filter criterion that only accepts utterances which only have the given labels.
 
     Args:
-        labels (set): A set of labels which are accepted.
-        label_list_ids (set): Only check label-lists with these ids. If empty checks all label-lists.
+        labels (:class:`set`): A set of labels which are accepted.
+        label_list_ids (:class:`set`): Only check label-lists with these ids. If empty checks all label-lists.
     """
 
     def __init__(self, labels=set(), label_list_ids=set()):

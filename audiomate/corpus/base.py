@@ -137,7 +137,7 @@ class CorpusView(metaclass=abc.ABCMeta):
                                    are considered.
 
         Returns:
-             set: A set of distinct label-values.
+             :class:`set`: A set of distinct label-values.
         """
         values = set()
 

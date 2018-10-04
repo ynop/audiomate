@@ -146,7 +146,7 @@ class Utterance(object):
                                    are considered.
 
         Returns:
-             set: A set of distinct label-values.
+             :class:`set`: A set of distinct label-values.
         """
         values = set()
 
