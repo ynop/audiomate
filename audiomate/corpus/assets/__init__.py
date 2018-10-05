@@ -16,4 +16,3 @@ from .label import LabelList  # noqa: F401
 
 from .container import Container  # noqa: F401
 from .features import FeatureContainer  # noqa: F401
-from .features import PartitioningFeatureIterator  # noqa: F401

@@ -64,10 +64,3 @@ FeatureContainer
 .. autoclass:: FeatureContainer
    :members:
    :inherited-members:
-
-PartitioningFeatureIterator
----------------------------
-
-.. autoclass:: PartitioningFeatureIterator
-   :members:
-   :inherited-members:

@@ -2,7 +2,7 @@ import click
 import h5py
 import numpy as np
 
-from audiomate.corpus.assets.features import PartitioningFeatureIterator
+from audiomate.feeding import PartitioningFeatureIterator
 
 
 @click.command()
