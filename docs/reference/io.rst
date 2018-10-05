@@ -44,7 +44,7 @@ Implementations
   Free-Spoken-Digit-Dataset       x         x
   Folder                                    x
   Google Speech Commands                    x
-  GTZAN                                     x
+  GTZAN                           x         x
   Kaldi                                     x      x
   Mozilla DeepSpeech                               x
   MUSAN                           x         x
@@ -109,6 +109,9 @@ Google Speech Commands
 
 GTZAN
 ^^^^^
+.. autoclass:: GtzanDownloader
+   :members:
+
 .. autoclass:: GtzanReader
    :members:
 
