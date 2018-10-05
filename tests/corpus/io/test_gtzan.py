@@ -1,9 +1,11 @@
 import os
 
 import pytest
+import requests_mock
 
 from audiomate import corpus
 from audiomate.corpus import io
+from audiomate.corpus.io import gtzan
 from tests import resources
 
 
@@ -15,6 +17,29 @@ def reader():
 @pytest.fixture
 def data_path():
     return resources.sample_corpus_path('gtzan')
+
+
+@pytest.fixture()
+def tar_data():
+    with open(resources.get_resource_path(['sample_files', 'cv_corpus_v1.tar.gz']), 'rb') as f:
+        return f.read()
+
+
+class TestGtzanDownloader:
+
+    def test_download(self, tar_data, tmpdir):
+        target_folder = tmpdir.strpath
+        downloader = io.GtzanDownloader()
+
+        with requests_mock.Mocker() as mock:
+            mock.get(gtzan.DOWNLOAD_URL, content=tar_data)
+
+            downloader.download(target_folder)
+
+        assert os.path.isfile(os.path.join(target_folder, 'cv-valid-dev.csv'))
+        assert os.path.isdir(os.path.join(target_folder, 'cv-valid-dev'))
+        assert os.path.isfile(os.path.join(target_folder, 'cv-valid-train.csv'))
+        assert os.path.isdir(os.path.join(target_folder, 'cv-valid-train'))
 
 
 class TestGtzanReader:

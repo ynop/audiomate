@@ -2,9 +2,44 @@ import os
 
 import audiomate
 from audiomate.corpus import assets
+from audiomate.utils import download
+from audiomate.utils import files
 from . import base
 
+DOWNLOAD_URL = 'http://opihi.cs.uvic.ca/sound/music_speech.tar.gz'
 DIRECTORIES = {'music_wav': 'music', 'speech_wav': 'speech'}
+
+
+class GtzanDownloader(base.CorpusDownloader):
+    """
+    Downloader for the GTZAN Corpus.
+
+    Args:
+        url (str): The url to download the dataset from. If not given the default URL is used.
+                   It is expected to be a tar.gz file.
+    """
+
+    def __init__(self, url=None):
+        if url is None:
+            self.url = DOWNLOAD_URL
+        else:
+            self.url = url
+
+    @classmethod
+    def type(cls):
+        return 'gtzan'
+
+    def _download(self, target_path):
+        os.makedirs(target_path, exist_ok=True)
+        tmp_file = os.path.join(target_path, 'tmp_ark.tar.gz')
+
+        download.download_file(self.url, tmp_file)
+        download.extract_tar(tmp_file, target_path)
+
+        # We use copy since subfolders in the archive are read-only, hence throws permission error when trying to move.
+        files.move_all_files_from_subfolders_to_top(target_path, delete_subfolders=True, copy=True)
+
+        os.remove(tmp_file)
 
 
 class GtzanReader(base.CorpusReader):

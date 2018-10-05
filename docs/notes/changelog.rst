@@ -16,7 +16,10 @@ Next Version
   But it only works for the prepared corpus.
 
 * Added function (:func:`audiomate.corpus.utils.label_cleaning.merge_consecutive_labels_with_same_values`)
-  for merging consecutive labels with the same value.
+  for merging consecutive labels with the same value
+
+* Added downloader (:class:`audiomate.corpus.io.GtzanDownloader`) for the
+  `GTZAN Music/Speech <https://marsyasweb.appspot.com/download/data_sets/>`_.
 
 **Fixes**
 
