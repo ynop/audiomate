@@ -63,5 +63,3 @@ class TestFeatureContainer:
 
         with pytest.raises(ValueError):
             sample_feature_container.stats()
-
-

@@ -3,9 +3,189 @@ This module module provides functionality to load data from a container into mem
 """
 
 import gc
-import re
+import random
 
 import numpy as np
+
+import audiomate
+from audiomate.corpus import assets
+from audiomate.utils import units
+
+
+class PartitioningContainerLoader(object):
+    """
+    Load data from one or more containers in partitions.
+    It computes a scheme to load the data of as many utterances as possible in one partition.
+
+    A scheme is initially computed on creation of the loader. To compute a new one the ``reload()`` method can be used.
+    This only has an effect if ``shuffle == True``,
+    otherwise the utterances are defined always loaded in the same order.
+
+    With a given scheme, data of a partition can be retrieved via ``load_partition_data()``.
+    It loads all data of the partition with the given index into memory.
+
+    Args:
+        corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
+                                          This defines which utterances are considered for loading.
+        containers (assets.Container, list): Either a single or a list of Container objects.
+                                             From the given containers data is loaded.
+        partition_size (str): Size of the partitions in bytes. The units ``k`` (kibibytes), ``m`` (mebibytes) and ``g``
+                             (gibibytes) are supported, i.e. a ``partition_size`` of ``1g`` equates :math:`2^{30}`
+                             bytes.
+        shuffle (bool): Indicates whether the utterances should be returned in
+                        random order (``True``) or not (``False``).
+        seed (int): Seed to be used for the random number generator.
+    """
+
+    def __init__(self, corpus_or_utt_ids, containers, partition_size, shuffle=True, seed=None):
+        if isinstance(corpus_or_utt_ids, audiomate.Corpus):
+            self.utt_ids = list(corpus_or_utt_ids.utterances.keys())
+        else:
+            self.utt_ids = corpus_or_utt_ids
+
+        if isinstance(containers, assets.Container):
+            self.containers = [containers]
+        else:
+            self.containers = containers
+
+        if len(self.containers) == 0:
+            raise ValueError('At least one container has to be provided!')
+
+        self.partitions = []
+        self.partition_size = units.parse_storage_size(partition_size)
+        self.shuffle = shuffle
+
+        # init random state
+        self.rand = random.Random()
+        self.rand.seed(a=seed)
+
+        # setup
+        self._raise_error_if_container_is_missing_an_utterance()
+        self.reload()
+
+    def reload(self):
+        """
+        Create a new partition scheme. A scheme defines which utterances are in which partition.
+        The scheme only changes after every call if ``self.shuffle == True``.
+
+        Returns:
+            list: List of PartitionInfo objects, defining the new partitions (same as ``self.partitions``)
+        """
+
+        # Create the order in which utterances will be loaded
+        utt_ids = sorted(self.utt_ids)
+
+        if self.shuffle:
+            self.rand.shuffle(utt_ids)
+
+        # In the given order compute the partitions
+        utt_sizes = self._scan()
+
+        partitions = []
+
+        current_partition = PartitionInfo()
+
+        for utt_id in utt_ids:
+            utt_size = utt_sizes[utt_id]
+
+            # We add utterance to the partition as long the partition-size is not exceeded
+            # Otherwise we start with new partition.
+            if current_partition.size + utt_size > self.partition_size:
+                partitions.append(current_partition)
+                current_partition = PartitionInfo()
+
+            current_partition.utt_ids.append(utt_id)
+            current_partition.size += utt_size
+
+        if current_partition.size > 0:
+            partitions.append(current_partition)
+
+        self.partitions = partitions
+        return self.partitions
+
+    def load_partition_data(self, index):
+        """
+        Load and return the partition with the given index.
+
+        Args:
+            index (int): The index of partition, that refers to the index in ``self.partitions``.
+
+        Returns:
+            PartitionData: A PartitionData object containing the data for the partition with the given index.
+        """
+
+        info = self.partitions[index]
+        data = PartitionData(info)
+
+        for utt_id in info.utt_ids:
+            utt_data = [c._file[utt_id][:] for c in self.containers]
+            data.utt_data.append(utt_data)
+
+        return data
+
+    def _raise_error_if_container_is_missing_an_utterance(self):
+        """ Check if there is a dataset for every utterance in every container, otherwise raise an error. """
+        expected_keys = frozenset(self.utt_ids)
+
+        for container in self.containers:
+            keys = set(container.keys())
+
+            if not keys.issuperset(expected_keys):
+                raise ValueError('Container is missing data for some utterances!')
+
+    def _scan(self):
+        """ For every utterance, calculate the size it will need in memory. """
+        utt_sizes = {}
+
+        for dset_name in self.utt_ids:
+            per_container = []
+
+            for container in self.containers:
+                dset = container._file[dset_name]
+                dtype_size = dset.dtype.itemsize
+
+                record_size = dtype_size * dset.size
+                per_container.append(record_size)
+
+            utt_size = sum(per_container)
+
+            if utt_size > self.partition_size:
+                raise ValueError('Records in "{0}" are larger than the partition size'.format(dset_name))
+
+            utt_sizes[dset_name] = utt_size
+
+        return utt_sizes
+
+
+class PartitionInfo(object):
+    """
+    Class for holding the info of a partition.
+
+    Attributes:
+        utt_ids (list): A list of utterance-ids in the partition.
+        size (int): The number of bytes the partition will allocate, when loaded.
+    """
+
+    def __init__(self):
+        self.utt_ids = []
+        self.size = 0
+
+
+class PartitionData(object):
+    """
+    Class for holding the loaded data of a partition.
+
+    Args:
+        info (PartitionInfo): The info about the partition.
+
+    Attributes:
+        utt_data (list): A list holding the data-objects for every utterance in the order of ``info.utt_ids``.
+                         The entries are also lists or tuples containing the array for every container.
+    """
+
+    def __init__(self, info):
+        self.info = info
+        self.utt_data = []
 
 
 class PartitioningFeatureIterator(object):
@@ -55,11 +235,9 @@ class PartitioningFeatureIterator(object):
                 0.84680521,  0.75517786], dtype=float32))
     """
 
-    PARTITION_SIZE_PATTERN = re.compile('^([0-9]+(\.[0-9]+)?)([gmk])?$', re.I)
-
     def __init__(self, hdf5file, partition_size, shuffle=True, seed=None, includes=None, excludes=None):
         self._file = hdf5file
-        self._partition_size = self._parse_partition_size(partition_size)
+        self._partition_size = units.parse_storage_size(partition_size)
         self._shuffle = shuffle
         self._seed = seed
 
@@ -186,26 +364,6 @@ class PartitioningFeatureIterator(object):
             dset_props.append(DataSetProperties(dset_name, num_records, record_size))
 
         return dset_props
-
-    @staticmethod
-    def _parse_partition_size(partition_size):
-        units = {
-            'k': 1024,
-            'm': 1024 * 1024,
-            'g': 1024 * 1024 * 1024
-        }
-
-        match = PartitioningFeatureIterator.PARTITION_SIZE_PATTERN.fullmatch(str(partition_size))
-
-        if match is None:
-            raise ValueError('Invalid partition size: {0}'.format(partition_size))
-
-        groups = match.groups()
-
-        if groups[2] is None:  # no units
-            return int(float(groups[0]))  # silently dropping the float, because byte is the smallest unit)
-
-        return int(float(groups[0]) * units[groups[2].lower()])
 
     @staticmethod
     def _filter_data_sets(data_sets, includes=None, excludes=None):
