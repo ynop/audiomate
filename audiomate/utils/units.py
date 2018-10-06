@@ -4,8 +4,43 @@ Especially it provides function to convert from one to another unit (e.g. second
 """
 
 import math
+import re
 
 import numpy as np
+
+
+def parse_storage_size(storage_size):
+    """
+    Parses an expression that represents an amount of storage/memory and returns the number of bytes it represents.
+
+    Args:
+        storage_size(str): Size in bytes. The units ``k`` (kibibytes), ``m`` (mebibytes) and ``g``
+                           (gibibytes) are supported, i.e. a ``partition_size`` of ``1g`` equates :math:`2^{30}` bytes.
+
+    Returns:
+        int: Number of bytes.
+    """
+    pattern = re.compile('^([0-9]+(\.[0-9]+)?)([gmk])?$', re.I)
+
+    units = {
+        'k': 1024,
+        'm': 1024 * 1024,
+        'g': 1024 * 1024 * 1024
+    }
+
+    match = pattern.fullmatch(str(storage_size))
+
+    if match is None:
+        raise ValueError('Invalid partition size: {0}'.format(storage_size))
+
+    groups = match.groups()
+
+    # no units
+    if groups[2] is None:
+        # silently dropping the float, because byte is the smallest unit)
+        return int(float(groups[0]))
+
+    return int(float(groups[0]) * units[groups[2].lower()])
 
 
 def seconds_to_sample(seconds, sampling_rate=16000):

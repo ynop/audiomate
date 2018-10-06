@@ -3,6 +3,38 @@ import pytest
 from audiomate.utils import units
 
 
+def test_partition_size_in_bytes_specified_as_int():
+    assert 1024 == units.parse_storage_size(1024)
+
+
+def test_partition_size_in_bytes():
+    assert 1024 == units.parse_storage_size('1024')
+
+
+def test_partition_size_in_kibibytes():
+    assert 2 * 1024 == units.parse_storage_size('2k')
+
+
+def test_partition_size_in_mebibytes():
+    assert 2 * 1024 * 1024 == units.parse_storage_size('2m')
+
+
+def test_partition_size_in_gibibytes():
+    assert 2 * 1024 * 1024 * 1024 == units.parse_storage_size('2g')
+
+
+def test_partition_size_in_gibibytes_with_capital_g():
+    assert 2 * 1024 * 1024 * 1024 == units.parse_storage_size('2G')
+
+
+def test_partition_size_fractions_of_bytes_are_ignored():
+    assert 1 == units.parse_storage_size('1.1')
+
+
+def test_partition_size_half_a_gibibyte():
+    assert 512 * 1024 * 1024 == units.parse_storage_size('0.5g')
+
+
 class TestUnits:
     def test_seconds_to_sample(self):
         assert units.seconds_to_sample(0, 16000) == 0
