@@ -59,8 +59,13 @@ class PartitioningContainerLoader(object):
         self.rand = random.Random()
         self.rand.seed(a=seed)
 
-        # setup
+        # check
         self._raise_error_if_container_is_missing_an_utterance()
+
+        # Compute utterance size and length
+        self.utt_sizes = self._scan()
+        self.utt_lengths = self._get_all_lengths()
+
         self.reload()
 
     def reload(self):
@@ -78,15 +83,13 @@ class PartitioningContainerLoader(object):
         if self.shuffle:
             self.rand.shuffle(utt_ids)
 
-        # In the given order compute the partitions
-        utt_sizes = self._scan()
-
         partitions = []
 
         current_partition = PartitionInfo()
 
         for utt_id in utt_ids:
-            utt_size = utt_sizes[utt_id]
+            utt_size = self.utt_sizes[utt_id]
+            utt_lengths = self.utt_lengths[utt_id]
 
             # We add utterance to the partition as long the partition-size is not exceeded
             # Otherwise we start with new partition.
@@ -95,6 +98,7 @@ class PartitioningContainerLoader(object):
                 current_partition = PartitionInfo()
 
             current_partition.utt_ids.append(utt_id)
+            current_partition.utt_lengths.append(utt_lengths)
             current_partition.size += utt_size
 
         if current_partition.size > 0:
@@ -156,6 +160,16 @@ class PartitioningContainerLoader(object):
 
         return utt_sizes
 
+    def _get_all_lengths(self):
+        """ For every utterance, get the length of the data in every container. Return a list of tuples. """
+        utt_lengths = {}
+
+        for utt_idx in self.utt_ids:
+            per_container = [c._file[utt_idx].shape[0] for c in self.containers]
+            utt_lengths[utt_idx] = tuple(per_container)
+
+        return utt_lengths
+
 
 class PartitionInfo(object):
     """
@@ -163,12 +177,21 @@ class PartitionInfo(object):
 
     Attributes:
         utt_ids (list): A list of utterance-ids in the partition.
+        utt_lengths (list): List with lengths of the utterances. (Outermost dimension in the dataset of the container)
+                            Since there are maybe multiple containers, every item is a tuple of lengths.
+                            They correspond to the length of the utterance in every container,
+                            in the order of the containers passed to the ParitioningContainerLoader.
         size (int): The number of bytes the partition will allocate, when loaded.
     """
 
     def __init__(self):
         self.utt_ids = []
+        self.utt_lengths = []
         self.size = 0
+
+    def total_lengths(self):
+        """ Return the total length of all utterances for every container. """
+        return tuple([sum(x) for x in zip(*self.utt_lengths)])
 
 
 class PartitionData(object):

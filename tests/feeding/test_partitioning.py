@@ -58,6 +58,33 @@ class TestPartitioningContainerLoader:
             'utt-3': (9 + 4 + 8) * 6 * np.dtype(np.float32).itemsize
         }
 
+    def test_get_lengths_returns_correct_lengths_for_multiple_containers(self, tmpdir):
+        c1 = assets.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
+        c2 = assets.Container(os.path.join(tmpdir.strpath, 'c2.h5'))
+        c3 = assets.Container(os.path.join(tmpdir.strpath, 'c3.h5'))
+        c1.open()
+        c1.set('utt-1', np.random.random((6, 6)).astype(np.float32))
+        c1.set('utt-2', np.random.random((2, 6)).astype(np.float32))
+        c1.set('utt-3', np.random.random((9, 6)).astype(np.float32))
+        c2.open()
+        c2.set('utt-1', np.random.random((2, 6)).astype(np.float32))
+        c2.set('utt-2', np.random.random((1, 6)).astype(np.float32))
+        c2.set('utt-3', np.random.random((4, 6)).astype(np.float32))
+        c3.open()
+        c3.set('utt-1', np.random.random((1, 6)).astype(np.float32))
+        c3.set('utt-2', np.random.random((3, 6)).astype(np.float32))
+        c3.set('utt-3', np.random.random((8, 6)).astype(np.float32))
+
+        loader = partitioning.PartitioningContainerLoader(['utt-1', 'utt-2', 'utt-3'],
+                                                          [c1, c2, c3], '1000', shuffle=True, seed=88)
+
+        lengths = loader._get_all_lengths()
+
+        assert len(lengths) == 3
+        assert lengths['utt-1'] == (6, 2, 1)
+        assert lengths['utt-2'] == (2, 1, 3)
+        assert lengths['utt-3'] == (9, 4, 8)
+
     def test_raises_error_if_utt_is_missing_in_container(self, tmpdir):
         c1 = assets.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
         c1.open()
@@ -93,10 +120,13 @@ class TestPartitioningContainerLoader:
 
         assert len(loader.partitions) == 3
         assert loader.partitions[0].utt_ids == ['utt-1', 'utt-2']
+        assert loader.partitions[0].utt_lengths == [(6,), (2,)]
         assert loader.partitions[0].size == 192
         assert loader.partitions[1].utt_ids == ['utt-3']
+        assert loader.partitions[1].utt_lengths == [(9,)]
         assert loader.partitions[1].size == 216
         assert loader.partitions[2].utt_ids == ['utt-4', 'utt-5']
+        assert loader.partitions[2].utt_lengths == [(2,), (5,)]
         assert loader.partitions[2].size == 168
 
     def test_reload_creates_no_partition_with_no_utterances(self, tmpdir):
@@ -166,6 +196,21 @@ class TestPartitioningContainerLoader:
         assert part_3.info.utt_ids == ['utt-4', 'utt-5']
         assert np.allclose(part_3.utt_data[0], utt_4_data)
         assert np.allclose(part_3.utt_data[1], utt_5_data)
+
+
+class TestPartitionInfo:
+
+    def test_total_length_for_single_container(self):
+        info = partitioning.PartitionInfo()
+        info.utt_lengths = [(1,), (9,), (13,)]
+
+        assert info.total_lengths() == (23,)
+
+    def test_total_length_for_multiple_containers(self):
+        info = partitioning.PartitionInfo()
+        info.utt_lengths = [(1, 4), (9, 5), (13, 8)]
+
+        assert info.total_lengths() == (23, 17)
 
 
 class TestPartitioningFeatureIterator(object):
