@@ -93,3 +93,71 @@ class TestFrameDataset:
         assert len(sample_frame_dataset[26]) == 2
         assert np.array_equal(sample_frame_dataset[26][0], np.array([12, 13, 14, 15]))
         assert np.array_equal(sample_frame_dataset[26][1], np.array([12, 13, 14, 15]) + 10)
+
+
+@pytest.fixture
+def sample_multi_frame_dataset(tmpdir):
+    inputs_path = os.path.join(tmpdir.strpath, 'inputs.hdf5')
+    targets_path = os.path.join(tmpdir.strpath, 'targets.hdf5')
+
+    corpus = resources.create_dataset()
+    container_inputs = assets.Container(inputs_path)
+    container_targets = assets.Container(targets_path)
+
+    container_inputs.open()
+    container_targets.open()
+
+    container_inputs.set('utt-1', np.arange(60).reshape(15, 4))
+    container_inputs.set('utt-2', np.arange(80).reshape(20, 4))
+    container_inputs.set('utt-3', np.arange(44).reshape(11, 4))
+    container_inputs.set('utt-4', np.arange(12).reshape(3, 4))
+    container_inputs.set('utt-5', np.arange(16).reshape(4, 4))
+
+    container_targets.set('utt-1', np.arange(30).reshape(15, 2))
+    container_targets.set('utt-2', np.arange(40).reshape(20, 2))
+    container_targets.set('utt-3', np.arange(22).reshape(11, 2))
+    container_targets.set('utt-4', np.arange(6).reshape(3, 2))
+    container_targets.set('utt-5', np.arange(8).reshape(4, 2))
+
+    return feeding.MultiFrameDataset(corpus, [container_inputs, container_targets], 4)
+
+
+class TestMultiFrameDataset:
+
+    def test_get_chunked_regions(self, sample_multi_frame_dataset):
+        regions = sample_multi_frame_dataset.get_chunked_utt_regions()
+
+        assert len(regions) == 5
+
+        assert regions[0][0] == 0
+        assert regions[0][1] == 4
+
+        assert regions[1][0] == 4
+        assert regions[1][1] == 5
+
+        assert regions[2][0] == 9
+        assert regions[2][1] == 3
+
+        assert regions[3][0] == 12
+        assert regions[3][1] == 1
+
+        assert regions[4][0] == 13
+        assert regions[4][1] == 1
+
+    def test_get_length(self, sample_multi_frame_dataset):
+        assert len(sample_multi_frame_dataset) == 14
+
+    def test_get_item_in_the_middle_of_an_utterance(self, sample_multi_frame_dataset):
+        assert len(sample_multi_frame_dataset[2]) == 2
+        assert np.array_equal(sample_multi_frame_dataset[2][0], np.arange(16).reshape(4, 4) + 32)
+        assert np.array_equal(sample_multi_frame_dataset[2][1], np.arange(8).reshape(4, 2) + 16)
+
+    def test_get_item_at_the_begin_of_an_utterance(self, sample_multi_frame_dataset):
+        assert len(sample_multi_frame_dataset[4]) == 2
+        assert np.array_equal(sample_multi_frame_dataset[4][0], np.arange(16).reshape(4, 4))
+        assert np.array_equal(sample_multi_frame_dataset[4][1], np.arange(8).reshape(4, 2))
+
+    def test_get_item_at_the_end_of_an_utterance(self, sample_multi_frame_dataset):
+        assert len(sample_multi_frame_dataset[11]) == 2
+        assert np.array_equal(sample_multi_frame_dataset[11][0], np.arange(12).reshape(3, 4) + 32)
+        assert np.array_equal(sample_multi_frame_dataset[11][1], np.arange(6).reshape(3, 2) + 16)

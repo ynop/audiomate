@@ -16,6 +16,9 @@ Datasets
     :members:
     :inherited-members:
 
+.. autoclass:: MultiFrameDataset
+    :members:
+    :inherited-members:
 
 Iterator
 --------
