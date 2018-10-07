@@ -1,4 +1,11 @@
+from .dataset import Dataset  # noqa: F401
+from .dataset import FrameDataset  # noqa: F401
+
 from .iterator import DataIterator  # noqa: F401
+from .iterator import FrameIterator  # noqa: F401
 
 from .partitioning import PartitioningFeatureIterator  # noqa: F401
 
+from .partitioning import PartitioningContainerLoader  # noqa: F401
+from .partitioning import PartitionInfo  # noqa: F401
+from .partitioning import PartitionData  # noqa: F401
