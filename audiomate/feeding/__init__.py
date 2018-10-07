@@ -1,3 +1,8 @@
+"""
+The :mod:`audiomate.feeding` module provides tools for a simple access to data stored in different
+:class:`audiomate.corpus.assets.Container`.
+"""
+
 from .dataset import Dataset  # noqa: F401
 from .dataset import FrameDataset  # noqa: F401
 

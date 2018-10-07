@@ -48,6 +48,20 @@ class FrameDataset(Dataset):
     Note:
         For a frame dataset it is expected that every container contains exactly one value/vector for every frame.
         So the first dimension of every array in every container have to match.
+
+    Example:
+        >>> corpus = audiomate.Corpus.load('/path/to/corpus')
+        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>>
+        >>> ds = FrameDataset(corpus, [container_inputs, container_outputs])
+        >>> len(ds) # Number of frames in the dataset
+        2938
+        >>> ds[293] # Frame (inputs, outputs) with index 293
+        (
+            array([0.58843831, 0.18128443, 0.19718328, 0.25284105]),
+            array([0.0, 1.0])
+        )
     """
 
     def __init__(self, corpus_or_utt_ids, containers):

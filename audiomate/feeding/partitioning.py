@@ -35,6 +35,25 @@ class PartitioningContainerLoader(object):
         shuffle (bool): Indicates whether the utterances should be returned in
                         random order (``True``) or not (``False``).
         seed (int): Seed to be used for the random number generator.
+
+    Example:
+        >>> corpus = audiomate.Corpus.load('/path/to/corpus')
+        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>>
+        >>> lo = PartitioningContainerLoader(corpus, [container_inputs, container_outputs], '1G', shuffle=True, seed=23)
+        >>> len(lo.partitions) # Number of parititions
+        5
+        >>> lo.partitions[0].utt_ids # Utterances in the partition with index 0
+        ['utt-1', 'utt-2', ...]
+        >>> p0 = lo.load_partition_data(0) # Load partition 0 into memory
+        >>> p0.info.utt_ids[0] # First utterance in the partition
+        'utt-1'
+        >>> p0.utt_data[0] # Data of the first utterance
+        (
+            array([[0.58843831, 0.18128443, 0.19718328, 0.25284105], ...]),
+            array([[0.0, 1.0], ...])
+        )
     """
 
     def __init__(self, corpus_or_utt_ids, containers, partition_size, shuffle=True, seed=None):

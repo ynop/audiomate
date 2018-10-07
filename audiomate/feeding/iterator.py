@@ -65,9 +65,22 @@ class FrameIterator(DataIterator):
         shuffle (bool): Indicates whether the data should be returned in
                         random order (``True``) or not (``False``).
         seed (int): Seed to be used for the random number generator.
+
     Note:
         For a FrameIterator it is expected that every container contains exactly one value/vector for every frame.
         So the first dimension of every array in every container have to match.
+
+    Example:
+        >>> corpus = audiomate.Corpus.load('/path/to/corpus')
+        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>>
+        >>> ds = FrameIterator(corpus, [container_inputs, container_outputs], '1G', shuffle=True, seed=23)
+        >>> next(ds) # Next Frame (inputs, outputs)
+        (
+            array([0.58843831, 0.18128443, 0.19718328, 0.25284105]),
+            array([0.0, 1.0])
+        )
     """
 
     def __init__(self, corpus_or_utt_ids, containers, partition_size, shuffle=True, seed=None):
