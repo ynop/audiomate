@@ -42,90 +42,7 @@ class Dataset(object):
         raise NotImplementedError
 
 
-class FrameDataset(Dataset):
-    """
-    A dataset wrapping frames of a corpus. A single sample represents a single frame.
-
-    Args:
-        corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
-                                          This defines which utterances are considered for iterating.
-        containers (list, Container): A single container or a list of containers.
-
-    Note:
-        For a frame dataset it is expected that every container contains exactly one value/vector for every frame.
-        So the first dimension of every array in every container have to match.
-
-    Example:
-        >>> corpus = audiomate.Corpus.load('/path/to/corpus')
-        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
-        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
-        >>>
-        >>> ds = FrameDataset(corpus, [container_inputs, container_outputs])
-        >>> len(ds) # Number of frames in the dataset
-        2938
-        >>> ds[293] # Frame (inputs, outputs) with index 293
-        (
-            array([0.58843831, 0.18128443, 0.19718328, 0.25284105]),
-            array([0.0, 1.0])
-        )
-    """
-
-    def __init__(self, corpus_or_utt_ids, containers):
-        super(FrameDataset, self).__init__(corpus_or_utt_ids, containers)
-
-        self.regions = self.get_utt_regions()
-        self.region_offsets = [x[0] for x in self.regions]
-
-    def __len__(self):
-        last_region = self.regions[-1]
-        return last_region[0] + last_region[1]
-
-    def __getitem__(self, item):
-        # we search the region before the offset is higher than the item.
-        region_index = bisect.bisect_right(self.region_offsets, item) - 1
-        region = self.regions[region_index]
-
-        offset_within_utterance = item - region[0]
-        return [x[offset_within_utterance].astype(np.float32) for x in region[2]]
-
-    def get_utt_regions(self):
-        """
-        Return the regions of all utterances, assuming all utterances are concatenated.
-        It is assumed that the utterances are sorted in ascending order for concatenation.
-
-        A region is defined by offset, length (num-frames) and
-        a list of references to the utterance datasets in the containers.
-
-        Returns:
-            list: List of with a tuple for every utterances containing the region info.
-        """
-
-        regions = []
-        current_offset = 0
-
-        for utt_idx in sorted(self.utt_ids):
-            offset = current_offset
-
-            lengths = []
-            refs = []
-
-            for container in self.containers:
-                lengths.append(container.get(utt_idx).shape[0])
-                refs.append(container.get(utt_idx, mem_map=True))
-
-            if len(set(lengths)) != 1:
-                raise ValueError('Utterance {} has not the same number of frames in all containers!'.format(utt_idx))
-
-            region = (offset, lengths[0], refs)
-            regions.append(region)
-
-            # Sets the offset for the next utterances
-            current_offset += lengths[0]
-
-        return regions
-
-
-class MultiFrameDataset(FrameDataset):
+class MultiFrameDataset(Dataset):
     """
     A dataset wrapping chunks of frames of a corpus. A single sample represents a chunk of frames.
 
@@ -189,41 +106,106 @@ class MultiFrameDataset(FrameDataset):
     def __init__(self, corpus_or_utt_ids, containers, frames_per_chunk, return_length=False):
         super(MultiFrameDataset, self).__init__(corpus_or_utt_ids, containers)
 
+        if frames_per_chunk < 1:
+            raise ValueError('Chunk-size has to be at least 1!')
+
         self.frames_per_chunk = frames_per_chunk
         self.return_length = return_length
 
-        self.chunked_regions = self.get_chunked_utt_regions()
-        self.chunked_offsets = [x[0] for x in self.chunked_regions]
+        self.regions = self.get_utt_regions()
+        self.region_offsets = [x[0] for x in self.regions]
 
     def __len__(self):
-        last_region = self.chunked_regions[-1]
+        last_region = self.regions[-1]
         return last_region[0] + last_region[1]
 
     def __getitem__(self, item):
         # we search the region before the offset is higher than the item.
-        region_index = bisect.bisect_right(self.chunked_offsets, item) - 1
-        region = self.chunked_regions[region_index]
+        region_index = bisect.bisect_right(self.region_offsets, item) - 1
+        region = self.regions[region_index]
 
-        offset_within_utterance = (item - region[0]) * self.frames_per_chunk
-        to = offset_within_utterance + self.frames_per_chunk
-        data = [x[offset_within_utterance:to].astype(np.float32) for x in region[2]]
+        frame_offset = (item - region[0]) * self.frames_per_chunk
+        frame_end = frame_offset + self.frames_per_chunk
+
+        data = [x[frame_offset:frame_end].astype(np.float32) for x in region[2]]
 
         if self.return_length:
             data.append(int(data[0].shape[0]))
 
         return data
 
-    def get_chunked_utt_regions(self):
+    def get_utt_regions(self):
         """
-        From the regions defined for the single-frame case, extract regions for chunked access.
+        Return the regions of all utterances, assuming all utterances are concatenated.
+        It is assumed that the utterances are sorted in ascending order for concatenation.
+
+        A region is defined by offset (in chunks), length (num-chunks) and
+        a list of references to the utterance datasets in the containers.
+
+        Returns:
+            list: List of with a tuple for every utterances containing the region info.
         """
-        chunked_regions = []
-        chunked_offset = 0
 
-        for offset, length, references in self.regions:
-            chunked_length = math.ceil(length / float(self.frames_per_chunk))
-            chunked_regions.append((chunked_offset, chunked_length, references))
+        regions = []
+        current_offset = 0
 
-            chunked_offset += chunked_length
+        for utt_idx in sorted(self.utt_ids):
+            offset = current_offset
 
-        return chunked_regions
+            num_frames = []
+            refs = []
+
+            for container in self.containers:
+                num_frames.append(container.get(utt_idx).shape[0])
+                refs.append(container.get(utt_idx, mem_map=True))
+
+            if len(set(num_frames)) != 1:
+                raise ValueError('Utterance {} has not the same number of frames in all containers!'.format(utt_idx))
+
+            num_chunks = math.ceil(num_frames[0] / float(self.frames_per_chunk))
+
+            region = (offset, num_chunks, refs)
+            regions.append(region)
+
+            # Sets the offset for the next utterances
+            current_offset += num_chunks
+
+        return regions
+
+
+class FrameDataset(MultiFrameDataset):
+    """
+    A dataset wrapping frames of a corpus. A single sample represents a single frame.
+
+    Args:
+        corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
+                                          This defines which utterances are considered for iterating.
+        containers (list, Container): A single container or a list of containers.
+
+    Note:
+        For a frame dataset it is expected that every container contains exactly one value/vector for every frame.
+        So the first dimension of every array in every container have to match.
+
+    Example:
+        >>> corpus = audiomate.Corpus.load('/path/to/corpus')
+        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>>
+        >>> ds = FrameDataset(corpus, [container_inputs, container_outputs])
+        >>> len(ds) # Number of frames in the dataset
+        2938
+        >>> ds[293] # Frame (inputs, outputs) with index 293
+        (
+            array([0.58843831, 0.18128443, 0.19718328, 0.25284105]),
+            array([0.0, 1.0])
+        )
+    """
+
+    def __init__(self, corpus_or_utt_ids, containers):
+        super(FrameDataset, self).__init__(corpus_or_utt_ids, containers, 1, return_length=False)
+
+    def __getitem__(self, item):
+        data = super(FrameDataset, self).__getitem__(item)
+
+        # We have to remove the outermost dimension, which is 1 for chunk-size of 1 frame
+        return [x[0] for x in data]
