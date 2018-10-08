@@ -52,159 +52,6 @@ class DataIterator(object):
         raise NotImplementedError
 
 
-class FrameIterator(DataIterator):
-    """
-    A data-iterator wrapping frames of a corpus. A single sample represents a single frame.
-
-    Args:
-        corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
-                                          This defines which utterances are considered for iterating.
-        container (list, Container): A single container or a list of containers.
-        partition_size (str): Size of the partitions in bytes. The units ``k`` (kibibytes), ``m`` (mebibytes) and ``g``
-                              (gibibytes) are supported, i.e. a ``partition_size`` of ``1g`` equates :math:`2^{30}`
-                              bytes.
-        shuffle (bool): Indicates whether the data should be returned in
-                        random order (``True``) or not (``False``).
-        seed (int): Seed to be used for the random number generator.
-
-    Note:
-        For a FrameIterator it is expected that every container contains exactly one value/vector for every frame.
-        So the first dimension of every array in every container have to match.
-
-    Example:
-        >>> corpus = audiomate.Corpus.load('/path/to/corpus')
-        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
-        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
-        >>>
-        >>> ds = FrameIterator(corpus, [container_inputs, container_outputs], '1G', shuffle=True, seed=23)
-        >>> next(ds) # Next Frame (inputs, outputs)
-        (
-            array([0.58843831, 0.18128443, 0.19718328, 0.25284105]),
-            array([0.0, 1.0])
-        )
-    """
-
-    def __init__(self, corpus_or_utt_ids, containers, partition_size, shuffle=True, seed=None):
-        super(FrameIterator, self).__init__(corpus_or_utt_ids, containers, shuffle=shuffle, seed=seed)
-
-        self.partition_size = partition_size
-
-        self.loader = None
-        self.current_partition = None
-        self.current_partition_index = -1
-        self.current_frame_index = 0
-
-        self.loader = partitioning.PartitioningContainerLoader(self.utt_ids,
-                                                               self.containers,
-                                                               self.partition_size,
-                                                               shuffle=self.shuffle,
-                                                               seed=self.rand.random())
-
-    def __iter__(self):
-        self.current_partition = None
-        self.current_partition_index = -1
-        self.current_frame_index = 0
-
-        self.loader.reload()
-
-        return self
-
-    def __next__(self):
-        if self.current_partition is None or self.current_frame_index >= len(self.current_partition):
-            self.current_partition_index += 1
-            self.current_frame_index = 0
-
-            if self.current_partition_index < len(self.loader.partitions):
-                partition_data = self.loader.load_partition_data(self.current_partition_index)
-                self.current_partition = FramePartitionData(partition_data,
-                                                            shuffle=self.shuffle,
-                                                            seed=self.rand.random())
-            else:
-                raise StopIteration
-
-        next_frame = self.current_partition[self.current_frame_index]
-        self.current_frame_index += 1
-
-        return next_frame
-
-
-class FramePartitionData(object):
-    """
-    Wrapper for PartitionData to access the frames via indexes.
-
-    Args:
-        partition_data (PartitionData): The loaded partition-data.
-        shuffle (bool): If True the frames are shuffled randomly for access.
-        seed (int): The seed to use for shuffling.
-    """
-
-    def __init__(self, partition_data, shuffle=True, seed=None):
-        self.data = partition_data
-        self.shuffle = shuffle
-
-        self.rand = random.Random()
-        self.rand.seed(a=seed)
-
-        # Regions are used to provide indexed access across all utterances
-        self.regions = self.get_utt_regions()
-        self.region_offsets = [x[0] for x in self.regions]
-
-        # Sampling used to access frames
-        last_region = self.regions[-1]
-        self.sampling = list(range(last_region[0] + last_region[1]))
-
-        if self.shuffle:
-            self.rand.shuffle(self.sampling)
-
-    def __len__(self):
-        last_region = self.regions[-1]
-        return last_region[0] + last_region[1]
-
-    def __getitem__(self, item):
-        index = self.sampling[item]
-
-        # we search the region before the offset is higher than the index.
-        region_index = bisect.bisect_right(self.region_offsets, index) - 1
-        region = self.regions[region_index]
-
-        offset_within_utterance = index - region[0]
-        return [x[offset_within_utterance].astype(np.float32) for x in region[2]]
-
-    def get_utt_regions(self):
-        """
-        Return the regions of all utterances, assuming all utterances are concatenated.
-        A region is defined by offset, length (num-frames) and
-        a list of references to the utterance datasets in the containers.
-
-        Returns:
-            list: List of with a tuple for every utterances containing the region info.
-        """
-
-        regions = []
-        current_offset = 0
-
-        for utt_idx, utt_data in zip(self.data.info.utt_ids, self.data.utt_data):
-            offset = current_offset
-
-            lengths = []
-            refs = []
-
-            for part in utt_data:
-                lengths.append(part.shape[0])
-                refs.append(part)
-
-            if len(set(lengths)) != 1:
-                raise ValueError('Utterance {} has not the same number of frames in all containers!'.format(utt_idx))
-
-            region = (offset, lengths[0], refs)
-            regions.append(region)
-
-            # Sets the offset for the next utterances
-            current_offset += lengths[0]
-
-        return regions
-
-
 class MultiFrameIterator(DataIterator):
     """
     A data-iterator wrapping chunks of subsequent frames of a corpus.
@@ -295,7 +142,50 @@ class MultiFrameIterator(DataIterator):
         return next_chunk
 
 
-class MultiFramePartitionData(FramePartitionData):
+class FrameIterator(MultiFrameIterator):
+    """
+    A data-iterator wrapping frames of a corpus. A single sample represents a single frame.
+
+    Args:
+        corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
+                                          This defines which utterances are considered for iterating.
+        container (list, Container): A single container or a list of containers.
+        partition_size (str): Size of the partitions in bytes. The units ``k`` (kibibytes), ``m`` (mebibytes) and ``g``
+                              (gibibytes) are supported, i.e. a ``partition_size`` of ``1g`` equates :math:`2^{30}`
+                              bytes.
+        shuffle (bool): Indicates whether the data should be returned in
+                        random order (``True``) or not (``False``).
+        seed (int): Seed to be used for the random number generator.
+
+    Note:
+        For a FrameIterator it is expected that every container contains exactly one value/vector for every frame.
+        So the first dimension of every array in every container have to match.
+
+    Example:
+        >>> corpus = audiomate.Corpus.load('/path/to/corpus')
+        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>>
+        >>> ds = FrameIterator(corpus, [container_inputs, container_outputs], '1G', shuffle=True, seed=23)
+        >>> next(ds) # Next Frame (inputs, outputs)
+        (
+            array([0.58843831, 0.18128443, 0.19718328, 0.25284105]),
+            array([0.0, 1.0])
+        )
+    """
+
+    def __init__(self, corpus_or_utt_ids, containers, partition_size, shuffle=True, seed=None):
+        super(FrameIterator, self).__init__(corpus_or_utt_ids, containers, partition_size, 1,
+                                            return_length=False, shuffle=shuffle, seed=seed)
+
+    def __next__(self):
+        data = super(FrameIterator, self).__next__()
+
+        # We have to remove the outermost dimension, which is 1 for chunk-size of 1 frame
+        return [x[0] for x in data]
+
+
+class MultiFramePartitionData(object):
     """
     Wrapper for PartitionData to access chunks of frames via indexes.
 
@@ -310,7 +200,8 @@ class MultiFramePartitionData(FramePartitionData):
     """
 
     def __init__(self, partition_data, frames_per_chunk, return_length=False, shuffle=True, seed=None):
-        super(MultiFramePartitionData, self).__init__(partition_data, shuffle=shuffle, seed=seed)
+        if frames_per_chunk < 1:
+            raise ValueError('Number of frames per chunk has to higher than 0.')
 
         self.data = partition_data
         self.frames_per_chunk = frames_per_chunk
@@ -321,47 +212,67 @@ class MultiFramePartitionData(FramePartitionData):
         self.rand.seed(a=seed)
 
         # Regions are used to provide indexed access across all utterances
-        self.chunked_regions = self.get_chunked_utt_regions()
-        self.chunked_offsets = [x[0] for x in self.chunked_regions]
+        self.regions = self.get_utt_regions()
+        self.region_offsets = [x[0] for x in self.regions]
 
         # Sampling used to access frames
-        last_region = self.chunked_regions[-1]
-        self.chunked_sampling = list(range(last_region[0] + last_region[1]))
+        self.sampling = list(range(len(self)))
 
         if self.shuffle:
-            self.rand.shuffle(self.chunked_sampling)
+            self.rand.shuffle(self.sampling)
 
     def __len__(self):
-        last_region = self.chunked_regions[-1]
+        last_region = self.regions[-1]
         return last_region[0] + last_region[1]
 
     def __getitem__(self, item):
-        index = self.chunked_sampling[item]
+        index = self.sampling[item]
 
         # we search the region before the offset is higher than the index.
-        region_index = bisect.bisect_right(self.chunked_offsets, index) - 1
-        region = self.chunked_regions[region_index]
+        region_index = bisect.bisect_right(self.region_offsets, index) - 1
+        region = self.regions[region_index]
 
-        offset_within_utterance = (index - region[0]) * self.frames_per_chunk
-        to = offset_within_utterance + self.frames_per_chunk
-        data = [x[offset_within_utterance:to].astype(np.float32) for x in region[2]]
+        frame_offset = (index - region[0]) * self.frames_per_chunk
+        frame_end = frame_offset + self.frames_per_chunk
+        data = [x[frame_offset:frame_end].astype(np.float32) for x in region[2]]
 
         if self.return_length:
             data.append(int(data[0].shape[0]))
 
         return data
 
-    def get_chunked_utt_regions(self):
+    def get_utt_regions(self):
         """
-        From the regions defined for the single-frame case, extract regions for chunked access.
+        Return the regions of all utterances, assuming all utterances are concatenated.
+        A region is defined by offset, length (num-frames) and
+        a list of references to the utterance datasets in the containers.
+
+        Returns:
+            list: List of with a tuple for every utterances containing the region info.
         """
-        chunked_regions = []
-        chunked_offset = 0
 
-        for offset, length, references in self.regions:
-            chunked_length = math.ceil(length / float(self.frames_per_chunk))
-            chunked_regions.append((chunked_offset, chunked_length, references))
+        regions = []
+        current_offset = 0
 
-            chunked_offset += chunked_length
+        for utt_idx, utt_data in zip(self.data.info.utt_ids, self.data.utt_data):
+            offset = current_offset
 
-        return chunked_regions
+            num_frames = []
+            refs = []
+
+            for part in utt_data:
+                num_frames.append(part.shape[0])
+                refs.append(part)
+
+            if len(set(num_frames)) != 1:
+                raise ValueError('Utterance {} has not the same number of frames in all containers!'.format(utt_idx))
+
+            num_chunks = math.ceil(num_frames[0] / float(self.frames_per_chunk))
+
+            region = (offset, num_chunks, refs)
+            regions.append(region)
+
+            # Sets the offset for the next utterances
+            current_offset += num_chunks
+
+        return regions
