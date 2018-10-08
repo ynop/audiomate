@@ -9,6 +9,7 @@ from .dataset import MultiFrameDataset  # noqa: F401
 
 from .iterator import DataIterator  # noqa: F401
 from .iterator import FrameIterator  # noqa: F401
+from .iterator import MultiFrameIterator  # noqa: F401
 
 from .partitioning import PartitioningFeatureIterator  # noqa: F401
 

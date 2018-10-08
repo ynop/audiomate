@@ -45,7 +45,7 @@ class TestDataIterator:
             feeding.DataIterator(corpus, [])
 
 
-class TestFramePartitionLoader:
+class TestFramePartitionData:
 
     def test_get_utt_regions(self, sample_partition_data):
         frame_data = iterator.FramePartitionData(sample_partition_data, shuffle=False)
@@ -234,3 +234,195 @@ class TestFrameIterator(object):
         assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[4])
         assert np.allclose(([0.6, 0.6, 0.6, 0.6, 0.6]), frames[5])
         assert np.allclose(([0.7, 0.7, 0.7, 0.7, 0.7]), frames[6])
+
+
+class TestMultiFramePartitionData:
+
+    def test_get_chunked_utt_regions(self, sample_partition_data):
+        frame_data = iterator.MultiFramePartitionData(sample_partition_data, 3, shuffle=False)
+        regions = frame_data.get_chunked_utt_regions()
+
+        assert regions[0][0] == 0
+        assert regions[0][1] == 2
+
+        assert regions[1][0] == 2
+        assert regions[1][1] == 3
+
+        assert regions[2][0] == 5
+        assert regions[2][1] == 3
+
+        assert regions[3][0] == 8
+        assert regions[3][1] == 1
+
+        assert regions[4][0] == 9
+        assert regions[4][1] == 2
+
+    def test_get_length(self, sample_partition_data):
+        frame_data = iterator.MultiFramePartitionData(sample_partition_data, 3, shuffle=False)
+        assert len(frame_data) == 11
+
+    def test_get_item_at_start_of_utterance(self, sample_partition_data):
+        frame_data = iterator.MultiFramePartitionData(sample_partition_data, 3, shuffle=False)
+
+        assert len(frame_data[2]) == 2
+        assert np.array_equal(frame_data[2][0], np.arange(12).reshape(3, 4))
+        assert np.array_equal(frame_data[2][1], np.arange(12).reshape(3, 4) + 10)
+
+    def test_get_item_in_middle_of_utterance(self, sample_partition_data):
+        frame_data = iterator.MultiFramePartitionData(sample_partition_data, 3, shuffle=False)
+
+        assert len(frame_data[6]) == 2
+        assert np.array_equal(frame_data[6][0], np.arange(12).reshape(3, 4) + 12)
+        assert np.array_equal(frame_data[6][1], np.arange(12).reshape(3, 4) + 22)
+
+    def test_get_item_at_end_of_utterance(self, sample_partition_data):
+        frame_data = iterator.MultiFramePartitionData(sample_partition_data, 3, shuffle=False)
+
+        assert len(frame_data[8]) == 2
+        assert np.array_equal(frame_data[8][0], np.arange(8).reshape(2, 4))
+        assert np.array_equal(frame_data[8][1], np.arange(8).reshape(2, 4) + 10)
+
+
+class TestMultiFrameIterator(object):
+
+    def test_next_emits_no_frames_if_file_is_empty(self, tmpdir):
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        cont = assets.Container(file_path)
+        cont.open()
+
+        frames = tuple(iterator.MultiFrameIterator([], [cont], '120', 5))
+        assert 0 == len(frames)
+
+    def test_next_emits_no_features_if_data_set_is_empty(self, tmpdir):
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        cont = assets.Container(file_path)
+        cont.open()
+        cont.set('utt-1', np.array([]))
+
+        frames = tuple(iterator.MultiFrameIterator(['utt-1'], [cont], '120', 5))
+        assert 0 == len(frames)
+
+    def test_next_emits_all_features_in_sequential_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        cont = assets.Container(file_path)
+        cont.open()
+        cont.set('utt-1', ds1)
+        cont.set('utt-2', ds2)
+
+        frames = tuple(iterator.MultiFrameIterator(['utt-1', 'utt-2'], [cont], '120', 5, shuffle=False))
+        assert 2 == len(frames)
+
+        assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[0])
+        assert np.allclose(([[0.3, 0.3, 0.3, 0.3, 0.3],
+                             [0.4, 0.4, 0.4, 0.4, 0.4],
+                             [0.5, 0.5, 0.5, 0.5, 0.5]]), frames[1])
+
+    def test_next_emits_all_features_in_random_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        cont = assets.Container(file_path)
+        cont.open()
+        cont.set('utt-1', ds1)
+        cont.set('utt-2', ds2)
+        cont.set('utt-3', ds3)
+
+        frames = tuple(iterator.MultiFrameIterator(['utt-1', 'utt-2', 'utt-3'], [cont], 120, 2, shuffle=True, seed=6))
+
+        assert 4 == len(frames)
+
+        assert np.allclose(([[0.5, 0.5, 0.5, 0.5, 0.5]]), frames[0])
+        assert np.allclose(([[0.3, 0.3, 0.3, 0.3, 0.3],
+                             [0.4, 0.4, 0.4, 0.4, 0.4]]), frames[1])
+        assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6]]), frames[2])
+        assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[3])
+
+    def test_next_emits_features_only_from_included_ds_in_sequential_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        cont = assets.Container(file_path)
+        cont.open()
+        cont.set('utt-1', ds1)
+        cont.set('utt-2', ds2)
+        cont.set('utt-3', ds3)
+
+        frames = tuple(iterator.MultiFrameIterator(['utt-1', 'utt-3'], [cont], 120, 2, shuffle=False))
+
+        assert 2 == len(frames)
+        assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[0])
+        assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6],
+                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[1])
+
+    def test_next_emits_features_only_from_included_ds_in_random_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        cont = assets.Container(file_path)
+        cont.open()
+        cont.set('utt-1', ds1)
+        cont.set('utt-2', ds2)
+        cont.set('utt-3', ds3)
+
+        frames = tuple(iterator.MultiFrameIterator(['utt-1', 'utt-3'], [cont], 120, 2, shuffle=True, seed=1))
+
+        assert 2 == len(frames)
+
+        assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6],
+                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[0])
+        assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[1])
+
+    def test_next_emits_all_features_if_partition_spans_multiple_data_sets_in_sequential_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        cont = assets.Container(file_path)
+        cont.open()
+        cont.set('utt-1', ds1)
+        cont.set('utt-2', ds2)
+        cont.set('utt-3', ds3)
+
+        frames = tuple(iterator.MultiFrameIterator(['utt-1', 'utt-2', 'utt-3'], [cont], 240, 2, shuffle=False))
+
+        assert 4 == len(frames)
+
+        assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[0])
+        assert np.allclose(([[0.3, 0.3, 0.3, 0.3, 0.3],
+                             [0.4, 0.4, 0.4, 0.4, 0.4]]), frames[1])
+        assert np.allclose(([[0.5, 0.5, 0.5, 0.5, 0.5]]), frames[2])
+        assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6],
+                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[3])
+
+    def test_next_emits_all_features_if_partition_spans_multiple_data_sets_in_random_order(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        cont = assets.Container(file_path)
+        cont.open()
+        cont.set('utt-1', ds1)
+        cont.set('utt-2', ds2)
+        cont.set('utt-3', ds3)
+
+        frames = tuple(iterator.MultiFrameIterator(['utt-1', 'utt-2', 'utt-3'], [cont], 240, 2, shuffle=True, seed=12))
+
+        assert 4 == len(frames)
+
+        assert np.allclose(([[0.5, 0.5, 0.5, 0.5, 0.5]]), frames[0])
+        assert np.allclose(([[0.3, 0.3, 0.3, 0.3, 0.3],
+                             [0.4, 0.4, 0.4, 0.4, 0.4]]), frames[1])
+        assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[2])
+        assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6],
+                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[3])

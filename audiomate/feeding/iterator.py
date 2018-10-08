@@ -1,4 +1,5 @@
 import bisect
+import math
 import random
 
 import numpy as np
@@ -149,7 +150,8 @@ class FramePartitionData(object):
         self.region_offsets = [x[0] for x in self.regions]
 
         # Sampling used to access frames
-        self.sampling = list(range(len(self)))
+        last_region = self.regions[-1]
+        self.sampling = list(range(last_region[0] + last_region[1]))
 
         if self.shuffle:
             self.rand.shuffle(self.sampling)
@@ -201,3 +203,150 @@ class FramePartitionData(object):
             current_offset += lengths[0]
 
         return regions
+
+
+class MultiFrameIterator(DataIterator):
+    """
+    A data-iterator wrapping chunks of subsequent frames of a corpus.
+    A single sample represents a chunk of frames.
+
+    Args:
+        corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
+                                          This defines which utterances are considered for iterating.
+        container (list, Container): A single container or a list of containers.
+        partition_size (str): Size of the partitions in bytes. The units ``k`` (kibibytes), ``m`` (mebibytes) and ``g``
+                              (gibibytes) are supported, i.e. a ``partition_size`` of ``1g`` equates :math:`2^{30}`
+                              bytes.
+        frames_per_chunk (int): Number of subsequent frames in a single sample.
+        shuffle (bool): Indicates whether the data should be returned in
+                        random order (``True``) or not (``False``).
+        seed (int): Seed to be used for the random number generator.
+
+    Note:
+        For a MultiFrameIterator it is expected that every container contains exactly one value/vector for every frame.
+        So the first dimension (outermost) of every array in every container have to match.
+
+    Example:
+        >>> corpus = audiomate.Corpus.load('/path/to/corpus')
+        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>>
+        >>> ds = MultiFrameIterator(corpus, [container_inputs, container_outputs], '1G', 5, shuffle=True, seed=23)
+        >>> next(ds) # Next Chunk (inputs, outputs)
+        (
+            array([[0.72991909, 0.20258683, 0.30574747, 0.53783217],
+                   [0.38875413, 0.83611128, 0.49054591, 0.15710017],
+                   [0.35153358, 0.40051009, 0.93647765, 0.29589257],
+                   [0.97465772, 0.80160451, 0.81871436, 0.4892925 ],
+                   [0.59310933, 0.8565602 , 0.95468696, 0.07933512]])
+            array([[0.0, 1.0], [0.0, 1.0],[0.0, 1.0],[0.0, 1.0], [0.0, 1.0]])
+        )
+    """
+
+    def __init__(self, corpus_or_utt_ids, containers, partition_size, frames_per_chunk, shuffle=True, seed=None):
+        super(MultiFrameIterator, self).__init__(corpus_or_utt_ids, containers, shuffle=shuffle, seed=seed)
+
+        self.partition_size = partition_size
+        self.frames_per_chunk = frames_per_chunk
+
+        self.loader = None
+        self.current_partition = None
+        self.current_partition_index = -1
+        self.current_chunk_index = 0
+
+        self.loader = partitioning.PartitioningContainerLoader(self.utt_ids,
+                                                               self.containers,
+                                                               self.partition_size,
+                                                               shuffle=self.shuffle,
+                                                               seed=self.rand.random())
+
+    def __iter__(self):
+        self.current_partition = None
+        self.current_partition_index = -1
+        self.current_chunk_index = 0
+
+        self.loader.reload()
+
+        return self
+
+    def __next__(self):
+        if self.current_partition is None or self.current_chunk_index >= len(self.current_partition):
+            self.current_partition_index += 1
+            self.current_chunk_index = 0
+
+            if self.current_partition_index < len(self.loader.partitions):
+                partition_data = self.loader.load_partition_data(self.current_partition_index)
+                self.current_partition = MultiFramePartitionData(partition_data,
+                                                                 self.frames_per_chunk,
+                                                                 shuffle=self.shuffle,
+                                                                 seed=self.rand.random())
+            else:
+                raise StopIteration
+
+        next_chunk = self.current_partition[self.current_chunk_index]
+        self.current_chunk_index += 1
+
+        return next_chunk
+
+
+class MultiFramePartitionData(FramePartitionData):
+    """
+    Wrapper for PartitionData to access chunks of frames via indexes.
+
+    Args:
+        partition_data (PartitionData): The loaded partition-data.
+        frames_per_chunk (int): Number of subsequent frames in a chunk.
+        shuffle (bool): If True the frames are shuffled randomly for access.
+        seed (int): The seed to use for shuffling.
+    """
+
+    def __init__(self, partition_data, frames_per_chunk, shuffle=True, seed=None):
+        super(MultiFramePartitionData, self).__init__(partition_data, shuffle=shuffle, seed=seed)
+
+        self.data = partition_data
+        self.frames_per_chunk = frames_per_chunk
+        self.shuffle = shuffle
+
+        self.rand = random.Random()
+        self.rand.seed(a=seed)
+
+        # Regions are used to provide indexed access across all utterances
+        self.chunked_regions = self.get_chunked_utt_regions()
+        self.chunked_offsets = [x[0] for x in self.chunked_regions]
+
+        # Sampling used to access frames
+        last_region = self.chunked_regions[-1]
+        self.chunked_sampling = list(range(last_region[0] + last_region[1]))
+
+        if self.shuffle:
+            self.rand.shuffle(self.chunked_sampling)
+
+    def __len__(self):
+        last_region = self.chunked_regions[-1]
+        return last_region[0] + last_region[1]
+
+    def __getitem__(self, item):
+        index = self.chunked_sampling[item]
+
+        # we search the region before the offset is higher than the index.
+        region_index = bisect.bisect_right(self.chunked_offsets, index) - 1
+        region = self.chunked_regions[region_index]
+
+        offset_within_utterance = (index - region[0]) * self.frames_per_chunk
+        to = offset_within_utterance + self.frames_per_chunk
+        return [x[offset_within_utterance:to].astype(np.float32) for x in region[2]]
+
+    def get_chunked_utt_regions(self):
+        """
+        From the regions defined for the single-frame case, extract regions for chunked access.
+        """
+        chunked_regions = []
+        chunked_offset = 0
+
+        for offset, length, references in self.regions:
+            chunked_length = math.ceil(length / float(self.frames_per_chunk))
+            chunked_regions.append((chunked_offset, chunked_length, references))
+
+            chunked_offset += chunked_length
+
+        return chunked_regions

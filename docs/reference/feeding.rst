@@ -31,6 +31,10 @@ Iterator
     :members:
     :inherited-members:
 
+.. autoclass:: MultiFrameIterator
+    :members:
+    :inherited-members:
+
 Partitioning
 ------------
 

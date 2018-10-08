@@ -46,6 +46,11 @@ class FrameDataset(Dataset):
     """
     A dataset wrapping frames of a corpus. A single sample represents a single frame.
 
+    Args:
+        corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
+                                          This defines which utterances are considered for iterating.
+        containers (list, Container): A single container or a list of containers.
+
     Note:
         For a frame dataset it is expected that every container contains exactly one value/vector for every frame.
         So the first dimension of every array in every container have to match.
@@ -126,6 +131,12 @@ class MultiFrameDataset(FrameDataset):
 
     A chunk doesn't overlap an utterances boundaries. So if the utterance length is not divisible by the chunk length,
     the last chunk of an utterance may be smaller than the chunk size.
+
+    Args:
+        corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
+                                          This defines which utterances are considered for iterating.
+        containers (list, Container): A single container or a list of containers.
+        frames_per_chunk (int): Number of subsequent frames in a single sample.
 
     Note:
         For a multi-frame dataset it is expected that every container contains exactly one value/vector for every frame.
