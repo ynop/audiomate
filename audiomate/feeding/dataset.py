@@ -5,6 +5,7 @@ import numpy as np
 
 import audiomate
 from audiomate.corpus import assets
+from . import iterator
 
 
 class Dataset(object):
@@ -134,6 +135,24 @@ class MultiFrameDataset(Dataset):
 
         return data
 
+    def partitioned_iterator(self, partition_size, shuffle=True, seed=None):
+        """
+        Return a partitioning :class:`audiomate.feeding.MultiFrameIterator` for the dataset.
+
+        Args:
+            partition_size (str): Size of the partitions in bytes. The units ``k`` (kibibytes), ``m``
+                                  (mebibytes) and ``g`` (gibibytes) are supported, i.e. a ``partition_size``
+                                  of ``1g`` equates :math:`2^{30}` bytes.
+            shuffle (bool): Indicates whether the data should be returned in
+                            random order (``True``) or not (``False``).
+            seed (int): Seed to be used for the random number generator.
+
+        Returns:
+            MultiFrameIterator: A partition iterator over the dataset.
+        """
+        return iterator.MultiFrameIterator(self.utt_ids, self.containers, partition_size, self.frames_per_chunk,
+                                           return_length=self.return_length, shuffle=shuffle, seed=seed)
+
     def get_utt_regions(self):
         """
         Return the regions of all utterances, assuming all utterances are concatenated.
@@ -209,3 +228,20 @@ class FrameDataset(MultiFrameDataset):
 
         # We have to remove the outermost dimension, which is 1 for chunk-size of 1 frame
         return [x[0] for x in data]
+
+    def partitioned_iterator(self, partition_size, shuffle=True, seed=None):
+        """
+        Return a partitioning :class:`audiomate.feeding.FrameIterator` for the dataset.
+
+        Args:
+            partition_size (str): Size of the partitions in bytes. The units ``k`` (kibibytes), ``m``
+                                  (mebibytes) and ``g`` (gibibytes) are supported, i.e. a ``partition_size``
+                                  of ``1g`` equates :math:`2^{30}` bytes.
+            shuffle (bool): Indicates whether the data should be returned in
+                            random order (``True``) or not (``False``).
+            seed (int): Seed to be used for the random number generator.
+
+        Returns:
+            FrameIterator: A partition iterator over the dataset.
+        """
+        return iterator.FrameIterator(self.utt_ids, self.containers, partition_size, shuffle=shuffle, seed=seed)

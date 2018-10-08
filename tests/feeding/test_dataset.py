@@ -60,6 +60,17 @@ class TestMultiFrameDataset:
         with pytest.raises(ValueError):
             feeding.MultiFrameDataset(None, [], 0)
 
+    def test_partitioned_iterator(self, sample_multi_frame_dataset):
+        it = sample_multi_frame_dataset.partitioned_iterator('960', shuffle=True, seed=12)
+
+        assert isinstance(it, feeding.MultiFrameIterator)
+        assert it.return_length == sample_multi_frame_dataset.return_length
+        assert it.frames_per_chunk == sample_multi_frame_dataset.frames_per_chunk
+        assert it.containers == sample_multi_frame_dataset.containers
+        assert it.utt_ids == sample_multi_frame_dataset.utt_ids
+        assert it.shuffle
+        assert it.partition_size == '960'
+
     def test_get_utt_regions(self, sample_multi_frame_dataset):
         regions = sample_multi_frame_dataset.get_utt_regions()
 
@@ -145,6 +156,15 @@ def sample_frame_dataset(tmpdir):
 
 
 class TestFrameDataset:
+
+    def test_partitioned_iterator(self, sample_frame_dataset):
+        it = sample_frame_dataset.partitioned_iterator('960', shuffle=True, seed=12)
+
+        assert isinstance(it, feeding.FrameIterator)
+        assert it.containers == sample_frame_dataset.containers
+        assert it.utt_ids == sample_frame_dataset.utt_ids
+        assert it.shuffle
+        assert it.partition_size == '960'
 
     def test_get_length(self, sample_frame_dataset):
         assert len(sample_frame_dataset) == 27
