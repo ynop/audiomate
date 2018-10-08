@@ -161,3 +161,21 @@ class TestMultiFrameDataset:
         assert len(sample_multi_frame_dataset[11]) == 2
         assert np.array_equal(sample_multi_frame_dataset[11][0], np.arange(12).reshape(3, 4) + 32)
         assert np.array_equal(sample_multi_frame_dataset[11][1], np.arange(6).reshape(3, 2) + 16)
+
+    def test_return_correct_length_for_chunk_with_full_size(self, sample_multi_frame_dataset):
+        ds_length_enabled = feeding.MultiFrameDataset(sample_multi_frame_dataset.utt_ids,
+                                                      sample_multi_frame_dataset.containers,
+                                                      4,
+                                                      return_length=True)
+
+        assert len(ds_length_enabled[9]) == 3
+        assert ds_length_enabled[9][2] == 4
+
+    def test_return_correct_length_for_chunk_at_end_of_utterance(self, sample_multi_frame_dataset):
+        ds_length_enabled = feeding.MultiFrameDataset(sample_multi_frame_dataset.utt_ids,
+                                                      sample_multi_frame_dataset.containers,
+                                                      4,
+                                                      return_length=True)
+
+        assert len(ds_length_enabled[11]) == 3
+        assert ds_length_enabled[11][2] == 3
