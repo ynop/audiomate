@@ -218,6 +218,9 @@ class MultiFrameIterator(DataIterator):
                               (gibibytes) are supported, i.e. a ``partition_size`` of ``1g`` equates :math:`2^{30}`
                               bytes.
         frames_per_chunk (int): Number of subsequent frames in a single sample.
+        return_length (bool): If True, the length of the chunk is returned as well. (default ``False``)
+                              The length is appended to tuple as the last element.
+                              (e.g. [container1-data, container2-data, length])
         shuffle (bool): Indicates whether the data should be returned in
                         random order (``True``) or not (``False``).
         seed (int): Seed to be used for the random number generator.
@@ -243,11 +246,13 @@ class MultiFrameIterator(DataIterator):
         )
     """
 
-    def __init__(self, corpus_or_utt_ids, containers, partition_size, frames_per_chunk, shuffle=True, seed=None):
+    def __init__(self, corpus_or_utt_ids, containers, partition_size, frames_per_chunk, return_length=False,
+                 shuffle=True, seed=None):
         super(MultiFrameIterator, self).__init__(corpus_or_utt_ids, containers, shuffle=shuffle, seed=seed)
 
         self.partition_size = partition_size
         self.frames_per_chunk = frames_per_chunk
+        self.return_length = return_length
 
         self.loader = None
         self.current_partition = None
@@ -278,6 +283,7 @@ class MultiFrameIterator(DataIterator):
                 partition_data = self.loader.load_partition_data(self.current_partition_index)
                 self.current_partition = MultiFramePartitionData(partition_data,
                                                                  self.frames_per_chunk,
+                                                                 return_length=self.return_length,
                                                                  shuffle=self.shuffle,
                                                                  seed=self.rand.random())
             else:
@@ -296,15 +302,19 @@ class MultiFramePartitionData(FramePartitionData):
     Args:
         partition_data (PartitionData): The loaded partition-data.
         frames_per_chunk (int): Number of subsequent frames in a chunk.
+        return_length (bool): If True, the length of the chunk is returned as well. (default ``False``)
+                              The length is appended to tuple as the last element.
+                              (e.g. [container1-data, container2-data, length])
         shuffle (bool): If True the frames are shuffled randomly for access.
         seed (int): The seed to use for shuffling.
     """
 
-    def __init__(self, partition_data, frames_per_chunk, shuffle=True, seed=None):
+    def __init__(self, partition_data, frames_per_chunk, return_length=False, shuffle=True, seed=None):
         super(MultiFramePartitionData, self).__init__(partition_data, shuffle=shuffle, seed=seed)
 
         self.data = partition_data
         self.frames_per_chunk = frames_per_chunk
+        self.return_length = return_length
         self.shuffle = shuffle
 
         self.rand = random.Random()
@@ -334,7 +344,12 @@ class MultiFramePartitionData(FramePartitionData):
 
         offset_within_utterance = (index - region[0]) * self.frames_per_chunk
         to = offset_within_utterance + self.frames_per_chunk
-        return [x[offset_within_utterance:to].astype(np.float32) for x in region[2]]
+        data = [x[offset_within_utterance:to].astype(np.float32) for x in region[2]]
+
+        if self.return_length:
+            data.append(int(data[0].shape[0]))
+
+        return data
 
     def get_chunked_utt_regions(self):
         """

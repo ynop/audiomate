@@ -121,11 +121,11 @@ class TestFrameIterator(object):
         frames = tuple(iterator.FrameIterator(['utt-1', 'utt-2'], [cont], 120, shuffle=False))
         assert 5 == len(frames)
 
-        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[0])
-        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[1])
-        assert np.allclose(([0.3, 0.3, 0.3, 0.3, 0.3]), frames[2])
-        assert np.allclose(([0.4, 0.4, 0.4, 0.4, 0.4]), frames[3])
-        assert np.allclose(([0.5, 0.5, 0.5, 0.5, 0.5]), frames[4])
+        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[0][0])
+        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[1][0])
+        assert np.allclose(([0.3, 0.3, 0.3, 0.3, 0.3]), frames[2][0])
+        assert np.allclose(([0.4, 0.4, 0.4, 0.4, 0.4]), frames[3][0])
+        assert np.allclose(([0.5, 0.5, 0.5, 0.5, 0.5]), frames[4][0])
 
     def test_next_emits_all_features_in_random_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -142,12 +142,12 @@ class TestFrameIterator(object):
 
         assert 6 == len(frames)
 
-        assert np.allclose(([0.6, 0.6, 0.6, 0.6, 0.6]), frames[0])
-        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[1])
-        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[2])
-        assert np.allclose(([0.3, 0.3, 0.3, 0.3, 0.3]), frames[3])
-        assert np.allclose(([0.5, 0.5, 0.5, 0.5, 0.5]), frames[4])
-        assert np.allclose(([0.4, 0.4, 0.4, 0.4, 0.4]), frames[5])
+        assert np.allclose(([0.6, 0.6, 0.6, 0.6, 0.6]), frames[0][0])
+        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[1][0])
+        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[2][0])
+        assert np.allclose(([0.3, 0.3, 0.3, 0.3, 0.3]), frames[3][0])
+        assert np.allclose(([0.5, 0.5, 0.5, 0.5, 0.5]), frames[4][0])
+        assert np.allclose(([0.4, 0.4, 0.4, 0.4, 0.4]), frames[5][0])
 
     def test_next_emits_features_only_from_included_ds_in_sequential_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -164,10 +164,10 @@ class TestFrameIterator(object):
 
         assert 4 == len(frames)
 
-        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[0])
-        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[1])
-        assert np.allclose(([0.6, 0.6, 0.6, 0.6, 0.6]), frames[2])
-        assert np.allclose(([0.7, 0.7, 0.7, 0.7, 0.7]), frames[3])
+        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[0][0])
+        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[1][0])
+        assert np.allclose(([0.6, 0.6, 0.6, 0.6, 0.6]), frames[2][0])
+        assert np.allclose(([0.7, 0.7, 0.7, 0.7, 0.7]), frames[3][0])
 
     def test_next_emits_features_only_from_included_ds_in_random_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -184,10 +184,10 @@ class TestFrameIterator(object):
 
         assert 4 == len(frames)
 
-        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[0])
-        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[1])
-        assert np.allclose(([0.7, 0.7, 0.7, 0.7, 0.7]), frames[2])
-        assert np.allclose(([0.6, 0.6, 0.6, 0.6, 0.6]), frames[3])
+        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[0][0])
+        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[1][0])
+        assert np.allclose(([0.7, 0.7, 0.7, 0.7, 0.7]), frames[2][0])
+        assert np.allclose(([0.6, 0.6, 0.6, 0.6, 0.6]), frames[3][0])
 
     def test_next_emits_all_features_if_partition_spans_multiple_data_sets_in_sequential_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -204,13 +204,13 @@ class TestFrameIterator(object):
 
         assert 7 == len(frames)
 
-        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[0])
-        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[1])
-        assert np.allclose(([0.3, 0.3, 0.3, 0.3, 0.3]), frames[2])
-        assert np.allclose(([0.4, 0.4, 0.4, 0.4, 0.4]), frames[3])
-        assert np.allclose(([0.5, 0.5, 0.5, 0.5, 0.5]), frames[4])
-        assert np.allclose(([0.6, 0.6, 0.6, 0.6, 0.6]), frames[5])
-        assert np.allclose(([0.7, 0.7, 0.7, 0.7, 0.7]), frames[6])
+        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[0][0])
+        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[1][0])
+        assert np.allclose(([0.3, 0.3, 0.3, 0.3, 0.3]), frames[2][0])
+        assert np.allclose(([0.4, 0.4, 0.4, 0.4, 0.4]), frames[3][0])
+        assert np.allclose(([0.5, 0.5, 0.5, 0.5, 0.5]), frames[4][0])
+        assert np.allclose(([0.6, 0.6, 0.6, 0.6, 0.6]), frames[5][0])
+        assert np.allclose(([0.7, 0.7, 0.7, 0.7, 0.7]), frames[6][0])
 
     def test_next_emits_all_features_if_partition_spans_multiple_data_sets_in_random_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -227,13 +227,13 @@ class TestFrameIterator(object):
 
         assert 7 == len(frames)
 
-        assert np.allclose(([0.5, 0.5, 0.5, 0.5, 0.5]), frames[0])
-        assert np.allclose(([0.3, 0.3, 0.3, 0.3, 0.3]), frames[1])
-        assert np.allclose(([0.4, 0.4, 0.4, 0.4, 0.4]), frames[2])
-        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[3])
-        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[4])
-        assert np.allclose(([0.6, 0.6, 0.6, 0.6, 0.6]), frames[5])
-        assert np.allclose(([0.7, 0.7, 0.7, 0.7, 0.7]), frames[6])
+        assert np.allclose(([0.5, 0.5, 0.5, 0.5, 0.5]), frames[0][0])
+        assert np.allclose(([0.3, 0.3, 0.3, 0.3, 0.3]), frames[1][0])
+        assert np.allclose(([0.4, 0.4, 0.4, 0.4, 0.4]), frames[2][0])
+        assert np.allclose(([0.2, 0.2, 0.2, 0.2, 0.2]), frames[3][0])
+        assert np.allclose(([0.1, 0.1, 0.1, 0.1, 0.1]), frames[4][0])
+        assert np.allclose(([0.6, 0.6, 0.6, 0.6, 0.6]), frames[5][0])
+        assert np.allclose(([0.7, 0.7, 0.7, 0.7, 0.7]), frames[6][0])
 
 
 class TestMultiFramePartitionData:
@@ -315,10 +315,10 @@ class TestMultiFrameIterator(object):
         assert 2 == len(frames)
 
         assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
-                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[0])
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[0][0])
         assert np.allclose(([[0.3, 0.3, 0.3, 0.3, 0.3],
                              [0.4, 0.4, 0.4, 0.4, 0.4],
-                             [0.5, 0.5, 0.5, 0.5, 0.5]]), frames[1])
+                             [0.5, 0.5, 0.5, 0.5, 0.5]]), frames[1][0])
 
     def test_next_emits_all_features_in_random_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -335,12 +335,12 @@ class TestMultiFrameIterator(object):
 
         assert 4 == len(frames)
 
-        assert np.allclose(([[0.5, 0.5, 0.5, 0.5, 0.5]]), frames[0])
+        assert np.allclose(([[0.5, 0.5, 0.5, 0.5, 0.5]]), frames[0][0])
         assert np.allclose(([[0.3, 0.3, 0.3, 0.3, 0.3],
-                             [0.4, 0.4, 0.4, 0.4, 0.4]]), frames[1])
-        assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6]]), frames[2])
+                             [0.4, 0.4, 0.4, 0.4, 0.4]]), frames[1][0])
+        assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6]]), frames[2][0])
         assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
-                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[3])
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[3][0])
 
     def test_next_emits_features_only_from_included_ds_in_sequential_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -357,9 +357,9 @@ class TestMultiFrameIterator(object):
 
         assert 2 == len(frames)
         assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
-                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[0])
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[0][0])
         assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6],
-                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[1])
+                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[1][0])
 
     def test_next_emits_features_only_from_included_ds_in_random_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -377,9 +377,9 @@ class TestMultiFrameIterator(object):
         assert 2 == len(frames)
 
         assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6],
-                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[0])
+                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[0][0])
         assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
-                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[1])
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[1][0])
 
     def test_next_emits_all_features_if_partition_spans_multiple_data_sets_in_sequential_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -397,12 +397,12 @@ class TestMultiFrameIterator(object):
         assert 4 == len(frames)
 
         assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
-                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[0])
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[0][0])
         assert np.allclose(([[0.3, 0.3, 0.3, 0.3, 0.3],
-                             [0.4, 0.4, 0.4, 0.4, 0.4]]), frames[1])
-        assert np.allclose(([[0.5, 0.5, 0.5, 0.5, 0.5]]), frames[2])
+                             [0.4, 0.4, 0.4, 0.4, 0.4]]), frames[1][0])
+        assert np.allclose(([[0.5, 0.5, 0.5, 0.5, 0.5]]), frames[2][0])
         assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6],
-                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[3])
+                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[3][0])
 
     def test_next_emits_all_features_if_partition_spans_multiple_data_sets_in_random_order(self, tmpdir):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
@@ -419,10 +419,38 @@ class TestMultiFrameIterator(object):
 
         assert 4 == len(frames)
 
-        assert np.allclose(([[0.5, 0.5, 0.5, 0.5, 0.5]]), frames[0])
+        assert np.allclose(([[0.5, 0.5, 0.5, 0.5, 0.5]]), frames[0][0])
         assert np.allclose(([[0.3, 0.3, 0.3, 0.3, 0.3],
-                             [0.4, 0.4, 0.4, 0.4, 0.4]]), frames[1])
+                             [0.4, 0.4, 0.4, 0.4, 0.4]]), frames[1][0])
         assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
-                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[2])
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[2][0])
         assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6],
-                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[3])
+                             [0.7, 0.7, 0.7, 0.7, 0.7]]), frames[3][0])
+
+    def test_next_emits_chunks_with_length(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        cont = assets.Container(file_path)
+        cont.open()
+        cont.set('utt-1', ds1)
+        cont.set('utt-2', ds2)
+        cont.set('utt-3', ds3)
+
+        frames = tuple(iterator.MultiFrameIterator(['utt-1', 'utt-2', 'utt-3'], [cont], 120, 2, return_length=True,
+                                                   shuffle=True, seed=6))
+
+        assert 4 == len(frames)
+
+        assert np.allclose(([[0.5, 0.5, 0.5, 0.5, 0.5]]), frames[0][0])
+        assert np.allclose(([[0.3, 0.3, 0.3, 0.3, 0.3],
+                             [0.4, 0.4, 0.4, 0.4, 0.4]]), frames[1][0])
+        assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6]]), frames[2][0])
+        assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[3][0])
+
+        assert frames[0][1] == 1
+        assert frames[1][1] == 2
+        assert frames[2][1] == 1
+        assert frames[3][1] == 2
