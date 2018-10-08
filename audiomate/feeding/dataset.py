@@ -58,6 +58,8 @@ class MultiFrameDataset(Dataset):
         return_length (bool): If True, the length of the chunk is returned as well. (default ``False``)
                               The length is appended to tuple as the last element.
                               (e.g. [container1-data, container2-data, length])
+        pad (bool): If True, samples that are shorter are padded with zeros to match ``frames_per_chunk``.
+                    If padding is enabled, the lengths are always returned ``return_length = True``.
 
     Note:
         For a multi-frame dataset it is expected that every container contains exactly one value/vector for every frame.
@@ -104,14 +106,19 @@ class MultiFrameDataset(Dataset):
         )
     """
 
-    def __init__(self, corpus_or_utt_ids, containers, frames_per_chunk, return_length=False):
+    def __init__(self, corpus_or_utt_ids, containers, frames_per_chunk, return_length=False, pad=False):
         super(MultiFrameDataset, self).__init__(corpus_or_utt_ids, containers)
 
         if frames_per_chunk < 1:
             raise ValueError('Chunk-size has to be at least 1!')
 
         self.frames_per_chunk = frames_per_chunk
-        self.return_length = return_length
+        self.pad = pad
+
+        if self.pad:
+            self.return_length = True
+        else:
+            self.return_length = return_length
 
         self.regions = self.get_utt_regions()
         self.region_offsets = [x[0] for x in self.regions]
@@ -129,9 +136,22 @@ class MultiFrameDataset(Dataset):
         frame_end = frame_offset + self.frames_per_chunk
 
         data = [x[frame_offset:frame_end].astype(np.float32) for x in region[2]]
+        size = data[0].shape[0]
+
+        if self.pad and size < self.frames_per_chunk:
+
+            padded_data = []
+            for x in data:
+                # Only pad the outermost (first) dimension
+                pad_widths = [(0, 0)] * (len(x.shape) - 1)
+                pad_widths.insert(0, (0, self.frames_per_chunk - size))
+                padded_x = np.pad(x, pad_widths, mode='constant', constant_values=0)
+                padded_data.append(padded_x)
+
+            data = padded_data
 
         if self.return_length:
-            data.append(int(data[0].shape[0]))
+            data.append(size)
 
         return data
 
@@ -151,7 +171,7 @@ class MultiFrameDataset(Dataset):
             MultiFrameIterator: A partition iterator over the dataset.
         """
         return iterator.MultiFrameIterator(self.utt_ids, self.containers, partition_size, self.frames_per_chunk,
-                                           return_length=self.return_length, shuffle=shuffle, seed=seed)
+                                           return_length=self.return_length, pad=self.pad, shuffle=shuffle, seed=seed)
 
     def get_utt_regions(self):
         """

@@ -264,6 +264,36 @@ class TestMultiFrameIterator(object):
         assert frames[2][1] == 1
         assert frames[3][1] == 2
 
+    def test_next_emits_chunks_with_padding(self, tmpdir):
+        ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
+        ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
+        ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6]])
+        file_path = os.path.join(tmpdir.strpath, 'features.h5')
+        cont = assets.Container(file_path)
+        cont.open()
+        cont.set('utt-1', ds1)
+        cont.set('utt-2', ds2)
+        cont.set('utt-3', ds3)
+
+        frames = tuple(iterator.MultiFrameIterator(['utt-1', 'utt-2', 'utt-3'], [cont], 120, 2, pad=True,
+                                                   shuffle=True, seed=6))
+
+        assert 4 == len(frames)
+
+        assert np.allclose(([[0.5, 0.5, 0.5, 0.5, 0.5],
+                             [0.0, 0.0, 0.0, 0.0, 0.0]]), frames[0][0])
+        assert np.allclose(([[0.3, 0.3, 0.3, 0.3, 0.3],
+                             [0.4, 0.4, 0.4, 0.4, 0.4]]), frames[1][0])
+        assert np.allclose(([[0.6, 0.6, 0.6, 0.6, 0.6],
+                             [0.0, 0.0, 0.0, 0.0, 0.0]]), frames[2][0])
+        assert np.allclose(([[0.1, 0.1, 0.1, 0.1, 0.1],
+                             [0.2, 0.2, 0.2, 0.2, 0.2]]), frames[3][0])
+
+        assert frames[0][1] == 1
+        assert frames[1][1] == 2
+        assert frames[2][1] == 1
+        assert frames[3][1] == 2
+
 
 class TestFrameIterator(object):
 

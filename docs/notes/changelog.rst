@@ -9,7 +9,13 @@ Next Version
 * Moved label-encoding to its own module (:mod:`audiomate.encoding`).
   It now provides the processing of full corpora and store it in containers.
 
+* Moved :class:`audiomate.feeding.PartitioningFeatureIterator` to the :mod:`audiomate.feeding` module.
+
 **New Features**
+
+* Introducing the :mod:`audiomate.feeding` module. It provides different tools for accessing container data.
+  Via a :class:`audiomate.feeding.Dataset` data can be accessed by indices.
+  With a :class:`audiomate.feeding.DataIterator` one can easily iterate over data, such as frames.
 
 * Added processing steps for computing Onset-Strength (:class:`audiomate.processing.pipeline.OnsetStrength`))
   and Tempogram (:class:`audiomate.processing.pipeline.Tempogram`)).
@@ -34,12 +40,6 @@ Next Version
 
 * Added :class:`audiomate.encoding.TokenOrdinalEncoder` to encode labels of an utterance
   by mapping every token of the label to a number.
-
-* Create container base class (:class:`audiomate.corpus.assets.Container`), that can be used to store arbitrary data
-  per utterance. The :class:`audiomate.corpus.assets.FeatureContainer` is now an extension of the container,
-  that provides functionality especially for features.
-
-**Non-Breaking Changes**
 
 * Create container base class (:class:`audiomate.corpus.assets.Container`), that can be used to store arbitrary data
   per utterance. The :class:`audiomate.corpus.assets.FeatureContainer` is now an extension of the container,

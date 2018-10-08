@@ -65,6 +65,7 @@ class TestMultiFrameDataset:
 
         assert isinstance(it, feeding.MultiFrameIterator)
         assert it.return_length == sample_multi_frame_dataset.return_length
+        assert it.pad == sample_multi_frame_dataset.pad
         assert it.frames_per_chunk == sample_multi_frame_dataset.frames_per_chunk
         assert it.containers == sample_multi_frame_dataset.containers
         assert it.utt_ids == sample_multi_frame_dataset.utt_ids
@@ -126,6 +127,19 @@ class TestMultiFrameDataset:
 
         assert len(ds_length_enabled[11]) == 3
         assert ds_length_enabled[11][2] == 3
+
+    def test_pads_shorter_chunks_with_zeros(self, sample_multi_frame_dataset):
+        ds_pad_enabled = feeding.MultiFrameDataset(sample_multi_frame_dataset.utt_ids,
+                                                   sample_multi_frame_dataset.containers,
+                                                   4,
+                                                   pad=True)
+
+        assert len(ds_pad_enabled[11]) == 3
+        exp = np.pad(np.arange(12).reshape(3, 4) + 32, ((0, 1), (0, 0)), mode='constant', constant_values=0)
+        assert np.array_equal(ds_pad_enabled[11][0], exp)
+        exp = np.pad(np.arange(6).reshape(3, 2) + 16, ((0, 1), (0, 0)), mode='constant', constant_values=0)
+        assert np.array_equal(ds_pad_enabled[11][1], exp)
+        assert ds_pad_enabled[11][2] == 3
 
 
 @pytest.fixture

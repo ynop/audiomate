@@ -68,6 +68,8 @@ class MultiFrameIterator(DataIterator):
         return_length (bool): If True, the length of the chunk is returned as well. (default ``False``)
                               The length is appended to tuple as the last element.
                               (e.g. [container1-data, container2-data, length])
+        pad (bool): If True, samples that are shorter are padded with zeros to match ``frames_per_chunk``.
+                    If padding is enabled, the lengths are always returned ``return_length = True``.
         shuffle (bool): Indicates whether the data should be returned in
                         random order (``True``) or not (``False``).
         seed (int): Seed to be used for the random number generator.
@@ -94,12 +96,17 @@ class MultiFrameIterator(DataIterator):
     """
 
     def __init__(self, corpus_or_utt_ids, containers, partition_size, frames_per_chunk, return_length=False,
-                 shuffle=True, seed=None):
+                 pad=False, shuffle=True, seed=None):
         super(MultiFrameIterator, self).__init__(corpus_or_utt_ids, containers, shuffle=shuffle, seed=seed)
 
         self.partition_size = partition_size
         self.frames_per_chunk = frames_per_chunk
-        self.return_length = return_length
+        self.pad = pad
+
+        if self.pad:
+            self.return_length = True
+        else:
+            self.return_length = return_length
 
         self.loader = None
         self.current_partition = None
@@ -131,6 +138,7 @@ class MultiFrameIterator(DataIterator):
                 self.current_partition = MultiFramePartitionData(partition_data,
                                                                  self.frames_per_chunk,
                                                                  return_length=self.return_length,
+                                                                 pad=self.pad,
                                                                  shuffle=self.shuffle,
                                                                  seed=self.rand.random())
             else:
@@ -195,17 +203,25 @@ class MultiFramePartitionData(object):
         return_length (bool): If True, the length of the chunk is returned as well. (default ``False``)
                               The length is appended to tuple as the last element.
                               (e.g. [container1-data, container2-data, length])
+        pad (bool): If True, samples that are shorter are padded with zeros to match ``frames_per_chunk``.
+                    If padding is enabled, the lengths are always returned ``return_length = True``.
         shuffle (bool): If True the frames are shuffled randomly for access.
         seed (int): The seed to use for shuffling.
     """
 
-    def __init__(self, partition_data, frames_per_chunk, return_length=False, shuffle=True, seed=None):
+    def __init__(self, partition_data, frames_per_chunk, return_length=False, pad=False, shuffle=True, seed=None):
         if frames_per_chunk < 1:
             raise ValueError('Number of frames per chunk has to higher than 0.')
 
         self.data = partition_data
         self.frames_per_chunk = frames_per_chunk
-        self.return_length = return_length
+        self.pad = pad
+
+        if self.pad:
+            self.return_length = True
+        else:
+            self.return_length = return_length
+
         self.shuffle = shuffle
 
         self.rand = random.Random()
@@ -234,10 +250,23 @@ class MultiFramePartitionData(object):
 
         frame_offset = (index - region[0]) * self.frames_per_chunk
         frame_end = frame_offset + self.frames_per_chunk
+
         data = [x[frame_offset:frame_end].astype(np.float32) for x in region[2]]
+        size = data[0].shape[0]
+
+        if self.pad and size < self.frames_per_chunk:
+            padded_data = []
+            for x in data:
+                # Only pad the outermost (first) dimension
+                pad_widths = [(0, 0)] * (len(x.shape) - 1)
+                pad_widths.insert(0, (0, self.frames_per_chunk - size))
+                padded_x = np.pad(x, pad_widths, mode='constant', constant_values=0)
+                padded_data.append(padded_x)
+
+            data = padded_data
 
         if self.return_length:
-            data.append(int(data[0].shape[0]))
+            data.append(size)
 
         return data
 
