@@ -390,3 +390,18 @@ class TestLabel(object):
         label = assets.Label('a', 2, 5)
 
         assert label.duration == 3
+
+    def test_tokenized(self):
+        label = assets.Label('wo wie was warum  weshalb')
+
+        assert label.tokenized(delimiter=' ') == ['wo', 'wie', 'was', 'warum', 'weshalb']
+
+    def test_tokenized_returns_empty_list_for_empty_label_value(self):
+        label = assets.Label('  ')
+
+        assert label.tokenized(delimiter=' ') == []
+
+    def test_tokenized_with_other_delimiter(self):
+        label = assets.Label('wie,kann, ich, dass machen')
+
+        assert label.tokenized(delimiter=',') == ['wie', 'kann', 'ich', 'dass machen']

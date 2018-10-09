@@ -89,6 +89,39 @@ class Label(object):
 
         return self.label_list.utterance.file.read_samples(sr=sr, offset=self.start_abs, duration=duration)
 
+    def tokenized(self, delimiter=' '):
+        """
+        Return a list with tokens from the value of the label.
+        Tokens are extracted by splitting the string using ``delimiter`` and
+        then trimming any whitespace before and after splitted strings.
+
+        Args:
+            delimiter (str): The delimiter used to split into tokens. (default: space)
+
+        Return:
+            list: A list of tokens in the order they occur in the label.
+
+        Examples:
+
+            >>> label = Label('as is oh')
+            >>> label.tokenized()
+            ['as', 'is', 'oh']
+
+        Using a different delimiter (whitespace is trimmed anyway):
+
+            >>> label = Label('oh hi, as, is  ')
+            >>> label.tokenized(delimiter=',')
+            ['oh hi', 'as', 'is']
+        """
+
+        tokens = self.value.split(sep=delimiter)
+        tokens = [t.strip() for t in tokens]
+
+        while '' in tokens:
+            tokens.remove('')
+
+        return tokens
+
 
 class LabelList(object):
     """
