@@ -1,5 +1,6 @@
 import collections
 import heapq
+import bisect
 from functools import total_ordering
 
 
@@ -354,6 +355,123 @@ class LabelList(object):
         """
         for label in self.labels:
             fn(label)
+
+    def split(self, cutting_points, shift_times=False):
+        """
+        Split the label-list into x parts and return them as new label-lists.
+        x is defined by the number of cutting-points (``x == len(cutting_points) + 1``)
+
+        Args:
+             cutting_points (list): List of floats defining the points in seconds, where the label-list is splitted.
+             shift_times (bool): If True, start and end-time of shifted in splitted label-lists.
+                                 So the start is relative to the cutting point and
+                                 not to the beginning of the original label-list.
+
+        Returns:
+            list: List of of :class:`audiomate.corpus.assets.LabelList`.
+                  Label-list 0 contains labels between ``0`` and ``cutting_points[0]``.
+                  Label-list 1 contains labels between ``cutting_points[0]`` and ``cutting_points[1]``.
+                  And so on.
+
+        Example:
+
+            >>> ll = LabelList(labels=[
+            >>>     Label('a', 0, 5),
+            >>>     Label('b', 5, 10),
+            >>>     Label('c', 11, 15),
+            >>> ])
+            >>>
+            >>> res = ll.split([4.1, 8.9, 12.0])
+            >>> len(res)
+            4
+            >>> res[0].labels
+            [Label('a', 0.0, 4.1)]
+            >>> res[1].labels
+            [
+                Label('a', 4.1, 5.0),
+                Label('b', 5.0, 8.9)
+            ]
+            >>> res[2].labels
+            [
+                Label('b', 8.9, 10.0),
+                Label('c', 11.0, 12.0)
+            ]
+            >>> res[3].labels
+            [Label('c', 12.0, 15.0)]
+
+        If ``shift_times=True``, the times are adjusted to be relative to the cutting-points for
+        every label-list but the first.
+
+            >>> ll = LabelList(labels=[
+            >>>     Label('a', 0, 5),
+            >>>     Label('b', 5, 10),
+            >>> ])
+            >>>
+            >>> res = ll.split([4.6])
+            >>> len(res)
+            4
+            >>> res[0].labels
+            [Label('a', 0.0, 4.6)]
+            >>> res[1].labels
+            [
+                Label('a', 0.0, 0.4),
+                Label('b', 0.4, 5.4)
+            ]
+        """
+
+        if len(cutting_points) == 0:
+            raise ValueError('At least one cutting-point is needed!')
+
+        cutting_points = sorted(cutting_points)
+
+        label_lists = [LabelList(idx=self.idx) for _ in range(len(cutting_points) + 1)]
+
+        for label in sorted(self.labels):
+            if label.end < 0:
+                # if label end is unknown (end of utt) we assume its past the last cutting point
+                label_end = cutting_points[-1] + 1000.0
+            else:
+                label_end = label.end
+
+            # find indices where start and end of label would be inserted in cutting_points
+            start_cut_index = bisect.bisect_right(cutting_points, label.start)
+            end_cut_index = bisect.bisect_left(cutting_points, label_end)
+
+            if end_cut_index <= start_cut_index:
+                # label is between two cutting points so append to label-list with that index
+                new_label = Label(label.value, start=label.start, end=label.end)
+
+                if shift_times and start_cut_index > 0:
+                    new_label.start -= cutting_points[start_cut_index - 1]
+
+                    if new_label.end > 0:
+                        new_label.end -= cutting_points[start_cut_index - 1]
+
+                label_lists[start_cut_index].append(new_label)
+            else:
+                # Cutting-points with index between start_cut_index, end_cut_index are within current label
+                # Therefore we split the label
+                for index in range(start_cut_index, end_cut_index + 1):
+                    if index == start_cut_index:
+                        sub_label_start = label.start
+                    else:
+                        sub_label_start = cutting_points[index - 1]
+
+                    if index >= end_cut_index:
+                        sub_label_end = label.end
+                    else:
+                        sub_label_end = cutting_points[index]
+
+                    if shift_times and index > 0:
+                        sub_label_start -= cutting_points[index - 1]
+
+                        if sub_label_end > 0:
+                            sub_label_end -= cutting_points[index - 1]
+
+                    new_label = Label(label.value, start=sub_label_start, end=sub_label_end)
+                    label_lists[index].append(new_label)
+
+        return label_lists
 
     def __getitem__(self, item):
         return self.labels.__getitem__(item)

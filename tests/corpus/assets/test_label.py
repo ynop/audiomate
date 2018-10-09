@@ -248,6 +248,155 @@ class TestLabelList(unittest.TestCase):
         assert ll[0].start == 0
         assert ll[0].end == -1
 
+    def test_split(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 4.0),
+            assets.Label('b', 4.0, 8.0),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        res = ll.split([1.9, 6.2, 10.5])
+
+        assert len(res) == 4
+
+        assert len(res[0]) == 1
+        assert res[0][0] == assets.Label('a', 0.0, 1.9)
+
+        assert len(res[1]) == 2
+        assert res[1][0] == assets.Label('a', 1.9, 4.0)
+        assert res[1][1] == assets.Label('b', 4.0, 6.2)
+
+        assert len(res[2]) == 2
+        assert res[2][0] == assets.Label('b', 6.2, 8.0)
+        assert res[2][1] == assets.Label('c', 9.0, 10.5)
+
+        assert len(res[3]) == 1
+        assert res[3][0] == assets.Label('c', 10.5, 12.0)
+
+    def test_split_unsorted_label_list(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 4.0),
+            assets.Label('c', 9.0, 12.0),
+            assets.Label('b', 4.0, 8.0)
+        ])
+
+        res = ll.split([1.9, 6.2, 10.5])
+
+        assert len(res) == 4
+
+        assert len(res[0]) == 1
+        assert res[0][0] == assets.Label('a', 0.0, 1.9)
+
+        assert len(res[1]) == 2
+        assert res[1][0] == assets.Label('a', 1.9, 4.0)
+        assert res[1][1] == assets.Label('b', 4.0, 6.2)
+
+        assert len(res[2]) == 2
+        assert res[2][0] == assets.Label('b', 6.2, 8.0)
+        assert res[2][1] == assets.Label('c', 9.0, 10.5)
+
+        assert len(res[3]) == 1
+        assert res[3][0] == assets.Label('c', 10.5, 12.0)
+
+    def test_split_label_within_cutting_points_is_included(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 4.0),
+            assets.Label('b', 4.0, 8.0),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        res = ll.split([1.9, 10.5])
+
+        assert len(res[1]) == 3
+        assert res[1][1].value == 'b'
+        assert res[1][1].start == 4.0
+        assert res[1][1].end == 8.0
+
+    def test_split_with_endless_label(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 4.0),
+            assets.Label('c', 4.0, -1)
+        ])
+
+        res = ll.split([1.9, 10.5])
+
+        assert len(res) == 3
+
+        assert len(res[2]) == 1
+        assert res[2][0].value == 'c'
+        assert res[2][0].start == 10.5
+        assert res[2][0].end == -1
+
+    def test_split_with_cutting_point_after_last_label(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 4.0),
+            assets.Label('c', 4.0, 8.9)
+        ])
+
+        res = ll.split([10.5])
+
+        assert len(res) == 2
+        assert len(res[0]) == 2
+        assert len(res[1]) == 0
+
+    def test_split_cutting_point_on_boundary_doesnot_split_label(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 9.0),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        res = ll.split([9.0])
+
+        assert len(res) == 2
+
+        assert len(res[0]) == 1
+        assert len(res[1]) == 1
+
+    def test_split_without_cutting_points_raises_error(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 9.0),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        with pytest.raises(ValueError):
+            ll.split([])
+
+    def test_split_with_shifting_start_and_endtime(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 9.0),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        res = ll.split([4.2], shift_times=True)
+
+        assert len(res) == 2
+
+        assert len(res[0]) == 1
+        assert res[0][0].value == 'a'
+        assert res[0][0].start == 0.0
+        assert res[0][0].end == 4.2
+
+        assert len(res[1]) == 2
+        assert res[1][0] == assets.Label('a', 0.0, 4.8)
+        assert res[1][1] == assets.Label('c', 4.8, 7.8)
+
+    def test_split_first_label_not_splitted(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 9.0),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        res = ll.split([11.2], shift_times=True)
+
+        assert len(res) == 2
+
+        assert len(res[0]) == 2
+        assert res[0][0] == assets.Label('a', 0.0, 9.0)
+        assert res[0][1] == assets.Label('c', 9.0, 11.2)
+
+        assert len(res[1]) == 1
+        assert res[1][0] == assets.Label('c', 0.0, pytest.approx(0.8))
+
 
 class TestLabel(object):
 
