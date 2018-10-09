@@ -26,6 +26,9 @@ Next Version
 * Added downloader (:class:`audiomate.corpus.io.GtzanDownloader`) for the
   `GTZAN Music/Speech <https://marsyasweb.appspot.com/download/data_sets/>`_.
 
+* Added :class:`audiomate.encoding.TokenOrdinalEncoder` to encode labels of an utterance
+  by mapping every token of the label to a number.
+
 **Non-Breaking Changes**
 
 * Create container base class (:class:`audiomate.corpus.assets.Container`), that can be used to store arbitrary data

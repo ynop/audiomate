@@ -18,3 +18,9 @@ Frame-Based
 
 .. autoclass:: FrameOrdinalEncoder
    :members:
+
+Utterance-Based
+---------------
+
+.. autoclass:: TokenOrdinalEncoder
+   :members:
