@@ -287,6 +287,24 @@ class LabelList(object):
 
         return occurrences
 
+    def all_tokens(self, delimiter=' '):
+        """
+        Return a list of all tokens occurring in the label-list.
+
+        Args:
+            delimiter (str): The delimiter used to split labels into tokens
+                             (see :meth:`audiomate.corpus.assets.Label.tokenized`).
+
+        Returns:
+             :class:`set`: A set of distinct tokens.
+        """
+        tokens = set()
+
+        for label in self:
+            tokens = tokens.union(set(label.tokenized(delimiter=delimiter)))
+
+        return tokens
+
     def label_total_duration(self):
         """
         Return for each distinct label value the total duration of all occurrences.

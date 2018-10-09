@@ -3,6 +3,7 @@ import unittest
 import pytest
 
 import audiomate
+from audiomate.corpus import assets
 
 from tests import resources
 
@@ -54,3 +55,25 @@ class CorpusViewTest(unittest.TestCase):
         duration = self.ds.total_duration
 
         assert duration == pytest.approx(85.190375)
+
+    def test_all_tokens(self):
+        corpus = resources.create_dataset()
+        assert corpus.all_tokens() == {'who', 'am', 'i', 'are', 'is', 'he', 'you', 'she', 'they'}
+
+    def test_all_tokens_returns_only_from_selected_label_lists(self):
+        corpus = resources.create_dataset()
+        ll = assets.LabelList(idx='test', labels=[assets.Label('what can he do')])
+        corpus.utterances['utt-1'].set_label_list(ll)
+
+        target_lls = [audiomate.corpus.LL_WORD_TRANSCRIPT]
+        expected_tokens = {'who', 'am', 'i', 'are', 'is', 'he', 'you', 'she', 'they'}
+        assert corpus.all_tokens(label_list_ids=target_lls) == expected_tokens
+
+    def test_all_tokens_with_custom_delimiter(self):
+        corpus = resources.create_dataset()
+        ll = assets.LabelList(idx='test', labels=[assets.Label('a, b, a, c')])
+        corpus.utterances['utt-1'].set_label_list(ll)
+
+        target_lls = ['test']
+        expected_tokens = {'a', 'b', 'c'}
+        assert corpus.all_tokens(delimiter=',', label_list_ids=target_lls) == expected_tokens

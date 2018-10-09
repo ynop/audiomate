@@ -176,6 +176,27 @@ class Utterance(object):
 
         return count
 
+    def all_tokens(self, delimiter=' ', label_list_ids=None):
+        """
+        Return a list of all tokens occurring in one of the labels in the label-lists.
+
+        Args:
+            delimiter (str): The delimiter used to split labels into tokens
+                             (see :meth:`audiomate.corpus.assets.Label.tokenized`).
+            label_list_ids (list): If not None, only labels from label-lists with an idx contained in this list
+                                   are considered.
+
+        Returns:
+             :class:`set`: A set of distinct tokens.
+        """
+        tokens = set()
+
+        for label_list in self.label_lists.values():
+            if label_list_ids is None or label_list.idx in label_list_ids:
+                tokens = tokens.union(label_list.all_tokens(delimiter=delimiter))
+
+        return tokens
+
     def label_total_duration(self, label_list_ids=None):
         """
         Return a dictionary containing the number of seconds, every label-value is occurring in this utterance.

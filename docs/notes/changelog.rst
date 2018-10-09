@@ -26,10 +26,14 @@ Next Version
 * Added downloader (:class:`audiomate.corpus.io.GtzanDownloader`) for the
   `GTZAN Music/Speech <https://marsyasweb.appspot.com/download/data_sets/>`_.
 
+* Added :meth:`audiomate.corpus.assets.Label.tokenized` to get a list of tokens from a label.
+  It basically splits the value and trims whitespace.
+
+* Added methods on :class:`audiomate.corpus.CorpusView`, :class:`audiomate.corpus.assets.Utterance`
+  and :class:`audiomate.corpus.assets.LabelList` to get a set of occurring tokens.
+
 * Added :class:`audiomate.encoding.TokenOrdinalEncoder` to encode labels of an utterance
   by mapping every token of the label to a number.
-
-**Non-Breaking Changes**
 
 * Create container base class (:class:`audiomate.corpus.assets.Container`), that can be used to store arbitrary data
   per utterance. The :class:`audiomate.corpus.assets.FeatureContainer` is now an extension of the container,
