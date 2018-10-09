@@ -24,9 +24,9 @@ class Dataset(object):
 
     def __init__(self, corpus_or_utt_ids, containers):
         if isinstance(corpus_or_utt_ids, audiomate.Corpus):
-            self.utt_ids = list(corpus_or_utt_ids.utterances.keys())
+            self.utt_ids = sorted(list(corpus_or_utt_ids.utterances.keys()))
         else:
-            self.utt_ids = corpus_or_utt_ids
+            self.utt_ids = sorted(corpus_or_utt_ids)
 
         if isinstance(containers, assets.Container):
             self.containers = [containers]
@@ -36,11 +36,143 @@ class Dataset(object):
         if len(self.containers) == 0:
             raise ValueError('At least one container has to be provided!')
 
+        for container in self.containers:
+            if not Dataset.container_has_utterances(container, self.utt_ids):
+                raise ValueError('Container {} does not contain all necessary utterances'.format(container.path))
+
     def __getitem__(self, item):
         raise NotImplementedError
 
     def __len__(self):
         raise NotImplementedError
+
+    @staticmethod
+    def container_has_utterances(container, keys):
+        container_keys = set(container.keys())
+        return container_keys.issuperset(keys)
+
+
+class UtteranceDataset(Dataset):
+    """
+    A dataset wrapping data of complete utterances. Assuming two containers are given,
+    a single sample contains all the data for an utterance from both containers.
+
+    Args:
+        corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
+                                          This defines which utterances are considered for iterating.
+        containers (list, Container): A single container or a list of containers.
+        return_length (bool): If True, the length of the data from every container is returned as well.
+                              The length is appended after the data of every container
+                              (e.g. [container1-data, container1-length, container2-data, container2-length])
+        pad (bool): If True, samples that are shorter than the longest sample in the dataset are padded with 0.
+                    The padding is done for each container individually.
+                    (e.g. container1-data can be shorter than container2-data)
+                    If padding is enabled, the lengths are always returned ``return_length = True``.
+
+    Examples:
+
+        >>> corpus = audiomate.Corpus.load('/path/to/corpus')
+        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>>
+        >>> ds = UtteranceDataset(corpus, [container_inputs, container_outputs])
+        >>> len(ds) # Number of utterances/samples in the dataset
+        114
+        >>> ds[20] # Utterance/Sample (inputs, inputs-len, outputs, outputs-len) with index 20
+        (
+            array([[0.72991909, 0.20258683, 0.30574747, 0.53783217],
+                   [0.38875413, 0.83611128, 0.49054591, 0.15710017],
+                   [0.35153358, 0.40051009, 0.93647765, 0.29589257],
+                   [0.97465772, 0.80160451, 0.81871436, 0.4892925 ],
+                   [0.59310933, 0.8565602 , 0.95468696, 0.07933512]]),
+            5,
+            array([0, 9, 10, 4]),
+            4
+        )
+
+    With ``pad=True`` the data is padded on the outermost dimension
+    with zeros to match the length of the longest sequence/utterance.
+    In the following it is assumed the longest sequence in the inputs is ``8`` and in the outputs ``6``.
+
+        >>> corpus = audiomate.Corpus.load('/path/to/corpus')
+        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>>
+        >>> ds = UtteranceDataset(corpus, [container_inputs, container_outputs], pad=True)
+        >>> len(ds) # Number of utterances/samples in the dataset
+        114
+        >>> ds[20] # Utterance/Sample (inputs, inputs-len, outputs, outputs-len) with index 20
+        (
+            array([[0.72991909, 0.20258683, 0.30574747, 0.53783217],
+                   [0.38875413, 0.83611128, 0.49054591, 0.15710017],
+                   [0.35153358, 0.40051009, 0.93647765, 0.29589257],
+                   [0.97465772, 0.80160451, 0.81871436, 0.4892925 ],
+                   [0.59310933, 0.8565602 , 0.95468696, 0.07933512],
+                   [0.0, 0.0, 0.0, 0.0],
+                   [0.0, 0.0, 0.0, 0.0],
+                   [0.0, 0.0, 0.0, 0.0]
+            ]),
+            5,
+            array([0, 9, 10, 4, 0, 0]),
+            4
+        )
+
+    """
+
+    def __init__(self, corpus_or_utt_ids, containers, return_length=True, pad=False):
+        super(UtteranceDataset, self).__init__(corpus_or_utt_ids, containers)
+
+        self.pad = pad
+
+        if self.pad:
+            self.return_length = True
+        else:
+            self.return_length = return_length
+
+        self.pad_lengths = self.longest_utterances_per_container()
+
+    def __len__(self):
+        return len(self.utt_ids)
+
+    def __getitem__(self, item):
+        utt_idx = self.utt_ids[item]
+
+        sample = []
+
+        for index, container in enumerate(self.containers):
+            data = container.get(utt_idx, mem_map=False)
+            size = data.shape[0]
+
+            required_padded_length = self.pad_lengths[index]
+
+            if self.pad and size < required_padded_length:
+                pad_width = [(0, required_padded_length - size)]
+
+                for i in range(1, len(data.shape)):
+                    pad_width.append((0, 0))
+
+                data = np.pad(data, pad_width, mode='constant', constant_values=0)
+
+            sample.append(data)
+
+            if self.return_length:
+                sample.append(size)
+
+        return sample
+
+    def longest_utterances_per_container(self):
+        """ Return a tuple/list containing the length of the longest utterance of ever container. """
+        lengths = []
+
+        for container in self.containers:
+            longest_in_container = 0
+            for utt_idx in self.utt_ids:
+                utt_length = container._file[utt_idx].shape[0]
+                longest_in_container = max(utt_length, longest_in_container)
+
+            lengths.append(longest_in_container)
+
+        return lengths
 
 
 class MultiFrameDataset(Dataset):

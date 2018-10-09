@@ -9,6 +9,38 @@ import pytest
 from tests import resources
 
 
+@pytest.fixture
+def container_dim_x_4(tmpdir):
+    inputs_path = os.path.join(tmpdir.strpath, 'inputs.hdf5')
+
+    container = assets.Container(inputs_path)
+    container.open()
+
+    container.set('utt-1', np.arange(60).reshape(15, 4))
+    container.set('utt-2', np.arange(80).reshape(20, 4))
+    container.set('utt-3', np.arange(44).reshape(11, 4))
+    container.set('utt-4', np.arange(12).reshape(3, 4))
+    container.set('utt-5', np.arange(16).reshape(4, 4))
+
+    return container
+
+
+@pytest.fixture
+def container_dim_x(tmpdir):
+    inputs_path = os.path.join(tmpdir.strpath, 'outputs.hdf5')
+
+    container = assets.Container(inputs_path)
+    container.open()
+
+    container.set('utt-1', np.arange(6))
+    container.set('utt-2', np.arange(8))
+    container.set('utt-3', np.arange(4))
+    container.set('utt-4', np.arange(2))
+    container.set('utt-5', np.arange(6))
+
+    return container
+
+
 class TestDataset:
 
     def test_init_throws_error_when_no_container_is_given(self):
@@ -17,14 +49,120 @@ class TestDataset:
         with pytest.raises(ValueError):
             feeding.Dataset(corpus, [])
 
-    def test_init_with_corpus(self):
-        corpus = resources.create_dataset()
-        it = feeding.Dataset(corpus, [assets.Container('blub')])
-        assert set(it.utt_ids) == set(corpus.utterances.keys())
+    def test_init_with_corpus(self, tmpdir):
+        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c.open()
+        c.set('utt-1', data=np.arange(20))
+        c.set('utt-2', data=np.arange(20))
+        c.set('utt-3', data=np.arange(20))
+        c.set('utt-4', data=np.arange(20))
+        c.set('utt-5', data=np.arange(20))
 
-    def test_init_with_utterance_list(self):
-        it = feeding.Dataset(['utt-1', 'utt-2'], [assets.Container('blub')])
-        assert set(it.utt_ids) == {'utt-1', 'utt-2'}
+        corpus = resources.create_dataset()
+        it = feeding.Dataset(corpus, [c])
+        assert it.utt_ids == ['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5']
+
+    def test_init_with_utterance_list(self, tmpdir):
+        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c.open()
+        c.set('utt-1', data=np.arange(20))
+        c.set('utt-2', data=np.arange(20))
+
+        it = feeding.Dataset(['utt-1', 'utt-2'], [c])
+        assert it.utt_ids == ['utt-1', 'utt-2']
+
+    def test_init_missing_utterance_in_container_raises_error(self, tmpdir):
+        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c.open()
+        c.set('utt-1', data=np.arange(20))
+        c.set('utt-3', data=np.arange(20))
+
+        with pytest.raises(ValueError):
+            feeding.Dataset(['utt-1', 'utt-2', 'utt-3'], [assets.Container('blub')])
+
+    def test_container_has_utterances(self, tmpdir):
+        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c.open()
+        c.set('utt-1', data=np.arange(20))
+        c.set('utt-2', data=np.arange(20))
+        c.set('utt-3', data=np.arange(20))
+
+        assert feeding.Dataset.container_has_utterances(c, ['utt-1', 'utt-2', 'utt-3'])
+
+    def test_container_has_utterances_returns_false_if_one_is_missing(self, tmpdir):
+        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c.open()
+        c.set('utt-1', data=np.arange(20))
+        c.set('utt-3', data=np.arange(20))
+
+        assert not feeding.Dataset.container_has_utterances(c, ['utt-1', 'utt-2', 'utt-3'])
+
+
+class TestUtteranceDataset:
+
+    def test_init_with_corpus(self, container_dim_x_4, container_dim_x):
+        corpus = resources.create_dataset()
+        ds = feeding.UtteranceDataset(corpus, [container_dim_x_4, container_dim_x])
+
+        assert ds.utt_ids == ['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5']
+
+    def test_init_with_list_of_utt_ids(self, container_dim_x_4, container_dim_x):
+        ds = feeding.UtteranceDataset(['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5'],
+                                      [container_dim_x_4, container_dim_x])
+
+        assert ds.utt_ids == ['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5']
+
+    def test_len(self, container_dim_x_4, container_dim_x):
+        ds = feeding.UtteranceDataset(['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5'],
+                                      [container_dim_x_4, container_dim_x])
+
+        assert len(ds) == 5
+
+    def test_get_item(self, container_dim_x_4, container_dim_x):
+        ds = feeding.UtteranceDataset(['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5'],
+                                      [container_dim_x_4, container_dim_x])
+
+        sample = ds[2]
+
+        assert len(sample) == 4
+        assert np.array_equal(sample[0], np.arange(44).reshape(11, 4))
+        assert sample[1] == 11
+        assert np.array_equal(sample[2], np.arange(4))
+        assert sample[3] == 4
+
+    def test_get_item_padded(self, container_dim_x_4, container_dim_x):
+        ds = feeding.UtteranceDataset(['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5'],
+                                      [container_dim_x_4, container_dim_x], pad=True)
+
+        sample = ds[2]
+
+        assert len(sample) == 4
+        assert np.array_equal(sample[0], np.pad(np.arange(44).reshape(11, 4), ((0, 9), (0, 0)), mode='constant'))
+        assert sample[1] == 11
+        assert np.array_equal(sample[2], np.pad(np.arange(4), (0, 4), mode='constant'))
+        assert sample[3] == 4
+
+    def test_get_item_padded_when_no_padding_required(self, container_dim_x_4, container_dim_x):
+        ds = feeding.UtteranceDataset(['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5'],
+                                      [container_dim_x_4, container_dim_x], pad=True)
+
+        sample = ds[1]
+
+        assert len(sample) == 4
+        assert np.array_equal(sample[0], np.arange(80).reshape(20, 4))
+        assert sample[1] == 20
+        assert np.array_equal(sample[2], np.arange(8))
+        assert sample[3] == 8
+
+    def test_longest_utterances_per_container(self, container_dim_x_4, container_dim_x):
+        ds = feeding.UtteranceDataset(['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5'],
+                                      [container_dim_x_4, container_dim_x])
+
+        lengths = ds.longest_utterances_per_container()
+
+        assert len(lengths) == 2
+        assert lengths[0] == 20
+        assert lengths[1] == 8
 
 
 @pytest.fixture
@@ -58,7 +196,7 @@ class TestMultiFrameDataset:
 
     def test_raises_error_if_frames_per_chunk_is_smaller_than_one(self):
         with pytest.raises(ValueError):
-            feeding.MultiFrameDataset(None, [], 0)
+            feeding.MultiFrameDataset(['utt-1'], [], 0)
 
     def test_partitioned_iterator(self, sample_multi_frame_dataset):
         it = sample_multi_frame_dataset.partitioned_iterator('960', shuffle=True, seed=12)
