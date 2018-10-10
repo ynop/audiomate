@@ -125,3 +125,87 @@ class UtteranceTest(unittest.TestCase):
     def test_num_samples_matches_read_samples(self):
         assert self.utt.read_samples().shape[0] == self.utt.num_samples()
         assert self.utt.read_samples(sr=11255).shape[0] == self.utt.num_samples(sr=11255)
+
+    def test_split(self):
+        ll_1 = assets.LabelList('phones', labels=[assets.Label('alpha', start=0.0, end=30.0)])
+        ll_2 = assets.LabelList('words', labels=[assets.Label('b', start=0.0, end=30.0)])
+        utt = assets.Utterance('utt-1', 'file-x', start=0.0, end=40.0, label_lists=[ll_1, ll_2])
+
+        res = utt.split([14.0, 29.5])
+
+        assert len(res) == 3
+
+        assert res[0].start == 0.0
+        assert res[0].end == 14.0
+        assert 'phones' in res[0].label_lists.keys()
+        assert 'words' in res[0].label_lists.keys()
+
+        assert res[1].start == 14.0
+        assert res[1].end == 29.5
+        assert 'phones' in res[1].label_lists.keys()
+        assert 'words' in res[1].label_lists.keys()
+
+        assert res[2].start == 29.5
+        assert res[2].end == 40.0
+        assert 'phones' in res[2].label_lists.keys()
+        assert 'words' in res[2].label_lists.keys()
+
+    def test_split_endless(self):
+        utt = assets.Utterance('utt-1', None, start=0.0, end=-1)
+        res = utt.split([24.5])
+
+        assert len(res) == 2
+        assert res[1].start == 24.5
+        assert res[1].end == -1
+
+    def test_split_sets_file(self):
+        file = assets.File('file-1', '/some/path')
+        utt = assets.Utterance('utt-1', file, start=0.0, end=10.0)
+        res = utt.split([5.2])
+
+        assert len(res) == 2
+        assert res[0].file == file
+        assert res[1].file == file
+
+    def test_split_sets_issuer(self):
+        issuer = assets.Speaker('spk-1')
+        utt = assets.Utterance('utt-1', None, issuer=issuer, start=0.0, end=10.0)
+        res = utt.split([5.2])
+
+        assert len(res) == 2
+        assert res[0].issuer == issuer
+        assert res[1].issuer == issuer
+
+    def test_split_without_cutting_points_raises_error(self):
+        utt = assets.Utterance('utt-1', None, start=0.0, end=-1)
+
+        with pytest.raises(ValueError):
+            utt.split([])
+
+    def test_split_with_cutting_point_after_end_returns_one_utt(self):
+        utt = assets.Utterance('utt-1', None, start=4.0, end=20.0)
+        res = utt.split([24.5])
+
+        assert len(res) == 1
+        assert res[0].start == 4.0
+        assert res[0].end == 20.0
+
+    def test_split_when_utt_start_is_not_zero(self):
+        utt = assets.Utterance('utt-1', None, start=6.0, end=20.0)
+        res = utt.split([3.0])
+
+        assert len(res) == 2
+        assert res[0].start == 6.0
+        assert res[0].end == 9.0
+        assert res[1].start == 9.0
+        assert res[1].end == 20.0
+
+    def test_split_file_relative(self):
+        utt = assets.Utterance('utt-1', None, start=6.0, end=20.0)
+        res = utt.split([8.0], file_relative=True)
+
+        assert len(res) == 2
+        assert res[0].start == 6.0
+        assert res[0].end == 8.0
+        assert res[1].start == 8.0
+        assert res[1].end == 20.0

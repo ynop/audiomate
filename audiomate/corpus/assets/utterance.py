@@ -216,3 +216,73 @@ class Utterance(object):
                     duration[label_value] += label_duration
 
         return duration
+
+    def split(self, cutting_points, file_relative=False):
+        """
+        Split the utterance into x parts (sub-utterances) and return them as new utterances.
+        x is defined by cutting_points (``x = len(cutting_points) + 1``).
+
+        By default cutting-points are relative to the start of the utterance.
+        For example if an utterance starts at 50s,
+        a cutting-point of 10.0 will split the utterance at 60s relative to the file.
+
+        Args:
+            cutting_points (list): List of floats defining the times in seconds where to split the utterance.
+            file_relative (bool): If True, cutting-points are relative to the start of the file.
+                                  Otherwise they are relative to the start of the utterance.
+
+        Returns:
+            list: List of splitted utterances.
+
+        Example:
+
+            >>> utt = Utterance('utt-1', 'file-x', start=0.0, end=30.0)
+            >>> sub_utts = utt.split([10.0, 20.0])
+            >>> len(sub_utts)
+            3
+            >>> sub_utts[0].start
+            0.0
+            >>> sub_utts[0].end
+            10.0
+        """
+
+        if not file_relative:
+            cutting_points = [c + self.start for c in cutting_points]
+
+        if len(cutting_points) == 0:
+            raise ValueError('At least 1 cutting point is needed!')
+
+        splitted_label_lists = collections.defaultdict(list)
+
+        for idx, label_list in self.label_lists.items():
+            parts = label_list.split(cutting_points, shift_times=True)
+            splitted_label_lists[idx] = parts
+
+        filtered_cutting_points = []
+
+        for cutting_point in cutting_points:
+            if cutting_point > self.start and (cutting_point < self.end or self.end < 0):
+                filtered_cutting_points.append(cutting_point)
+
+        sub_utterances = []
+
+        for index in range(len(filtered_cutting_points) + 1):
+            if index == 0:
+                sub_start = self.start
+            else:
+                sub_start = cutting_points[index - 1]
+
+            if index >= len(filtered_cutting_points):
+                sub_end = self.end
+            else:
+                sub_end = filtered_cutting_points[index]
+
+            new_idx = '{}_{}'.format(self.idx, index)
+            new_utt = Utterance(new_idx, file=self.file, issuer=self.issuer, start=sub_start, end=sub_end)
+
+            for parts in splitted_label_lists.values():
+                new_utt.set_label_list(parts[index])
+
+            sub_utterances.append(new_utt)
+
+        return sub_utterances
