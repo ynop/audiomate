@@ -232,7 +232,7 @@ class Utterance(object):
                                   Otherwise they are relative to the start of the utterance.
 
         Returns:
-            list: List of splitted utterances.
+            list: List of :class:`Utterance`'s.
 
         Example:
 

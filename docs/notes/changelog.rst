@@ -45,6 +45,9 @@ Next Version
   per utterance. The :class:`audiomate.corpus.assets.FeatureContainer` is now an extension of the container,
   that provides functionality especially for features.
 
+* Added functions to split utterances and label-lists into multiple parts.
+  (:meth:`audiomate.corpus.assets.Utterance.split`, :meth:`audiomate.corpus.assets.LabelList.split`)
+
 **Fixes**
 
 * [`#58 <https://github.com/ynop/audiomate/issues/58>`_] Keep track of number of samples per frame and between frames.

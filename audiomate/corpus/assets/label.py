@@ -361,17 +361,19 @@ class LabelList(object):
         Split the label-list into x parts and return them as new label-lists.
         x is defined by the number of cutting-points (``x == len(cutting_points) + 1``)
 
+        The result is a list of label-lists corresponding to each part.
+        Label-list 0 contains labels between ``0`` and ``cutting_points[0]``.
+        Label-list 1 contains labels between ``cutting_points[0]`` and ``cutting_points[1]``.
+        And so on.
+
         Args:
-             cutting_points (list): List of floats defining the points in seconds, where the label-list is splitted.
-             shift_times (bool): If True, start and end-time of shifted in splitted label-lists.
+            cutting_points (list): List of floats defining the points in seconds, where the label-list is splitted.
+            shift_times (bool): If True, start and end-time of shifted in splitted label-lists.
                                  So the start is relative to the cutting point and
                                  not to the beginning of the original label-list.
 
         Returns:
-            list: List of of :class:`audiomate.corpus.assets.LabelList`.
-                  Label-list 0 contains labels between ``0`` and ``cutting_points[0]``.
-                  Label-list 1 contains labels between ``cutting_points[0]`` and ``cutting_points[1]``.
-                  And so on.
+            list: A list of of :class:`audiomate.corpus.assets.LabelList`.
 
         Example:
 
