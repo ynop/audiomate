@@ -214,3 +214,113 @@ class LabelCoverageValidator(base.Validator):
             uncovered_segments.append((utterance.start, utterance.end))
 
         return uncovered_segments
+
+
+class LabelOverflowValidationResult(base.ValidationResult):
+    """
+    Result of a the :class:`LabelOverflowValidator`.
+
+    Args:
+        passed (bool): A boolean indicating, if the validation has passed (True) or failed (False).
+        overflow_segments (dict): A dictionary containing a list of overflowing segments for every utterance.
+        name (str): The name of the validator, that produced the result.
+        info (dict): Dictionary containing key/value string-pairs with detailed information of the validation.
+                     For example id of the label-list that was validated.
+    """
+
+    def __init__(self, passed, overflow_segments, name, info=None):
+        super(LabelOverflowValidationResult, self).__init__(passed, name=name, info=info)
+
+        self.overflow_segments = overflow_segments
+
+    def get_report(self):
+        """
+        Return a string containing a report of the result.
+        This can used to print or save to a text file.
+
+        Returns:
+            str: String containing infos about the result
+        """
+
+        lines = [super(LabelOverflowValidationResult, self).get_report()]
+
+        if len(self.overflow_segments) > 0:
+            lines.append('\nSegments outside of the utterance:')
+
+            for utt_idx, utt_segments in self.overflow_segments.items():
+                if len(utt_segments) > 0:
+                    lines.append('\n{}'.format(utt_idx))
+                    sorted_items = sorted(utt_segments, key=lambda x: x[0])
+                    lines.extend(['    * {:10.2f}  -  {:10.2f} :  {}'.format(x[0], x[1], x[2]) for x in sorted_items])
+
+        return '\n'.join(lines)
+
+
+class LabelOverflowValidator(base.Validator):
+    """
+    Check if all labels are within the boundaries of an utterance.
+    Finds all segments of labels that lie outside of an utterance.
+
+    Args:
+        label_list_idx (str): The idx of the label-list to check.
+        threshold (float): A threshold for a time distance to be considered for an overflow.
+    """
+
+    def __init__(self, label_list_idx, threshold=0.01):
+        self.label_list_idx = label_list_idx
+        self.threshold = threshold
+
+    def name(self):
+        return 'Label-Overflow ({})'.format(self.label_list_idx)
+
+    def validate(self, corpus):
+        """
+        Perform the validation on the given corpus.
+
+        Args:
+            corpus (Corpus): The corpus to test/validate.
+
+        Returns:
+            InvalidUtterancesResult: Validation result.
+        """
+
+        overflow_segments = {}
+
+        for utterance in corpus.utterances.values():
+            utt_segments = self.validate_utterance(utterance)
+
+            if len(utt_segments) > 0:
+                overflow_segments[utterance.idx] = utt_segments
+
+        passed = len(overflow_segments) <= 0
+        info = {
+            'Label-List ID': self.label_list_idx,
+            'Threshold': str(self.threshold)
+        }
+
+        return LabelOverflowValidationResult(passed, overflow_segments, self.name(), info)
+
+    def validate_utterance(self, utterance):
+        """
+        Validate the given utterance and return a list of segments (start, end, label-value),
+        that are outside of the utterance.
+        """
+        overflow_segments = []
+
+        if self.label_list_idx in utterance.label_lists.keys():
+            ll = utterance.label_lists[self.label_list_idx]
+
+            for label in ll:
+                start = 0
+                end = utterance.duration
+
+                if start - label.start > self.threshold:
+                    label_end = start if label.end == -1 else label.end
+                    overflow_end = min(start, label_end)
+                    overflow_segments.append((label.start, overflow_end, label.value))
+
+                if end >= 0 and label.end - end > self.threshold:
+                    overflow_start = max(end, label.start)
+                    overflow_segments.append((overflow_start, label.end, label.value))
+
+        return overflow_segments
