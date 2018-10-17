@@ -48,6 +48,9 @@ Next Version
 * Added functions to split utterances and label-lists into multiple parts.
   (:meth:`audiomate.corpus.assets.Utterance.split`, :meth:`audiomate.corpus.assets.LabelList.split`)
 
+* Added :class:`audiomate.processing.pipeline.AddContext` to add context to frames,
+  using previous and subsequent frames.
+
 **Fixes**
 
 * [`#58 <https://github.com/ynop/audiomate/issues/58>`_] Keep track of number of samples per frame and between frames.

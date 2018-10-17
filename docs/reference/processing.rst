@@ -45,6 +45,7 @@ Some processing pipeline steps are already implemented.
   MFCC                            Extracts MFCC features.
   PowerToDb                       Convert power spectrum to Db.
   Delta                           Compute delta features.
+  AddContext                      Add previous and subsequent frames to the current frame.
   Stack                           Reduce multiple features into one by stacking them on top of each other.
   AvgPool                         Compute the average (per dimension) over a given number of sequential frames.
   VarPool                         Compute the variance (per dimension) over a given number of sequential frames.
@@ -65,6 +66,9 @@ Some processing pipeline steps are already implemented.
    :members:
 
 .. autoclass:: audiomate.processing.pipeline.Delta
+   :members:
+
+.. autoclass:: audiomate.processing.pipeline.AddContext
    :members:
 
 .. autoclass:: audiomate.processing.pipeline.Stack
