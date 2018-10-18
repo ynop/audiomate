@@ -3,6 +3,7 @@ import os
 import numpy as np
 
 from audiomate.corpus import assets
+from audiomate.corpus import subset
 from audiomate import feeding
 
 import pytest
@@ -61,6 +62,23 @@ class TestDataset:
         corpus = resources.create_dataset()
         it = feeding.Dataset(corpus, [c])
         assert it.utt_ids == ['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5']
+
+    def test_init_with_corpus_view(self, tmpdir):
+        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c.open()
+        c.set('utt-1', data=np.arange(20))
+        c.set('utt-2', data=np.arange(20))
+        c.set('utt-3', data=np.arange(20))
+        c.set('utt-4', data=np.arange(20))
+        c.set('utt-5', data=np.arange(20))
+
+        corpus = resources.create_dataset()
+        subview = subset.Subview(corpus, filter_criteria=[
+            subset.MatchingUtteranceIdxFilter(utterance_idxs={'utt-1', 'utt-2', 'utt-4'})
+        ])
+
+        it = feeding.Dataset(subview, [c])
+        assert it.utt_ids == ['utt-1', 'utt-2', 'utt-4']
 
     def test_init_with_utterance_list(self, tmpdir):
         c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))

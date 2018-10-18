@@ -3,6 +3,7 @@ import os
 import numpy as np
 
 from audiomate.corpus import assets
+from audiomate.corpus import subset
 from audiomate import feeding
 from audiomate.feeding import iterator
 
@@ -37,6 +38,15 @@ class TestDataIterator:
         corpus = resources.create_dataset()
         it = feeding.DataIterator(corpus, [assets.Container('blub')])
         assert set(it.utt_ids) == set(corpus.utterances.keys())
+
+    def test_init_with_corpus_view(self):
+        corpus = resources.create_dataset()
+        subview = subset.Subview(corpus, filter_criteria=[
+            subset.MatchingUtteranceIdxFilter(utterance_idxs={'utt-1', 'utt-2', 'utt-4'})
+        ])
+
+        it = feeding.DataIterator(subview, [assets.Container('blub')])
+        assert set(it.utt_ids) == set(subview.utterances.keys())
 
     def test_init_throws_error_when_no_container_is_given(self):
         corpus = resources.create_dataset()

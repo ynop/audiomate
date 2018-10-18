@@ -27,7 +27,7 @@ class DataIterator(object):
     """
 
     def __init__(self, corpus_or_utt_ids, containers, shuffle=True, seed=None):
-        if isinstance(corpus_or_utt_ids, audiomate.Corpus):
+        if isinstance(corpus_or_utt_ids, audiomate.corpus.CorpusView):
             self.utt_ids = list(corpus_or_utt_ids.utterances.keys())
         else:
             self.utt_ids = corpus_or_utt_ids
