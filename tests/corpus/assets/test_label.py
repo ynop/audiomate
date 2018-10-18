@@ -397,6 +397,21 @@ class TestLabelList(unittest.TestCase):
         assert len(res[1]) == 1
         assert res[1][0] == assets.Label('c', 0.0, pytest.approx(0.8))
 
+    def test_split_single_label_that_doesnt_start_at_zero(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('c', 8.0, 12.0)
+        ])
+
+        res = ll.split([11.2], shift_times=True)
+
+        assert len(res) == 2
+
+        assert len(res[0]) == 1
+        assert res[0][0] == assets.Label('c', 8.0, 11.2)
+
+        assert len(res[1]) == 1
+        assert res[1][0] == assets.Label('c', 0.0, pytest.approx(0.8))
+
 
 class TestLabel(object):
 

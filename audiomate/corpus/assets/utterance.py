@@ -255,7 +255,8 @@ class Utterance(object):
         splitted_label_lists = collections.defaultdict(list)
 
         for idx, label_list in self.label_lists.items():
-            parts = label_list.split(cutting_points, shift_times=True)
+            label_cutting_points = [x - self.start for x in cutting_points]
+            parts = label_list.split(label_cutting_points, shift_times=True)
             splitted_label_lists[idx] = parts
 
         filtered_cutting_points = []

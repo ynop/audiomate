@@ -198,7 +198,7 @@ class UtteranceTest(unittest.TestCase):
         assert res[0].start == 6.0
         assert res[0].end == 9.0
         assert res[1].start == 9.0
-        assert res[1].end == 20.0
+        assert res[1].end == 20.
 
     def test_split_file_relative(self):
         utt = assets.Utterance('utt-1', None, start=6.0, end=20.0)
@@ -208,4 +208,41 @@ class UtteranceTest(unittest.TestCase):
         assert res[0].start == 6.0
         assert res[0].end == 8.0
         assert res[1].start == 8.0
+        assert res[1].end == 20.00
+
+    def test_split_utt_relative(self):
+        utt = assets.Utterance('utt-1', None, start=6.0, end=20.0)
+        res = utt.split([8.0], file_relative=False)
+
+        assert len(res) == 2
+        assert res[0].start == 6.0
+        assert res[0].end == 14.0
+        assert res[1].start == 14.0
         assert res[1].end == 20.0
+
+    def test_split_utt_relative_with_labels(self):
+        ll_1 = assets.LabelList('phones', labels=[assets.Label('alpha', start=0.0, end=30.0)])
+        ll_2 = assets.LabelList('words', labels=[assets.Label('b', start=8.0, end=30.0)])
+        utt = assets.Utterance('utt-1', 'file-x', start=10.0, end=40.0, label_lists=[ll_1, ll_2])
+
+        res = utt.split([14.0], file_relative=False)
+
+        assert len(res) == 2
+
+        assert res[0].start == 10.0
+        assert res[0].end == 24.0
+        assert 'phones' in res[0].label_lists.keys()
+        assert res[0].label_lists['phones'][0].start == 0.0
+        assert res[0].label_lists['phones'][0].end == 14.0
+        assert 'words' in res[0].label_lists.keys()
+        assert res[0].label_lists['words'][0].start == 8.0
+        assert res[0].label_lists['words'][0].end == 14.0
+
+        assert res[1].start == 24.0
+        assert res[1].end == 40.0
+        assert 'phones' in res[1].label_lists.keys()
+        assert res[1].label_lists['phones'][0].start == 0.0
+        assert res[1].label_lists['phones'][0].end == 16.0
+        assert 'words' in res[1].label_lists.keys()
+        assert res[1].label_lists['words'][0].start == 0.0
+        assert res[1].label_lists['words'][0].end == 16.0
