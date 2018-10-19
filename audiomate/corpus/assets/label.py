@@ -306,6 +306,82 @@ class LabelList(object):
 
         return tokens
 
+    def join(self, delimiter=' ', overlap_threshold=0.1):
+        """
+        Return a string with all labels concatenated together.
+        The order of the labels is defined by the start of the label.
+        If the overlapping between two labels is greater than ``overlap_threshold``,
+        an Exception is thrown.
+
+        Args:
+            delimiter (str): A string to join two consecutive labels.
+            overlap_threshold (float): Maximum overlap between two consecutive labels.
+
+        Returns:
+            str: A string with all labels concatenated together.
+
+        Example:
+            >>> ll = LabelList(idx='some', labels=[
+            >>>     Label('a', start=0, end=4),
+            >>>     Label('b', start=3.95, end=6.0),
+            >>>     Label('c', start=7.0, end=10.2),
+            >>>     Label('d', start=10.3, end=14.0)
+            >>> ])
+            >>> ll.join(' - ')
+            'a - b - c - d'
+        """
+
+        sorted_by_start = sorted(self.labels)
+        concat_values = []
+        last_label_end = None
+
+        for label in sorted_by_start:
+            if last_label_end is None or (last_label_end - label.start < overlap_threshold and last_label_end > 0):
+                concat_values.append(label.value)
+                last_label_end = label.end
+            else:
+                raise ValueError('Labels overlap, not able to define the correct order')
+
+        return delimiter.join(concat_values)
+
+    def tokenized(self, delimiter=' ', overlap_threshold=0.1):
+        """
+        Return a ordered list of tokens based on all labels.
+        Joins all token from all labels (``label.tokenized()```).
+        If the overlapping between two labels is greater than ``overlap_threshold``,
+        an Exception is thrown.
+
+        Args:
+            delimiter (str): The delimiter used to split labels into tokens. (default: space)
+            overlap_threshold (float): Maximum overlap between two consecutive labels.
+
+        Returns:
+            str: A list containing tokens of all labels ordered according to the label order.
+
+        Example:
+            >>> ll = LabelList(idx='some', labels=[
+            >>>     Label('a d q', start=0, end=4),
+            >>>     Label('b', start=3.95, end=6.0),
+            >>>     Label('c a', start=7.0, end=10.2),
+            >>>     Label('f g', start=10.3, end=14.0)
+            >>> ])
+            >>> ll.tokenized(delimiter=' ', overlap_threshold=0.1)
+            ['a', 'd', 'q', 'b', 'c', 'a', 'f', 'g']
+        """
+
+        sorted_by_start = sorted(self.labels)
+        tokens = []
+        last_label_end = None
+
+        for label in sorted_by_start:
+            if last_label_end is None or (last_label_end - label.start < overlap_threshold and last_label_end > 0):
+                tokens.extend(label.tokenized(delimiter=delimiter))
+                last_label_end = label.end
+            else:
+                raise ValueError('Labels overlap, not able to define the correct order')
+
+        return tokens
+
     def label_total_duration(self):
         """
         Return for each distinct label value the total duration of all occurrences.

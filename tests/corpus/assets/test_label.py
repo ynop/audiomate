@@ -248,6 +248,73 @@ class TestLabelList(unittest.TestCase):
         assert ll[0].start == 0
         assert ll[0].end == -1
 
+    def test_join(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 4.0),
+            assets.Label('b', 4.0, 8.0),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        assert ll.join() == 'a b c'
+
+    def test_join_with_custom_delimiter(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 4.0),
+            assets.Label('b', 4.0, 8.0),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        assert ll.join(delimiter=' - ') == 'a - b - c'
+
+    def test_join_raises_error_if_overlap_is_higher_than_threshold(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 4.0),
+            assets.Label('b', 3.8, 8.0),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        with pytest.raises(ValueError):
+            ll.join(overlap_threshold=0.1)
+
+    def test_join_raises_error_if_overlap_is_higher_than_threshold_given_an_endless_label(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a', 0.0, 4.0),
+            assets.Label('b', 4.5, -1),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        with pytest.raises(ValueError):
+            ll.join(overlap_threshold=0.1)
+
+    def test_tokenized(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a u t', 0.0, 4.0),
+            assets.Label('b x', 4.0, 8.0),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        assert ll.tokenized() == ['a', 'u', 't', 'b', 'x', 'c']
+
+    def test_tokenized_raises_error_if_overlap_is_higher_than_threshold(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a u t', 0.0, 4.0),
+            assets.Label('b x', 3.85, 8.0),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        with pytest.raises(ValueError):
+            ll.tokenized()
+
+    def test_tokenized_raises_error_if_overlap_is_higher_than_threshold_given_an_endless_label(self):
+        ll = assets.LabelList(idx='test', labels=[
+            assets.Label('a u t', 0.0, 4.0),
+            assets.Label('b x', 4.5, -1),
+            assets.Label('c', 9.0, 12.0)
+        ])
+
+        with pytest.raises(ValueError):
+            ll.tokenized()
+
     def test_split(self):
         ll = assets.LabelList(idx='test', labels=[
             assets.Label('a', 0.0, 4.0),

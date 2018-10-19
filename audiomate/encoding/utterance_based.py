@@ -39,19 +39,7 @@ class TokenOrdinalEncoder(base.Encoder):
             raise ValueError('Utterance {} has not label-list with idx {}!'.format(utterance.idx, self.label_list_idx))
 
         ll = utterance.label_lists[self.label_list_idx]
-        sorted_labels = sorted(ll.labels, key=lambda x: x.start)
-
-        concatenated_tokens = []
-        last_label_end = 0.0
-
-        for label in sorted_labels:
-            if last_label_end > label.start + 0.1 or last_label_end == -1:
-                raise ValueError('Labels overlap, not able to define the correct order')
-
-            tokens = label.tokenized(delimiter=self.token_delimiter)
-            concatenated_tokens.extend(tokens)
-
-            last_label_end = label.end
+        concatenated_tokens = ll.tokenized(delimiter=self.token_delimiter, overlap_threshold=0.1)
 
         ordinals = []
 
