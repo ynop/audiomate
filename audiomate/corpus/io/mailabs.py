@@ -57,8 +57,7 @@ class MailabsReader(base.CorpusReader):
 
     .. seealso::
 
-       `M-AILABS Speech Dataset
-       <http://www.m-ailabs.bayern/en/the-mailabs-speech-dataset/>`_
+       `M-AILABS Speech Dataset <http://www.m-ailabs.bayern/en/the-mailabs-speech-dataset/>`_
           Project Page
     """
 

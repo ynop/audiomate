@@ -51,6 +51,10 @@ Next Version
 * Added :class:`audiomate.processing.pipeline.AddContext` to add context to frames,
   using previous and subsequent frames.
 
+* Added reader (:class:`audiomate.corpus.io.MailabsReader`) and
+  downloader (:class:`audiomate.corpus.io.MailabsDownloader`) for the
+  `M-AILABS Speech Dataset <http://www.m-ailabs.bayern/en/the-mailabs-speech-dataset/>`_.
+
 **Fixes**
 
 * [`#58 <https://github.com/ynop/audiomate/issues/58>`_] Keep track of number of samples per frame and between frames.
