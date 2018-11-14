@@ -78,7 +78,8 @@ class Label(object):
         Read the samples of the utterance.
 
         Args:
-            sr (int): If None uses the sampling rate given by the file, otherwise resamples to the given sampling rate.
+            sr (int): If None uses the sampling rate given by the track,
+                      otherwise resamples to the given sampling rate.
 
         Returns:
             np.ndarray: A numpy array containing the samples as a floating point (numpy.float32) time series.
@@ -88,7 +89,7 @@ class Label(object):
         if self.end >= 0 or self.label_list.utterance.end >= 0:
             duration = self.duration
 
-        return self.label_list.utterance.file.read_samples(sr=sr, offset=self.start_abs, duration=duration)
+        return self.label_list.utterance.track.read_samples(sr=sr, offset=self.start_abs, duration=duration)
 
     def tokenized(self, delimiter=' '):
         """

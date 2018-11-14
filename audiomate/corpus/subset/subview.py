@@ -72,7 +72,7 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
 
     def match(self, utterance, corpus):
         return (utterance.idx in self.utterance_idxs and not self.inverse) \
-               or (utterance.idx not in self.utterance_idxs and self.inverse)
+            or (utterance.idx not in self.utterance_idxs and self.inverse)
 
     def serialize(self):
         inverse_indication = 'exclude' if self.inverse else 'include'
@@ -197,8 +197,8 @@ class Subview(base.CorpusView):
         return 'subview of {}'.format(self.corpus.name)
 
     @property
-    def files(self):
-        return {utterance.file.idx: utterance.file for utterance in self.utterances.values()}
+    def tracks(self):
+        return {utterance.track.idx: utterance.track for utterance in self.utterances.values()}
 
     @property
     def utterances(self):

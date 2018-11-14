@@ -11,11 +11,11 @@ from audiomate.utils import audio
 class Processor(metaclass=abc.ABCMeta):
     """
     The processor base class provides the functionality to process audio data on different levels
-    (Corpus, Utterance, File). For every level there is an offline and an online method.
-    In the offline mode the data is processed in one step (e.g. the whole file/utterance at once).
-    This means the ``process_frames`` method is called with all the frames of the file/utterance.
+    (Corpus, Utterance, Track). For every level there is an offline and an online method.
+    In the offline mode the data is processed in one step (e.g. the whole track/utterance at once).
+    This means the ``process_frames`` method is called with all the frames of the track/utterance.
     In online mode the data is processed in chunks, so the ``process_frames`` method is called multiple times
-    per file/utterance with different chunks.
+    per track/utterance with different chunks.
 
     To implement a concrete processor the ``process_frames`` method has to be implemented.
     This method is called in online and offline mode. So it is up to the user to determine
@@ -175,7 +175,7 @@ class Processor(metaclass=abc.ABCMeta):
         Returns:
             np.ndarray: The processed features.
         """
-        return self.process_file(utterance.file.path, frame_size=frame_size, hop_size=hop_size, sr=sr,
+        return self.process_file(utterance.track.path, frame_size=frame_size, hop_size=hop_size, sr=sr,
                                  start=utterance.start, end=utterance.end, utterance=utterance, corpus=corpus)
 
     def process_utterance_online(self, utterance, frame_size=400, hop_size=160, sr=None, chunk_size=1,
@@ -198,7 +198,7 @@ class Processor(metaclass=abc.ABCMeta):
         Returns:
             Generator: A generator that yield processed chunks.
         """
-        return self.process_file_online(utterance.file.path, frame_size=frame_size, hop_size=hop_size, sr=sr,
+        return self.process_file_online(utterance.track.path, frame_size=frame_size, hop_size=hop_size, sr=sr,
                                         start=utterance.start, end=utterance.end, utterance=utterance, corpus=corpus,
                                         chunk_size=chunk_size, buffer_size=buffer_size)
 
@@ -343,7 +343,7 @@ class Processor(metaclass=abc.ABCMeta):
             if sr is None:
                 if sampling_rate > 0 and sampling_rate != utt_sampling_rate:
                     raise ValueError(
-                        'File {} has a different sampling-rate than the previous ones!'.format(utterance.file.idx))
+                        'File {} has a different sampling-rate than the previous ones!'.format(utterance.track.idx))
 
                 sampling_rate = utt_sampling_rate
 

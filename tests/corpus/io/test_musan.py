@@ -38,27 +38,27 @@ class MusanReaderTest(unittest.TestCase):
         self.reader = io.MusanReader()
         self.test_path = resources.sample_corpus_path('musan')
 
-    def test_load_files(self):
+    def test_load_tracks(self):
         ds = self.reader.load(self.test_path)
 
         fma = os.path.join(self.test_path, 'music', 'fma')
         free_sound = os.path.join(self.test_path, 'noise', 'free-sound')
         librivox = os.path.join(self.test_path, 'speech', 'librivox')
 
-        assert ds.num_files == 5
+        assert ds.num_tracks == 5
 
-        assert ds.files['music-fma-0000'].idx == 'music-fma-0000'
-        assert ds.files['music-fma-0000'].path == os.path.join(fma, 'music-fma-0000.wav')
+        assert ds.tracks['music-fma-0000'].idx == 'music-fma-0000'
+        assert ds.tracks['music-fma-0000'].path == os.path.join(fma, 'music-fma-0000.wav')
 
-        assert ds.files['noise-free-sound-0000'].idx == 'noise-free-sound-0000'
-        assert ds.files['noise-free-sound-0000'].path == os.path.join(free_sound, 'noise-free-sound-0000.wav')
-        assert ds.files['noise-free-sound-0001'].idx == 'noise-free-sound-0001'
-        assert ds.files['noise-free-sound-0001'].path == os.path.join(free_sound, 'noise-free-sound-0001.wav')
+        assert ds.tracks['noise-free-sound-0000'].idx == 'noise-free-sound-0000'
+        assert ds.tracks['noise-free-sound-0000'].path == os.path.join(free_sound, 'noise-free-sound-0000.wav')
+        assert ds.tracks['noise-free-sound-0001'].idx == 'noise-free-sound-0001'
+        assert ds.tracks['noise-free-sound-0001'].path == os.path.join(free_sound, 'noise-free-sound-0001.wav')
 
-        assert ds.files['speech-librivox-0000'].idx == 'speech-librivox-0000'
-        assert ds.files['speech-librivox-0000'].path == os.path.join(librivox, 'speech-librivox-0000.wav')
-        assert ds.files['speech-librivox-0001'].idx == 'speech-librivox-0001'
-        assert ds.files['speech-librivox-0001'].path == os.path.join(librivox, 'speech-librivox-0001.wav')
+        assert ds.tracks['speech-librivox-0000'].idx == 'speech-librivox-0000'
+        assert ds.tracks['speech-librivox-0000'].path == os.path.join(librivox, 'speech-librivox-0000.wav')
+        assert ds.tracks['speech-librivox-0001'].idx == 'speech-librivox-0001'
+        assert ds.tracks['speech-librivox-0001'].path == os.path.join(librivox, 'speech-librivox-0001.wav')
 
     def test_load_issuers(self):
         ds = self.reader.load(self.test_path)
@@ -86,31 +86,31 @@ class MusanReaderTest(unittest.TestCase):
         assert ds.num_utterances == 5
 
         assert ds.utterances['music-fma-0000'].idx == 'music-fma-0000'
-        assert ds.utterances['music-fma-0000'].file.idx == 'music-fma-0000'
+        assert ds.utterances['music-fma-0000'].track.idx == 'music-fma-0000'
         assert ds.utterances['music-fma-0000'].issuer.idx == 'Quiet_Music_for_Tiny_Robots'
         assert ds.utterances['music-fma-0000'].start == 0
         assert ds.utterances['music-fma-0000'].end == -1
 
         assert ds.utterances['noise-free-sound-0000'].idx == 'noise-free-sound-0000'
-        assert ds.utterances['noise-free-sound-0000'].file.idx == 'noise-free-sound-0000'
+        assert ds.utterances['noise-free-sound-0000'].track.idx == 'noise-free-sound-0000'
         assert ds.utterances['noise-free-sound-0000'].issuer is None
         assert ds.utterances['noise-free-sound-0000'].start == 0
         assert ds.utterances['noise-free-sound-0000'].end == -1
 
         assert ds.utterances['noise-free-sound-0001'].idx == 'noise-free-sound-0001'
-        assert ds.utterances['noise-free-sound-0001'].file.idx == 'noise-free-sound-0001'
+        assert ds.utterances['noise-free-sound-0001'].track.idx == 'noise-free-sound-0001'
         assert ds.utterances['noise-free-sound-0001'].issuer is None
         assert ds.utterances['noise-free-sound-0001'].start == 0
         assert ds.utterances['noise-free-sound-0001'].end == -1
 
         assert ds.utterances['speech-librivox-0000'].idx == 'speech-librivox-0000'
-        assert ds.utterances['speech-librivox-0000'].file.idx == 'speech-librivox-0000'
+        assert ds.utterances['speech-librivox-0000'].track.idx == 'speech-librivox-0000'
         assert ds.utterances['speech-librivox-0000'].issuer.idx == 'speech-librivox-0000'
         assert ds.utterances['speech-librivox-0000'].start == 0
         assert ds.utterances['speech-librivox-0000'].end == -1
 
         assert ds.utterances['speech-librivox-0001'].idx == 'speech-librivox-0001'
-        assert ds.utterances['speech-librivox-0001'].file.idx == 'speech-librivox-0001'
+        assert ds.utterances['speech-librivox-0001'].track.idx == 'speech-librivox-0001'
         assert ds.utterances['speech-librivox-0001'].issuer.idx == 'speech-librivox-0001'
         assert ds.utterances['speech-librivox-0001'].start == 0
         assert ds.utterances['speech-librivox-0001'].end == -1

@@ -1,19 +1,21 @@
 import librosa
 import audioread
 
+from . import track
 
-class File(object):
+
+class FileTrack(track.Track):
     """
-    The file object is used to hold any data/infos about a file contained in a corpus.
+    A track that is stored in a file.
 
     Args:
-        idx (str): A unique identifier within a corpus for the file.
+        idx (str): A identifier to uniquely identify a track.
         path (str): The path to the file.
     """
-    __slots__ = ['idx', 'path']
+    __slots__ = ['path']
 
     def __init__(self, idx, path):
-        self.idx = idx
+        super(FileTrack, self).__init__(idx)
         self.path = path
 
     @property
@@ -55,12 +57,20 @@ class File(object):
         (see http://librosa.github.io/librosa/generated/librosa.core.load.html).
 
         Args:
-            sr (int): If None uses the sampling rate given by the file, otherwise resamples to the given sampling rate.
-            offset (float): The time in seconds, from where to start reading the samples (rel. to the file start).
+            sr (int): If ``None``, uses the sampling rate given by the file,
+                      otherwise resamples to the given sampling rate.
+            offset (float): The time in seconds, from where to start reading
+                            the samples (rel. to the file start).
             duration (float): The length of the samples to read in seconds.
 
         Returns:
-            np.ndarray: A numpy array containing the samples as a floating point (numpy.float32) time series.
+            np.ndarray: A numpy array containing the samples as a
+                        floating point (numpy.float32) time series.
         """
-        samples, __ = librosa.core.load(self.path, sr=sr, offset=offset, duration=duration)
+        samples, __ = librosa.core.load(
+            self.path,
+            sr=sr,
+            offset=offset,
+            duration=duration
+        )
         return samples

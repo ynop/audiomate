@@ -29,6 +29,7 @@ This should ease the use of audio datasets for example for machine learning task
     :caption: Package Reference
 
     reference/corpus
+    reference/tracks
     reference/assets
     reference/containers
     reference/io

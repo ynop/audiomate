@@ -8,26 +8,27 @@ from . import label
 
 class Utterance(object):
     """
-    An utterance defines a sample of audio. It is part of a file or can span over the whole file.
+    An utterance defines a sample of audio.
+    It is part of a track or can span over the whole track.
 
     Args:
         idx (str): A unique identifier for the utterance within a dataset.
-        file (File): The file this utterance is belonging to.
+        track (Track): The track this utterance is belonging to.
         issuer (Issuer): The issuer this utterance was created from.
-        start (float): The start of the utterance within the audio file in seconds. (default 0)
-        end (float): The end of the utterance within the audio file in seconds. -1 indicates that
-                     the utterance ends at the end of the file. (default -1)
+        start (float): The start of the utterance within the audio track in seconds. (default 0)
+        end (float): The end of the utterance within the audio track in seconds. -1 indicates that
+                     the utterance ends at the end of the track. (default -1)
         label_lists (LabelList, list): A single or multiple label-lists.
 
     Attributes:
         label_lists (dict): A dictionary containing label-lists with the label-list-idx as key.
     """
 
-    __slots__ = ['idx', 'file', 'issuer', 'start', 'end', 'label_lists']
+    __slots__ = ['idx', 'track', 'issuer', 'start', 'end', 'label_lists']
 
-    def __init__(self, idx, file, issuer=None, start=0, end=-1, label_lists=None):
+    def __init__(self, idx, track, issuer=None, start=0, end=-1, label_lists=None):
         self.idx = idx
-        self.file = file
+        self.track = track
         self.issuer = issuer
         self.start = start
         self.end = end
@@ -45,7 +46,7 @@ class Utterance(object):
         Return the absolute end of the utterance relative to the signal.
         """
         if self.end == -1:
-            return self.file.duration
+            return self.track.duration
         else:
             return self.end
 
@@ -85,7 +86,8 @@ class Utterance(object):
         Read the samples of the utterance.
 
         Args:
-            sr (int): If None uses the sampling rate given by the file, otherwise resamples to the given sampling rate.
+            sr (int): If None uses the sampling rate given by the track,
+                      otherwise resamples to the given sampling rate.
             offset (float): Offset in seconds to read samples from.
             duration (float): If not None read only this number of seconds in maximum.
 
@@ -104,14 +106,14 @@ class Utterance(object):
         if duration is not None:
             read_duration = min(duration, read_duration)
 
-        return self.file.read_samples(sr=sr, offset=self.start + offset, duration=read_duration)
+        return self.track.read_samples(sr=sr, offset=self.start + offset, duration=read_duration)
 
     @property
     def sampling_rate(self):
         """
         Return the sampling rate.
         """
-        return self.file.sampling_rate
+        return self.track.sampling_rate
 
     #
     #   Labels
@@ -217,18 +219,18 @@ class Utterance(object):
 
         return duration
 
-    def split(self, cutting_points, file_relative=False):
+    def split(self, cutting_points, track_relative=False):
         """
         Split the utterance into x parts (sub-utterances) and return them as new utterances.
         x is defined by cutting_points (``x = len(cutting_points) + 1``).
 
         By default cutting-points are relative to the start of the utterance.
         For example if an utterance starts at 50s,
-        a cutting-point of 10.0 will split the utterance at 60s relative to the file.
+        a cutting-point of 10.0 will split the utterance at 60s relative to the track.
 
         Args:
             cutting_points (list): List of floats defining the times in seconds where to split the utterance.
-            file_relative (bool): If True, cutting-points are relative to the start of the file.
+            track_relative (bool): If True, cutting-points are relative to the start of the track.
                                   Otherwise they are relative to the start of the utterance.
 
         Returns:
@@ -246,7 +248,7 @@ class Utterance(object):
             10.0
         """
 
-        if not file_relative:
+        if not track_relative:
             cutting_points = [c + self.start for c in cutting_points]
 
         if len(cutting_points) == 0:
@@ -279,7 +281,7 @@ class Utterance(object):
                 sub_end = filtered_cutting_points[index]
 
             new_idx = '{}_{}'.format(self.idx, index)
-            new_utt = Utterance(new_idx, file=self.file, issuer=self.issuer, start=sub_start, end=sub_end)
+            new_utt = Utterance(new_idx, track=self.track, issuer=self.issuer, start=sub_start, end=sub_end)
 
             for parts in splitted_label_lists.values():
                 new_utt.set_label_list(parts[index])

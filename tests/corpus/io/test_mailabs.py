@@ -46,12 +46,12 @@ class TestMailabsDownloader:
 
 class TestMailabsReader:
 
-    def test_load_correct_number_of_files(self, reader, data_path):
+    def test_load_correct_number_of_tracks(self, reader, data_path):
         ds = reader.load(data_path)
 
-        assert ds.num_files == 13
+        assert ds.num_tracks == 13
 
-    def test_load_files(self, reader, data_path):
+    def test_load_tracks(self, reader, data_path):
         ds = reader.load(data_path)
 
         idx = 'elizabeth_klett-jane_eyre_01_f000001'
@@ -59,22 +59,22 @@ class TestMailabsReader:
                             'elizabeth_klett', 'jane_eyre',
                             'wavs', 'jane_eyre_01_f000001.wav')
 
-        assert ds.files[idx].idx == idx
-        assert ds.files[idx].path == path
+        assert ds.tracks[idx].idx == idx
+        assert ds.tracks[idx].path == path
 
         idx = 'fred-azele_01_f000002'
         path = os.path.join(data_path, 'de_DE', 'by_book', 'male', 'fred',
                             'azele', 'wavs', 'azele_01_f000002.wav')
 
-        assert ds.files[idx].idx == idx
-        assert ds.files[idx].path == path
+        assert ds.tracks[idx].idx == idx
+        assert ds.tracks[idx].path == path
 
         idx = 'abc_01_f000002'
         path = os.path.join(data_path, 'de_DE', 'by_book', 'mix',
                             'abc', 'wavs', 'abc_01_f000002.wav')
 
-        assert ds.files[idx].idx == idx
-        assert ds.files[idx].path == path
+        assert ds.tracks[idx].idx == idx
+        assert ds.tracks[idx].path == path
 
     def test_load_correct_number_of_issuers(self, reader, data_path):
         ds = reader.load(data_path)
@@ -119,7 +119,7 @@ class TestMailabsReader:
         idx = 'elizabeth_klett-jane_eyre_01_f000003'
 
         assert ds.utterances[idx].idx == idx
-        assert ds.utterances[idx].file.idx == idx
+        assert ds.utterances[idx].track.idx == idx
         assert ds.utterances[idx].issuer.idx == 'elizabeth_klett'
         assert ds.utterances[idx].start == 0
         assert ds.utterances[idx].end == -1
@@ -127,7 +127,7 @@ class TestMailabsReader:
         idx = 'sara-abc_01_f000001'
 
         assert ds.utterances[idx].idx == idx
-        assert ds.utterances[idx].file.idx == idx
+        assert ds.utterances[idx].track.idx == idx
         assert ds.utterances[idx].issuer.idx == 'sara'
         assert ds.utterances[idx].start == 0
         assert ds.utterances[idx].end == -1
@@ -135,7 +135,7 @@ class TestMailabsReader:
         idx = 'abc_01_f000001'
 
         assert ds.utterances[idx].idx == idx
-        assert ds.utterances[idx].file.idx == idx
+        assert ds.utterances[idx].track.idx == idx
         assert ds.utterances[idx].issuer.idx == idx
         assert ds.utterances[idx].start == 0
         assert ds.utterances[idx].end == -1

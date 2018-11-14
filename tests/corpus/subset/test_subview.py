@@ -122,10 +122,10 @@ class SubviewTest(unittest.TestCase):
         self.corpus = resources.create_dataset()
         self.subview = subview.Subview(self.corpus, filter_criteria=[filter])
 
-    def test_files(self):
-        assert self.subview.num_files == 2
-        assert 'wav-1' in self.subview.files.keys()
-        assert 'wav_3' in self.subview.files.keys()
+    def test_tracks(self):
+        assert self.subview.num_tracks == 2
+        assert 'wav-1' in self.subview.tracks.keys()
+        assert 'wav_3' in self.subview.tracks.keys()
 
     def test_utterances(self):
         assert self.subview.num_utterances == 2

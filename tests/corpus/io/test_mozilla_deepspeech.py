@@ -41,12 +41,12 @@ class TestMozillaDeepSpeechWriter:
         # DATA RECORDS
         utts = {r[0]: (r[1], r[2]) for r in records[1:]}
 
-        path = ds.utterances['utt-1'].file.path
+        path = ds.utterances['utt-1'].track.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
         assert utts[path][1] == ds.utterances['utt-1'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels[0].value
 
-        path = ds.utterances['utt-2'].file.path
+        path = ds.utterances['utt-2'].track.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
         assert utts[path][1] == ds.utterances['utt-2'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels[0].value
@@ -61,7 +61,7 @@ class TestMozillaDeepSpeechWriter:
         assert utts[path][0] == '32044'
         assert utts[path][1] == ds.utterances['utt-4'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels[0].value
 
-        path = ds.utterances['utt-5'].file.path
+        path = ds.utterances['utt-5'].track.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
         assert utts[path][1] == ds.utterances['utt-5'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels[0].value
@@ -86,12 +86,12 @@ class TestMozillaDeepSpeechWriter:
         # DATA RECORDS
         utts = {r[0]: (r[1], r[2]) for r in records[1:]}
 
-        path = ds.utterances['utt-1'].file.path
+        path = ds.utterances['utt-1'].track.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
         assert utts[path][1] == ds.utterances['utt-1'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels[0].value
 
-        path = ds.utterances['utt-2'].file.path
+        path = ds.utterances['utt-2'].track.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
         assert utts[path][1] == ds.utterances['utt-2'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels[0].value
@@ -126,7 +126,7 @@ class TestMozillaDeepSpeechWriter:
         assert utts[path][0] == '32044'
         assert utts[path][1] == ds.utterances['utt-4'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels[0].value
 
-        path = ds.utterances['utt-5'].file.path
+        path = ds.utterances['utt-5'].track.path
         assert len(utts[path]) == 2
         assert utts[path][0] == '83090'
         assert utts[path][1] == ds.utterances['utt-5'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels[0].value

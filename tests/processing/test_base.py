@@ -6,6 +6,7 @@ import h5py
 
 import pytest
 
+from audiomate import tracks
 from audiomate import containers
 from audiomate.corpus import assets
 from audiomate import processing
@@ -50,8 +51,8 @@ def processor():
 
 @pytest.fixture()
 def sample_utterance():
-    file = assets.File('test_file', resources.sample_wav_file('wav_1.wav'))
-    utterance = assets.Utterance('test', file)
+    file_track = tracks.FileTrack('test_file', resources.sample_wav_file('wav_1.wav'))
+    utterance = assets.Utterance('test', file_track)
     return utterance
 
 

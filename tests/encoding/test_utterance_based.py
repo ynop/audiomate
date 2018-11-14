@@ -10,7 +10,7 @@ class TestTokenOrdinalEncoder:
 
     def test_encode_utterance_with_single_label(self):
         ll = assets.LabelList(idx='go', labels=[assets.Label('a c b')])
-        utt = assets.Utterance(idx='utt-1', file='file-x', label_lists=ll)
+        utt = assets.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('go', ['a', 'b', 'c'])
         encoded = encoder.encode_utterance(utt)
@@ -23,7 +23,7 @@ class TestTokenOrdinalEncoder:
             assets.Label('c b b', start=5, end=9.4),
             assets.Label('a a a', start=9.5, end=10.2)
         ])
-        utt = assets.Utterance(idx='utt-1', file='file-x', label_lists=ll)
+        utt = assets.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('go', ['a', 'b', 'c'])
         encoded = encoder.encode_utterance(utt)
@@ -36,7 +36,7 @@ class TestTokenOrdinalEncoder:
             assets.Label('c b b', start=2, end=9.4),
             assets.Label('a a a', start=9.5, end=10.2)
         ])
-        utt = assets.Utterance(idx='utt-1', file='file-x', label_lists=ll)
+        utt = assets.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('go', ['a', 'b', 'c'])
 
@@ -45,7 +45,7 @@ class TestTokenOrdinalEncoder:
 
     def test_encode_utterance_with_missing_token_raises_error(self):
         ll = assets.LabelList(idx='go', labels=[assets.Label('a c b unknown')])
-        utt = assets.Utterance(idx='utt-1', file='file-x', label_lists=ll)
+        utt = assets.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('go', ['a', 'b', 'c'])
 
@@ -54,7 +54,7 @@ class TestTokenOrdinalEncoder:
 
     def test_encode_utterance_with_non_existing_label_list_raises_error(self):
         ll = assets.LabelList(idx='go', labels=[assets.Label('a c b unknown')])
-        utt = assets.Utterance(idx='utt-1', file='file-x', label_lists=ll)
+        utt = assets.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('not_existing', ['a', 'b', 'c'])
 
@@ -63,7 +63,7 @@ class TestTokenOrdinalEncoder:
 
     def test_encode_utterance_with_custom_delimiter(self):
         ll = assets.LabelList(idx='go', labels=[assets.Label('a, c , b, b')])
-        utt = assets.Utterance(idx='utt-1', file='file-x', label_lists=ll)
+        utt = assets.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('go', ['a', 'b', 'c'], token_delimiter=',')
         encoded = encoder.encode_utterance(utt)

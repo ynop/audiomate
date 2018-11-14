@@ -4,20 +4,6 @@ audiomate.corpus.assets
 .. automodule:: audiomate.corpus.assets
 .. currentmodule:: audiomate.corpus.assets
 
-File
-----
-
-.. autoclass:: File
-   :members:
-   :inherited-members:
-
-Utterance
----------
-
-.. autoclass:: Utterance
-   :members:
-   :inherited-members:
-
 Issuer
 ------
 

@@ -22,25 +22,25 @@ class CorpusView(metaclass=abc.ABCMeta):
         return 'undefined'
 
     #
-    #   Files
+    #   Tracks
     #
 
     @property
     @abc.abstractmethod
-    def files(self):
+    def tracks(self):
         """
-        Return the files in the corpus.
+        Return the tracks in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`audiomate.corpus.assets.File` objects with the
-            file-idx as key.
+            dict: A dictionary containing :py:class:`audiomate.track.Track` objects with the
+            track-idx as key.
         """
         return {}
 
     @property
-    def num_files(self):
-        """ Return number of files. """
-        return len(self.files)
+    def num_tracks(self):
+        """ Return number of tracks. """
+        return len(self.tracks)
 
     #
     #   Utterances

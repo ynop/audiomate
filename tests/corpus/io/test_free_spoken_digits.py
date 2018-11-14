@@ -44,10 +44,10 @@ class TestFreeSpokenDigitDownloader:
 
 class TestFreeSpokenDigitReader:
 
-    def test_load_correct_number_of_files(self, reader, data_path):
+    def test_load_correct_number_of_tracks(self, reader, data_path):
         ds = reader.load(data_path)
 
-        assert ds.num_files == 4
+        assert ds.num_tracks == 4
 
     @pytest.mark.parametrize('idx,path', [
         ('0_jackson_0', os.path.join('recordings', '0_jackson_0.wav')),
@@ -55,11 +55,11 @@ class TestFreeSpokenDigitReader:
         ('2_theo_0', os.path.join('recordings', '2_theo_0.wav')),
         ('2_theo_1', os.path.join('recordings', '2_theo_1.wav')),
     ])
-    def test_load_files(self, idx, path, reader, data_path):
+    def test_load_tracks(self, idx, path, reader, data_path):
         ds = reader.load(data_path)
 
-        assert ds.files[idx].idx == idx
-        assert ds.files[idx].path == os.path.join(data_path, path)
+        assert ds.tracks[idx].idx == idx
+        assert ds.tracks[idx].path == os.path.join(data_path, path)
 
     def test_load_correct_number_of_speakers(self, reader, data_path):
         ds = reader.load(data_path)
@@ -92,7 +92,7 @@ class TestFreeSpokenDigitReader:
         ds = reader.load(data_path)
 
         assert ds.utterances[idx].idx == idx
-        assert ds.utterances[idx].file.idx == idx
+        assert ds.utterances[idx].track.idx == idx
         assert ds.utterances[idx].issuer.idx == issuer_idx
         assert ds.utterances[idx].start == 0
         assert ds.utterances[idx].end == -1

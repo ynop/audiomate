@@ -5,6 +5,7 @@ import re
 import json
 
 import audiomate
+from audiomate import tracks
 from audiomate.corpus import assets
 from audiomate.corpus.subset import subview
 from audiomate.utils import textfile
@@ -67,7 +68,7 @@ class DefaultReader(base.CorpusReader):
     def read_files(file_path, corpus):
         path = os.path.dirname(file_path)
         for file_idx, file_path in textfile.read_key_value_lines(file_path, separator=' ').items():
-            corpus.new_file(os.path.join(path, file_path), file_idx=file_idx, copy_file=False)
+            corpus.new_file(os.path.join(path, file_path), track_idx=file_idx, copy_file=False)
 
     @staticmethod
     def read_issuers(file_path, corpus):
@@ -210,7 +211,15 @@ class DefaultWriter(base.CorpusWriter):
 
     @staticmethod
     def write_files(file_path, corpus, path):
-        file_records = [[file.idx, os.path.relpath(file.path, path)] for file in corpus.files.values()]
+        file_records = []
+
+        for file in corpus.tracks.values():
+            if isinstance(file, tracks.FileTrack):
+                file_records.append([
+                    file.idx,
+                    os.path.relpath(file.path, path)
+                ])
+
         textfile.write_separated_lines(file_path, file_records, separator=' ', sort_by_column=0)
 
     @staticmethod
@@ -245,7 +254,7 @@ class DefaultWriter(base.CorpusWriter):
 
     @staticmethod
     def write_utterances(utterance_path, corpus):
-        utterance_records = {utterance.idx: [utterance.file.idx, utterance.start, utterance.end] for
+        utterance_records = {utterance.idx: [utterance.track.idx, utterance.start, utterance.end] for
                              utterance in corpus.utterances.values()}
         textfile.write_separated_lines(utterance_path, utterance_records, separator=' ', sort_by_column=0)
 

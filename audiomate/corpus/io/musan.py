@@ -98,7 +98,7 @@ class MusanReader(base.CorpusReader):
                     utterance_idx = file_idx  # every file is a separate utterance
                     issuer_idx = create_or_get_issuer[type_name](corpus, file_idx, annotations)
 
-                    corpus.new_file(file_path, file_idx=file_idx, copy_file=False)
+                    corpus.new_file(file_path, track_idx=file_idx, copy_file=False)
                     utterance = corpus.new_utterance(utterance_idx, file_idx, issuer_idx)
                     utterance.set_label_list(assets.LabelList.create_single(type_name, idx=audiomate.corpus.LL_DOMAIN))
 

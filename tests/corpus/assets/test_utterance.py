@@ -4,6 +4,7 @@ import numpy as np
 import librosa
 import pytest
 
+from audiomate import tracks
 from audiomate.corpus import assets
 
 from tests import resources
@@ -37,9 +38,9 @@ class UtteranceTest(unittest.TestCase):
             assets.Label('g', 4.2, 7.9)
         ])
 
-        self.file = assets.File('wav', resources.sample_wav_file('wav_1.wav'))
+        self.track = tracks.FileTrack('wav', resources.sample_wav_file('wav_1.wav'))
         self.issuer = assets.Issuer('toni')
-        self.utt = assets.Utterance('test', self.file, issuer=self.issuer, start=1.25, end=1.30, label_lists=[
+        self.utt = assets.Utterance('test', self.track, issuer=self.issuer, start=1.25, end=1.30, label_lists=[
             self.ll_1,
             self.ll_2,
             self.ll_duplicate_idx,
@@ -49,15 +50,15 @@ class UtteranceTest(unittest.TestCase):
     def test_end_abs(self):
         assert self.utt.end_abs == 1.30
 
-    def test_end_abs_end_of_file(self):
-        utt = assets.Utterance('utt', self.file, start=0.3, end=-1)
+    def test_end_abs_end_of_track(self):
+        utt = assets.Utterance('utt', self.track, start=0.3, end=-1)
         assert utt.end_abs == pytest.approx(2.5951875)
 
     def test_duration(self):
         assert self.utt.duration == pytest.approx(0.05)
 
-    def test_duration_end_of_file(self):
-        utt = assets.Utterance('utt', self.file, start=0.3, end=-1)
+    def test_duration_end_of_track(self):
+        utt = assets.Utterance('utt', self.track, start=0.3, end=-1)
         assert utt.duration == pytest.approx(2.2951875)
 
     def test_issuer_relation_on_creation(self):
@@ -105,15 +106,15 @@ class UtteranceTest(unittest.TestCase):
         assert duration['g'] == pytest.approx(3.7)
 
     def test_read_samples(self):
-        expected, __ = librosa.core.load(self.file.path, sr=None, offset=1.25, duration=0.05)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=1.25, duration=0.05)
         assert np.array_equal(self.utt.read_samples(), expected)
 
     def test_read_samples_with_offset(self):
-        expected, __ = librosa.core.load(self.file.path, sr=None, offset=1.27, duration=0.03)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=1.27, duration=0.03)
         assert np.array_equal(self.utt.read_samples(offset=0.02), expected)
 
     def test_read_samples_with_duration(self):
-        expected, __ = librosa.core.load(self.file.path, sr=None, offset=1.26, duration=0.03)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=1.26, duration=0.03)
         assert np.array_equal(self.utt.read_samples(offset=0.01, duration=0.03), expected)
 
     def test_num_samples(self):
@@ -129,7 +130,7 @@ class UtteranceTest(unittest.TestCase):
     def test_split(self):
         ll_1 = assets.LabelList('phones', labels=[assets.Label('alpha', start=0.0, end=30.0)])
         ll_2 = assets.LabelList('words', labels=[assets.Label('b', start=0.0, end=30.0)])
-        utt = assets.Utterance('utt-1', 'file-x', start=0.0, end=40.0, label_lists=[ll_1, ll_2])
+        utt = assets.Utterance('utt-1', 'track-x', start=0.0, end=40.0, label_lists=[ll_1, ll_2])
 
         res = utt.split([14.0, 29.5])
 
@@ -158,14 +159,14 @@ class UtteranceTest(unittest.TestCase):
         assert res[1].start == 24.5
         assert res[1].end == -1
 
-    def test_split_sets_file(self):
-        file = assets.File('file-1', '/some/path')
+    def test_split_sets_track(self):
+        file = tracks.FileTrack('file-1', '/some/path')
         utt = assets.Utterance('utt-1', file, start=0.0, end=10.0)
         res = utt.split([5.2])
 
         assert len(res) == 2
-        assert res[0].file == file
-        assert res[1].file == file
+        assert res[0].track == file
+        assert res[1].track == file
 
     def test_split_sets_issuer(self):
         issuer = assets.Speaker('spk-1')
@@ -200,9 +201,9 @@ class UtteranceTest(unittest.TestCase):
         assert res[1].start == 9.0
         assert res[1].end == 20.
 
-    def test_split_file_relative(self):
+    def test_split_track_relative(self):
         utt = assets.Utterance('utt-1', None, start=6.0, end=20.0)
-        res = utt.split([8.0], file_relative=True)
+        res = utt.split([8.0], track_relative=True)
 
         assert len(res) == 2
         assert res[0].start == 6.0
@@ -212,7 +213,7 @@ class UtteranceTest(unittest.TestCase):
 
     def test_split_utt_relative(self):
         utt = assets.Utterance('utt-1', None, start=6.0, end=20.0)
-        res = utt.split([8.0], file_relative=False)
+        res = utt.split([8.0], track_relative=False)
 
         assert len(res) == 2
         assert res[0].start == 6.0
@@ -225,7 +226,7 @@ class UtteranceTest(unittest.TestCase):
         ll_2 = assets.LabelList('words', labels=[assets.Label('b', start=8.0, end=30.0)])
         utt = assets.Utterance('utt-1', 'file-x', start=10.0, end=40.0, label_lists=[ll_1, ll_2])
 
-        res = utt.split([14.0], file_relative=False)
+        res = utt.split([14.0], track_relative=False)
 
         assert len(res) == 2
 

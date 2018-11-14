@@ -31,10 +31,10 @@ def create_dataset():
     wav_3_path = sample_wav_file('wav_3.wav')
     wav_4_path = sample_wav_file('wav_4.wav')
 
-    file_1 = ds.new_file(wav_1_path, file_idx='wav-1')
-    file_2 = ds.new_file(wav_2_path, file_idx='wav_2')
-    file_3 = ds.new_file(wav_3_path, file_idx='wav_3')
-    file_4 = ds.new_file(wav_4_path, file_idx='wav_4')
+    file_1 = ds.new_file(wav_1_path, track_idx='wav-1')
+    file_2 = ds.new_file(wav_2_path, track_idx='wav_2')
+    file_3 = ds.new_file(wav_3_path, track_idx='wav_3')
+    file_4 = ds.new_file(wav_4_path, track_idx='wav_4')
 
     issuer_1 = assets.Speaker('spk-1', gender=assets.Gender.MALE)
     issuer_2 = assets.Speaker('spk-2', gender=assets.Gender.FEMALE)
@@ -82,10 +82,10 @@ def create_multi_label_corpus():
     wav_3_path = sample_wav_file('wav_3.wav')
     wav_4_path = sample_wav_file('wav_4.wav')
 
-    file_1 = ds.new_file(wav_1_path, file_idx='wav-1')
-    file_2 = ds.new_file(wav_2_path, file_idx='wav_2')
-    file_3 = ds.new_file(wav_3_path, file_idx='wav_3')
-    file_4 = ds.new_file(wav_4_path, file_idx='wav_4')
+    file_1 = ds.new_file(wav_1_path, track_idx='wav-1')
+    file_2 = ds.new_file(wav_2_path, track_idx='wav_2')
+    file_3 = ds.new_file(wav_3_path, track_idx='wav_3')
+    file_4 = ds.new_file(wav_4_path, track_idx='wav_4')
 
     issuer_1 = ds.new_issuer('spk-1')
     issuer_2 = ds.new_issuer('spk-2')
@@ -165,10 +165,10 @@ def create_single_label_corpus():
     wav_3_path = sample_wav_file('wav_3.wav')
     wav_4_path = sample_wav_file('wav_4.wav')
 
-    file_1 = ds.new_file(wav_1_path, file_idx='wav-1')
-    file_2 = ds.new_file(wav_2_path, file_idx='wav_2')
-    file_3 = ds.new_file(wav_3_path, file_idx='wav_3')
-    file_4 = ds.new_file(wav_4_path, file_idx='wav_4')
+    file_1 = ds.new_file(wav_1_path, track_idx='wav-1')
+    file_2 = ds.new_file(wav_2_path, track_idx='wav_2')
+    file_3 = ds.new_file(wav_3_path, track_idx='wav_3')
+    file_4 = ds.new_file(wav_4_path, track_idx='wav_4')
 
     issuer_1 = ds.new_issuer('spk-1')
     issuer_2 = ds.new_issuer('spk-2')

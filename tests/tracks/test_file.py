@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 import librosa
 
-from audiomate.corpus import assets
+from audiomate import tracks
 
 from tests import resources
 
@@ -24,7 +24,7 @@ class TestFile:
         ('wavex_2_48k_24b.wav', 48000)
     ])
     def test_sampling_rate(self, name, sampling_rate, audio_path):
-        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
+        file_obj = tracks.FileTrack('some_idx', os.path.join(audio_path, name))
 
         assert file_obj.sampling_rate == sampling_rate
 
@@ -36,7 +36,7 @@ class TestFile:
         ('wavex_2_48k_24b.wav', 2)
     ])
     def test_num_channels(self, name, num_channels, audio_path):
-        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
+        file_obj = tracks.FileTrack('some_idx', os.path.join(audio_path, name))
 
         assert file_obj.num_channels == num_channels
 
@@ -46,7 +46,7 @@ class TestFile:
         ('wavex_2_48k_24b.wav', 192000)
     ])
     def test_num_samples(self, name, num_samples, audio_path):
-        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
+        file_obj = tracks.FileTrack('some_idx', os.path.join(audio_path, name))
 
         assert file_obj.num_samples == num_samples
 
@@ -55,7 +55,7 @@ class TestFile:
         ('mp3_2_44_1k_16b.mp3', 222336)
     ])
     def test_num_samples_compressed_formats(self, name, num_samples, audio_path):
-        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
+        file_obj = tracks.FileTrack('some_idx', os.path.join(audio_path, name))
 
         assert file_obj.num_samples == pytest.approx(num_samples, abs=2000)
 
@@ -65,7 +65,7 @@ class TestFile:
         ('wavex_2_48k_24b.wav', 4.0)
     ])
     def test_num_duration(self, name, duration, audio_path):
-        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
+        file_obj = tracks.FileTrack('some_idx', os.path.join(audio_path, name))
 
         assert file_obj.duration == pytest.approx(duration)
 
@@ -74,7 +74,7 @@ class TestFile:
         ('mp3_2_44_1k_16b.mp3', 5.0416326531)
     ])
     def test_num_duration_compressed_formats(self, name, duration, audio_path):
-        file_obj = assets.File('some_idx', os.path.join(audio_path, name))
+        file_obj = tracks.FileTrack('some_idx', os.path.join(audio_path, name))
 
         assert file_obj.duration == pytest.approx(duration, abs=0.1)
 
@@ -87,7 +87,7 @@ class TestFile:
     ])
     def test_read_samples(self, name, audio_path):
         audio_path = os.path.join(audio_path, name)
-        file_obj = assets.File('some_idx', audio_path)
+        file_obj = tracks.FileTrack('some_idx', audio_path)
 
         expected, __ = librosa.core.load(audio_path, sr=None, mono=True)
         actual = file_obj.read_samples()
@@ -103,7 +103,7 @@ class TestFile:
     ])
     def test_read_samples_fix_sampling_rate(self, name, audio_path):
         audio_path = os.path.join(audio_path, name)
-        file_obj = assets.File('some_idx', audio_path)
+        file_obj = tracks.FileTrack('some_idx', audio_path)
 
         expected, __ = librosa.core.load(audio_path, sr=16000, mono=True)
         actual = file_obj.read_samples(sr=16000)
@@ -119,9 +119,10 @@ class TestFile:
     ])
     def test_read_samples_range(self, name, audio_path):
         audio_path = os.path.join(audio_path, name)
-        file_obj = assets.File('some_idx', audio_path)
+        file_obj = tracks.FileTrack('some_idx', audio_path)
 
-        expected, __ = librosa.core.load(audio_path, sr=None, mono=True, offset=1.0, duration=1.7)
+        expected, __ = librosa.core.load(audio_path, sr=None, mono=True,
+                                         offset=1.0, duration=1.7)
         actual = file_obj.read_samples(offset=1.0, duration=1.7)
 
         assert np.array_equal(actual, expected)
