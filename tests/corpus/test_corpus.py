@@ -253,7 +253,7 @@ class CorpusTest(unittest.TestCase):
 
         assert corpus.name == 'default'
         assert corpus.path == resources.sample_corpus_path('default')
-        assert corpus.num_tracks == 4
+        assert corpus.num_tracks == 6
         assert 'file-1' in corpus.tracks
         assert 'file-2' in corpus.tracks
         assert 'file-3' in corpus.tracks
@@ -295,7 +295,7 @@ class CorpusTest(unittest.TestCase):
 
         assert corpus.name == 'default'
         assert corpus.path == resources.sample_corpus_path('default')
-        assert corpus.num_tracks == 4
+        assert corpus.num_tracks == 6
 
         tempdir_contents = os.listdir(self.tempdir)
         assert len(tempdir_contents) == 0
@@ -312,7 +312,7 @@ class CorpusTest(unittest.TestCase):
 
         assert corpus.name == 'default'
         assert corpus.path == resources.sample_corpus_path('default')
-        assert corpus.num_tracks == 4
+        assert corpus.num_tracks == 6
 
         tempdir_contents = os.listdir(self.tempdir)
         assert len(tempdir_contents) == 0
@@ -321,7 +321,7 @@ class CorpusTest(unittest.TestCase):
         corpus.save()
 
         tempdir_contents = os.listdir(self.tempdir)
-        assert len(tempdir_contents) == 9
+        assert len(tempdir_contents) == 10
 
         assert 'files.txt' in tempdir_contents
         assert 'issuers.json' in tempdir_contents
@@ -388,7 +388,7 @@ class CorpusTest(unittest.TestCase):
 
         assert corpus.name == 'default'
         assert corpus.path == resources.sample_corpus_path('default')
-        assert corpus.num_tracks == 4
+        assert corpus.num_tracks == 6
 
         tempdir_contents = os.listdir(self.tempdir)
         assert len(tempdir_contents) == 0
@@ -404,7 +404,7 @@ class CorpusTest(unittest.TestCase):
 
         assert corpus.name == 'default'
         assert corpus.path == resources.sample_corpus_path('default')
-        assert corpus.num_tracks == 4
+        assert corpus.num_tracks == 6
 
         tempdir_contents = os.listdir(self.tempdir)
         assert len(tempdir_contents) == 0
@@ -412,7 +412,7 @@ class CorpusTest(unittest.TestCase):
         corpus.save_at(self.tempdir)
 
         tempdir_contents = os.listdir(self.tempdir)
-        assert len(tempdir_contents) == 9
+        assert len(tempdir_contents) == 10
 
         assert 'files.txt' in tempdir_contents
         assert 'issuers.json' in tempdir_contents

@@ -35,7 +35,7 @@ class TestDefaultReader:
     def test_load_tracks(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)
 
-        assert ds.num_tracks == 4
+        assert ds.num_tracks == 6
         assert ds.tracks['file-1'].idx == 'file-1'
         assert ds.tracks['file-1'].path == os.path.join(sample_corpus_path, 'files', 'wav_1.wav')
         assert ds.tracks['file-2'].idx == 'file-2'
@@ -44,6 +44,12 @@ class TestDefaultReader:
         assert ds.tracks['file-3'].path == os.path.join(sample_corpus_path, 'files', 'wav_3.wav')
         assert ds.tracks['file-4'].idx == 'file-4'
         assert ds.tracks['file-4'].path == os.path.join(sample_corpus_path, 'files', 'wav_4.wav')
+        assert ds.tracks['file-5'].idx == 'file-5'
+        assert ds.tracks['file-5'].key == 'file-5'
+        assert ds.tracks['file-5'].container.path == os.path.join(sample_corpus_path, 'audio')
+        assert ds.tracks['file-6'].idx == 'file-6'
+        assert ds.tracks['file-6'].key == 'file-6'
+        assert ds.tracks['file-6'].container.path == os.path.join(sample_corpus_path, 'audio')
 
     def test_load_utterances(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)
@@ -169,9 +175,10 @@ class TestDefaultWriter:
         writer.save(sample_corpus, tmpdir.strpath)
         files = os.listdir(tmpdir.strpath)
 
-        assert len(files) == 8
+        assert len(files) == 9
 
         assert 'files.txt' in files
+        assert 'audio.txt' in files
         assert 'issuers.json' in files
         assert 'utterances.txt' in files
         assert 'utt_issuers.txt' in files
@@ -198,6 +205,24 @@ class TestDefaultWriter:
                                                                                        file_2_path,
                                                                                        file_3_path,
                                                                                        file_4_path)
+
+    def test_save_container_tracks(self, writer, reader, sample_corpus_path, tmpdir):
+        # make sure relative path changes in contrast to self.ds.path
+        out_path = os.path.join(tmpdir.strpath, 'somesubdir')
+        os.makedirs(out_path)
+
+        sample_corpus = reader.load(sample_corpus_path)
+
+        writer.save(sample_corpus, out_path)
+
+        with open(os.path.join(out_path, 'audio.txt'), 'r') as f:
+            file_content = f.read()
+
+        rel_path = os.path.relpath(os.path.join(sample_corpus_path, 'audio'), out_path)
+        assert file_content.strip() == '\n'.join((
+            'file-5 {} file-5'.format(rel_path),
+            'file-6 {} file-6'.format(rel_path)
+        ))
 
     def test_save_issuers(self, writer, sample_corpus, tmpdir):
         writer.save(sample_corpus, tmpdir.strpath)
