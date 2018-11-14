@@ -5,7 +5,7 @@ import h5py
 
 from audiomate.feeding import PartitioningFeatureIterator
 from audiomate.feeding import partitioning
-from audiomate.corpus import assets
+from audiomate import containers
 
 import pytest
 
@@ -13,7 +13,7 @@ import pytest
 class TestPartitioningContainerLoader:
 
     def test_scan_computes_correct_size_for_one_container(self, tmpdir):
-        c1 = assets.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
+        c1 = containers.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
         c1.open()
         c1.set('utt-1', np.random.random((6, 6)).astype(np.float32))
         c1.set('utt-2', np.random.random((2, 6)).astype(np.float32))
@@ -31,9 +31,9 @@ class TestPartitioningContainerLoader:
         }
 
     def test_scan_computes_correct_size_for_multiple_containers(self, tmpdir):
-        c1 = assets.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
-        c2 = assets.Container(os.path.join(tmpdir.strpath, 'c2.h5'))
-        c3 = assets.Container(os.path.join(tmpdir.strpath, 'c3.h5'))
+        c1 = containers.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
+        c2 = containers.Container(os.path.join(tmpdir.strpath, 'c2.h5'))
+        c3 = containers.Container(os.path.join(tmpdir.strpath, 'c3.h5'))
         c1.open()
         c1.set('utt-1', np.random.random((6, 6)).astype(np.float32))
         c1.set('utt-2', np.random.random((2, 6)).astype(np.float32))
@@ -59,9 +59,9 @@ class TestPartitioningContainerLoader:
         }
 
     def test_get_lengths_returns_correct_lengths_for_multiple_containers(self, tmpdir):
-        c1 = assets.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
-        c2 = assets.Container(os.path.join(tmpdir.strpath, 'c2.h5'))
-        c3 = assets.Container(os.path.join(tmpdir.strpath, 'c3.h5'))
+        c1 = containers.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
+        c2 = containers.Container(os.path.join(tmpdir.strpath, 'c2.h5'))
+        c3 = containers.Container(os.path.join(tmpdir.strpath, 'c3.h5'))
         c1.open()
         c1.set('utt-1', np.random.random((6, 6)).astype(np.float32))
         c1.set('utt-2', np.random.random((2, 6)).astype(np.float32))
@@ -86,7 +86,7 @@ class TestPartitioningContainerLoader:
         assert lengths['utt-3'] == (9, 4, 8)
 
     def test_raises_error_if_utt_is_missing_in_container(self, tmpdir):
-        c1 = assets.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
+        c1 = containers.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
         c1.open()
         c1.set('utt-1', np.random.random((6, 6)).astype(np.float32))
         c1.set('utt-3', np.random.random((9, 6)).astype(np.float32))
@@ -96,7 +96,7 @@ class TestPartitioningContainerLoader:
                                                      c1, '250', shuffle=True, seed=88)
 
     def test_raises_error_if_utt_is_to_large_for_partition_size(self, tmpdir):
-        c1 = assets.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
+        c1 = containers.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
         c1.open()
         c1.set('utt-1', np.random.random((6, 6)).astype(np.float32))
         # Needs 264
@@ -107,7 +107,7 @@ class TestPartitioningContainerLoader:
                                                      c1, '250', shuffle=True, seed=88)
 
     def test_reload_creates_correct_partitions(self, tmpdir):
-        c1 = assets.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
+        c1 = containers.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
         c1.open()
         c1.set('utt-1', np.random.random((6, 6)).astype(np.float32))
         c1.set('utt-2', np.random.random((2, 6)).astype(np.float32))
@@ -130,7 +130,7 @@ class TestPartitioningContainerLoader:
         assert loader.partitions[2].size == 168
 
     def test_reload_creates_no_partition_with_no_utterances(self, tmpdir):
-        c1 = assets.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
+        c1 = containers.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
         c1.open()
 
         loader = partitioning.PartitioningContainerLoader([], c1, '250', shuffle=False)
@@ -138,7 +138,7 @@ class TestPartitioningContainerLoader:
         assert len(loader.partitions) == 0
 
     def test_reload_creates_different_partitions_on_second_run(self, tmpdir):
-        c1 = assets.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
+        c1 = containers.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
         c1.open()
         c1.set('utt-1', np.random.random((6, 6)).astype(np.float32))
         c1.set('utt-2', np.random.random((2, 6)).astype(np.float32))
@@ -167,7 +167,7 @@ class TestPartitioningContainerLoader:
             assert utt_ids_changed
 
     def test_load_partition_data(self, tmpdir):
-        c1 = assets.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
+        c1 = containers.Container(os.path.join(tmpdir.strpath, 'c1.h5'))
         c1.open()
         utt_1_data = np.random.random((6, 6)).astype(np.float32)
         utt_2_data = np.random.random((2, 6)).astype(np.float32)

@@ -95,7 +95,7 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the feature-containers in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`audiomate.corpus.assets.FeatureContainer` objects
+            dict: A dictionary containing :py:class:`audiomate.container.FeatureContainer` objects
             with the feature-idx as key.
         """
         return {}

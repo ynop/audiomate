@@ -51,16 +51,3 @@ LabelList
    :members:
    :inherited-members:
 
-Container
----------
-
-.. autoclass:: Container
-   :members:
-   :inherited-members:
-
-FeatureContainer
-----------------
-
-.. autoclass:: FeatureContainer
-   :members:
-   :inherited-members:

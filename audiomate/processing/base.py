@@ -3,7 +3,7 @@ import abc
 import librosa
 import numpy as np
 
-from audiomate.corpus import assets
+from audiomate import containers
 from audiomate.utils import units
 from audiomate.utils import audio
 
@@ -92,7 +92,7 @@ class Processor(metaclass=abc.ABCMeta):
         Returns:
             FeatureContainer: The feature-container containing the processed features.
         """
-        feat_container = assets.FeatureContainer(output_path)
+        feat_container = containers.FeatureContainer(output_path)
         feat_container.open()
 
         input_features.open()
@@ -127,7 +127,7 @@ class Processor(metaclass=abc.ABCMeta):
         Returns:
             FeatureContainer: The feature-container containing the processed features.
         """
-        feat_container = assets.FeatureContainer(output_path)
+        feat_container = containers.FeatureContainer(output_path)
         feat_container.open()
 
         input_features.open()
@@ -332,7 +332,7 @@ class Processor(metaclass=abc.ABCMeta):
 
     def _process_corpus(self, corpus, output_path, processing_func, frame_size=400, hop_size=160, sr=None):
         """ Utility function for processing a corpus with a separate processing function. """
-        feat_container = assets.FeatureContainer(output_path)
+        feat_container = containers.FeatureContainer(output_path)
         feat_container.open()
 
         sampling_rate = -1

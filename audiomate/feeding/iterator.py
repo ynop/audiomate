@@ -5,7 +5,7 @@ import random
 import numpy as np
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import containers
 from . import partitioning
 
 
@@ -26,16 +26,16 @@ class DataIterator(object):
         seed (int): Seed to be used for the random number generator.
     """
 
-    def __init__(self, corpus_or_utt_ids, containers, shuffle=True, seed=None):
+    def __init__(self, corpus_or_utt_ids, feature_containers, shuffle=True, seed=None):
         if isinstance(corpus_or_utt_ids, audiomate.corpus.CorpusView):
             self.utt_ids = list(corpus_or_utt_ids.utterances.keys())
         else:
             self.utt_ids = corpus_or_utt_ids
 
-        if isinstance(containers, assets.Container):
-            self.containers = [containers]
+        if isinstance(feature_containers, containers.Container):
+            self.containers = [feature_containers]
         else:
-            self.containers = containers
+            self.containers = feature_containers
 
         if len(self.containers) == 0:
             raise ValueError('At least one container has to be provided!')
@@ -80,8 +80,8 @@ class MultiFrameIterator(DataIterator):
 
     Example:
         >>> corpus = audiomate.Corpus.load('/path/to/corpus')
-        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
-        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>> container_inputs = containers.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = containers.Container('/path/to/targets.hdf5')
         >>>
         >>> ds = MultiFrameIterator(corpus, [container_inputs, container_outputs], '1G', 5, shuffle=True, seed=23)
         >>> next(ds) # Next Chunk (inputs, outputs)
@@ -171,8 +171,8 @@ class FrameIterator(MultiFrameIterator):
 
     Example:
         >>> corpus = audiomate.Corpus.load('/path/to/corpus')
-        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
-        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>> container_inputs = containers.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = containers.Container('/path/to/targets.hdf5')
         >>>
         >>> ds = FrameIterator(corpus, [container_inputs, container_outputs], '1G', shuffle=True, seed=23)
         >>> next(ds) # Next Frame (inputs, outputs)

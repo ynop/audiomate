@@ -4,7 +4,7 @@ import math
 import numpy as np
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import containers
 from . import iterator
 
 
@@ -22,23 +22,23 @@ class Dataset(object):
         containers (list, Container): A single container or a list of containers.
     """
 
-    def __init__(self, corpus_or_utt_ids, containers):
+    def __init__(self, corpus_or_utt_ids, feature_containers):
         if isinstance(corpus_or_utt_ids, audiomate.corpus.CorpusView):
             self.utt_ids = sorted(list(corpus_or_utt_ids.utterances.keys()))
         else:
             self.utt_ids = sorted(corpus_or_utt_ids)
 
-        if isinstance(containers, assets.Container):
-            self.containers = [containers]
+        if isinstance(feature_containers, containers.Container):
+            self.containers = [feature_containers]
         else:
-            self.containers = containers
+            self.containers = feature_containers
 
         if len(self.containers) == 0:
             raise ValueError('At least one container has to be provided!')
 
-        for container in self.containers:
-            if not Dataset.container_has_utterances(container, self.utt_ids):
-                raise ValueError('Container {} does not contain all necessary utterances'.format(container.path))
+        for cnt in self.containers:
+            if not Dataset.container_has_utterances(cnt, self.utt_ids):
+                raise ValueError('Container {} does not contain all necessary utterances'.format(cnt.path))
 
     def __getitem__(self, item):
         raise NotImplementedError
@@ -72,8 +72,8 @@ class UtteranceDataset(Dataset):
     Examples:
 
         >>> corpus = audiomate.Corpus.load('/path/to/corpus')
-        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
-        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>> container_inputs = containers.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = containers.Container('/path/to/targets.hdf5')
         >>>
         >>> ds = UtteranceDataset(corpus, [container_inputs, container_outputs])
         >>> len(ds) # Number of utterances/samples in the dataset
@@ -95,8 +95,8 @@ class UtteranceDataset(Dataset):
     In the following it is assumed the longest sequence in the inputs is ``8`` and in the outputs ``6``.
 
         >>> corpus = audiomate.Corpus.load('/path/to/corpus')
-        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
-        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>> container_inputs = containers.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = containers.Container('/path/to/targets.hdf5')
         >>>
         >>> ds = UtteranceDataset(corpus, [container_inputs, container_outputs], pad=True)
         >>> len(ds) # Number of utterances/samples in the dataset
@@ -139,8 +139,8 @@ class UtteranceDataset(Dataset):
 
         sample = []
 
-        for index, container in enumerate(self.containers):
-            data = container.get(utt_idx, mem_map=False)
+        for index, cnt in enumerate(self.containers):
+            data = cnt.get(utt_idx, mem_map=False)
             size = data.shape[0]
 
             required_padded_length = self.pad_lengths[index]
@@ -164,10 +164,10 @@ class UtteranceDataset(Dataset):
         """ Return a tuple/list containing the length of the longest utterance of ever container. """
         lengths = []
 
-        for container in self.containers:
+        for cnt in self.containers:
             longest_in_container = 0
             for utt_idx in self.utt_ids:
-                utt_length = container._file[utt_idx].shape[0]
+                utt_length = cnt._file[utt_idx].shape[0]
                 longest_in_container = max(utt_length, longest_in_container)
 
             lengths.append(longest_in_container)
@@ -200,8 +200,8 @@ class MultiFrameDataset(Dataset):
     Examples:
 
         >>> corpus = audiomate.Corpus.load('/path/to/corpus')
-        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
-        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>> container_inputs = containers.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = containers.Container('/path/to/targets.hdf5')
         >>>
         >>> ds = MultiFrameDataset(corpus, [container_inputs, container_outputs], 5)
         >>> len(ds) # Number of chunks in the dataset
@@ -220,8 +220,8 @@ class MultiFrameDataset(Dataset):
     (Except for chunks at the of utterances the length will be equal to ``frames_per_chunk``.)
 
         >>> corpus = audiomate.Corpus.load('/path/to/corpus')
-        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
-        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>> container_inputs = containers.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = containers.Container('/path/to/targets.hdf5')
         >>>
         >>> ds = MultiFrameDataset(corpus, [container_inputs, container_outputs], 5)
         >>> len(ds) # Number of chunks in the dataset
@@ -326,9 +326,9 @@ class MultiFrameDataset(Dataset):
             num_frames = []
             refs = []
 
-            for container in self.containers:
-                num_frames.append(container.get(utt_idx).shape[0])
-                refs.append(container.get(utt_idx, mem_map=True))
+            for cnt in self.containers:
+                num_frames.append(cnt.get(utt_idx).shape[0])
+                refs.append(cnt.get(utt_idx, mem_map=True))
 
             if len(set(num_frames)) != 1:
                 raise ValueError('Utterance {} has not the same number of frames in all containers!'.format(utt_idx))
@@ -359,8 +359,8 @@ class FrameDataset(MultiFrameDataset):
 
     Example:
         >>> corpus = audiomate.Corpus.load('/path/to/corpus')
-        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
-        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>> container_inputs = containers.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = containers.Container('/path/to/targets.hdf5')
         >>>
         >>> ds = FrameDataset(corpus, [container_inputs, container_outputs])
         >>> len(ds) # Number of frames in the dataset

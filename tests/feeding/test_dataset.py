@@ -2,7 +2,7 @@ import os
 
 import numpy as np
 
-from audiomate.corpus import assets
+from audiomate import containers
 from audiomate.corpus import subset
 from audiomate import feeding
 
@@ -14,32 +14,32 @@ from tests import resources
 def container_dim_x_4(tmpdir):
     inputs_path = os.path.join(tmpdir.strpath, 'inputs.hdf5')
 
-    container = assets.Container(inputs_path)
-    container.open()
+    cnt = containers.Container(inputs_path)
+    cnt.open()
 
-    container.set('utt-1', np.arange(60).reshape(15, 4))
-    container.set('utt-2', np.arange(80).reshape(20, 4))
-    container.set('utt-3', np.arange(44).reshape(11, 4))
-    container.set('utt-4', np.arange(12).reshape(3, 4))
-    container.set('utt-5', np.arange(16).reshape(4, 4))
+    cnt.set('utt-1', np.arange(60).reshape(15, 4))
+    cnt.set('utt-2', np.arange(80).reshape(20, 4))
+    cnt.set('utt-3', np.arange(44).reshape(11, 4))
+    cnt.set('utt-4', np.arange(12).reshape(3, 4))
+    cnt.set('utt-5', np.arange(16).reshape(4, 4))
 
-    return container
+    return cnt
 
 
 @pytest.fixture
 def container_dim_x(tmpdir):
     inputs_path = os.path.join(tmpdir.strpath, 'outputs.hdf5')
 
-    container = assets.Container(inputs_path)
-    container.open()
+    cnt = containers.Container(inputs_path)
+    cnt.open()
 
-    container.set('utt-1', np.arange(6))
-    container.set('utt-2', np.arange(8))
-    container.set('utt-3', np.arange(4))
-    container.set('utt-4', np.arange(2))
-    container.set('utt-5', np.arange(6))
+    cnt.set('utt-1', np.arange(6))
+    cnt.set('utt-2', np.arange(8))
+    cnt.set('utt-3', np.arange(4))
+    cnt.set('utt-4', np.arange(2))
+    cnt.set('utt-5', np.arange(6))
 
-    return container
+    return cnt
 
 
 class TestDataset:
@@ -51,7 +51,7 @@ class TestDataset:
             feeding.Dataset(corpus, [])
 
     def test_init_with_corpus(self, tmpdir):
-        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c = containers.Container(os.path.join(tmpdir.strpath, 'test.h5'))
         c.open()
         c.set('utt-1', data=np.arange(20))
         c.set('utt-2', data=np.arange(20))
@@ -64,7 +64,7 @@ class TestDataset:
         assert it.utt_ids == ['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5']
 
     def test_init_with_corpus_view(self, tmpdir):
-        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c = containers.Container(os.path.join(tmpdir.strpath, 'test.h5'))
         c.open()
         c.set('utt-1', data=np.arange(20))
         c.set('utt-2', data=np.arange(20))
@@ -81,7 +81,7 @@ class TestDataset:
         assert it.utt_ids == ['utt-1', 'utt-2', 'utt-4']
 
     def test_init_with_utterance_list(self, tmpdir):
-        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c = containers.Container(os.path.join(tmpdir.strpath, 'test.h5'))
         c.open()
         c.set('utt-1', data=np.arange(20))
         c.set('utt-2', data=np.arange(20))
@@ -90,16 +90,16 @@ class TestDataset:
         assert it.utt_ids == ['utt-1', 'utt-2']
 
     def test_init_missing_utterance_in_container_raises_error(self, tmpdir):
-        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c = containers.Container(os.path.join(tmpdir.strpath, 'test.h5'))
         c.open()
         c.set('utt-1', data=np.arange(20))
         c.set('utt-3', data=np.arange(20))
 
         with pytest.raises(ValueError):
-            feeding.Dataset(['utt-1', 'utt-2', 'utt-3'], [assets.Container('blub')])
+            feeding.Dataset(['utt-1', 'utt-2', 'utt-3'], [containers.Container('blub')])
 
     def test_container_has_utterances(self, tmpdir):
-        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c = containers.Container(os.path.join(tmpdir.strpath, 'test.h5'))
         c.open()
         c.set('utt-1', data=np.arange(20))
         c.set('utt-2', data=np.arange(20))
@@ -108,7 +108,7 @@ class TestDataset:
         assert feeding.Dataset.container_has_utterances(c, ['utt-1', 'utt-2', 'utt-3'])
 
     def test_container_has_utterances_returns_false_if_one_is_missing(self, tmpdir):
-        c = assets.Container(os.path.join(tmpdir.strpath, 'test.h5'))
+        c = containers.Container(os.path.join(tmpdir.strpath, 'test.h5'))
         c.open()
         c.set('utt-1', data=np.arange(20))
         c.set('utt-3', data=np.arange(20))
@@ -189,8 +189,8 @@ def sample_multi_frame_dataset(tmpdir):
     targets_path = os.path.join(tmpdir.strpath, 'targets.hdf5')
 
     corpus = resources.create_dataset()
-    container_inputs = assets.Container(inputs_path)
-    container_targets = assets.Container(targets_path)
+    container_inputs = containers.Container(inputs_path)
+    container_targets = containers.Container(targets_path)
 
     container_inputs.open()
     container_targets.open()
@@ -304,8 +304,8 @@ def sample_frame_dataset(tmpdir):
     targets_path = os.path.join(tmpdir.strpath, 'targets.hdf5')
 
     corpus = resources.create_dataset()
-    container_inputs = assets.Container(inputs_path)
-    container_targets = assets.Container(targets_path)
+    container_inputs = containers.Container(inputs_path)
+    container_targets = containers.Container(targets_path)
 
     container_inputs.open()
     container_targets.open()

@@ -2,6 +2,7 @@ import copy
 import os
 import shutil
 
+from audiomate import containers
 from audiomate.corpus import assets
 from audiomate.utils import naming
 from . import base
@@ -372,10 +373,10 @@ class Corpus(base.CorpusView):
         else:
             new_feature_path = os.path.abspath(new_feature_path)
 
-        container = assets.FeatureContainer(new_feature_path)
-        self._feature_containers[new_feature_idx] = container
+        feat_container = containers.FeatureContainer(new_feature_path)
+        self._feature_containers[new_feature_idx] = feat_container
 
-        return container
+        return feat_container
 
     #
     #   Subviews

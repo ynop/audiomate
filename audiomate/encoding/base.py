@@ -1,6 +1,6 @@
 import abc
 
-from audiomate.corpus import assets
+from audiomate import containers
 
 
 class Encoder(metaclass=abc.ABCMeta):
@@ -14,7 +14,7 @@ class Encoder(metaclass=abc.ABCMeta):
 
     def encode_corpus(self, corpus, output_path):
         """
-        Encode all utterances of the given corpus and store them in a :class:`audiomate.corpus.assets.Container`.
+        Encode all utterances of the given corpus and store them in a :class:`audiomate.container.Container`.
 
         Args:
             corpus (Corpus): The corpus to process.
@@ -24,15 +24,15 @@ class Encoder(metaclass=abc.ABCMeta):
             Container: The container with the encoded data.
         """
 
-        container = assets.Container(output_path)
-        container.open()
+        out_container = containers.Container(output_path)
+        out_container.open()
 
         for utterance in corpus.utterances.values():
             data = self.encode_utterance(utterance, corpus=corpus)
-            container.set(utterance.idx, data)
+            out_container.set(utterance.idx, data)
 
-        container.close()
-        return container
+        out_container.close()
+        return out_container
 
     @abc.abstractmethod
     def encode_utterance(self, utterance, corpus=None):

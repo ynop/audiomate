@@ -1,15 +1,18 @@
 import pytest
 
-from audiomate.corpus import assets
+from audiomate import containers
 from tests import resources
 
 
 @pytest.fixture()
 def sample_feature_container():
-    container = assets.FeatureContainer(resources.get_resource_path(['sample_files', 'feat_container']))
-    container.open()
-    yield container
-    container.close()
+    container_path = resources.get_resource_path(
+        ['sample_files', 'feat_container']
+    )
+    sample_container = containers.FeatureContainer(container_path)
+    sample_container.open()
+    yield sample_container
+    sample_container.close()
 
 
 class TestFeatureContainer:
@@ -23,8 +26,8 @@ class TestFeatureContainer:
     def test_sampling_rate(self, sample_feature_container):
         assert sample_feature_container.sampling_rate == 16000
 
-    def test_stats_per_utterance(self, sample_feature_container):
-        utt_stats = sample_feature_container.stats_per_utterance()
+    def test_stats_per_key(self, sample_feature_container):
+        utt_stats = sample_feature_container.stats_per_key()
 
         assert utt_stats['utt-1'].min == pytest.approx(0.0071605651933048797)
         assert utt_stats['utt-1'].max == pytest.approx(0.9967182746569494)
@@ -44,11 +47,11 @@ class TestFeatureContainer:
         assert utt_stats['utt-3'].var == pytest.approx(0.071833200069641057)
         assert utt_stats['utt-3'].num == 220
 
-    def test_stats_per_utterance_not_open(self, sample_feature_container):
+    def test_stats_per_key_not_open(self, sample_feature_container):
         sample_feature_container.close()
 
         with pytest.raises(ValueError):
-            sample_feature_container.stats_per_utterance()
+            sample_feature_container.stats_per_key()
 
     def test_stats(self, sample_feature_container):
         stats = sample_feature_container.stats()

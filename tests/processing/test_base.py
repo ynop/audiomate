@@ -6,6 +6,7 @@ import h5py
 
 import pytest
 
+from audiomate import containers
 from audiomate.corpus import assets
 from audiomate import processing
 
@@ -264,7 +265,7 @@ class TestProcessor:
         processor.mock_hop_size_scale = 5
         processor.process_corpus(ds, feat_path, frame_size=4096, hop_size=2048)
 
-        fc = assets.FeatureContainer(feat_path)
+        fc = containers.FeatureContainer(feat_path)
         fc.open()
 
         assert fc.frame_size == 10240
@@ -352,7 +353,7 @@ class TestProcessor:
         processor.mock_hop_size_scale = 0.25
         processor.process_corpus_online(ds, feat_path, frame_size=4096, hop_size=2048)
 
-        fc = assets.FeatureContainer(feat_path)
+        fc = containers.FeatureContainer(feat_path)
         fc.open()
 
         assert fc.frame_size == 2048
@@ -370,7 +371,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(30).reshape(5, 6)
 
         with in_feats:
@@ -383,7 +384,7 @@ class TestProcessor:
 
         processor.process_features(ds, in_feats, out_feat_path)
 
-        out_feats = assets.FeatureContainer(out_feat_path)
+        out_feats = containers.FeatureContainer(out_feat_path)
 
         with out_feats:
             assert len(out_feats.keys()) == 5
@@ -400,7 +401,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(30).reshape(5, 6)
 
         with in_feats:
@@ -413,7 +414,7 @@ class TestProcessor:
 
         processor.process_features_online(ds, in_feats, out_feat_path)
 
-        out_feats = assets.FeatureContainer(out_feat_path)
+        out_feats = containers.FeatureContainer(out_feat_path)
 
         with out_feats:
             assert len(out_feats.keys()) == 5
@@ -430,7 +431,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(90).reshape(15, 6)
 
         with in_feats:
@@ -443,7 +444,7 @@ class TestProcessor:
 
         processor.process_features_online(ds, in_feats, out_feat_path, chunk_size=4)
 
-        out_feats = assets.FeatureContainer(out_feat_path)
+        out_feats = containers.FeatureContainer(out_feat_path)
 
         assert len(processor.called_with_data) == 4 * 5
         assert processor.called_with_data[0].shape == (4, 6)
@@ -464,7 +465,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(90).reshape(15, 6)
 
         with in_feats:
@@ -489,7 +490,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(30).reshape(5, 6)
 
         with in_feats:
@@ -504,7 +505,7 @@ class TestProcessor:
         processor.mock_hop_size_scale = 2.0
         processor.process_features(ds, in_feats, out_feat_path)
 
-        out_feats = assets.FeatureContainer(out_feat_path)
+        out_feats = containers.FeatureContainer(out_feat_path)
 
         with out_feats:
             assert out_feats.frame_size == 800
@@ -516,7 +517,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(30).reshape(5, 6)
 
         with in_feats:
@@ -531,7 +532,7 @@ class TestProcessor:
         processor.mock_hop_size_scale = 2.0
         processor.process_features_online(ds, in_feats, out_feat_path)
 
-        out_feats = assets.FeatureContainer(out_feat_path)
+        out_feats = containers.FeatureContainer(out_feat_path)
 
         with out_feats:
             assert out_feats.frame_size == 800

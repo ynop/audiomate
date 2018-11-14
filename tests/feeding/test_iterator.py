@@ -2,7 +2,7 @@ import os
 
 import numpy as np
 
-from audiomate.corpus import assets
+from audiomate import containers
 from audiomate.corpus import subset
 from audiomate import feeding
 from audiomate.feeding import iterator
@@ -31,12 +31,12 @@ def sample_partition_data():
 class TestDataIterator:
 
     def test_init_with_utterance_list(self):
-        it = feeding.DataIterator(['utt-1', 'utt-2'], [assets.Container('blub')])
+        it = feeding.DataIterator(['utt-1', 'utt-2'], [containers.Container('blub')])
         assert set(it.utt_ids) == {'utt-1', 'utt-2'}
 
     def test_init_with_corpus(self):
         corpus = resources.create_dataset()
-        it = feeding.DataIterator(corpus, [assets.Container('blub')])
+        it = feeding.DataIterator(corpus, [containers.Container('blub')])
         assert set(it.utt_ids) == set(corpus.utterances.keys())
 
     def test_init_with_corpus_view(self):
@@ -45,7 +45,7 @@ class TestDataIterator:
             subset.MatchingUtteranceIdxFilter(utterance_idxs={'utt-1', 'utt-2', 'utt-4'})
         ])
 
-        it = feeding.DataIterator(subview, [assets.Container('blub')])
+        it = feeding.DataIterator(subview, [containers.Container('blub')])
         assert set(it.utt_ids) == set(subview.utterances.keys())
 
     def test_init_throws_error_when_no_container_is_given(self):
@@ -106,7 +106,7 @@ class TestMultiFrameIterator(object):
 
     def test_next_emits_no_frames_if_file_is_empty(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
 
         frames = tuple(iterator.MultiFrameIterator([], [cont], '120', 5))
@@ -114,7 +114,7 @@ class TestMultiFrameIterator(object):
 
     def test_next_emits_no_features_if_data_set_is_empty(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', np.array([]))
 
@@ -125,7 +125,7 @@ class TestMultiFrameIterator(object):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -144,7 +144,7 @@ class TestMultiFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -166,7 +166,7 @@ class TestMultiFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -185,7 +185,7 @@ class TestMultiFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -205,7 +205,7 @@ class TestMultiFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -228,7 +228,7 @@ class TestMultiFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -251,7 +251,7 @@ class TestMultiFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -279,7 +279,7 @@ class TestMultiFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -309,7 +309,7 @@ class TestFrameIterator(object):
 
     def test_next_emits_no_frames_if_file_is_empty(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
 
         frames = tuple(iterator.FrameIterator([], [cont], 120))
@@ -317,7 +317,7 @@ class TestFrameIterator(object):
 
     def test_next_emits_no_features_if_data_set_is_empty(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', np.array([]))
 
@@ -328,7 +328,7 @@ class TestFrameIterator(object):
         ds1 = np.array([[0.1, 0.1, 0.1, 0.1, 0.1], [0.2, 0.2, 0.2, 0.2, 0.2]])
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -347,7 +347,7 @@ class TestFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -369,7 +369,7 @@ class TestFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -389,7 +389,7 @@ class TestFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -409,7 +409,7 @@ class TestFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)
@@ -432,7 +432,7 @@ class TestFrameIterator(object):
         ds2 = np.array([[0.3, 0.3, 0.3, 0.3, 0.3], [0.4, 0.4, 0.4, 0.4, 0.4], [0.5, 0.5, 0.5, 0.5, 0.5]])
         ds3 = np.array([[0.6, 0.6, 0.6, 0.6, 0.6], [0.7, 0.7, 0.7, 0.7, 0.7]])
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
-        cont = assets.Container(file_path)
+        cont = containers.Container(file_path)
         cont.open()
         cont.set('utt-1', ds1)
         cont.set('utt-2', ds2)

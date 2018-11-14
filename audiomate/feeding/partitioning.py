@@ -8,7 +8,7 @@ import random
 import numpy as np
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import containers
 from audiomate.utils import units
 
 
@@ -27,7 +27,7 @@ class PartitioningContainerLoader(object):
     Args:
         corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
                                           This defines which utterances are considered for loading.
-        containers (assets.Container, list): Either a single or a list of Container objects.
+        containers (container.Container, list): Either a single or a list of Container objects.
                                              From the given containers data is loaded.
         partition_size (str): Size of the partitions in bytes. The units ``k`` (kibibytes), ``m`` (mebibytes) and ``g``
                              (gibibytes) are supported, i.e. a ``partition_size`` of ``1g`` equates :math:`2^{30}`
@@ -38,8 +38,8 @@ class PartitioningContainerLoader(object):
 
     Example:
         >>> corpus = audiomate.Corpus.load('/path/to/corpus')
-        >>> container_inputs = assets.FeatureContainer('/path/to/features.hdf5')
-        >>> container_outputs = assets.Container('/path/to/targets.hdf5')
+        >>> container_inputs = containers.FeatureContainer('/path/to/features.hdf5')
+        >>> container_outputs = containers.Container('/path/to/targets.hdf5')
         >>>
         >>> lo = PartitioningContainerLoader(corpus, [container_inputs, container_outputs], '1G', shuffle=True, seed=23)
         >>> len(lo.partitions) # Number of parititions
@@ -56,16 +56,17 @@ class PartitioningContainerLoader(object):
         )
     """
 
-    def __init__(self, corpus_or_utt_ids, containers, partition_size, shuffle=True, seed=None):
+    def __init__(self, corpus_or_utt_ids, feature_containers, partition_size,
+                 shuffle=True, seed=None):
         if isinstance(corpus_or_utt_ids, audiomate.Corpus):
             self.utt_ids = list(corpus_or_utt_ids.utterances.keys())
         else:
             self.utt_ids = corpus_or_utt_ids
 
-        if isinstance(containers, assets.Container):
-            self.containers = [containers]
+        if isinstance(feature_containers, containers.Container):
+            self.containers = [feature_containers]
         else:
-            self.containers = containers
+            self.containers = feature_containers
 
         if len(self.containers) == 0:
             raise ValueError('At least one container has to be provided!')
@@ -150,8 +151,8 @@ class PartitioningContainerLoader(object):
         """ Check if there is a dataset for every utterance in every container, otherwise raise an error. """
         expected_keys = frozenset(self.utt_ids)
 
-        for container in self.containers:
-            keys = set(container.keys())
+        for cnt in self.containers:
+            keys = set(cnt.keys())
 
             if not keys.issuperset(expected_keys):
                 raise ValueError('Container is missing data for some utterances!')
@@ -163,8 +164,8 @@ class PartitioningContainerLoader(object):
         for dset_name in self.utt_ids:
             per_container = []
 
-            for container in self.containers:
-                dset = container._file[dset_name]
+            for cnt in self.containers:
+                dset = cnt._file[dset_name]
                 dtype_size = dset.dtype.itemsize
 
                 record_size = dtype_size * dset.size

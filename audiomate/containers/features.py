@@ -6,12 +6,15 @@ from . import container
 
 class FeatureContainer(container.Container):
     """
-    The feature-container is a container for storing features extracted from audio data.
-    Features are array-like data, where every feature represents the properties of a given segment of audio.
+    The FeatureContainer is a container for storing features
+    extracted from audio data. Features are array-like data,
+    where every feature represents the properties of a given segment of audio.
 
     Args:
-        path (str): Path to where the HDF5 file is stored. If the file doesn't exist, one is
-                    created.
+        path (str): Path to where the HDF5 file is stored.
+                    If the file doesn't exist, one is created.
+        mode (str): Either 'r' for read-only, 'w' for truncate and write or
+                    'a' for append. (default: 'a').
 
     Example:
         >>> fc = FeatureContainer('/path/to/hdf5file')
@@ -66,30 +69,30 @@ class FeatureContainer(container.Container):
         """
         self.raise_error_if_not_open()
 
-        per_utt_stats = self.stats_per_utterance()
+        per_key_stats = self.stats_per_key()
 
-        return stats.DataStats.concatenate(per_utt_stats.values())
+        return stats.DataStats.concatenate(per_key_stats.values())
 
-    def stats_per_utterance(self):
+    def stats_per_key(self):
         """
-        Return statistics calculated for each utterance in the container.
+        Return statistics calculated for each key in the container.
 
         Note:
             The feature container has to be opened in advance.
 
         Returns:
-            dict: A dictionary containing a DataStats object for each utterance.
+            dict: A dictionary containing a DataStats object for each key.
         """
         self.raise_error_if_not_open()
 
         all_stats = {}
 
-        for utt_id, data in self._file.items():
+        for key, data in self._file.items():
             data = data[()]
-            all_stats[utt_id] = stats.DataStats(float(np.mean(data)),
-                                                float(np.var(data)),
-                                                np.min(data),
-                                                np.max(data),
-                                                data.size)
+            all_stats[key] = stats.DataStats(float(np.mean(data)),
+                                             float(np.var(data)),
+                                             np.min(data),
+                                             np.max(data),
+                                             data.size)
 
         return all_stats
