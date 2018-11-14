@@ -21,6 +21,13 @@ def sample_container():
 
 class TestContainer:
 
+    def test_is_open(self, sample_container):
+        assert sample_container.is_open()
+
+    def test_is_open_returns_false(self, sample_container):
+        sample_container.close()
+        assert not sample_container.is_open()
+
     def test_keys(self, sample_container):
         assert sample_container.keys() == ['utt-1', 'utt-2', 'utt-3']
 

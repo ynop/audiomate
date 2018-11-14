@@ -1,3 +1,4 @@
+import contextlib
 import h5py
 
 
@@ -31,12 +32,23 @@ class Container(object):
 
         self._file = None
 
-    def open(self):
+    def open(self, mode=None):
         """
         Open the container file.
+
+        Args:
+            mode (str): Either 'r' for read-only, 'w' for truncate and write or
+                        'a' for append. (default: 'a').
+                        If ``None``, uses ``self.mode``.
         """
+
+        if mode is None:
+            mode = self.mode
+        elif mode not in ['r', 'w', 'a']:
+            raise ValueError('Invalid mode! Modes: [\'a\', \'r\', \'w\']')
+
         if self._file is None:
-            self._file = h5py.File(self.path, mode=self.mode)
+            self._file = h5py.File(self.path, mode=mode)
 
     def close(self):
         """
@@ -45,6 +57,35 @@ class Container(object):
         if self._file is not None:
             self._file.close()
             self._file = None
+
+    def is_open(self, mode=None):
+        """
+        Return ``True``, if container is already open. ``False`` otherwise.
+        """
+        return self._file is not None
+
+    @contextlib.contextmanager
+    def open_if_needed(self, mode=None):
+        """
+        Convenience context-manager for the use with ``with``.
+        Opens the container if not already done.
+        Only closes the container if it was opened within this context.
+
+        Args:
+            mode (str): Either 'r' for read-only, 'w' for truncate and write or
+                        'a' for append. (default: 'a').
+                        If ``None``, uses ``self.mode``.
+        """
+        was_open = self.is_open()
+
+        if not was_open:
+            self.open(mode=mode)
+
+        try:
+            yield self
+        finally:
+            if not was_open:
+                self.close()
 
     def __enter__(self):
         self.open()

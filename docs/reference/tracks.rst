@@ -17,3 +17,10 @@ FileTrack
 .. autoclass:: FileTrack
    :members:
    :inherited-members:
+
+ContainerTrack
+--------------
+
+.. autoclass:: ContainerTrack
+   :members:
+   :inherited-members:
