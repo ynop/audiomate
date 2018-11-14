@@ -20,7 +20,7 @@ def parse_storage_size(storage_size):
     Returns:
         int: Number of bytes.
     """
-    pattern = re.compile('^([0-9]+(\.[0-9]+)?)([gmk])?$', re.I)
+    pattern = re.compile(r'^([0-9]+(\.[0-9]+)?)([gmk])?$', re.I)
 
     units = {
         'k': 1024,

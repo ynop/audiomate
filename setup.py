@@ -46,7 +46,7 @@ setup(name='audiomate',
               'Sphinx==1.6.5',
               'sphinx-rtd-theme==0.2.5b1'
           ],
-          'ci': ['flake8==3.5.0', 'flake8-quotes==0.12.1'],
+          'ci': ['flake8==3.6.0', 'flake8-quotes==0.12.1'],
       },
       setup_requires=['pytest-runner'],
       tests_require=[
