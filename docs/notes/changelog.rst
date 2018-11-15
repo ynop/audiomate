@@ -11,6 +11,20 @@ Next Version
 
 * Moved :class:`audiomate.feeding.PartitioningFeatureIterator` to the :mod:`audiomate.feeding` module.
 
+* Added :class:`audiomate.containers.AudioContainer` to store audio tracks
+  in a single file. All container classes are now in a separate module
+  :mod:`audiomate.containers`.
+
+* Corpus now contains Tracks not Files anymore. This makes it possible to
+  different kinds of audio sources. Audio from a file is now included using
+  :class:`audiomate.tracks.FileTrack`. New is the
+  :class:`audiomate.tracks.ContainerTrack`, which reads data stored in
+  a container.
+
+* The :class:`audiomate.corpus.io.DefaultReader` and the
+  :class:`audiomate.corpus.io.DefaultWriter` now load and store tracks,
+  that are stored in a container.
+
 **New Features**
 
 * Introducing the :mod:`audiomate.feeding` module. It provides different tools for accessing container data.
