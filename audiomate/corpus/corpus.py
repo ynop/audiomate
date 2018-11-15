@@ -432,6 +432,42 @@ class Corpus(base.CorpusView):
             self.new_feature_container(feat_container_idx, feat_container.path)
 
     #
+    #   VARIA
+    #
+
+    def relocate_audio_to_single_container(self, target_path):
+        """
+        Copies every track to a single container.
+        Afterwards all tracks in the container are linked against
+        this single container.
+        """
+
+        cont = containers.AudioContainer(target_path)
+        cont.open()
+
+        new_tracks = {}
+
+        # First create a new container track for all existing tracks
+        for track in self.tracks.values():
+            sr = track.sampling_rate
+            samples = track.read_samples()
+
+            cont.set(track.idx, samples, sr)
+            new_track = tracks.ContainerTrack(track.idx, cont)
+
+            new_tracks[track.idx] = new_track
+
+        # Update track list of corpus
+        self._tracks = new_tracks
+
+        # Update utterances to point to new tracks
+        for utterance in self.utterances.values():
+            new_track = self.tracks[utterance.track.idx]
+            utterance.track = new_track
+
+        cont.close()
+
+    #
     #   Creation
     #
 

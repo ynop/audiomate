@@ -7,6 +7,7 @@ import pytest
 
 import audiomate
 from audiomate import tracks
+from audiomate import containers
 from audiomate.corpus import assets
 from audiomate.corpus.subset import subview
 from audiomate.corpus.io import MusanReader, KaldiWriter
@@ -571,3 +572,35 @@ class CorpusTest(unittest.TestCase):
         assert ds.num_issuers == 9
         assert ds.num_subviews == 4
         assert ds.num_feature_containers == 4
+
+    #
+    # Varia
+    #
+
+    def test_relocate_audio_to_single_container(self):
+        corpus = audiomate.Corpus.load(resources.sample_corpus_path('default'))
+
+        target_container_path = os.path.join(self.tempdir, 'audio')
+        corpus.relocate_audio_to_single_container(target_container_path)
+
+        assert os.path.isfile(target_container_path)
+
+        cont = containers.AudioContainer(target_container_path)
+        cont.open()
+
+        assert cont.keys() == [
+            'file-1',
+            'file-2',
+            'file-3',
+            'file-4',
+            'file-5',
+            'file-6',
+        ]
+
+        assert corpus.tracks['file-1'].idx == 'file-1'
+        assert corpus.tracks['file-1'].container.path == cont.path
+
+        assert corpus.utterances['utt-1'].track.idx == 'file-1'
+        assert corpus.utterances['utt-1'].track.container.path == cont.path
+
+        cont.close()
