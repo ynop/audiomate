@@ -126,3 +126,23 @@ class TestFile:
         actual = file_obj.read_samples(offset=1.0, duration=1.7)
 
         assert np.array_equal(actual, expected)
+
+    def test_read_frames(self, tmpdir):
+        wav_path = os.path.join(tmpdir.strpath, 'file.wav')
+        wav_content = np.random.random(10044)
+
+        librosa.output.write_wav(wav_path, wav_content, 16000)
+        file_obj = tracks.FileTrack('some_idx', wav_path)
+
+        data = list(file_obj.read_frames(frame_size=400, hop_size=160))
+        frames = np.array([x[0] for x in data])
+        last = [x[1] for x in data]
+
+        assert frames.shape == (62, 400)
+        assert frames.dtype == np.float32
+        assert np.allclose(frames[0], wav_content[:400], atol=0.0001)
+        expect = np.pad(wav_content[9760:], (0, 116), mode='constant')
+        assert np.allclose(frames[61], expect, atol=0.0001)
+
+        assert last[:-1] == [False] * (len(data) - 1)
+        assert last[-1]

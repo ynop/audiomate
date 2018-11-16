@@ -2,6 +2,7 @@ import librosa
 import audioread
 
 from . import track
+from audiomate.utils import audio
 
 
 class FileTrack(track.Track):
@@ -65,7 +66,7 @@ class FileTrack(track.Track):
 
         Returns:
             np.ndarray: A numpy array containing the samples as a
-                        floating point (numpy.float32) time series.
+            floating point (numpy.float32) time series.
         """
         samples, __ = librosa.core.load(
             self.path,
@@ -74,3 +75,34 @@ class FileTrack(track.Track):
             duration=duration
         )
         return samples
+
+    def read_frames(self, frame_size, hop_size, offset=0,
+                    duration=None, buffer_size=5760000):
+        """
+        Generator that reads and returns the samples of the track in frames.
+
+        Args:
+            frame_size (int): The number of samples per frame.
+            hop_size (int): The number of samples between two frames.
+            offset (float): The time in seconds, from where to start
+                            reading the samples (rel. to the track start).
+            duration (float): The length of the samples to read in seconds.
+
+        Returns:
+            Generator: A generator yielding a tuple for every frame.
+            The first item is the frame,
+            the second the sampling-rate and
+            the third a boolean indicating if it is the last frame.
+        """
+        if duration is not None:
+            end = offset + duration
+        else:
+            end = -1
+
+        return audio.read_frames(
+            self.path,
+            frame_size,
+            hop_size,
+            start=offset,
+            end=end,
+            buffer_size=buffer_size)

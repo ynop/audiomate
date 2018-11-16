@@ -1,4 +1,5 @@
 import librosa
+import numpy as np
 
 from . import track
 
@@ -73,7 +74,7 @@ class ContainerTrack(track.Track):
 
         Returns:
             np.ndarray: A numpy array containing the samples as a
-                        floating point (numpy.float32) time series.
+            floating point (numpy.float32) time series.
         """
         with self.container.open_if_needed(mode='r') as cnt:
             samples, native_sr = cnt.get(self.key)
@@ -96,3 +97,43 @@ class ContainerTrack(track.Track):
                 )
 
             return samples
+
+    def read_frames(self, frame_size, hop_size, offset=0,
+                    duration=None, block_size=None):
+        """
+        Generator that reads and returns the samples of the track in frames.
+
+        Args:
+            frame_size (int): The number of samples per frame.
+            hop_size (int): The number of samples between two frames.
+            offset (float): The time in seconds, from where to start
+                            reading the samples (rel. to the track start).
+            duration (float): The length of the samples to read in seconds.
+
+        Returns:
+            Generator: A generator yielding a tuple for every frame.
+            The first item is the frame,
+            the second the sampling-rate and
+            the third a boolean indicating if it is the last frame.
+        """
+        with self.container.open_if_needed(mode='r') as cnt:
+            samples, sr = cnt.get(self.key)
+
+            current_index = 0
+
+            while current_index + frame_size < samples.shape[0]:
+                next_frame = samples[current_index:current_index+frame_size]
+                yield next_frame, False
+                current_index += hop_size
+
+            next_frame = samples[current_index:]
+
+            if next_frame.shape[0] < frame_size:
+                next_frame = np.pad(
+                    next_frame,
+                    (0, frame_size - next_frame.shape[0]),
+                    mode='constant',
+                    constant_values=0
+                )
+
+            yield next_frame, True

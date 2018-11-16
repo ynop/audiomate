@@ -48,7 +48,7 @@ class Track(abc.ABC):
     @abc.abstractmethod
     def read_samples(self, sr=None, offset=0, duration=None):
         """
-        Return the samples from the file.
+        Return the samples of the track.
 
         Args:
             sr (int): If ``None``, uses the native sampling-rate,
@@ -59,6 +59,27 @@ class Track(abc.ABC):
 
         Returns:
             np.ndarray: A numpy array containing the samples
-                        as a floating point (numpy.float32) time series.
+            as a floating point (numpy.float32) time series.
+        """
+        pass
+
+    @abc.abstractmethod
+    def read_frames(self, frame_size, hop_size, offset=0,
+                    duration=None, buffer_size=5760000):
+        """
+        Generator that reads and returns the samples of the track in frames.
+
+        Args:
+            frame_size (int): The number of samples per frame.
+            hop_size (int): The number of samples between two frames.
+            offset (float): The time in seconds, from where to start
+                            reading the samples (rel. to the track start).
+            duration (float): The length of the samples to read in seconds.
+
+        Returns:
+            Generator: A generator yielding a tuple for every frame.
+            The first item is the frame,
+            the second the sampling-rate and
+            the third a boolean indicating if it is the last frame.
         """
         pass

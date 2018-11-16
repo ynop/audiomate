@@ -1,3 +1,4 @@
+import os
 import numpy as np
 
 from audiomate import containers
@@ -72,3 +73,48 @@ class TestContainerTrack:
 
         assert samples.dtype == np.float32
         assert samples.shape[0] == 5
+
+    def test_read_frames(self, tmpdir):
+        cont_path = os.path.join(tmpdir.strpath, 'audio.hdf5')
+        cont = containers.AudioContainer(cont_path)
+        cont.open()
+
+        content = np.random.random(10044)
+        cont.set('track', content, 16000)
+        track = tracks.ContainerTrack('some_idx', cont, 'track')
+
+        data = list(track.read_frames(frame_size=400, hop_size=160))
+        frames = np.array([x[0] for x in data])
+        last = [x[1] for x in data]
+
+        assert frames.shape == (62, 400)
+        assert frames.dtype == np.float32
+        assert np.allclose(frames[0], content[:400], atol=0.0001)
+        expect = np.pad(content[9760:], (0, 116), mode='constant')
+        assert np.allclose(frames[61], expect, atol=0.0001)
+
+        assert last[:-1] == [False] * (len(data) - 1)
+        assert last[-1]
+
+        cont.close()
+
+    def test_read_frames_matches_length(self, tmpdir):
+        cont_path = os.path.join(tmpdir.strpath, 'audio.hdf5')
+        cont = containers.AudioContainer(cont_path)
+        cont.open()
+
+        content = np.random.random(7)
+        cont.set('track', content, 16000)
+        track = tracks.ContainerTrack('some_idx', cont, 'track')
+
+        data = list(track.read_frames(frame_size=2, hop_size=1))
+        frames = np.array([x[0] for x in data])
+        last = [x[1] for x in data]
+
+        assert frames.shape == (6, 2)
+        assert frames.dtype == np.float32
+
+        assert last[:-1] == [False] * (len(data) - 1)
+        assert last[-1]
+
+        cont.close()
