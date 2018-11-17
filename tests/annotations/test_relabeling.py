@@ -2,15 +2,15 @@ import os.path
 
 import pytest
 
-from audiomate.corpus import assets
-from audiomate.corpus.utils import relabeling
+from audiomate.annotations import Label, LabelList
+from audiomate.annotations import relabeling
 
 
 class TestLabelListUtilities(object):
 
     def test_relabel_maps_a_onto_b(self):
-        label_list = assets.LabelList(labels=[
-            assets.Label('a', 3.2, 4.5)
+        label_list = LabelList(labels=[
+            Label('a', 3.2, 4.5)
         ])
 
         actual = relabeling.relabel(label_list, {('a',): 'b'})
@@ -30,10 +30,10 @@ class TestLabelListUtilities(object):
             ('b', 'c',): 'b_c',
         }
 
-        label_list = assets.LabelList(labels=[
-            assets.Label('a', 3.2, 4.5),
-            assets.Label('b', 4.0, 4.9),
-            assets.Label('c', 4.2, 5.1)
+        label_list = LabelList(labels=[
+            Label('a', 3.2, 4.5),
+            Label('b', 4.0, 4.9),
+            Label('c', 4.2, 5.1)
         ])
 
         actual = relabeling.relabel(label_list, projections)
@@ -67,9 +67,9 @@ class TestLabelListUtilities(object):
             ('a', 'b'): 'a_b',
         }
 
-        label_list = assets.LabelList(labels=[
-            assets.Label('a', 3.2, 4.9),
-            assets.Label('b', 3.9, 4.5)
+        label_list = LabelList(labels=[
+            Label('a', 3.2, 4.9),
+            Label('b', 3.9, 4.5)
         ])
 
         actual = relabeling.relabel(label_list, projections)
@@ -94,9 +94,9 @@ class TestLabelListUtilities(object):
             ('b',): 'b',
         }
 
-        label_list = assets.LabelList(labels=[
-            assets.Label('a', 3.2, 4.4),
-            assets.Label('b', 4.4, 5.1)
+        label_list = LabelList(labels=[
+            Label('a', 3.2, 4.4),
+            Label('b', 4.4, 5.1)
         ])
 
         actual = relabeling.relabel(label_list, projections)
@@ -114,9 +114,9 @@ class TestLabelListUtilities(object):
             ('b',): 'b',
         }
 
-        label_list = assets.LabelList(labels=[
-            assets.Label('a', 3.2, 5.1),
-            assets.Label('b', 4.2, 4.7)
+        label_list = LabelList(labels=[
+            Label('a', 3.2, 5.1),
+            Label('b', 4.2, 4.7)
         ])
 
         actual = relabeling.relabel(label_list, projections)
@@ -132,10 +132,10 @@ class TestLabelListUtilities(object):
         assert actual[1].value == 'a'
 
     def test_relabel_throws_error_if_unmapped_labels_are_detected(self):
-        label_list = assets.LabelList(labels=[
-            assets.Label('a', 3.2, 5.1),
-            assets.Label('b', 4.2, 4.7),
-            assets.Label('c', 4.3, 4.8)
+        label_list = LabelList(labels=[
+            Label('a', 3.2, 5.1),
+            Label('b', 4.2, 4.7),
+            Label('c', 4.3, 4.8)
         ])
 
         unmapped_combinations = [('a', 'b'), ('a', 'b', 'c'), ('a', 'c')]
@@ -147,10 +147,10 @@ class TestLabelListUtilities(object):
         assert ex.value.message == expected_message
 
     def test_relabel_proceeds_despite_unmapped_labels_in_presence_of_wildcard_rule(self):
-        label_list = assets.LabelList(labels=[
-            assets.Label('a', 3.2, 5.1),
-            assets.Label('b', 4.2, 4.7),
-            assets.Label('c', 4.3, 4.8)
+        label_list = LabelList(labels=[
+            Label('a', 3.2, 5.1),
+            Label('b', 4.2, 4.7),
+            Label('c', 4.3, 4.8)
         ])
 
         actual = relabeling.relabel(label_list, {('a',): 'new_label_a', ('**',): 'catch_all'})
@@ -193,10 +193,10 @@ class TestLabelListUtilities(object):
         assert projections[('a',)] == 'bar'
 
     def test_all_projections_missing_if_no_projections_defined(self):
-        label_list = assets.LabelList(labels=[
-            assets.Label('b', 3.2, 4.5),
-            assets.Label('a', 4.0, 4.9),
-            assets.Label('c', 4.2, 5.1)
+        label_list = LabelList(labels=[
+            Label('b', 3.2, 4.5),
+            Label('a', 4.0, 4.9),
+            Label('c', 4.2, 5.1)
         ])
 
         unmapped_combinations = relabeling.find_missing_projections(label_list, {})
@@ -214,10 +214,10 @@ class TestLabelListUtilities(object):
             ('c',): 'bar'
         }
 
-        label_list = assets.LabelList(labels=[
-            assets.Label('b', 3.2, 4.5),
-            assets.Label('a', 4.0, 4.9),
-            assets.Label('c', 4.2, 5.1)
+        label_list = LabelList(labels=[
+            Label('b', 3.2, 4.5),
+            Label('a', 4.0, 4.9),
+            Label('c', 4.2, 5.1)
         ])
 
         unmapped_combinations = relabeling.find_missing_projections(label_list, projections)
@@ -228,11 +228,11 @@ class TestLabelListUtilities(object):
         assert ('a', 'c',) in unmapped_combinations
 
     def test_no_duplicate_missing_projections_reported(self):
-        label_list = assets.LabelList(labels=[
-            assets.Label('b', 1.0, 2.0),
-            assets.Label('a', 1.5, 2.5),
-            assets.Label('b', 3.0, 4.0),
-            assets.Label('a', 3.5, 4.5),
+        label_list = LabelList(labels=[
+            Label('b', 1.0, 2.0),
+            Label('a', 1.5, 2.5),
+            Label('b', 3.0, 4.0),
+            Label('a', 3.5, 4.5),
         ])
 
         unmapped_combinations = relabeling.find_missing_projections(label_list, {})
@@ -251,10 +251,10 @@ class TestLabelListUtilities(object):
             ('c',): 'bar'
         }
 
-        label_list = assets.LabelList(labels=[
-            assets.Label('b', 3.2, 4.5),
-            assets.Label('a', 4.0, 4.9),
-            assets.Label('c', 4.2, 5.1)
+        label_list = LabelList(labels=[
+            Label('b', 3.2, 4.5),
+            Label('a', 4.0, 4.9),
+            Label('c', 4.2, 5.1)
         ])
 
         unmapped_combinations = relabeling.find_missing_projections(label_list, projections)
@@ -267,10 +267,10 @@ class TestLabelListUtilities(object):
             ('**',): 'new_label_all',
         }
 
-        label_list = assets.LabelList(labels=[
-            assets.Label('b', 3.2, 4.5),
-            assets.Label('a', 4.0, 4.9),
-            assets.Label('c', 4.2, 5.1)
+        label_list = LabelList(labels=[
+            Label('b', 3.2, 4.5),
+            Label('a', 4.0, 4.9),
+            Label('c', 4.2, 5.1)
         ])
 
         unmapped_combinations = relabeling.find_missing_projections(label_list, projections)
@@ -278,9 +278,9 @@ class TestLabelListUtilities(object):
         assert len(unmapped_combinations) == 0
 
     def test_missing_projections_are_naturally_sorted(self):
-        label_list = assets.LabelList(labels=[
-            assets.Label('b', 1.0, 2.0),
-            assets.Label('a', 1.5, 2.5),
+        label_list = LabelList(labels=[
+            Label('b', 1.0, 2.0),
+            Label('a', 1.5, 2.5),
         ])
 
         unmapped_combinations = relabeling.find_missing_projections(label_list, {})

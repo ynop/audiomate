@@ -9,7 +9,7 @@ class TokenOrdinalEncoder(base.Encoder):
     For the full utterance a sequence/array of numbers are computed, which correspond to tokens.
 
     Tokens are extracted from labels by splitting using a delimiter (by default space).
-    See :meth:`audiomate.corpus.assets.Label.tokenized`.
+    See :meth:`audiomate.annotations.Label.tokenized`.
     Hence a token can be word, phone, ..., depending on the label and the delimiter.
 
     Args:

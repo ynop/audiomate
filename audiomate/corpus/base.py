@@ -190,7 +190,7 @@ class CorpusView(metaclass=abc.ABCMeta):
 
         Args:
             delimiter (str): The delimiter used to split labels into tokens
-                             (see :meth:`audiomate.corpus.assets.Label.tokenized`).
+                             (see :meth:`audiomate.annotations.Label.tokenized`).
             label_list_ids (list): If not None, only labels from label-lists with an idx contained in this list
                                    are considered.
 

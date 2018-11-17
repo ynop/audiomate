@@ -2,6 +2,7 @@ import os
 import glob
 
 import audiomate
+from audiomate import annotations
 from audiomate.corpus import assets
 from audiomate.utils import download
 from audiomate.utils import files
@@ -80,7 +81,7 @@ class FreeSpokenDigitReader(base.CorpusReader):
                 corpus.import_issuers(issuer)
 
             utterance = corpus.new_utterance(file_idx, file_idx, issuer_idx)
-            utterance.set_label_list(assets.LabelList.create_single(str(digit),
-                                                                    idx=audiomate.corpus.LL_WORD_TRANSCRIPT))
+            utterance.set_label_list(annotations.LabelList.create_single(str(digit),
+                                                                         idx=audiomate.corpus.LL_WORD_TRANSCRIPT))
 
         return corpus

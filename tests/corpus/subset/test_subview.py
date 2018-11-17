@@ -1,5 +1,6 @@
 import unittest
 
+from audiomate import annotations
 from audiomate.corpus import assets
 from audiomate.corpus.subset import subview
 
@@ -51,28 +52,28 @@ class MatchingLabelFilterTest(unittest.TestCase):
     def setUp(self):
         self.utt1 = assets.Utterance('utt-1', 'file-1')
 
-        self.utt1.set_label_list(assets.LabelList(idx='alpha', labels=[
-            assets.Label('music', 0, 5),
-            assets.Label('speech', 5, 12),
-            assets.Label('music', 13, 15)
+        self.utt1.set_label_list(annotations.LabelList(idx='alpha', labels=[
+            annotations.Label('music', 0, 5),
+            annotations.Label('speech', 5, 12),
+            annotations.Label('music', 13, 15)
         ]))
 
-        self.utt1.set_label_list(assets.LabelList(idx='bravo', labels=[
-            assets.Label('music', 0, 1),
-            assets.Label('speech', 2, 6)
+        self.utt1.set_label_list(annotations.LabelList(idx='bravo', labels=[
+            annotations.Label('music', 0, 1),
+            annotations.Label('speech', 2, 6)
         ]))
 
         self.utt2 = assets.Utterance('utt-2', 'file-2')
 
-        self.utt2.set_label_list(assets.LabelList(idx='alpha', labels=[
-            assets.Label('music', 0, 5),
-            assets.Label('speech', 5, 12),
-            assets.Label('noise', 13, 15)
+        self.utt2.set_label_list(annotations.LabelList(idx='alpha', labels=[
+            annotations.Label('music', 0, 5),
+            annotations.Label('speech', 5, 12),
+            annotations.Label('noise', 13, 15)
         ]))
 
-        self.utt2.set_label_list(assets.LabelList(idx='bravo', labels=[
-            assets.Label('music', 0, 1),
-            assets.Label('speech', 2, 6)
+        self.utt2.set_label_list(annotations.LabelList(idx='bravo', labels=[
+            annotations.Label('music', 0, 1),
+            annotations.Label('speech', 2, 6)
         ]))
 
     def test_match_all_label_lists(self):

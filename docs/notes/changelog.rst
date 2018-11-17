@@ -25,6 +25,9 @@ Next Version
   :class:`audiomate.corpus.io.DefaultWriter` now load and store tracks,
   that are stored in a container.
 
+* All functionality regarding labels was moved to its own module
+  :mod:`audiomate.annotations`.
+
 **New Features**
 
 * Introducing the :mod:`audiomate.feeding` module. It provides different tools for accessing container data.

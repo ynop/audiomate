@@ -1,4 +1,5 @@
 from audiomate import corpus
+from audiomate import annotations
 from audiomate.corpus import assets
 from audiomate.corpus import validation
 
@@ -64,14 +65,14 @@ class TestLabelCoverageValidator:
 
     def test_validate(self):
         ds = resources.create_single_label_corpus()
-        utt4_ll = assets.LabelList(idx='default', labels=[
-            assets.Label('a', start=0.0, end=1.44),
-            assets.Label('a', start=1.89, end=10.0),
+        utt4_ll = annotations.LabelList(idx='default', labels=[
+            annotations.Label('a', start=0.0, end=1.44),
+            annotations.Label('a', start=1.89, end=10.0),
         ])
         ds.utterances['utt-4'].set_label_list(utt4_ll)
-        utt6_ll = assets.LabelList(idx='default', labels=[
-            assets.Label('a', start=1.33, end=5.9),
-            assets.Label('a', start=5.9, end=14.7),
+        utt6_ll = annotations.LabelList(idx='default', labels=[
+            annotations.Label('a', start=1.33, end=5.9),
+            annotations.Label('a', start=5.9, end=14.7),
         ])
         ds.utterances['utt-6'].set_label_list(utt6_ll)
 
@@ -103,14 +104,14 @@ class TestLabelOverflowValidator:
 
     def test_validate_returns_part_of_overlapping_label(self):
         ds = resources.create_single_label_corpus()
-        utt4_ll = assets.LabelList(idx='default', labels=[
-            assets.Label('a', start=0.0, end=9.0),
-            assets.Label('b', start=9.0, end=13.0),
+        utt4_ll = annotations.LabelList(idx='default', labels=[
+            annotations.Label('a', start=0.0, end=9.0),
+            annotations.Label('b', start=9.0, end=13.0),
         ])
         ds.utterances['utt-4'].set_label_list(utt4_ll)
-        utt6_ll = assets.LabelList(idx='default', labels=[
-            assets.Label('a', start=-2.0, end=5.9),
-            assets.Label('b', start=5.9, end=14.7),
+        utt6_ll = annotations.LabelList(idx='default', labels=[
+            annotations.Label('a', start=-2.0, end=5.9),
+            annotations.Label('b', start=5.9, end=14.7),
         ])
         ds.utterances['utt-6'].set_label_list(utt6_ll)
 
@@ -125,9 +126,9 @@ class TestLabelOverflowValidator:
 
     def test_validate_utterance_returns_completly_outlying_label(self):
         utt = assets.Utterance('utt-idx', None, start=10.0, end=17.9)
-        ll = assets.LabelList(idx='default', labels=[
-            assets.Label('a', start=-4.0, end=-2.0),
-            assets.Label('b', start=19.0, end=22.0),
+        ll = annotations.LabelList(idx='default', labels=[
+            annotations.Label('a', start=-4.0, end=-2.0),
+            annotations.Label('b', start=19.0, end=22.0),
         ])
         utt.set_label_list(ll)
 

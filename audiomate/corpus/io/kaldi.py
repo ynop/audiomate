@@ -4,6 +4,7 @@ import struct
 import numpy as np
 
 import audiomate
+from audiomate import annotations
 from audiomate.corpus import assets
 from audiomate.utils import textfile
 from . import base
@@ -115,7 +116,7 @@ class KaldiReader(base.CorpusReader):
     def read_transcriptions(text_path, corpus):
         transcriptions = textfile.read_key_value_lines(text_path, separator=' ')
         for utt_id, transcription in transcriptions.items():
-            ll = assets.LabelList.create_single(transcription, idx=audiomate.corpus.LL_WORD_TRANSCRIPT)
+            ll = annotations.LabelList.create_single(transcription, idx=audiomate.corpus.LL_WORD_TRANSCRIPT)
             corpus.utterances[utt_id].set_label_list(ll)
 
 

@@ -2,8 +2,8 @@ import collections
 
 import numpy as np
 
+from audiomate import annotations
 from audiomate.utils import units
-from . import label
 
 
 class Utterance(object):
@@ -129,7 +129,7 @@ class Utterance(object):
 
         """
 
-        if isinstance(label_lists, label.LabelList):
+        if isinstance(label_lists, annotations.LabelList):
             label_lists = [label_lists]
 
         for label_list in label_lists:
@@ -184,7 +184,7 @@ class Utterance(object):
 
         Args:
             delimiter (str): The delimiter used to split labels into tokens
-                             (see :meth:`audiomate.corpus.assets.Label.tokenized`).
+                             (see :meth:`audiomate.annotations.Label.tokenized`).
             label_list_ids (list): If not None, only labels from label-lists with an idx contained in this list
                                    are considered.
 

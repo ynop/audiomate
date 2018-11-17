@@ -19,14 +19,14 @@ class FrameHotEncoder(base.Encoder):
         sr (int): The sampling rate used, if None it is assumed the native sampling rate from the file is used.
 
     Example:
-        >>> from audiomate.corpus import assets
+        >>> from audiomate import annotations
         >>> from audiomate.utils import units import
         >>>
-        >>> ll = assets.LabelList(idx='test', labels=[
-        >>>     assets.Label('music', 0, 2),
-        >>>     assets.Label('speech', 2, 5),
-        >>>     assets.Label('noise', 4, 6),
-        >>>     assets.Label('music', 6, 8)
+        >>> ll = annotations.LabelList(idx='test', labels=[
+        >>>     annotations.Label('music', 0, 2),
+        >>>     annotations.Label('speech', 2, 5),
+        >>>     annotations.Label('noise', 4, 6),
+        >>>     annotations.Label('music', 6, 8)
         >>> ])
         >>> utt.set_label_list(ll)
         >>>
@@ -95,14 +95,14 @@ class FrameOrdinalEncoder(base.Encoder):
         sr (int): The sampling rate used, if None it is assumed the native sampling rate from the file is used.
 
     Example:
-        >>> from audiomate.corpus import assets
+        >>> from audiomate import annotations
         >>> from audiomate.utils import units import
         >>>
-        >>> ll = assets.LabelList(idx='test', labels=[
-        >>>     assets.Label('music', 0, 2),
-        >>>     assets.Label('speech', 2, 5),
-        >>>     assets.Label('noise', 4, 6),
-        >>>     assets.Label('music', 6, 8)
+        >>> ll = annotations.LabelList(idx='test', labels=[
+        >>>     annotations.Label('music', 0, 2),
+        >>>     annotations.Label('speech', 2, 5),
+        >>>     annotations.Label('noise', 4, 6),
+        >>>     annotations.Label('music', 6, 8)
         >>> ])
         >>> utt.set_label_list(ll)
         >>>

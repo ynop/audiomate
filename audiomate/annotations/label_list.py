@@ -1,128 +1,8 @@
 import collections
 import heapq
 import bisect
-from functools import total_ordering
 
-
-@total_ordering
-class Label(object):
-    """
-    Represents a label that describes some part of an utterance.
-
-    Args:
-        value (str): The text of the label.
-        start (float): Start of the label within the utterance in seconds. (default: 0)
-        end (float): End of the label within the utterance in seconds. (default: -1) (-1 defines
-                     the end of the utterance)
-        meta (dict): A dictionary containing additional information for the label.
-
-    Attributes:
-        label_list (LabelList): The label-list this label is belonging to.
-    """
-    __slots__ = ['value', 'start', 'end', 'label_list', 'meta']
-
-    def __init__(self, value, start=0, end=-1, meta=None):
-        self.value = value
-        self.start = start
-        self.end = end
-        self.meta = meta or {}
-        self.label_list = None
-
-    def __eq__(self, other):
-        return (self.start, self.end, self.value.lower()) == (other.start, other.end, other.value.lower())
-
-    def __lt__(self, other):
-        self_end = float('inf') if self.end == -1 else self.end
-        other_end = float('inf') if other.end == -1 else other.end
-
-        return (self.start, self_end, self.value.lower()) < (other.start, other_end, other.value.lower())
-
-    def __repr__(self) -> str:
-        return 'Label({}, {}, {})'.format(self.value, self.start, self.end)
-
-    @property
-    def start_abs(self):
-        """
-        Return the absolute start of the label in seconds relative to the signal.
-        If the label isn't linked to any utterance via label-list,
-        it is assumed ``self.start`` is relative to the start of the signal, hence ``self.start`` == ``self.start_abs``.
-        """
-        if self.label_list is None or self.label_list.utterance is None:
-            return self.start
-
-        return self.label_list.utterance.start + self.start
-
-    @property
-    def end_abs(self):
-        """
-        Return the absolute end of the label in seconds relative to the signal.
-        If the label isn't linked to any utterance via label-list,
-        it is assumed ``self.end`` is relative to the start of the signal, hence ``self.end`` == ``self.end_abs``.
-        """
-        if self.label_list is None or self.label_list.utterance is None:
-            return self.end
-        elif self.end == -1:
-            return self.label_list.utterance.end_abs
-        else:
-            return self.end + self.label_list.utterance.start
-
-    @property
-    def duration(self):
-        """
-        Return the duration of the label in seconds.
-        """
-        return self.end_abs - self.start_abs
-
-    def read_samples(self, sr=None):
-        """
-        Read the samples of the utterance.
-
-        Args:
-            sr (int): If None uses the sampling rate given by the track,
-                      otherwise resamples to the given sampling rate.
-
-        Returns:
-            np.ndarray: A numpy array containing the samples as a floating point (numpy.float32) time series.
-        """
-        duration = None
-
-        if self.end >= 0 or self.label_list.utterance.end >= 0:
-            duration = self.duration
-
-        return self.label_list.utterance.track.read_samples(sr=sr, offset=self.start_abs, duration=duration)
-
-    def tokenized(self, delimiter=' '):
-        """
-        Return a list with tokens from the value of the label.
-        Tokens are extracted by splitting the string using ``delimiter`` and
-        then trimming any whitespace before and after splitted strings.
-
-        Args:
-            delimiter (str): The delimiter used to split into tokens. (default: space)
-
-        Return:
-            list: A list of tokens in the order they occur in the label.
-
-        Examples:
-
-            >>> label = Label('as is oh')
-            >>> label.tokenized()
-            ['as', 'is', 'oh']
-
-        Using a different delimiter (whitespace is trimmed anyway):
-
-            >>> label = Label('oh hi, as, is  ')
-            >>> label.tokenized(delimiter=',')
-            ['oh hi', 'as', 'is']
-        """
-
-        tokens = self.value.split(sep=delimiter)
-        tokens = [t.strip() for t in tokens]
-
-        while '' in tokens:
-            tokens.remove('')
-
-        return tokens
+from .label import Label
 
 
 class LabelList(object):
@@ -131,8 +11,10 @@ class LabelList(object):
     An utterance can have multiple label-lists.
 
     Args:
-        idx (str): An unique identifier for the label-list within a corpus for one utterance.
-        labels (list): The list containing the :py:class:`audiomate.corpus.assets.Label`.
+        idx (str): An unique identifier for the label-list
+                   within a corpus for one utterance.
+        labels (list): The list containing the
+                       :py:class:`audiomate.annotations.Label`.
 
     Attributes:
         utterance (Utterance): The utterance this label-list is belonging to.
@@ -176,18 +58,18 @@ class LabelList(object):
 
     def ranges(self, yield_ranges_without_labels=False, include_labels=None):
         """
-        Generate all ranges of the label-list. A range is defined as a part of the label-list for
-        which the same labels are defined.
+        Generate all ranges of the label-list. A range is defined
+        as a part of the label-list for which the same labels are defined.
 
         Args:
-            yield_ranges_without_labels (bool): If True also yields ranges for which no labels are
-                                                defined.
-            include_labels (list): If not empty, only the label values in the list will be
-                                   considered.
+            yield_ranges_without_labels (bool): If True also yields ranges for
+                                                which no labels are defined.
+            include_labels (list): If not empty, only the label values in
+                                   the list will be considered.
 
         Returns:
-            generator: A generator which yields one range (tuple start/end/list-of-labels) at a
-                       time.
+            generator: A generator which yields one range
+            (tuple start/end/list-of-labels) at a time.
 
         Example:
             >>> ll = LabelList(labels=[
@@ -198,11 +80,11 @@ class LabelList(object):
             >>> ])
             >>> ranges = ll.ranges()
             >>> next(ranges)
-            (3.2, 4.5, [<audiomate.corpus.assets.label.Label at 0x1090527c8>])
+            (3.2, 4.5, [<audiomate.annotations.Label at 0x1090527c8>])
             >>> next(ranges)
             (4.5, 5.1, [])
             >>> next(ranges)
-            (5.1, 7.2, [<audiomate.corpus.assets.label.Label at 0x1090484c8>])
+            (5.1, 7.2, [<audiomate.annotations.label.Label at 0x1090484c8>])
         """
 
         # all label start events
@@ -217,12 +99,16 @@ class LabelList(object):
             next_event = heapq.heappop(events)
             label = next_event[2]
 
-            # Return current range if its not the first event and not the same time as the previous
-            # event
+            # Return current range if its not the first event
+            # and not the same time as the previous event
             if -1 < current_range_start < next_event[0]:
 
                 if len(current_range_labels) > 0 or yield_ranges_without_labels:
-                    yield (current_range_start, next_event[0], list(current_range_labels))
+                    yield (
+                        current_range_start,
+                        next_event[0],
+                        list(current_range_labels)
+                    )
 
             # Update labels and add the "end" event
             if next_event[1] == 1:
@@ -268,7 +154,8 @@ class LabelList(object):
         Return for each label the number of occurrences within the list.
 
         Returns:
-            dict: A dictionary containing for every label-value (key) the number of occurrences (value).
+            dict: A dictionary containing for every label-value (key)
+            the number of occurrences (value).
 
         Example:
             >>> ll = LabelList(labels=[
@@ -295,7 +182,7 @@ class LabelList(object):
 
         Args:
             delimiter (str): The delimiter used to split labels into tokens
-                             (see :meth:`audiomate.corpus.assets.Label.tokenized`).
+                             (see :meth:`audiomate.annotations.Label.tokenized`).
 
         Returns:
              :class:`set`: A set of distinct tokens.
@@ -388,7 +275,8 @@ class LabelList(object):
         Return for each distinct label value the total duration of all occurrences.
 
         Returns:
-            dict: A dictionary containing for every label-value (key) the total duration in seconds (value).
+            dict: A dictionary containing for every label-value (key)
+                  the total duration in seconds (value).
 
         Example:
             >>> ll = LabelList(labels=[
@@ -411,8 +299,9 @@ class LabelList(object):
 
     def apply(self, fn):
         """
-        Apply the given function `fn` to every label in this label list. `fn` is a function of one argument that
-        receives the current label which can then be edited in place.
+        Apply the given function `fn` to every label in this label list.
+        `fn` is a function of one argument that receives the current label
+        which can then be edited in place.
 
         Args:
             fn (func): Function to apply to every label
@@ -444,13 +333,14 @@ class LabelList(object):
         And so on.
 
         Args:
-            cutting_points (list): List of floats defining the points in seconds, where the label-list is splitted.
+            cutting_points (list): List of floats defining the points in seconds,
+                                   where the label-list is splitted.
             shift_times (bool): If True, start and end-time of shifted in splitted label-lists.
                                  So the start is relative to the cutting point and
                                  not to the beginning of the original label-list.
 
         Returns:
-            list: A list of of :class:`audiomate.corpus.assets.LabelList`.
+            list: A list of of :class:`audiomate.annotations.LabelList`.
 
         Example:
 
@@ -478,8 +368,8 @@ class LabelList(object):
             >>> res[3].labels
             [Label('c', 12.0, 15.0)]
 
-        If ``shift_times=True``, the times are adjusted to be relative to the cutting-points for
-        every label-list but the first.
+        If ``shift_times=True``, the times are adjusted to be relative
+        to the cutting-points for every label-list but the first.
 
             >>> ll = LabelList(labels=[
             >>>     Label('a', 0, 5),

@@ -7,6 +7,7 @@ import json
 import audiomate
 from audiomate import containers
 from audiomate import tracks
+from audiomate import annotations
 from audiomate.corpus import assets
 from audiomate.corpus.subset import subview
 from audiomate.utils import textfile
@@ -162,10 +163,10 @@ class DefaultReader(base.CorpusReader):
                     meta = json.loads(meta_json)
                     label = meta_match.group(1)
 
-                utterance_labels[record[0]].append(assets.Label(label, start, end, meta=meta))
+                utterance_labels[record[0]].append(annotations.Label(label, start, end, meta=meta))
 
             for utterance_idx, labels in utterance_labels.items():
-                ll = assets.LabelList(idx=key, labels=labels)
+                ll = annotations.LabelList(idx=key, labels=labels)
                 corpus.utterances[utterance_idx].set_label_list(ll)
 
     @staticmethod

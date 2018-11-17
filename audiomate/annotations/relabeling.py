@@ -1,4 +1,4 @@
-from audiomate.corpus import assets
+from audiomate import annotations
 from audiomate.utils import textfile
 
 WILDCARD_COMBINATION = ('**',)
@@ -12,7 +12,7 @@ class UnmappedLabelsException(Exception):
 
 def relabel(label_list, projections):
     """
-    Relabel an entire :py:class:`~audiomate.corpus.assets.LabelList` using user-defined projections.
+    Relabel an entire :py:class:`~audiomate.annotations.LabelList` using user-defined projections.
     Labels can be renamed, removed or overlapping labels can be flattened to a single label per segment.
 
     Each entry in the dictionary of projections represents a single projection that maps a combination of labels (key)
@@ -24,11 +24,11 @@ def relabel(label_list, projections):
     or more combinations of labels is not defined.
 
     Args:
-        label_list (audiomate.corpus.assets.LabelList): The label list to relabel
+        label_list (audiomate.annotations.LabelList): The label list to relabel
         projections (dict): A dictionary that maps tuples of label combinations to string
                             labels.
     Returns:
-        audiomate.corpus.assets.LabelList: New label list with remapped labels
+        audiomate.annotations.LabelList: New label list with remapped labels
 
     Raises:
         UnmappedLabelsException: If a projection for one or more combinations of labels is not defined.
@@ -42,10 +42,10 @@ def relabel(label_list, projections):
         ...     ('a', 'b', 'c',): 'a_b_c',
         ...     ('**',): 'b_c',
         ... }
-        >>> label_list = assets.LabelList(labels=[
-        ...     assets.Label('a', 3.2, 4.5),
-        ...     assets.Label('b', 4.0, 4.9),
-        ...     assets.Label('c', 4.2, 5.1)
+        >>> label_list = annotations.LabelList(labels=[
+        ...     annotations.Label('a', 3.2, 4.5),
+        ...     annotations.Label('b', 4.0, 4.9),
+        ...     annotations.Label('c', 4.2, 5.1)
         ... ])
         >>> ll = relabel(label_list, projections)
         >>> [l.value for l in ll]
@@ -63,9 +63,9 @@ def relabel(label_list, projections):
         if label_mapping == '':
             continue
 
-        new_labels.append(assets.Label(label_mapping, labeled_segment[0], labeled_segment[1]))
+        new_labels.append(annotations.Label(label_mapping, labeled_segment[0], labeled_segment[1]))
 
-    return assets.LabelList(idx=label_list.idx, labels=new_labels)
+    return annotations.LabelList(idx=label_list.idx, labels=new_labels)
 
 
 def find_missing_projections(label_list, projections):
@@ -80,7 +80,7 @@ def find_missing_projections(label_list, projections):
     required to specify a projection for every single combination of labels.
 
     Args:
-        label_list (audiomate.corpus.assets.LabelList): The label list to relabel
+        label_list (audiomate.annotations.LabelList): The label list to relabel
         projections (dict): A dictionary that maps tuples of label combinations to string
                             labels.
 
@@ -88,10 +88,10 @@ def find_missing_projections(label_list, projections):
         List: List of combinations of labels that are not covered by any projection
 
     Example:
-        >>> ll = assets.LabelList(labels=[
-        ...     assets.Label('b', 3.2, 4.5),
-        ...     assets.Label('a', 4.0, 4.9),
-        ...     assets.Label('c', 4.2, 5.1)
+        >>> ll = annotations.LabelList(labels=[
+        ...     annotations.Label('b', 3.2, 4.5),
+        ...     annotations.Label('a', 4.0, 4.9),
+        ...     annotations.Label('c', 4.2, 5.1)
         ... ])
         >>> find_missing_projections(ll, {('b',): 'new_label'})
         [('a', 'b'), ('a', 'b', 'c'), ('a', 'c'), ('c',)]

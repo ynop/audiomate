@@ -3,7 +3,7 @@ import unittest
 import pytest
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import annotations
 
 from tests import resources
 
@@ -62,7 +62,9 @@ class CorpusViewTest(unittest.TestCase):
 
     def test_all_tokens_returns_only_from_selected_label_lists(self):
         corpus = resources.create_dataset()
-        ll = assets.LabelList(idx='test', labels=[assets.Label('what can he do')])
+        ll = annotations.LabelList(idx='test', labels=[
+            annotations.Label('what can he do')
+        ])
         corpus.utterances['utt-1'].set_label_list(ll)
 
         target_lls = [audiomate.corpus.LL_WORD_TRANSCRIPT]
@@ -71,7 +73,9 @@ class CorpusViewTest(unittest.TestCase):
 
     def test_all_tokens_with_custom_delimiter(self):
         corpus = resources.create_dataset()
-        ll = assets.LabelList(idx='test', labels=[assets.Label('a, b, a, c')])
+        ll = annotations.LabelList(idx='test', labels=[
+            annotations.Label('a, b, a, c')
+        ])
         corpus.utterances['utt-1'].set_label_list(ll)
 
         target_lls = ['test']

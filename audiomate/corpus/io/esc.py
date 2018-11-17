@@ -2,7 +2,7 @@ import os
 import collections
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import annotations
 from audiomate.corpus import subset
 from . import base
 from audiomate.utils import textfile
@@ -78,7 +78,7 @@ class ESC50Reader(base.CorpusReader):
 
             corpus.new_file(file_path, file_id)
             utt = corpus.new_utterance(file_id, file_id)
-            utt.set_label_list(assets.LabelList.create_single(category, idx=audiomate.corpus.LL_SOUND_CLASS))
+            utt.set_label_list(annotations.LabelList.create_single(category, idx=audiomate.corpus.LL_SOUND_CLASS))
 
             folds['fold-{}'.format(fold)].append(file_id)
 

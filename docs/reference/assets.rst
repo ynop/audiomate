@@ -23,17 +23,3 @@ Artist
 .. autoclass:: Artist
    :members:
 
-Label
------
-
-.. autoclass:: Label
-   :members:
-   :inherited-members:
-
-LabelList
----------
-
-.. autoclass:: LabelList
-   :members:
-   :inherited-members:
-

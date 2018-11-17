@@ -1,7 +1,7 @@
 import pytest
 
+from audiomate import annotations
 from audiomate.corpus import subset
-from audiomate.corpus import assets
 from tests import resources
 
 
@@ -17,36 +17,36 @@ def corpus_with_more_labels():
     """
     corpus = resources.create_single_label_corpus()
 
-    corpus.utterances['utt-1'].set_label_list(assets.LabelList(idx='radio', labels=[
-        assets.Label('alpha')
+    corpus.utterances['utt-1'].set_label_list(annotations.LabelList(idx='radio', labels=[
+        annotations.Label('alpha')
     ]))
 
-    corpus.utterances['utt-2'].set_label_list(assets.LabelList(idx='radio', labels=[
-        assets.Label('alpha')
+    corpus.utterances['utt-2'].set_label_list(annotations.LabelList(idx='radio', labels=[
+        annotations.Label('alpha')
     ]))
 
-    corpus.utterances['utt-3'].set_label_list(assets.LabelList(idx='radio', labels=[
-        assets.Label('beta')
+    corpus.utterances['utt-3'].set_label_list(annotations.LabelList(idx='radio', labels=[
+        annotations.Label('beta')
     ]))
 
-    corpus.utterances['utt-4'].set_label_list(assets.LabelList(idx='radio', labels=[
-        assets.Label('beta')
+    corpus.utterances['utt-4'].set_label_list(annotations.LabelList(idx='radio', labels=[
+        annotations.Label('beta')
     ]))
 
-    corpus.utterances['utt-5'].set_label_list(assets.LabelList(idx='radio', labels=[
-        assets.Label('beta')
+    corpus.utterances['utt-5'].set_label_list(annotations.LabelList(idx='radio', labels=[
+        annotations.Label('beta')
     ]))
 
-    corpus.utterances['utt-6'].set_label_list(assets.LabelList(idx='radio', labels=[
-        assets.Label('beta')
+    corpus.utterances['utt-6'].set_label_list(annotations.LabelList(idx='radio', labels=[
+        annotations.Label('beta')
     ]))
 
-    corpus.utterances['utt-7'].set_label_list(assets.LabelList(idx='radio', labels=[
-        assets.Label('beta')
+    corpus.utterances['utt-7'].set_label_list(annotations.LabelList(idx='radio', labels=[
+        annotations.Label('beta')
     ]))
 
-    corpus.utterances['utt-8'].set_label_list(assets.LabelList(idx='radio', labels=[
-        assets.Label('beta')
+    corpus.utterances['utt-8'].set_label_list(annotations.LabelList(idx='radio', labels=[
+        annotations.Label('beta')
     ]))
 
     return corpus

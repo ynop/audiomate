@@ -77,8 +77,8 @@ Finally in the ``_load`` method the actual loading is done and the loaded corpus
 
             # Utterances with labels ...
             utterance = corpus.new_utterance(file_idx, file_idx, issuer_idx)
-            utterance.set_label_list(assets.LabelList(idx='transcription', labels=[
-                assets.Label(str(digit))
+            utterance.set_label_list(annotations.LabelList(idx='transcription', labels=[
+                annotations.Label(str(digit))
             ]))
 
             return corpus

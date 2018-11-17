@@ -5,6 +5,7 @@ import librosa
 import pytest
 
 from audiomate import tracks
+from audiomate import annotations
 from audiomate.corpus import assets
 
 from tests import resources
@@ -12,30 +13,30 @@ from tests import resources
 
 class UtteranceTest(unittest.TestCase):
     def setUp(self):
-        self.ll_1 = assets.LabelList(idx='alpha', labels=[
-            assets.Label('a', 3.2, 4.5),
-            assets.Label('b', 5.1, 8.9),
-            assets.Label('c', 7.2, 10.5),
-            assets.Label('d', 10.5, 14),
-            assets.Label('d', 15, 18)
+        self.ll_1 = annotations.LabelList(idx='alpha', labels=[
+            annotations.Label('a', 3.2, 4.5),
+            annotations.Label('b', 5.1, 8.9),
+            annotations.Label('c', 7.2, 10.5),
+            annotations.Label('d', 10.5, 14),
+            annotations.Label('d', 15, 18)
         ])
 
-        self.ll_2 = assets.LabelList(idx='bravo', labels=[
-            assets.Label('a', 1.0, 4.2),
-            assets.Label('e', 4.2, 7.9),
-            assets.Label('c', 7.2, 10.5),
-            assets.Label('f', 10.5, 14),
-            assets.Label('d', 15, 17.3)
+        self.ll_2 = annotations.LabelList(idx='bravo', labels=[
+            annotations.Label('a', 1.0, 4.2),
+            annotations.Label('e', 4.2, 7.9),
+            annotations.Label('c', 7.2, 10.5),
+            annotations.Label('f', 10.5, 14),
+            annotations.Label('d', 15, 17.3)
         ])
 
-        self.ll_duplicate_idx = assets.LabelList(idx='charlie', labels=[
-            assets.Label('t', 1.0, 4.2),
-            assets.Label('h', 4.2, 7.9)
+        self.ll_duplicate_idx = annotations.LabelList(idx='charlie', labels=[
+            annotations.Label('t', 1.0, 4.2),
+            annotations.Label('h', 4.2, 7.9)
         ])
 
-        self.ll_3 = assets.LabelList(idx='charlie', labels=[
-            assets.Label('a', 1.0, 4.2),
-            assets.Label('g', 4.2, 7.9)
+        self.ll_3 = annotations.LabelList(idx='charlie', labels=[
+            annotations.Label('a', 1.0, 4.2),
+            annotations.Label('g', 4.2, 7.9)
         ])
 
         self.track = tracks.FileTrack('wav', resources.sample_wav_file('wav_1.wav'))
@@ -66,9 +67,9 @@ class UtteranceTest(unittest.TestCase):
         assert self.utt in self.issuer.utterances
 
     def test_set_label_list(self):
-        ll_4 = assets.LabelList(idx='delta', labels=[
-            assets.Label('y', 0.0, 3.3),
-            assets.Label('t', 3.8, 7.9)
+        ll_4 = annotations.LabelList(idx='delta', labels=[
+            annotations.Label('y', 0.0, 3.3),
+            annotations.Label('t', 3.8, 7.9)
         ])
 
         self.utt.set_label_list(ll_4)
@@ -128,8 +129,12 @@ class UtteranceTest(unittest.TestCase):
         assert self.utt.read_samples(sr=11255).shape[0] == self.utt.num_samples(sr=11255)
 
     def test_split(self):
-        ll_1 = assets.LabelList('phones', labels=[assets.Label('alpha', start=0.0, end=30.0)])
-        ll_2 = assets.LabelList('words', labels=[assets.Label('b', start=0.0, end=30.0)])
+        ll_1 = annotations.LabelList('phones', labels=[
+            annotations.Label('alpha', start=0.0, end=30.0)
+        ])
+        ll_2 = annotations.LabelList('words', labels=[
+            annotations.Label('b', start=0.0, end=30.0)
+        ])
         utt = assets.Utterance('utt-1', 'track-x', start=0.0, end=40.0, label_lists=[ll_1, ll_2])
 
         res = utt.split([14.0, 29.5])
@@ -222,8 +227,12 @@ class UtteranceTest(unittest.TestCase):
         assert res[1].end == 20.0
 
     def test_split_utt_relative_with_labels(self):
-        ll_1 = assets.LabelList('phones', labels=[assets.Label('alpha', start=0.0, end=30.0)])
-        ll_2 = assets.LabelList('words', labels=[assets.Label('b', start=8.0, end=30.0)])
+        ll_1 = annotations.LabelList('phones', labels=[
+            annotations.Label('alpha', start=0.0, end=30.0)
+        ])
+        ll_2 = annotations.LabelList('words', labels=[
+            annotations.Label('b', start=8.0, end=30.0)
+        ])
         utt = assets.Utterance('utt-1', 'file-x', start=10.0, end=40.0, label_lists=[ll_1, ll_2])
 
         res = utt.split([14.0], track_relative=False)

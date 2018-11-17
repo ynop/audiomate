@@ -1,6 +1,6 @@
 import re
 
-from audiomate.corpus import assets
+from audiomate import annotations
 from audiomate.utils import textfile
 
 __TIME_JUNK_PATTERN = re.compile(r'[^0-9.\-]')
@@ -33,7 +33,7 @@ def write_label_list(path, label_list):
 
     Args:
         path (str): Path to write the file to.
-        label_list (audiomate.corpus.assets.LabelList): Label list
+        label_list (audiomate.annotations.LabelList): Label list
     """
     entries = []
     for label in label_list:
@@ -76,18 +76,18 @@ def read_label_file(path):
 def read_label_list(path):
     """
     Reads labels from an Audacity label file
-    and returns them wrapped in a :py:class:`audiomate.corpus.assets.LabelList`.
+    and returns them wrapped in a :py:class:`audiomate.annotations.LabelList`.
 
     Args:
         path (str): Path to the Audacity label file
 
     Returns:
-        audiomate.corpus.assets.LabelList: Label list containing the labels
+        audiomate.annotations.LabelList: Label list containing the labels
     """
-    ll = assets.LabelList()
+    ll = annotations.LabelList()
 
     for record in read_label_file(path):
-        ll.append(assets.Label(record[2], start=record[0], end=record[1]))
+        ll.append(annotations.Label(record[2], start=record[0], end=record[1]))
 
     return ll
 

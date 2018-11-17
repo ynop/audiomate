@@ -2,6 +2,7 @@ import os
 import glob
 
 import audiomate
+from audiomate import annotations
 from audiomate.corpus import assets
 from audiomate.corpus import subset
 from . import base
@@ -68,25 +69,25 @@ class TimitReader(base.CorpusReader):
                             corpus.new_file(wav_path, utt_idx)
                             utt = corpus.new_utterance(utt_idx, utt_idx, speaker_idx)
 
-                            raw_ll = assets.LabelList.create_single(raw_text,
-                                                                    idx=audiomate.corpus.LL_WORD_TRANSCRIPT_RAW)
+                            raw_ll = annotations.LabelList.create_single(raw_text,
+                                                                         idx=audiomate.corpus.LL_WORD_TRANSCRIPT_RAW)
                             utt.set_label_list(raw_ll)
 
-                            word_ll = assets.LabelList(idx=audiomate.corpus.LL_WORD_TRANSCRIPT)
+                            word_ll = annotations.LabelList(idx=audiomate.corpus.LL_WORD_TRANSCRIPT)
 
                             for record in words:
                                 start = int(record[0]) / 16000
                                 end = int(record[1]) / 16000
-                                word_ll.append(assets.Label(record[2], start=start, end=end))
+                                word_ll.append(annotations.Label(record[2], start=start, end=end))
 
                             utt.set_label_list(word_ll)
 
-                            phone_ll = assets.LabelList(idx=audiomate.corpus.LL_PHONE_TRANSCRIPT)
+                            phone_ll = annotations.LabelList(idx=audiomate.corpus.LL_PHONE_TRANSCRIPT)
 
                             for record in phones:
                                 start = int(record[0]) / 16000
                                 end = int(record[1]) / 16000
-                                phone_ll.append(assets.Label(record[2], start=start, end=end))
+                                phone_ll.append(annotations.Label(record[2], start=start, end=end))
 
                             utt.set_label_list(phone_ll)
 

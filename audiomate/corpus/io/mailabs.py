@@ -1,6 +1,7 @@
 import os
 
 import audiomate
+from audiomate import annotations
 from audiomate.corpus import assets
 from audiomate.corpus import subset
 from audiomate.utils import download
@@ -184,12 +185,12 @@ class MailabsReader(base.CorpusReader):
                 if os.path.isfile(wav_path):
                     corpus.new_file(wav_path, idx)
 
-                    ll_raw = assets.LabelList.create_single(
+                    ll_raw = annotations.LabelList.create_single(
                         transcription_raw,
                         idx=audiomate.corpus.LL_WORD_TRANSCRIPT_RAW
                     )
 
-                    ll_clean = assets.LabelList.create_single(
+                    ll_clean = annotations.LabelList.create_single(
                         transcription_clean,
                         idx=audiomate.corpus.LL_WORD_TRANSCRIPT
                     )

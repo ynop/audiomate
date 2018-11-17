@@ -2,6 +2,7 @@ import os
 import glob
 
 import audiomate
+from audiomate import annotations
 from audiomate.corpus import assets
 from audiomate.corpus import subset
 from audiomate.utils import download
@@ -103,8 +104,12 @@ class CommonVoiceReader(base.CorpusReader):
             issuer = assets.Speaker(idx, gender=gender, age_group=age)
             corpus.import_issuers(issuer)
             utterance = corpus.new_utterance(idx, idx, issuer.idx)
-            utterance.set_label_list(assets.LabelList.create_single(transcription,
-                                                                    idx=audiomate.corpus.LL_WORD_TRANSCRIPT))
+            utterance.set_label_list(
+                annotations.LabelList.create_single(
+                    transcription,
+                    idx=audiomate.corpus.LL_WORD_TRANSCRIPT
+                )
+            )
 
             utt_ids.append(idx)
 

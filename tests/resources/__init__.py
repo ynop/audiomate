@@ -2,6 +2,7 @@ import os
 import tempfile
 
 import audiomate
+from audiomate.annotations import Label, LabelList
 from audiomate.corpus import assets
 from audiomate.corpus.subset import subview
 
@@ -48,16 +49,16 @@ def create_dataset():
     utt_4 = ds.new_utterance('utt-4', file_3.idx, issuer_idx=issuer_2.idx, start=1.5, end=2.5)
     utt_5 = ds.new_utterance('utt-5', file_4.idx, issuer_idx=issuer_3.idx)
 
-    utt_1.set_label_list(assets.LabelList(audiomate.corpus.LL_WORD_TRANSCRIPT,
-                                          labels=[assets.Label('who am i')]))
-    utt_2.set_label_list(assets.LabelList(audiomate.corpus.LL_WORD_TRANSCRIPT,
-                                          labels=[assets.Label('who are you', meta={'a': 'hey', 'b': 2})]))
-    utt_3.set_label_list(assets.LabelList(audiomate.corpus.LL_WORD_TRANSCRIPT,
-                                          labels=[assets.Label('who is he')]))
-    utt_4.set_label_list(assets.LabelList(audiomate.corpus.LL_WORD_TRANSCRIPT,
-                                          labels=[assets.Label('who are they')]))
-    utt_5.set_label_list(assets.LabelList(audiomate.corpus.LL_WORD_TRANSCRIPT,
-                                          labels=[assets.Label('who is she')]))
+    utt_1.set_label_list(LabelList(audiomate.corpus.LL_WORD_TRANSCRIPT,
+                                   labels=[Label('who am i')]))
+    utt_2.set_label_list(LabelList(audiomate.corpus.LL_WORD_TRANSCRIPT,
+                                   labels=[Label('who are you', meta={'a': 'hey', 'b': 2})]))
+    utt_3.set_label_list(LabelList(audiomate.corpus.LL_WORD_TRANSCRIPT,
+                                   labels=[Label('who is he')]))
+    utt_4.set_label_list(LabelList(audiomate.corpus.LL_WORD_TRANSCRIPT,
+                                   labels=[Label('who are they')]))
+    utt_5.set_label_list(LabelList(audiomate.corpus.LL_WORD_TRANSCRIPT,
+                                   labels=[Label('who is she')]))
 
     train_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-1', 'utt-2', 'utt-3'})
     sv_train = subview.Subview(ds, filter_criteria=[train_filter])
@@ -100,46 +101,46 @@ def create_multi_label_corpus():
     utt_7 = ds.new_utterance('utt-7', file_4.idx, issuer_idx=issuer_3.idx, start=15, end=25)
     utt_8 = ds.new_utterance('utt-8', file_4.idx, issuer_idx=issuer_3.idx, start=25, end=40)
 
-    utt_1.set_label_list(assets.LabelList(labels=[
-        assets.Label('music', 0, 5),
-        assets.Label('speech', 5, 12),
-        assets.Label('music', 13, 15)
+    utt_1.set_label_list(LabelList(labels=[
+        Label('music', 0, 5),
+        Label('speech', 5, 12),
+        Label('music', 13, 15)
     ]))
 
-    utt_2.set_label_list(assets.LabelList(labels=[
-        assets.Label('music', 0, 5),
-        assets.Label('speech', 5, 12),
-        assets.Label('music', 13, 15)
+    utt_2.set_label_list(LabelList(labels=[
+        Label('music', 0, 5),
+        Label('speech', 5, 12),
+        Label('music', 13, 15)
     ]))
 
-    utt_3.set_label_list(assets.LabelList(labels=[
-        assets.Label('music', 0, 1),
-        assets.Label('speech', 2, 6)
+    utt_3.set_label_list(LabelList(labels=[
+        Label('music', 0, 1),
+        Label('speech', 2, 6)
     ]))
 
-    utt_4.set_label_list(assets.LabelList(labels=[
-        assets.Label('music', 0, 5),
-        assets.Label('speech', 5, 12),
-        assets.Label('music', 13, 15)
+    utt_4.set_label_list(LabelList(labels=[
+        Label('music', 0, 5),
+        Label('speech', 5, 12),
+        Label('music', 13, 15)
     ]))
 
-    utt_5.set_label_list(assets.LabelList(labels=[
-        assets.Label('speech', 0, 7)
+    utt_5.set_label_list(LabelList(labels=[
+        Label('speech', 0, 7)
     ]))
 
-    utt_6.set_label_list(assets.LabelList(labels=[
-        assets.Label('music', 0, 5),
-        assets.Label('speech', 5, 12),
-        assets.Label('music', 13, 15)
+    utt_6.set_label_list(LabelList(labels=[
+        Label('music', 0, 5),
+        Label('speech', 5, 12),
+        Label('music', 13, 15)
     ]))
 
-    utt_7.set_label_list(assets.LabelList(labels=[
-        assets.Label('music', 0, 5),
-        assets.Label('speech', 5, 11)
+    utt_7.set_label_list(LabelList(labels=[
+        Label('music', 0, 5),
+        Label('speech', 5, 11)
     ]))
 
-    utt_8.set_label_list(assets.LabelList(labels=[
-        assets.Label('music', 0, 10)
+    utt_8.set_label_list(LabelList(labels=[
+        Label('music', 0, 10)
     ]))
 
     train_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-4', 'utt-5', 'utt-6'})
@@ -183,36 +184,36 @@ def create_single_label_corpus():
     utt_7 = ds.new_utterance('utt-7', file_4.idx, issuer_idx=issuer_3.idx, start=15, end=25)
     utt_8 = ds.new_utterance('utt-8', file_4.idx, issuer_idx=issuer_3.idx, start=25, end=40)
 
-    utt_1.set_label_list(assets.LabelList(labels=[
-        assets.Label('music')
+    utt_1.set_label_list(LabelList(labels=[
+        Label('music')
     ]))
 
-    utt_2.set_label_list(assets.LabelList(labels=[
-        assets.Label('music')
+    utt_2.set_label_list(LabelList(labels=[
+        Label('music')
     ]))
 
-    utt_3.set_label_list(assets.LabelList(labels=[
-        assets.Label('speech')
+    utt_3.set_label_list(LabelList(labels=[
+        Label('speech')
     ]))
 
-    utt_4.set_label_list(assets.LabelList(labels=[
-        assets.Label('music')
+    utt_4.set_label_list(LabelList(labels=[
+        Label('music')
     ]))
 
-    utt_5.set_label_list(assets.LabelList(labels=[
-        assets.Label('speech')
+    utt_5.set_label_list(LabelList(labels=[
+        Label('speech')
     ]))
 
-    utt_6.set_label_list(assets.LabelList(labels=[
-        assets.Label('music')
+    utt_6.set_label_list(LabelList(labels=[
+        Label('music')
     ]))
 
-    utt_7.set_label_list(assets.LabelList(labels=[
-        assets.Label('speech')
+    utt_7.set_label_list(LabelList(labels=[
+        Label('speech')
     ]))
 
-    utt_8.set_label_list(assets.LabelList(labels=[
-        assets.Label('music')
+    utt_8.set_label_list(LabelList(labels=[
+        Label('music')
     ]))
 
     return ds
