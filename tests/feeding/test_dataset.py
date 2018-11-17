@@ -5,6 +5,7 @@ import numpy as np
 from audiomate import containers
 from audiomate.corpus import subset
 from audiomate import feeding
+from audiomate.processing import pipeline
 
 import pytest
 from tests import resources
@@ -14,8 +15,12 @@ from tests import resources
 def container_dim_x_4(tmpdir):
     inputs_path = os.path.join(tmpdir.strpath, 'inputs.hdf5')
 
-    cnt = containers.Container(inputs_path)
+    cnt = containers.FeatureContainer(inputs_path)
     cnt.open()
+
+    cnt.frame_size = 4
+    cnt.hop_size = 2
+    cnt.sampling_rate = 16000
 
     cnt.set('utt-1', np.arange(60).reshape(15, 4))
     cnt.set('utt-2', np.arange(80).reshape(20, 4))
@@ -116,6 +121,15 @@ class TestDataset:
         assert not feeding.Dataset.container_has_utterances(c, ['utt-1', 'utt-2', 'utt-3'])
 
 
+class AddTransform(pipeline.Computation):
+    def __init__(self, value, parent=None, name=None):
+        super(AddTransform, self).__init__(parent=parent, name=name)
+        self.value = value
+
+    def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
+        return chunk.data + self.value
+
+
 class TestUtteranceDataset:
 
     def test_init_with_corpus(self, container_dim_x_4, container_dim_x):
@@ -181,6 +195,44 @@ class TestUtteranceDataset:
         assert len(lengths) == 2
         assert lengths[0] == 20
         assert lengths[1] == 8
+
+    def test_get_item_with_transfrom(self, container_dim_x_4, container_dim_x):
+        transform = AddTransform(value=3.0)
+
+        ds = feeding.UtteranceDataset(
+            ['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5'],
+            [container_dim_x_4, container_dim_x],
+            transform=[transform, None]
+        )
+
+        sample = ds[2]
+
+        assert len(sample) == 4
+        assert np.array_equal(sample[0], np.arange(44).reshape(11, 4) + 3.0)
+        assert sample[1] == 11
+        assert np.array_equal(sample[2], np.arange(4))
+        assert sample[3] == 4
+
+    def test_init_with_transform_for_non_feature_container_raises_error(
+            self, container_dim_x_4, container_dim_x):
+        transform = AddTransform(value=3.0)
+
+        with pytest.raises(ValueError):
+            feeding.UtteranceDataset(
+                ['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5'],
+                [container_dim_x_4, container_dim_x],
+                transform=[transform, transform]
+            )
+
+    def test_init_with_missing_transforms_raises_error(self, container_dim_x_4, container_dim_x):
+        transform = AddTransform(value=3.0)
+
+        with pytest.raises(ValueError):
+            feeding.UtteranceDataset(
+                ['utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5'],
+                [container_dim_x_4, container_dim_x],
+                transform=[transform]
+            )
 
 
 @pytest.fixture

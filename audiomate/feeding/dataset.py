@@ -5,6 +5,7 @@ import numpy as np
 
 import audiomate
 from audiomate import containers
+from audiomate import processing
 from . import iterator
 
 
@@ -60,7 +61,7 @@ class UtteranceDataset(Dataset):
     Args:
         corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
                                           This defines which utterances are considered for iterating.
-        containers (list, Container): A single container or a list of containers.
+        source_containers (list, Container): A single container or a list of containers.
         return_length (bool): If True, the length of the data from every container is returned as well.
                               The length is appended after the data of every container
                               (e.g. [container1-data, container1-length, container2-data, container2-length])
@@ -68,6 +69,10 @@ class UtteranceDataset(Dataset):
                     The padding is done for each container individually.
                     (e.g. container1-data can be shorter than container2-data)
                     If padding is enabled, the lengths are always returned ``return_length = True``.
+        transform (list, Processor): A single processor or a list of processors.
+                                     Has to be the same number as the number of containers.
+                                     If for some containers no transform should be applied,
+                                     pass ``None``.
 
     Examples:
 
@@ -119,10 +124,31 @@ class UtteranceDataset(Dataset):
 
     """
 
-    def __init__(self, corpus_or_utt_ids, containers, return_length=True, pad=False):
-        super(UtteranceDataset, self).__init__(corpus_or_utt_ids, containers)
+    def __init__(self, corpus_or_utt_ids, source_containers, return_length=True, pad=False, transform=None):
+        super(UtteranceDataset, self).__init__(corpus_or_utt_ids, source_containers)
 
         self.pad = pad
+
+        if transform is None:
+            self.transform = []
+        else:
+            if isinstance(transform, processing.Processor):
+                self.transform = [transform]
+            else:
+                self.transform = transform
+
+            if len(self.transform) != len(self.containers):
+                raise ValueError(
+                    ('Number of transforms does not match number of containers!'
+                     'Use None for containers without transform!')
+                )
+
+            for index, container_transform in enumerate(self.transform):
+                if container_transform is not None and \
+                        not isinstance(self.containers[index], containers.FeatureContainer):
+                    raise ValueError(
+                        ('Transforms can only be applied to'
+                         'Feature-Containers (Transform at index {})').format(index))
 
         if self.pad:
             self.return_length = True
@@ -141,6 +167,15 @@ class UtteranceDataset(Dataset):
 
         for index, cnt in enumerate(self.containers):
             data = cnt.get(utt_idx, mem_map=False)
+
+            if index < len(self.transform) and self.transform[index] is not None:
+                data = self.transform[index].process_frames(
+                    data,
+                    cnt.sampling_rate,
+                    offset=0,
+                    last=True
+                )
+
             size = data.shape[0]
 
             required_padded_length = self.pad_lengths[index]
