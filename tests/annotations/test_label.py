@@ -4,7 +4,6 @@ import librosa
 from audiomate import tracks
 from audiomate import annotations
 from audiomate import issuers
-from audiomate.corpus import assets
 
 from tests import resources
 
@@ -92,7 +91,7 @@ class TestLabel:
         path = resources.sample_wav_file('wav_1.wav')
         track = tracks.FileTrack('wav', path)
         issuer = issuers.Issuer('toni')
-        utt = assets.Utterance('t', track, issuer=issuer, start=1.0, end=2.30)
+        utt = tracks.Utterance('t', track, issuer=issuer, start=1.0, end=2.30)
 
         l1 = annotations.Label('a', 0.15, 0.448)
         l2 = annotations.Label('a', 0.5, 0.73)
@@ -120,7 +119,7 @@ class TestLabel:
         path = resources.sample_wav_file('wav_1.wav')
         track = tracks.FileTrack('wav', path)
         issuer = issuers.Issuer('toni')
-        utt = assets.Utterance('idx', track, issuer=issuer, start=1.0, end=-1)
+        utt = tracks.Utterance('idx', track, issuer=issuer, start=1.0, end=-1)
 
         l1 = annotations.Label('a', 0.15, 0.448)
         l2 = annotations.Label('a', 0.5, -1)
@@ -142,7 +141,7 @@ class TestLabel:
     def test_start_abs(self):
         label = annotations.Label('a', 2, 5)
         ll = annotations.LabelList(labels=[label])
-        assets.Utterance('utt-1', None, start=1, end=19, label_lists=[ll])
+        tracks.Utterance('utt-1', None, start=1, end=19, label_lists=[ll])
 
         assert label.start_abs == 3
 
@@ -154,7 +153,7 @@ class TestLabel:
     def test_end_abs(self):
         label = annotations.Label('a', 2, 5)
         ll = annotations.LabelList(labels=[label])
-        assets.Utterance('utt-1', None, start=1, end=19, label_lists=[ll])
+        tracks.Utterance('utt-1', None, start=1, end=19, label_lists=[ll])
 
         assert label.end_abs == 6
 

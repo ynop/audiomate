@@ -2,7 +2,6 @@ import numpy as np
 
 from audiomate import tracks
 from audiomate import annotations
-from audiomate.corpus import assets
 from audiomate.utils import units
 from audiomate import encoding
 
@@ -55,7 +54,7 @@ class TestFrameOrdinalEncoder:
 
     def test_encode_utterance_takes_larger_label(self):
         file = tracks.FileTrack('file-idx', resources.sample_wav_file('wav_1.wav'))
-        utt = assets.Utterance('utt-idx', file, start=0, end=8)
+        utt = tracks.Utterance('utt-idx', file, start=0, end=8)
         ll = annotations.LabelList(labels=[
             annotations.Label('music', 0, 4.5),
             annotations.Label('speech', 4.5, 8)
@@ -74,7 +73,7 @@ class TestFrameOrdinalEncoder:
 
     def test_encode_utterance_takes_lower_index_first(self):
         file = tracks.FileTrack('file-idx', resources.sample_wav_file('wav_1.wav'))
-        utt = assets.Utterance('utt-idx', file, start=0, end=5)
+        utt = tracks.Utterance('utt-idx', file, start=0, end=5)
         ll = annotations.LabelList(labels=[
             annotations.Label('music', 0, 3),
             annotations.Label('speech', 3, 5)

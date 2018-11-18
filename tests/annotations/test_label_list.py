@@ -4,7 +4,6 @@ import pytest
 
 from audiomate import tracks
 from audiomate.annotations import Label, LabelList
-from audiomate.corpus import assets
 
 from tests import resources
 
@@ -13,7 +12,7 @@ class TestLabelList(unittest.TestCase):
 
     def setUp(self):
         file_track = tracks.FileTrack('wav', resources.sample_wav_file('wav_1.wav'))
-        utt = assets.Utterance('utt', file_track, start=0.3, end=-1)
+        utt = tracks.Utterance('utt', file_track, start=0.3, end=-1)
         ll = LabelList()
         self.test_label = Label('a', start=0.5, end=-1)
         ll.append(self.test_label)

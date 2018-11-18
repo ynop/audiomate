@@ -24,3 +24,10 @@ ContainerTrack
 .. autoclass:: ContainerTrack
    :members:
    :inherited-members:
+
+Utterance
+---------
+
+.. autoclass:: Utterance
+   :members:
+   :inherited-members:

@@ -9,3 +9,5 @@ for reading the audio samples from a specific source.
 from .track import Track  # noqa: F401
 from .file import FileTrack  # noqa: F401
 from .container import ContainerTrack  # noqa: F401
+
+from .utterance import Utterance  # noqa: F401

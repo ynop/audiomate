@@ -9,7 +9,6 @@ import audiomate
 from audiomate import tracks
 from audiomate import containers
 from audiomate import issuers
-from audiomate.corpus import assets
 from audiomate.corpus.subset import subview
 from audiomate.corpus.io import MusanReader, KaldiWriter
 from audiomate.corpus.io import UnknownWriterException, UnknownReaderException
@@ -24,7 +23,7 @@ class CorpusTest(unittest.TestCase):
 
         self.ex_file = tracks.FileTrack('existing_file', '../any/path.wav')
         self.ex_issuer = issuers.Issuer('existing_issuer')
-        self.ex_utterance = assets.Utterance('existing_utt', self.ex_file, issuer=self.ex_issuer)
+        self.ex_utterance = tracks.Utterance('existing_utt', self.ex_file, issuer=self.ex_issuer)
 
         self.corpus.tracks['existing_file'] = self.ex_file
         self.corpus.issuers['existing_issuer'] = self.ex_issuer
@@ -115,9 +114,9 @@ class CorpusTest(unittest.TestCase):
 
     def test_import_utterances(self):
         importing_utterances = [
-            assets.Utterance('a', self.ex_file, self.ex_issuer, 0, 10),
-            assets.Utterance('b', self.ex_file, self.ex_issuer, 10, 20),
-            assets.Utterance('existing_utt', self.ex_file, self.ex_issuer, 20, 30)
+            tracks.Utterance('a', self.ex_file, self.ex_issuer, 0, 10),
+            tracks.Utterance('b', self.ex_file, self.ex_issuer, 10, 20),
+            tracks.Utterance('existing_utt', self.ex_file, self.ex_issuer, 20, 30)
         ]
 
         mapping = self.corpus.import_utterances(importing_utterances)
@@ -134,7 +133,7 @@ class CorpusTest(unittest.TestCase):
 
     def test_import_utterance_no_track(self):
         importing_utterances = [
-            assets.Utterance('a', tracks.FileTrack('notexist', 'notexist'), self.ex_issuer, 0, 10)
+            tracks.Utterance('a', tracks.FileTrack('notexist', 'notexist'), self.ex_issuer, 0, 10)
         ]
 
         with pytest.raises(ValueError):
@@ -142,7 +141,7 @@ class CorpusTest(unittest.TestCase):
 
     def test_import_utterance_no_issuer(self):
         importing_utterances = [
-            assets.Utterance('a', self.ex_file, issuers.Issuer('notexist'), 0, 10)
+            tracks.Utterance('a', self.ex_file, issuers.Issuer('notexist'), 0, 10)
         ]
 
         with pytest.raises(ValueError):

@@ -1,7 +1,7 @@
 import numpy as np
 
+from audiomate import tracks
 from audiomate import annotations
-from audiomate.corpus import assets
 from audiomate import encoding
 
 import pytest
@@ -13,7 +13,7 @@ class TestTokenOrdinalEncoder:
         ll = annotations.LabelList(idx='go', labels=[
             annotations.Label('a c b')
         ])
-        utt = assets.Utterance('utt-1', None, label_lists=ll)
+        utt = tracks.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('go', ['a', 'b', 'c'])
         encoded = encoder.encode_utterance(utt)
@@ -26,7 +26,7 @@ class TestTokenOrdinalEncoder:
             annotations.Label('c b b', start=5, end=9.4),
             annotations.Label('a a a', start=9.5, end=10.2)
         ])
-        utt = assets.Utterance('utt-1', None, label_lists=ll)
+        utt = tracks.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('go', ['a', 'b', 'c'])
         encoded = encoder.encode_utterance(utt)
@@ -39,7 +39,7 @@ class TestTokenOrdinalEncoder:
             annotations.Label('c b b', start=2, end=9.4),
             annotations.Label('a a a', start=9.5, end=10.2)
         ])
-        utt = assets.Utterance('utt-1', None, label_lists=ll)
+        utt = tracks.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('go', ['a', 'b', 'c'])
 
@@ -50,7 +50,7 @@ class TestTokenOrdinalEncoder:
         ll = annotations.LabelList(idx='go', labels=[
             annotations.Label('a c b unknown')
         ])
-        utt = assets.Utterance('utt-1', None, label_lists=ll)
+        utt = tracks.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('go', ['a', 'b', 'c'])
 
@@ -61,7 +61,7 @@ class TestTokenOrdinalEncoder:
         ll = annotations.LabelList(idx='go', labels=[
             annotations.Label('a c b unknown')
         ])
-        utt = assets.Utterance('utt-1', None, label_lists=ll)
+        utt = tracks.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('not_existing', ['a', 'b', 'c'])
 
@@ -72,7 +72,7 @@ class TestTokenOrdinalEncoder:
         ll = annotations.LabelList(idx='go', labels=[
             annotations.Label('a, c , b, b')
         ])
-        utt = assets.Utterance('utt-1', None, label_lists=ll)
+        utt = tracks.Utterance('utt-1', None, label_lists=ll)
 
         encoder = encoding.TokenOrdinalEncoder('go', ['a', 'b', 'c'], token_delimiter=',')
         encoded = encoder.encode_utterance(utt)

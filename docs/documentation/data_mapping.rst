@@ -14,11 +14,11 @@ Depending on the audio content different attributes are important.
 Therefore different types of issuers can be used.
 
 Speech
-    For audio content that mainly contains spoken content the :class:`audiomate.corpus.assets.Speaker` has to be used.
+    For audio content that mainly contains spoken content the :class:`audiomate.issuers.Speaker` has to be used.
     This is most common for datasets regarding speech recognition/synthesis etc.
 
 Music
-    For audio content that contains music, the :class:`audiomate.corpus.assets.Artist` has to be used.
+    For audio content that contains music, the :class:`audiomate.issuers.Artist` has to be used.
 
 Labels
 ------

@@ -1,6 +1,6 @@
 from audiomate import corpus
+from audiomate import tracks
 from audiomate import annotations
-from audiomate.corpus import assets
 from audiomate.corpus import validation
 
 from tests import resources
@@ -125,7 +125,7 @@ class TestLabelOverflowValidator:
         assert result.overflow_segments['utt-6'] == [(-2.0, 0.0, 'a')]
 
     def test_validate_utterance_returns_completly_outlying_label(self):
-        utt = assets.Utterance('utt-idx', None, start=10.0, end=17.9)
+        utt = tracks.Utterance('utt-idx', None, start=10.0, end=17.9)
         ll = annotations.LabelList(idx='default', labels=[
             annotations.Label('a', start=-4.0, end=-2.0),
             annotations.Label('b', start=19.0, end=22.0),

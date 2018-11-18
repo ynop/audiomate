@@ -5,7 +5,6 @@ import shutil
 from audiomate import tracks
 from audiomate import containers
 from audiomate import issuers
-from audiomate.corpus import assets
 from audiomate.utils import naming
 from . import base
 from . import subset
@@ -235,7 +234,7 @@ class Corpus(base.CorpusView):
         if new_utt_idx in self._utterances.keys():
             new_utt_idx = naming.index_name_if_in_list(new_utt_idx, self._utterances.keys())
 
-        new_utt = assets.Utterance(new_utt_idx,
+        new_utt = tracks.Utterance(new_utt_idx,
                                    self.tracks[track_idx],
                                    issuer=issuer,
                                    start=start,
@@ -251,7 +250,7 @@ class Corpus(base.CorpusView):
         If any of the given utterance-ids already exists, a suffix is appended so it is unique.
 
         Args:
-            utterances (list): Either a list of or a single :py:class:`audiomate.corpus.assets.Utterance`.
+            utterances (list): Either a list of or a single :py:class:`audiomate.tracks.Utterance`.
 
         Returns:
             dict: A dictionary containing idx mappings (old-utterance-idx/utterance-instance).
@@ -259,7 +258,7 @@ class Corpus(base.CorpusView):
                   check the new id.
         """
 
-        if isinstance(utterances, assets.Utterance):
+        if isinstance(utterances, tracks.Utterance):
             utterances = [utterances]
 
         idx_mapping = {}

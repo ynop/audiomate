@@ -7,7 +7,6 @@ import pytest
 from audiomate import tracks
 from audiomate import annotations
 from audiomate import issuers
-from audiomate.corpus import assets
 
 from tests import resources
 
@@ -42,7 +41,7 @@ class UtteranceTest(unittest.TestCase):
 
         self.track = tracks.FileTrack('wav', resources.sample_wav_file('wav_1.wav'))
         self.issuer = issuers.Issuer('toni')
-        self.utt = assets.Utterance('test', self.track, issuer=self.issuer, start=1.25, end=1.30, label_lists=[
+        self.utt = tracks.Utterance('test', self.track, issuer=self.issuer, start=1.25, end=1.30, label_lists=[
             self.ll_1,
             self.ll_2,
             self.ll_duplicate_idx,
@@ -53,14 +52,14 @@ class UtteranceTest(unittest.TestCase):
         assert self.utt.end_abs == 1.30
 
     def test_end_abs_end_of_track(self):
-        utt = assets.Utterance('utt', self.track, start=0.3, end=-1)
+        utt = tracks.Utterance('utt', self.track, start=0.3, end=-1)
         assert utt.end_abs == pytest.approx(2.5951875)
 
     def test_duration(self):
         assert self.utt.duration == pytest.approx(0.05)
 
     def test_duration_end_of_track(self):
-        utt = assets.Utterance('utt', self.track, start=0.3, end=-1)
+        utt = tracks.Utterance('utt', self.track, start=0.3, end=-1)
         assert utt.duration == pytest.approx(2.2951875)
 
     def test_issuer_relation_on_creation(self):
@@ -136,7 +135,7 @@ class UtteranceTest(unittest.TestCase):
         ll_2 = annotations.LabelList('words', labels=[
             annotations.Label('b', start=0.0, end=30.0)
         ])
-        utt = assets.Utterance('utt-1', 'track-x', start=0.0, end=40.0, label_lists=[ll_1, ll_2])
+        utt = tracks.Utterance('utt-1', 'track-x', start=0.0, end=40.0, label_lists=[ll_1, ll_2])
 
         res = utt.split([14.0, 29.5])
 
@@ -158,7 +157,7 @@ class UtteranceTest(unittest.TestCase):
         assert 'words' in res[2].label_lists.keys()
 
     def test_split_endless(self):
-        utt = assets.Utterance('utt-1', None, start=0.0, end=-1)
+        utt = tracks.Utterance('utt-1', None, start=0.0, end=-1)
         res = utt.split([24.5])
 
         assert len(res) == 2
@@ -167,7 +166,7 @@ class UtteranceTest(unittest.TestCase):
 
     def test_split_sets_track(self):
         file = tracks.FileTrack('file-1', '/some/path')
-        utt = assets.Utterance('utt-1', file, start=0.0, end=10.0)
+        utt = tracks.Utterance('utt-1', file, start=0.0, end=10.0)
         res = utt.split([5.2])
 
         assert len(res) == 2
@@ -176,7 +175,7 @@ class UtteranceTest(unittest.TestCase):
 
     def test_split_sets_issuer(self):
         issuer = issuers.Speaker('spk-1')
-        utt = assets.Utterance('utt-1', None, issuer=issuer, start=0.0, end=10.0)
+        utt = tracks.Utterance('utt-1', None, issuer=issuer, start=0.0, end=10.0)
         res = utt.split([5.2])
 
         assert len(res) == 2
@@ -184,13 +183,13 @@ class UtteranceTest(unittest.TestCase):
         assert res[1].issuer == issuer
 
     def test_split_without_cutting_points_raises_error(self):
-        utt = assets.Utterance('utt-1', None, start=0.0, end=-1)
+        utt = tracks.Utterance('utt-1', None, start=0.0, end=-1)
 
         with pytest.raises(ValueError):
             utt.split([])
 
     def test_split_with_cutting_point_after_end_returns_one_utt(self):
-        utt = assets.Utterance('utt-1', None, start=4.0, end=20.0)
+        utt = tracks.Utterance('utt-1', None, start=4.0, end=20.0)
         res = utt.split([24.5])
 
         assert len(res) == 1
@@ -198,7 +197,7 @@ class UtteranceTest(unittest.TestCase):
         assert res[0].end == 20.0
 
     def test_split_when_utt_start_is_not_zero(self):
-        utt = assets.Utterance('utt-1', None, start=6.0, end=20.0)
+        utt = tracks.Utterance('utt-1', None, start=6.0, end=20.0)
         res = utt.split([3.0])
 
         assert len(res) == 2
@@ -208,7 +207,7 @@ class UtteranceTest(unittest.TestCase):
         assert res[1].end == 20.
 
     def test_split_track_relative(self):
-        utt = assets.Utterance('utt-1', None, start=6.0, end=20.0)
+        utt = tracks.Utterance('utt-1', None, start=6.0, end=20.0)
         res = utt.split([8.0], track_relative=True)
 
         assert len(res) == 2
@@ -218,7 +217,7 @@ class UtteranceTest(unittest.TestCase):
         assert res[1].end == 20.00
 
     def test_split_utt_relative(self):
-        utt = assets.Utterance('utt-1', None, start=6.0, end=20.0)
+        utt = tracks.Utterance('utt-1', None, start=6.0, end=20.0)
         res = utt.split([8.0], track_relative=False)
 
         assert len(res) == 2
@@ -234,7 +233,7 @@ class UtteranceTest(unittest.TestCase):
         ll_2 = annotations.LabelList('words', labels=[
             annotations.Label('b', start=8.0, end=30.0)
         ])
-        utt = assets.Utterance('utt-1', 'file-x', start=10.0, end=40.0, label_lists=[ll_1, ll_2])
+        utt = tracks.Utterance('utt-1', 'file-x', start=10.0, end=40.0, label_lists=[ll_1, ll_2])
 
         res = utt.split([14.0], track_relative=False)
 

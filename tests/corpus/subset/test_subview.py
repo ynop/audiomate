@@ -1,7 +1,7 @@
 import unittest
 
 from audiomate import annotations
-from audiomate.corpus import assets
+from audiomate import tracks
 from audiomate.corpus.subset import subview
 
 from tests import resources
@@ -11,20 +11,20 @@ class MatchingUtteranceIdxFilterTest(unittest.TestCase):
     def test_match(self):
         filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'a', 'b', 'd'})
 
-        self.assertTrue(filter.match(assets.Utterance('a', 'x'), None))
-        self.assertTrue(filter.match(assets.Utterance('b', 'x'), None))
-        self.assertTrue(filter.match(assets.Utterance('d', 'x'), None))
-        self.assertFalse(filter.match(assets.Utterance('c', 'x'), None))
-        self.assertFalse(filter.match(assets.Utterance('e', 'x'), None))
+        self.assertTrue(filter.match(tracks.Utterance('a', 'x'), None))
+        self.assertTrue(filter.match(tracks.Utterance('b', 'x'), None))
+        self.assertTrue(filter.match(tracks.Utterance('d', 'x'), None))
+        self.assertFalse(filter.match(tracks.Utterance('c', 'x'), None))
+        self.assertFalse(filter.match(tracks.Utterance('e', 'x'), None))
 
     def test_match_inverse(self):
         filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'a', 'b', 'd'}, inverse=True)
 
-        self.assertFalse(filter.match(assets.Utterance('a', 'x'), None))
-        self.assertFalse(filter.match(assets.Utterance('b', 'x'), None))
-        self.assertFalse(filter.match(assets.Utterance('d', 'x'), None))
-        self.assertTrue(filter.match(assets.Utterance('c', 'x'), None))
-        self.assertTrue(filter.match(assets.Utterance('e', 'x'), None))
+        self.assertFalse(filter.match(tracks.Utterance('a', 'x'), None))
+        self.assertFalse(filter.match(tracks.Utterance('b', 'x'), None))
+        self.assertFalse(filter.match(tracks.Utterance('d', 'x'), None))
+        self.assertTrue(filter.match(tracks.Utterance('c', 'x'), None))
+        self.assertTrue(filter.match(tracks.Utterance('e', 'x'), None))
 
     def test_serialize(self):
         f = subview.MatchingUtteranceIdxFilter(utterance_idxs={'a', 'b', 'd'})
@@ -50,7 +50,7 @@ class MatchingUtteranceIdxFilterTest(unittest.TestCase):
 class MatchingLabelFilterTest(unittest.TestCase):
 
     def setUp(self):
-        self.utt1 = assets.Utterance('utt-1', 'file-1')
+        self.utt1 = tracks.Utterance('utt-1', 'file-1')
 
         self.utt1.set_label_list(annotations.LabelList(idx='alpha', labels=[
             annotations.Label('music', 0, 5),
@@ -63,7 +63,7 @@ class MatchingLabelFilterTest(unittest.TestCase):
             annotations.Label('speech', 2, 6)
         ]))
 
-        self.utt2 = assets.Utterance('utt-2', 'file-2')
+        self.utt2 = tracks.Utterance('utt-2', 'file-2')
 
         self.utt2.set_label_list(annotations.LabelList(idx='alpha', labels=[
             annotations.Label('music', 0, 5),
