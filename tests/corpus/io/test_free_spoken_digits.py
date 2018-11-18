@@ -4,8 +4,8 @@ import pytest
 import requests_mock
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus.io import free_spoken_digits
-from audiomate.corpus import assets
 
 from tests import resources
 
@@ -74,7 +74,7 @@ class TestFreeSpokenDigitReader:
         ds = reader.load(data_path)
 
         assert ds.issuers[idx].idx == idx
-        assert type(ds.issuers[idx]) == assets.Speaker
+        assert type(ds.issuers[idx]) == issuers.Speaker
         assert len(ds.issuers[idx].utterances) == num_utt
 
     def test_load_correct_number_of_utterances(self, reader, data_path):

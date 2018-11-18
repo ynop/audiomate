@@ -3,7 +3,7 @@ import shutil
 
 import audiomate
 from audiomate import annotations
-from audiomate.corpus import assets
+from audiomate import issuers
 from audiomate.utils import download
 from audiomate.utils import textfile
 from . import base
@@ -167,7 +167,7 @@ class TatoebaReader(base.CorpusReader):
             corpus.new_file(file_path, idx)
 
             if speaker_idx not in corpus.issuers.keys():
-                issuer = assets.Speaker(speaker_idx)
+                issuer = issuers.Speaker(speaker_idx)
                 corpus.import_issuers(issuer)
 
             utterance = corpus.new_utterance(idx, idx, speaker_idx)

@@ -3,7 +3,7 @@ import glob
 
 import audiomate
 from audiomate import annotations
-from audiomate.corpus import assets
+from audiomate import issuers
 from audiomate.corpus import subset
 from . import base
 from audiomate.utils import textfile
@@ -43,12 +43,12 @@ class TimitReader(base.CorpusReader):
                         speaker_idx = speaker_abbr[1:]
 
                         if speaker_idx not in corpus.issuers.keys():
-                            issuer = assets.Speaker(speaker_idx)
+                            issuer = issuers.Speaker(speaker_idx)
 
                             if speaker_abbr[:1] == 'M':
-                                issuer.gender = assets.Gender.MALE
+                                issuer.gender = issuers.Gender.MALE
                             elif speaker_abbr[:1] == 'F':
-                                issuer.gender = assets.Gender.FEMALE
+                                issuer.gender = issuers.Gender.FEMALE
 
                             corpus.import_issuers(issuer)
 

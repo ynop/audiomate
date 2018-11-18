@@ -2,7 +2,7 @@ import os
 
 import audiomate
 from audiomate import annotations
-from audiomate.corpus import assets
+from audiomate import issuers
 from audiomate.corpus import subset
 from audiomate.utils import download
 from audiomate.utils import textfile
@@ -138,14 +138,14 @@ class MailabsReader(base.CorpusReader):
         base_path, __ = os.path.split(base_path)
         base_path, tag = os.path.split(base_path)
 
-        gender = assets.Gender.UNKNOWN
+        gender = issuers.Gender.UNKNOWN
 
         if gender_desc == 'male':
-            gender = assets.Gender.MALE
+            gender = issuers.Gender.MALE
         elif gender_desc == 'female':
-            gender = assets.Gender.FEMALE
+            gender = issuers.Gender.FEMALE
 
-        speaker = assets.Speaker(speaker_name, gender=gender)
+        speaker = issuers.Speaker(speaker_name, gender=gender)
         corpus.import_issuers(speaker)
 
         return speaker
@@ -172,7 +172,7 @@ class MailabsReader(base.CorpusReader):
 
                 if speaker is None:
                     idx = file_basename
-                    utt_speaker = assets.Speaker(idx)
+                    utt_speaker = issuers.Speaker(idx)
                     speaker_idx = idx
                     corpus.import_issuers(utt_speaker)
                 else:

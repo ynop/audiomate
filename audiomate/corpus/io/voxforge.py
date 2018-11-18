@@ -8,7 +8,7 @@ import requests
 import audiomate
 from . import base
 from audiomate import annotations
-from audiomate.corpus import assets
+from audiomate import issuers
 from audiomate.utils import textfile
 
 DOWNLOAD_URL = {
@@ -188,8 +188,8 @@ class VoxforgeReader(base.CorpusReader):
     def parse_speaker_info(readme_path):
         """ Parse speaker info and return tuple (idx, gender). """
         idx = None
-        gender = assets.Gender.UNKNOWN
-        age_group = assets.AgeGroup.UNKNOWN
+        gender = issuers.Gender.UNKNOWN
+        age_group = issuers.AgeGroup.UNKNOWN
         native_lang = None
 
         with open(readme_path, 'r', errors='ignore') as f:
@@ -211,19 +211,19 @@ class VoxforgeReader(base.CorpusReader):
 
                         if key == 'gender':
                             if value in ['männlich', 'male', 'mnnlich']:
-                                gender = assets.Gender.MALE
+                                gender = issuers.Gender.MALE
                             elif value in ['weiblich', 'female', '[female]']:
-                                gender = assets.Gender.FEMALE
+                                gender = issuers.Gender.FEMALE
 
                         if key == 'age range':
                             if value in ['erwachsener', 'adult', '[adult]', '[erwachsener]']:
-                                age_group = assets.AgeGroup.ADULT
+                                age_group = issuers.AgeGroup.ADULT
                             elif value in ['senior', '[senior']:
-                                age_group = assets.AgeGroup.SENIOR
+                                age_group = issuers.AgeGroup.SENIOR
                             elif value in ['youth', 'jugendlicher', '[youth]', '[jugendlicher]']:
-                                age_group = assets.AgeGroup.YOUTH
+                                age_group = issuers.AgeGroup.YOUTH
                             elif value in ['kind', 'child']:
-                                age_group = assets.AgeGroup.CHILD
+                                age_group = issuers.AgeGroup.CHILD
 
                         if key == 'language':
                             if value in ['de', 'ger', 'deu', '[de]']:
@@ -231,7 +231,7 @@ class VoxforgeReader(base.CorpusReader):
                             elif value in ['en', 'eng', '[en]']:
                                 native_lang = 'eng'
 
-        return assets.Speaker(idx, gender=gender, age_group=age_group, native_language=native_lang)
+        return issuers.Speaker(idx, gender=gender, age_group=age_group, native_language=native_lang)
 
     @staticmethod
     def parse_prompts(etc_folder):

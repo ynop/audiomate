@@ -4,8 +4,8 @@ import pytest
 import requests_mock
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus.io import mailabs
-from audiomate.corpus import assets
 
 from tests import resources
 
@@ -87,25 +87,25 @@ class TestMailabsReader:
         idx = 'fred'
 
         assert ds.issuers[idx].idx == idx
-        assert ds.issuers[idx].gender == assets.Gender.MALE
-        assert ds.issuers[idx].age_group == assets.AgeGroup.UNKNOWN
-        assert type(ds.issuers[idx]) == assets.Speaker
+        assert ds.issuers[idx].gender == issuers.Gender.MALE
+        assert ds.issuers[idx].age_group == issuers.AgeGroup.UNKNOWN
+        assert type(ds.issuers[idx]) == issuers.Speaker
         assert len(ds.issuers[idx].utterances) == 5
 
         idx = 'elizabeth_klett'
 
         assert ds.issuers[idx].idx == idx
-        assert ds.issuers[idx].gender == assets.Gender.FEMALE
-        assert ds.issuers[idx].age_group == assets.AgeGroup.UNKNOWN
-        assert type(ds.issuers[idx]) == assets.Speaker
+        assert ds.issuers[idx].gender == issuers.Gender.FEMALE
+        assert ds.issuers[idx].age_group == issuers.AgeGroup.UNKNOWN
+        assert type(ds.issuers[idx]) == issuers.Speaker
         assert len(ds.issuers[idx].utterances) == 3
 
         idx = 'abc_01_f000002'
 
         assert ds.issuers[idx].idx == idx
-        assert ds.issuers[idx].gender == assets.Gender.UNKNOWN
-        assert ds.issuers[idx].age_group == assets.AgeGroup.UNKNOWN
-        assert type(ds.issuers[idx]) == assets.Speaker
+        assert ds.issuers[idx].gender == issuers.Gender.UNKNOWN
+        assert ds.issuers[idx].age_group == issuers.AgeGroup.UNKNOWN
+        assert type(ds.issuers[idx]) == issuers.Speaker
         assert len(ds.issuers[idx].utterances) == 1
 
     def test_load_correct_number_of_utterances(self, reader, data_path):

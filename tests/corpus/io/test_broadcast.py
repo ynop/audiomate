@@ -1,8 +1,8 @@
 import os
 import unittest
 
+from audiomate import issuers
 from audiomate.corpus import io
-from audiomate.corpus import assets
 from tests import resources
 
 
@@ -31,14 +31,14 @@ class BroadcastReaderTest(unittest.TestCase):
 
         assert ds.issuers['speaker-1'].idx == 'speaker-1'
         assert len(ds.issuers['speaker-1'].info) == 0
-        assert type(ds.issuers['speaker-1']) == assets.Speaker
-        assert ds.issuers['speaker-1'].gender == assets.Gender.FEMALE
-        assert ds.issuers['speaker-1'].age_group == assets.AgeGroup.CHILD
+        assert type(ds.issuers['speaker-1']) == issuers.Speaker
+        assert ds.issuers['speaker-1'].gender == issuers.Gender.FEMALE
+        assert ds.issuers['speaker-1'].age_group == issuers.AgeGroup.CHILD
         assert ds.issuers['speaker-1'].native_language == 'eng'
 
         assert ds.issuers['speaker-2'].idx == 'speaker-2'
         assert len(ds.issuers['speaker-2'].info) == 0
-        assert type(ds.issuers['speaker-2']) == assets.Artist
+        assert type(ds.issuers['speaker-2']) == issuers.Artist
         assert ds.issuers['speaker-2'].name is None
 
         assert ds.issuers['speaker-3'].idx == 'speaker-3'

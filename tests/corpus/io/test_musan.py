@@ -4,9 +4,9 @@ import requests_mock
 import os
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus import io
 from audiomate.corpus.io import musan
-from audiomate.corpus import assets
 from tests import resources
 
 
@@ -66,17 +66,17 @@ class MusanReaderTest(unittest.TestCase):
         assert ds.num_issuers == 3
 
         assert 'speech-librivox-0000' in ds.issuers.keys()
-        assert type(ds.issuers['speech-librivox-0000']) == assets.Speaker
+        assert type(ds.issuers['speech-librivox-0000']) == issuers.Speaker
         assert ds.issuers['speech-librivox-0000'].idx == 'speech-librivox-0000'
-        assert ds.issuers['speech-librivox-0000'].gender == assets.Gender.MALE
+        assert ds.issuers['speech-librivox-0000'].gender == issuers.Gender.MALE
 
         assert 'speech-librivox-0001' in ds.issuers.keys()
-        assert type(ds.issuers['speech-librivox-0001']) == assets.Speaker
+        assert type(ds.issuers['speech-librivox-0001']) == issuers.Speaker
         assert ds.issuers['speech-librivox-0001'].idx == 'speech-librivox-0001'
-        assert ds.issuers['speech-librivox-0001'].gender == assets.Gender.FEMALE
+        assert ds.issuers['speech-librivox-0001'].gender == issuers.Gender.FEMALE
 
         assert 'Quiet_Music_for_Tiny_Robots' in ds.issuers.keys()
-        assert type(ds.issuers['Quiet_Music_for_Tiny_Robots']) == assets.Artist
+        assert type(ds.issuers['Quiet_Music_for_Tiny_Robots']) == issuers.Artist
         assert ds.issuers['Quiet_Music_for_Tiny_Robots'].idx == 'Quiet_Music_for_Tiny_Robots'
         assert ds.issuers['Quiet_Music_for_Tiny_Robots'].name == 'Quiet_Music_for_Tiny_Robots'
 

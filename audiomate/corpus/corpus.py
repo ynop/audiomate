@@ -4,6 +4,7 @@ import shutil
 
 from audiomate import tracks
 from audiomate import containers
+from audiomate import issuers
 from audiomate.corpus import assets
 from audiomate.utils import naming
 from . import base
@@ -306,18 +307,18 @@ class Corpus(base.CorpusView):
         if new_issuer_idx in self._issuers.keys():
             new_issuer_idx = naming.index_name_if_in_list(new_issuer_idx, self._issuers.keys())
 
-        new_issuer = assets.Issuer(new_issuer_idx, info=info)
+        new_issuer = issuers.Issuer(new_issuer_idx, info=info)
         self._issuers[new_issuer_idx] = new_issuer
 
         return new_issuer
 
-    def import_issuers(self, issuers):
+    def import_issuers(self, new_issuers):
         """
         Add the given issuers/issuer to the corpus.
         If any of the given issuer-ids already exists, a suffix is appended so it is unique.
 
         Args:
-            issuers (list): Either a list of or a single :py:class:`audiomate.corpus.assets.Issuer`.
+            issuers (list): Either a list of or a single :py:class:`audiomate.issuers.Issuer`.
 
         Returns:
             dict: A dictionary containing idx mappings (old-issuer-idx/issuer-instance).
@@ -325,12 +326,12 @@ class Corpus(base.CorpusView):
                   the new id.
         """
 
-        if isinstance(issuers, assets.Issuer):
-            issuers = [issuers]
+        if isinstance(new_issuers, issuers.Issuer):
+            new_issuers = [new_issuers]
 
         idx_mapping = {}
 
-        for issuer in issuers:
+        for issuer in new_issuers:
             idx_mapping[issuer.idx] = issuer
 
             # Add index to idx if already existing

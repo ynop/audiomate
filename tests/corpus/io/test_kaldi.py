@@ -4,8 +4,8 @@ import tempfile
 import unittest
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus import io
-from audiomate.corpus import assets
 from tests import resources
 
 
@@ -34,21 +34,21 @@ class KaldiReaderTest(unittest.TestCase):
         assert ds.num_issuers == 3
 
         assert ds.issuers['speaker-1'].idx == 'speaker-1'
-        assert type(ds.issuers['speaker-1']) == assets.Speaker
-        assert ds.issuers['speaker-1'].gender == assets.Gender.MALE
-        assert ds.issuers['speaker-1'].age_group == assets.AgeGroup.UNKNOWN
+        assert type(ds.issuers['speaker-1']) == issuers.Speaker
+        assert ds.issuers['speaker-1'].gender == issuers.Gender.MALE
+        assert ds.issuers['speaker-1'].age_group == issuers.AgeGroup.UNKNOWN
         assert ds.issuers['speaker-1'].native_language is None
 
         assert ds.issuers['speaker-2'].idx == 'speaker-2'
-        assert type(ds.issuers['speaker-2']) == assets.Speaker
-        assert ds.issuers['speaker-2'].gender == assets.Gender.MALE
-        assert ds.issuers['speaker-2'].age_group == assets.AgeGroup.UNKNOWN
+        assert type(ds.issuers['speaker-2']) == issuers.Speaker
+        assert ds.issuers['speaker-2'].gender == issuers.Gender.MALE
+        assert ds.issuers['speaker-2'].age_group == issuers.AgeGroup.UNKNOWN
         assert ds.issuers['speaker-2'].native_language is None
 
         assert ds.issuers['speaker-3'].idx == 'speaker-3'
-        assert type(ds.issuers['speaker-3']) == assets.Speaker
-        assert ds.issuers['speaker-3'].gender == assets.Gender.FEMALE
-        assert ds.issuers['speaker-3'].age_group == assets.AgeGroup.UNKNOWN
+        assert type(ds.issuers['speaker-3']) == issuers.Speaker
+        assert ds.issuers['speaker-3'].gender == issuers.Gender.FEMALE
+        assert ds.issuers['speaker-3'].age_group == issuers.AgeGroup.UNKNOWN
         assert ds.issuers['speaker-3'].native_language is None
 
     def test_load_utterances(self):

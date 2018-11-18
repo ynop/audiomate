@@ -4,8 +4,8 @@ import pytest
 import requests_mock
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus.io import voxforge
-from audiomate.corpus import assets
 
 from tests import resources
 
@@ -185,27 +185,27 @@ class TestVoxforgeReader:
         assert ds.num_issuers == 4
 
         assert ds.issuers['1337ad'].idx == '1337ad'
-        assert type(ds.issuers['1337ad']) == assets.Speaker
-        assert ds.issuers['1337ad'].gender == assets.Gender.FEMALE
-        assert ds.issuers['1337ad'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['1337ad']) == issuers.Speaker
+        assert ds.issuers['1337ad'].gender == issuers.Gender.FEMALE
+        assert ds.issuers['1337ad'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['1337ad'].native_language == 'deu'
 
         assert ds.issuers['anonymous-20081027-njq'].idx == 'anonymous-20081027-njq'
-        assert type(ds.issuers['anonymous-20081027-njq']) == assets.Speaker
-        assert ds.issuers['anonymous-20081027-njq'].gender == assets.Gender.MALE
-        assert ds.issuers['anonymous-20081027-njq'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['anonymous-20081027-njq']) == issuers.Speaker
+        assert ds.issuers['anonymous-20081027-njq'].gender == issuers.Gender.MALE
+        assert ds.issuers['anonymous-20081027-njq'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['anonymous-20081027-njq'].native_language == 'eng'
 
         assert ds.issuers['Katzer'].idx == 'Katzer'
-        assert type(ds.issuers['Katzer']) == assets.Speaker
-        assert ds.issuers['Katzer'].gender == assets.Gender.MALE
-        assert ds.issuers['Katzer'].age_group == assets.AgeGroup.YOUTH
+        assert type(ds.issuers['Katzer']) == issuers.Speaker
+        assert ds.issuers['Katzer'].gender == issuers.Gender.MALE
+        assert ds.issuers['Katzer'].age_group == issuers.AgeGroup.YOUTH
         assert ds.issuers['Katzer'].native_language == 'eng'
 
         assert ds.issuers['knotyouraveragejo'].idx == 'knotyouraveragejo'
-        assert type(ds.issuers['knotyouraveragejo']) == assets.Speaker
-        assert ds.issuers['knotyouraveragejo'].gender == assets.Gender.FEMALE
-        assert ds.issuers['knotyouraveragejo'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['knotyouraveragejo']) == issuers.Speaker
+        assert ds.issuers['knotyouraveragejo'].gender == issuers.Gender.FEMALE
+        assert ds.issuers['knotyouraveragejo'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['knotyouraveragejo'].native_language == 'eng'
 
     def test_load_utterances(self, reader, sample_corpus_path):

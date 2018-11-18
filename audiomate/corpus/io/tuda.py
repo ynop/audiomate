@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 import audiomate
 from audiomate import annotations
-from audiomate.corpus import assets
+from audiomate import issuers
 from audiomate.corpus.subset import subview
 from . import base
 
@@ -294,23 +294,23 @@ class TudaReader(base.CorpusReader):
             start_age_class = int(age_class.split('-')[0])
 
             if start_age_class < 12:
-                age_group = assets.AgeGroup.CHILD
+                age_group = issuers.AgeGroup.CHILD
             elif start_age_class < 18:
-                age_group = assets.AgeGroup.YOUTH
+                age_group = issuers.AgeGroup.YOUTH
             elif start_age_class < 65:
-                age_group = assets.AgeGroup.ADULT
+                age_group = issuers.AgeGroup.ADULT
             else:
-                age_group = assets.AgeGroup.SENIOR
+                age_group = issuers.AgeGroup.SENIOR
 
             native_lang = None
 
             if is_native == 'Ja':
                 native_lang = 'deu'
 
-            issuer = assets.Speaker(speaker_idx,
-                                    gender=assets.Gender(gender),
-                                    age_group=age_group,
-                                    native_language=native_lang)
+            issuer = issuers.Speaker(speaker_idx,
+                                     gender=issuers.Gender(gender),
+                                     age_group=age_group,
+                                     native_language=native_lang)
             corpus.import_issuers(issuer)
 
         corpus.new_file(wav_path, idx)

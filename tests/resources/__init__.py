@@ -3,7 +3,7 @@ import tempfile
 
 import audiomate
 from audiomate.annotations import Label, LabelList
-from audiomate.corpus import assets
+from audiomate.issuers import Issuer, Speaker, Gender
 from audiomate.corpus.subset import subview
 
 
@@ -37,9 +37,9 @@ def create_dataset():
     file_3 = ds.new_file(wav_3_path, track_idx='wav_3')
     file_4 = ds.new_file(wav_4_path, track_idx='wav_4')
 
-    issuer_1 = assets.Speaker('spk-1', gender=assets.Gender.MALE)
-    issuer_2 = assets.Speaker('spk-2', gender=assets.Gender.FEMALE)
-    issuer_3 = assets.Issuer('spk-3')
+    issuer_1 = Speaker('spk-1', gender=Gender.MALE)
+    issuer_2 = Speaker('spk-2', gender=Gender.FEMALE)
+    issuer_3 = Issuer('spk-3')
 
     ds.import_issuers([issuer_1, issuer_2, issuer_3])
 

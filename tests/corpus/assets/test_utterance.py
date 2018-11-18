@@ -6,6 +6,7 @@ import pytest
 
 from audiomate import tracks
 from audiomate import annotations
+from audiomate import issuers
 from audiomate.corpus import assets
 
 from tests import resources
@@ -40,7 +41,7 @@ class UtteranceTest(unittest.TestCase):
         ])
 
         self.track = tracks.FileTrack('wav', resources.sample_wav_file('wav_1.wav'))
-        self.issuer = assets.Issuer('toni')
+        self.issuer = issuers.Issuer('toni')
         self.utt = assets.Utterance('test', self.track, issuer=self.issuer, start=1.25, end=1.30, label_lists=[
             self.ll_1,
             self.ll_2,
@@ -174,7 +175,7 @@ class UtteranceTest(unittest.TestCase):
         assert res[1].track == file
 
     def test_split_sets_issuer(self):
-        issuer = assets.Speaker('spk-1')
+        issuer = issuers.Speaker('spk-1')
         utt = assets.Utterance('utt-1', None, issuer=issuer, start=0.0, end=10.0)
         res = utt.split([5.2])
 

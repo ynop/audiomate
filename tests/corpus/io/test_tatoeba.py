@@ -4,8 +4,8 @@ import pytest
 import requests_mock
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus import io
-from audiomate.corpus import assets
 from audiomate.corpus.io import tatoeba
 
 from tests import resources
@@ -245,19 +245,19 @@ class TestTatoebaReader:
         ds = reader.load(sample_corpus_path)
 
         assert ds.issuers['BraveSentry'].idx == 'BraveSentry'
-        assert type(ds.issuers['BraveSentry']) == assets.Speaker
+        assert type(ds.issuers['BraveSentry']) == issuers.Speaker
         assert len(ds.issuers['BraveSentry'].utterances) == 1
 
         assert ds.issuers['gretelen'].idx == 'gretelen'
-        assert type(ds.issuers['gretelen']) == assets.Speaker
+        assert type(ds.issuers['gretelen']) == issuers.Speaker
         assert len(ds.issuers['gretelen'].utterances) == 1
 
         assert ds.issuers['Nero'].idx == 'Nero'
-        assert type(ds.issuers['Nero']) == assets.Speaker
+        assert type(ds.issuers['Nero']) == issuers.Speaker
         assert len(ds.issuers['Nero'].utterances) == 1
 
         assert ds.issuers['CK'].idx == 'CK'
-        assert type(ds.issuers['CK']) == assets.Speaker
+        assert type(ds.issuers['CK']) == issuers.Speaker
         assert len(ds.issuers['CK'].utterances) == 2
 
     def test_load_correct_number_of_utterances(self, reader, sample_corpus_path):

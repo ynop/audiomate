@@ -8,7 +8,7 @@ import audiomate
 from audiomate import containers
 from audiomate import tracks
 from audiomate import annotations
-from audiomate.corpus import assets
+from audiomate import issuers
 from audiomate.corpus.subset import subview
 from audiomate.utils import textfile
 from audiomate.utils import jsonfile
@@ -87,23 +87,23 @@ class DefaultReader(base.CorpusReader):
             issuer_info = issuer_data.get('info', {})
 
             if issuer_type == 'speaker':
-                gender = assets.Gender(issuer_data.get('gender', 'unknown').lower())
-                age_group = assets.AgeGroup(issuer_data.get('age_group', 'unknown').lower())
+                gender = issuers.Gender(issuer_data.get('gender', 'unknown').lower())
+                age_group = issuers.AgeGroup(issuer_data.get('age_group', 'unknown').lower())
                 native_language = issuer_data.get('native_language', None)
 
-                issuer = assets.Speaker(issuer_idx,
-                                        gender=gender,
-                                        age_group=age_group,
-                                        native_language=native_language,
-                                        info=issuer_info)
+                issuer = issuers.Speaker(issuer_idx,
+                                         gender=gender,
+                                         age_group=age_group,
+                                         native_language=native_language,
+                                         info=issuer_info)
             elif issuer_type == 'artist':
                 name = issuer_data.get('name', None)
 
-                issuer = assets.Artist(issuer_idx,
-                                       name=name,
-                                       info=issuer_info)
+                issuer = issuers.Artist(issuer_idx,
+                                        name=name,
+                                        info=issuer_info)
             else:
-                issuer = assets.Issuer(issuer_idx, info=issuer_info)
+                issuer = issuers.Issuer(issuer_idx, info=issuer_info)
 
             corpus.import_issuers(issuer)
 
@@ -283,19 +283,19 @@ class DefaultWriter(base.CorpusWriter):
             if issuer.info is not None and len(issuer.info) > 0:
                 issuer_data['info'] = issuer.info
 
-            if type(issuer) == assets.Speaker:
+            if type(issuer) == issuers.Speaker:
                 issuer_data['type'] = 'speaker'
 
-                if issuer.gender != assets.Gender.UNKNOWN:
+                if issuer.gender != issuers.Gender.UNKNOWN:
                     issuer_data['gender'] = issuer.gender.value
 
-                if issuer.age_group != assets.AgeGroup.UNKNOWN:
+                if issuer.age_group != issuers.AgeGroup.UNKNOWN:
                     issuer_data['age_group'] = issuer.age_group.value
 
                 if issuer.native_language not in ['', None]:
                     issuer_data['native_language'] = issuer.native_language
 
-            elif type(issuer) == assets.Artist:
+            elif type(issuer) == issuers.Artist:
                 if issuer.name not in ['', None]:
                     issuer_data['name'] = issuer.name
 

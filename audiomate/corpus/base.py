@@ -74,7 +74,7 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the issuers in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`audiomate.corpus.assets.Issuer` objects with the
+            dict: A dictionary containing :py:class:`audiomate.issuers.Issuer` objects with the
             issuer-idx as key.
         """
         return {}

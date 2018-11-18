@@ -8,6 +8,7 @@ import pytest
 import audiomate
 from audiomate import tracks
 from audiomate import containers
+from audiomate import issuers
 from audiomate.corpus import assets
 from audiomate.corpus.subset import subview
 from audiomate.corpus.io import MusanReader, KaldiWriter
@@ -22,7 +23,7 @@ class CorpusTest(unittest.TestCase):
         self.corpus = audiomate.Corpus(self.tempdir)
 
         self.ex_file = tracks.FileTrack('existing_file', '../any/path.wav')
-        self.ex_issuer = assets.Issuer('existing_issuer')
+        self.ex_issuer = issuers.Issuer('existing_issuer')
         self.ex_utterance = assets.Utterance('existing_utt', self.ex_file, issuer=self.ex_issuer)
 
         self.corpus.tracks['existing_file'] = self.ex_file
@@ -141,7 +142,7 @@ class CorpusTest(unittest.TestCase):
 
     def test_import_utterance_no_issuer(self):
         importing_utterances = [
-            assets.Utterance('a', self.ex_file, assets.Issuer('notexist'), 0, 10)
+            assets.Utterance('a', self.ex_file, issuers.Issuer('notexist'), 0, 10)
         ]
 
         with pytest.raises(ValueError):
@@ -167,9 +168,9 @@ class CorpusTest(unittest.TestCase):
 
     def test_import_issuers(self):
         importing_issuers = [
-            assets.Issuer('a'),
-            assets.Issuer('b'),
-            assets.Issuer('existing_issuer')
+            issuers.Issuer('a'),
+            issuers.Issuer('b'),
+            issuers.Issuer('existing_issuer')
         ]
 
         mapping = self.corpus.import_issuers(importing_issuers)

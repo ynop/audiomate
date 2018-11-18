@@ -2,7 +2,7 @@ import os
 
 import audiomate
 from audiomate import annotations
-from audiomate.corpus import assets
+from audiomate import issuers
 from audiomate.utils import textfile
 from audiomate.utils import download
 from audiomate.utils import files
@@ -131,7 +131,7 @@ class MusanReader(base.CorpusReader):
         issuer_idx = labels[file_idx][2]
 
         if issuer_idx not in corpus.issuers:
-            issuer = assets.Artist(issuer_idx, name=issuer_idx)
+            issuer = issuers.Artist(issuer_idx, name=issuer_idx)
             corpus.import_issuers(issuer)
 
         return issuer_idx
@@ -141,13 +141,13 @@ class MusanReader(base.CorpusReader):
         if file_idx not in labels:
             return None
 
-        issuer = assets.Speaker(file_idx)
+        issuer = issuers.Speaker(file_idx)
 
         if file_idx in labels:
             if labels[file_idx][0] == 'm':
-                issuer.gender = assets.Gender.MALE
+                issuer.gender = issuers.Gender.MALE
             elif labels[file_idx][0] == 'f':
-                issuer.gender = assets.Gender.FEMALE
+                issuer.gender = issuers.Gender.FEMALE
 
         corpus.import_issuers(issuer)
 

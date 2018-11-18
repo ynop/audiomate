@@ -3,8 +3,8 @@ import os
 import pytest
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus import io
-from audiomate.corpus import assets
 from tests import resources
 
 
@@ -90,39 +90,39 @@ class TestTudaReader:
         assert ds.num_issuers == 6
 
         assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].idx == 'cf372280-5606-4b05-9d24-3ab7805d8462'
-        assert type(ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462']) == assets.Speaker
-        assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].gender == assets.Gender.MALE
-        assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462']) == issuers.Speaker
+        assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].gender == issuers.Gender.MALE
+        assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].native_language == 'deu'
 
         assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].idx == '55065c47-1290-4974-997e-e77f24e7c72d'
-        assert type(ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d']) == assets.Speaker
-        assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].gender == assets.Gender.MALE
-        assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d']) == issuers.Speaker
+        assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].gender == issuers.Gender.MALE
+        assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].native_language == 'deu'
 
         assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].idx == '755d9b71-f36e-45a6-a437-edebcfaee08d'
-        assert type(ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d']) == assets.Speaker
-        assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].gender == assets.Gender.MALE
-        assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d']) == issuers.Speaker
+        assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].gender == issuers.Gender.MALE
+        assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].native_language == 'deu'
 
         assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].idx == '9e6a00c9-80f0-479d-8b36-4139a9571217'
-        assert type(ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217']) == assets.Speaker
-        assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].gender == assets.Gender.FEMALE
-        assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].age_group == assets.AgeGroup.YOUTH
+        assert type(ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217']) == issuers.Speaker
+        assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].gender == issuers.Gender.FEMALE
+        assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].age_group == issuers.AgeGroup.YOUTH
         assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].native_language == 'deu'
 
         assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].idx == '58b8b441-684f-4753-aa16-589f1e149fa0'
-        assert type(ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0']) == assets.Speaker
-        assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].gender == assets.Gender.FEMALE
-        assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0']) == issuers.Speaker
+        assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].gender == issuers.Gender.FEMALE
+        assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].native_language == 'deu'
 
         assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].idx == '2a0995a7-47d8-453f-9864-5940efd3c71a'
-        assert type(ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a']) == assets.Speaker
-        assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].gender == assets.Gender.MALE
-        assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a']) == issuers.Speaker
+        assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].gender == issuers.Gender.MALE
+        assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].native_language == 'deu'
 
     def test_load_utterances(self, reader, data_path):

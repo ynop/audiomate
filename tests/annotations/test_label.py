@@ -3,6 +3,7 @@ import librosa
 
 from audiomate import tracks
 from audiomate import annotations
+from audiomate import issuers
 from audiomate.corpus import assets
 
 from tests import resources
@@ -90,7 +91,7 @@ class TestLabel:
     def test_read_samples(self):
         path = resources.sample_wav_file('wav_1.wav')
         track = tracks.FileTrack('wav', path)
-        issuer = assets.Issuer('toni')
+        issuer = issuers.Issuer('toni')
         utt = assets.Utterance('t', track, issuer=issuer, start=1.0, end=2.30)
 
         l1 = annotations.Label('a', 0.15, 0.448)
@@ -118,7 +119,7 @@ class TestLabel:
     def test_read_samples_no_utterance_and_label_end(self):
         path = resources.sample_wav_file('wav_1.wav')
         track = tracks.FileTrack('wav', path)
-        issuer = assets.Issuer('toni')
+        issuer = issuers.Issuer('toni')
         utt = assets.Utterance('idx', track, issuer=issuer, start=1.0, end=-1)
 
         l1 = annotations.Label('a', 0.15, 0.448)

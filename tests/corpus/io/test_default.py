@@ -4,8 +4,8 @@ import tempfile
 
 import pytest
 
+from audiomate import issuers
 from audiomate.corpus import io
-from audiomate.corpus import assets
 from audiomate.utils import jsonfile
 from tests import resources
 
@@ -93,14 +93,14 @@ class TestDefaultReader:
 
         assert ds.issuers['speaker-1'].idx == 'speaker-1'
         assert len(ds.issuers['speaker-1'].info) == 0
-        assert type(ds.issuers['speaker-1']) == assets.Speaker
-        assert ds.issuers['speaker-1'].gender == assets.Gender.MALE
-        assert ds.issuers['speaker-1'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['speaker-1']) == issuers.Speaker
+        assert ds.issuers['speaker-1'].gender == issuers.Gender.MALE
+        assert ds.issuers['speaker-1'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['speaker-1'].native_language == 'deu'
 
         assert ds.issuers['speaker-2'].idx == 'speaker-2'
         assert len(ds.issuers['speaker-2'].info) == 0
-        assert type(ds.issuers['speaker-2']) == assets.Artist
+        assert type(ds.issuers['speaker-2']) == issuers.Artist
         assert ds.issuers['speaker-2'].name == 'Ohooo'
 
         assert ds.issuers['speaker-3'].idx == 'speaker-3'

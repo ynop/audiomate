@@ -3,8 +3,8 @@ import os
 import pytest
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus import io
-from audiomate.corpus import assets
 from tests import resources
 
 
@@ -73,19 +73,19 @@ class TestTimitReader:
         assert ds.num_issuers == 7
 
     @pytest.mark.parametrize('idx,gender,num_utt', [
-        ('DAC1', assets.Gender.FEMALE, 1),
-        ('JSW0', assets.Gender.MALE, 2),
-        ('PAS0', assets.Gender.FEMALE, 1),
-        ('KLS0', assets.Gender.MALE, 2),
-        ('RCG0', assets.Gender.MALE, 1),
-        ('KJO0', assets.Gender.MALE, 1),
-        ('RFK0', assets.Gender.MALE, 1)
+        ('DAC1', issuers.Gender.FEMALE, 1),
+        ('JSW0', issuers.Gender.MALE, 2),
+        ('PAS0', issuers.Gender.FEMALE, 1),
+        ('KLS0', issuers.Gender.MALE, 2),
+        ('RCG0', issuers.Gender.MALE, 1),
+        ('KJO0', issuers.Gender.MALE, 1),
+        ('RFK0', issuers.Gender.MALE, 1)
     ])
     def test_load_issuers(self, idx, gender, num_utt, reader, data_path):
         ds = reader.load(data_path)
 
         assert ds.issuers[idx].idx == idx
-        assert type(ds.issuers[idx]) == assets.Speaker
+        assert type(ds.issuers[idx]) == issuers.Speaker
         assert ds.issuers[idx].gender == gender
         assert len(ds.issuers[idx].utterances) == num_utt
 
