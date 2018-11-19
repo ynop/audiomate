@@ -1,37 +1,44 @@
 import os
-import unittest
 
 from audiomate import corpus
 from audiomate.corpus.io import SpeechCommandsReader
 
+import pytest
+
 from tests import resources
 
 
-class SpeechCommandsReaderTest(unittest.TestCase):
-    def setUp(self):
-        self.reader = SpeechCommandsReader()
+@pytest.fixture
+def reader():
+    return SpeechCommandsReader()
 
-        self.ds_path = resources.sample_corpus_path('speech_commands')
 
-    def test_load_tracks(self):
-        ds = self.reader.load(self.ds_path)
+@pytest.fixture
+def sample_path():
+    return resources.sample_corpus_path('speech_commands')
+
+
+class TestSpeechCommandsReader:
+
+    def test_load_tracks(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         assert ds.num_tracks == 13
 
         assert ds.tracks['0b77ee66_nohash_0_bed'].idx == '0b77ee66_nohash_0_bed'
-        assert ds.tracks['0b77ee66_nohash_0_bed'].path == os.path.join(self.ds_path, 'bed', '0b77ee66_nohash_0.wav')
+        assert ds.tracks['0b77ee66_nohash_0_bed'].path == os.path.join(sample_path, 'bed', '0b77ee66_nohash_0.wav')
         assert ds.tracks['0b77ee66_nohash_1_bed'].idx == '0b77ee66_nohash_1_bed'
-        assert ds.tracks['0b77ee66_nohash_1_bed'].path == os.path.join(self.ds_path, 'bed', '0b77ee66_nohash_1.wav')
+        assert ds.tracks['0b77ee66_nohash_1_bed'].path == os.path.join(sample_path, 'bed', '0b77ee66_nohash_1.wav')
         assert ds.tracks['0b77ee66_nohash_2_bed'].idx == '0b77ee66_nohash_2_bed'
-        assert ds.tracks['0b77ee66_nohash_2_bed'].path == os.path.join(self.ds_path, 'bed', '0b77ee66_nohash_2.wav')
+        assert ds.tracks['0b77ee66_nohash_2_bed'].path == os.path.join(sample_path, 'bed', '0b77ee66_nohash_2.wav')
         assert ds.tracks['0bde966a_nohash_0_bed'].idx == '0bde966a_nohash_0_bed'
-        assert ds.tracks['0bde966a_nohash_0_bed'].path == os.path.join(self.ds_path, 'bed', '0bde966a_nohash_0.wav')
+        assert ds.tracks['0bde966a_nohash_0_bed'].path == os.path.join(sample_path, 'bed', '0bde966a_nohash_0.wav')
         assert ds.tracks['0bde966a_nohash_1_bed'].idx == '0bde966a_nohash_1_bed'
-        assert ds.tracks['0bde966a_nohash_1_bed'].path == os.path.join(self.ds_path, 'bed', '0bde966a_nohash_1.wav')
+        assert ds.tracks['0bde966a_nohash_1_bed'].path == os.path.join(sample_path, 'bed', '0bde966a_nohash_1.wav')
         assert ds.tracks['0c40e715_nohash_0_bed'].idx == '0c40e715_nohash_0_bed'
-        assert ds.tracks['0c40e715_nohash_0_bed'].path == os.path.join(self.ds_path, 'bed', '0c40e715_nohash_0.wav')
+        assert ds.tracks['0c40e715_nohash_0_bed'].path == os.path.join(sample_path, 'bed', '0c40e715_nohash_0.wav')
 
-        marvin_path = os.path.join(self.ds_path, 'marvin')
+        marvin_path = os.path.join(sample_path, 'marvin')
         assert ds.tracks['d5c41d6a_nohash_0_marvin'].idx == 'd5c41d6a_nohash_0_marvin'
         assert ds.tracks['d5c41d6a_nohash_0_marvin'].path == os.path.join(marvin_path, 'd5c41d6a_nohash_0.wav')
         assert ds.tracks['d7a58714_nohash_0_marvin'].idx == 'd7a58714_nohash_0_marvin'
@@ -40,16 +47,16 @@ class SpeechCommandsReaderTest(unittest.TestCase):
         assert ds.tracks['d8a5ace5_nohash_0_marvin'].path == os.path.join(marvin_path, 'd8a5ace5_nohash_0.wav')
 
         assert ds.tracks['0a7c2a8d_nohash_0_one'].idx == '0a7c2a8d_nohash_0_one'
-        assert ds.tracks['0a7c2a8d_nohash_0_one'].path == os.path.join(self.ds_path, 'one', '0a7c2a8d_nohash_0.wav')
+        assert ds.tracks['0a7c2a8d_nohash_0_one'].path == os.path.join(sample_path, 'one', '0a7c2a8d_nohash_0.wav')
         assert ds.tracks['0b77ee66_nohash_0_one'].idx == '0b77ee66_nohash_0_one'
-        assert ds.tracks['0b77ee66_nohash_0_one'].path == os.path.join(self.ds_path, 'one', '0b77ee66_nohash_0.wav')
+        assert ds.tracks['0b77ee66_nohash_0_one'].path == os.path.join(sample_path, 'one', '0b77ee66_nohash_0.wav')
         assert ds.tracks['c1b7c224_nohash_0_one'].idx == 'c1b7c224_nohash_0_one'
-        assert ds.tracks['c1b7c224_nohash_0_one'].path == os.path.join(self.ds_path, 'one', 'c1b7c224_nohash_0.wav')
+        assert ds.tracks['c1b7c224_nohash_0_one'].path == os.path.join(sample_path, 'one', 'c1b7c224_nohash_0.wav')
         assert ds.tracks['c1b7c224_nohash_1_one'].idx == 'c1b7c224_nohash_1_one'
-        assert ds.tracks['c1b7c224_nohash_1_one'].path == os.path.join(self.ds_path, 'one', 'c1b7c224_nohash_1.wav')
+        assert ds.tracks['c1b7c224_nohash_1_one'].path == os.path.join(sample_path, 'one', 'c1b7c224_nohash_1.wav')
 
-    def test_read_issuers(self):
-        ds = self.reader.load(self.ds_path)
+    def test_read_issuers(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         assert ds.num_issuers == 8
 
@@ -62,8 +69,8 @@ class SpeechCommandsReaderTest(unittest.TestCase):
         assert ds.issuers['0a7c2a8d'].idx == '0a7c2a8d'
         assert ds.issuers['c1b7c224'].idx == 'c1b7c224'
 
-    def test_read_utterances(self):
-        ds = self.reader.load(self.ds_path)
+    def test_read_utterances(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         assert ds.num_utterances == 13
 
@@ -122,8 +129,8 @@ class SpeechCommandsReaderTest(unittest.TestCase):
         assert ds.utterances['c1b7c224_nohash_1_one'].start == 0
         assert ds.utterances['c1b7c224_nohash_1_one'].end == -1
 
-    def test_read_labels(self):
-        ds = self.reader.load(self.ds_path)
+    def test_read_labels(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         assert len(ds.utterances['0b77ee66_nohash_0_bed'].label_lists) == 1
         assert len(ds.utterances['0b77ee66_nohash_0_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
@@ -177,8 +184,8 @@ class SpeechCommandsReaderTest(unittest.TestCase):
         assert len(ds.utterances['c1b7c224_nohash_1_one'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
         assert ds.utterances['c1b7c224_nohash_1_one'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'one'
 
-    def test_read_subvies(self):
-        ds = self.reader.load(self.ds_path)
+    def test_read_subvies(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         assert ds.num_subviews == 3
 

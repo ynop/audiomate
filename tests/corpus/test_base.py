@@ -1,5 +1,3 @@
-import unittest
-
 import pytest
 
 import audiomate
@@ -8,15 +6,18 @@ from audiomate import annotations
 from tests import resources
 
 
-class CorpusViewTest(unittest.TestCase):
-    def setUp(self):
-        self.ds = resources.create_multi_label_corpus()
+@pytest.fixture
+def ds():
+    return resources.create_multi_label_corpus()
 
-    def test_all_label_values(self):
-        assert self.ds.all_label_values() == {'music', 'speech'}
 
-    def test_label_count(self):
-        assert self.ds.label_count() == {'music': 11, 'speech': 7}
+class TestCorpusView:
+
+    def test_all_label_values(self, ds):
+        assert ds.all_label_values() == {'music', 'speech'}
+
+    def test_label_count(self, ds):
+        assert ds.label_count() == {'music': 11, 'speech': 7}
 
     def test_stats(self):
         ds = audiomate.Corpus.load(resources.sample_corpus_path('default'), reader='default')
@@ -45,14 +46,14 @@ class CorpusViewTest(unittest.TestCase):
         assert stats['utt-3'].var == pytest.approx(0.017659103)
         assert stats['utt-3'].num == 24000
 
-    def test_label_duration(self):
-        durations = self.ds.label_durations()
+    def test_label_duration(self, ds):
+        durations = ds.label_durations()
 
         assert durations['music'] == pytest.approx(44.0)
         assert durations['speech'] == pytest.approx(45.0)
 
-    def test_duration(self):
-        duration = self.ds.total_duration
+    def test_duration(self, ds):
+        duration = ds.total_duration
 
         assert duration == pytest.approx(85.190375)
 

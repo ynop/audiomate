@@ -4,7 +4,7 @@ from audiomate import annotations
 from audiomate.formats import audacity
 
 
-class TestAudacityFormat(object):
+class TestAudacityFormat:
 
     def test_read_label_file_en(self):
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_en.txt')

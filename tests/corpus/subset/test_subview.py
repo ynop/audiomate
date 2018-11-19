@@ -1,30 +1,31 @@
-import unittest
-
 from audiomate import annotations
 from audiomate import tracks
 from audiomate.corpus.subset import subview
 
+import pytest
+
 from tests import resources
 
 
-class MatchingUtteranceIdxFilterTest(unittest.TestCase):
+class TestMatchingUtteranceIdxFilter:
+
     def test_match(self):
         filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'a', 'b', 'd'})
 
-        self.assertTrue(filter.match(tracks.Utterance('a', 'x'), None))
-        self.assertTrue(filter.match(tracks.Utterance('b', 'x'), None))
-        self.assertTrue(filter.match(tracks.Utterance('d', 'x'), None))
-        self.assertFalse(filter.match(tracks.Utterance('c', 'x'), None))
-        self.assertFalse(filter.match(tracks.Utterance('e', 'x'), None))
+        assert filter.match(tracks.Utterance('a', 'x'), None)
+        assert filter.match(tracks.Utterance('b', 'x'), None)
+        assert filter.match(tracks.Utterance('d', 'x'), None)
+        assert not filter.match(tracks.Utterance('c', 'x'), None)
+        assert not filter.match(tracks.Utterance('e', 'x'), None)
 
     def test_match_inverse(self):
         filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'a', 'b', 'd'}, inverse=True)
 
-        self.assertFalse(filter.match(tracks.Utterance('a', 'x'), None))
-        self.assertFalse(filter.match(tracks.Utterance('b', 'x'), None))
-        self.assertFalse(filter.match(tracks.Utterance('d', 'x'), None))
-        self.assertTrue(filter.match(tracks.Utterance('c', 'x'), None))
-        self.assertTrue(filter.match(tracks.Utterance('e', 'x'), None))
+        assert not filter.match(tracks.Utterance('a', 'x'), None)
+        assert not filter.match(tracks.Utterance('b', 'x'), None)
+        assert not filter.match(tracks.Utterance('d', 'x'), None)
+        assert filter.match(tracks.Utterance('c', 'x'), None)
+        assert filter.match(tracks.Utterance('e', 'x'), None)
 
     def test_serialize(self):
         f = subview.MatchingUtteranceIdxFilter(utterance_idxs={'a', 'b', 'd'})
@@ -47,51 +48,60 @@ class MatchingUtteranceIdxFilterTest(unittest.TestCase):
         assert f.inverse
 
 
-class MatchingLabelFilterTest(unittest.TestCase):
+@pytest.fixture
+def utt_without_noise():
+    utt = tracks.Utterance('utt-1', 'file-1')
 
-    def setUp(self):
-        self.utt1 = tracks.Utterance('utt-1', 'file-1')
+    utt.set_label_list(annotations.LabelList(idx='alpha', labels=[
+        annotations.Label('music', 0, 5),
+        annotations.Label('speech', 5, 12),
+        annotations.Label('music', 13, 15)
+    ]))
 
-        self.utt1.set_label_list(annotations.LabelList(idx='alpha', labels=[
-            annotations.Label('music', 0, 5),
-            annotations.Label('speech', 5, 12),
-            annotations.Label('music', 13, 15)
-        ]))
+    utt.set_label_list(annotations.LabelList(idx='bravo', labels=[
+        annotations.Label('music', 0, 1),
+        annotations.Label('speech', 2, 6)
+    ]))
 
-        self.utt1.set_label_list(annotations.LabelList(idx='bravo', labels=[
-            annotations.Label('music', 0, 1),
-            annotations.Label('speech', 2, 6)
-        ]))
+    return utt
 
-        self.utt2 = tracks.Utterance('utt-2', 'file-2')
 
-        self.utt2.set_label_list(annotations.LabelList(idx='alpha', labels=[
-            annotations.Label('music', 0, 5),
-            annotations.Label('speech', 5, 12),
-            annotations.Label('noise', 13, 15)
-        ]))
+@pytest.fixture
+def utt_with_noise():
+    utt = tracks.Utterance('utt-2', 'file-2')
 
-        self.utt2.set_label_list(annotations.LabelList(idx='bravo', labels=[
-            annotations.Label('music', 0, 1),
-            annotations.Label('speech', 2, 6)
-        ]))
+    utt.set_label_list(annotations.LabelList(idx='alpha', labels=[
+        annotations.Label('music', 0, 5),
+        annotations.Label('speech', 5, 12),
+        annotations.Label('noise', 13, 15)
+    ]))
 
-    def test_match_all_label_lists(self):
+    utt.set_label_list(annotations.LabelList(idx='bravo', labels=[
+        annotations.Label('music', 0, 1),
+        annotations.Label('speech', 2, 6)
+    ]))
+
+    return utt
+
+
+class TestMatchingLabelFilter:
+
+    def test_match_all_label_lists(self, utt_with_noise, utt_without_noise):
         filter = subview.MatchingLabelFilter(labels={'music', 'speech'})
 
-        assert filter.match(self.utt1, None)
-        assert not filter.match(self.utt2, None)
+        assert filter.match(utt_without_noise, None)
+        assert not filter.match(utt_with_noise, None)
 
-    def test_match_single(self):
+    def test_match_single(self, utt_with_noise, utt_without_noise):
         filter = subview.MatchingLabelFilter(labels={'music', 'speech'}, label_list_ids={'alpha'})
 
-        assert filter.match(self.utt1, None)
-        assert not filter.match(self.utt2, None)
+        assert filter.match(utt_without_noise, None)
+        assert not filter.match(utt_with_noise, None)
 
         filter = subview.MatchingLabelFilter(labels={'music', 'speech'}, label_list_ids={'bravo'})
 
-        assert filter.match(self.utt1, None)
-        assert filter.match(self.utt2, None)
+        assert filter.match(utt_without_noise, None)
+        assert filter.match(utt_with_noise, None)
 
     def test_serialize(self):
         filter = subview.MatchingLabelFilter(labels={'music', 'speech'}, label_list_ids={'alpha'})
@@ -116,44 +126,46 @@ class MatchingLabelFilterTest(unittest.TestCase):
         assert filter.label_list_ids == set()
 
 
-class SubviewTest(unittest.TestCase):
-
-    def setUp(self):
+@pytest.fixture
+def sample_subview():
         filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-1', 'utt-3'})
-        self.corpus = resources.create_dataset()
-        self.subview = subview.Subview(self.corpus, filter_criteria=[filter])
+        corpus = resources.create_dataset()
+        return subview.Subview(corpus, filter_criteria=[filter])
 
-    def test_tracks(self):
-        assert self.subview.num_tracks == 2
-        assert 'wav-1' in self.subview.tracks.keys()
-        assert 'wav_3' in self.subview.tracks.keys()
 
-    def test_utterances(self):
-        assert self.subview.num_utterances == 2
-        assert 'utt-1' in self.subview.utterances.keys()
-        assert 'utt-3' in self.subview.utterances.keys()
+class TestSubview:
 
-    def test_issuers(self):
-        assert self.subview.num_issuers == 2
-        assert 'spk-1' in self.subview.issuers.keys()
-        assert 'spk-2' in self.subview.issuers.keys()
+    def test_tracks(self, sample_subview):
+        assert sample_subview.num_tracks == 2
+        assert 'wav-1' in sample_subview.tracks.keys()
+        assert 'wav_3' in sample_subview.tracks.keys()
 
-    def test_serialize(self):
-        repr = self.subview.serialize()
+    def test_utterances(self, sample_subview):
+        assert sample_subview.num_utterances == 2
+        assert 'utt-1' in sample_subview.utterances.keys()
+        assert 'utt-3' in sample_subview.utterances.keys()
+
+    def test_issuers(self, sample_subview):
+        assert sample_subview.num_issuers == 2
+        assert 'spk-1' in sample_subview.issuers.keys()
+        assert 'spk-2' in sample_subview.issuers.keys()
+
+    def test_serialize(self, sample_subview):
+        repr = sample_subview.serialize()
 
         assert repr == 'matching_utterance_ids\ninclude,utt-1,utt-3'
 
     def test_parse(self):
-        sv = subview.Subview.parse('matching_utterance_ids\ninclude,utt-1,utt-3', corpus=self.corpus)
+        corpus = resources.create_dataset()
+        sv = subview.Subview.parse('matching_utterance_ids\ninclude,utt-1,utt-3', corpus=corpus)
 
-        assert sv.corpus == self.corpus
         assert len(sv.filter_criteria) == 1
         assert sv.filter_criteria[0].utterance_idxs == {'utt-1', 'utt-3'}
 
-    def test_utterances_without_issuers(self):
-        self.corpus.utterances['utt-3'].issuer = None
-        self.corpus.utterances['utt-4'].issuer = None
-        self.corpus.utterances['utt-5'].issuer = None
+    def test_utterances_without_issuers(self, sample_subview):
+        sample_subview.corpus.utterances['utt-3'].issuer = None
+        sample_subview.corpus.utterances['utt-4'].issuer = None
+        sample_subview.corpus.utterances['utt-5'].issuer = None
 
-        assert self.subview.num_utterances == 2
-        assert self.subview.num_issuers == 1
+        assert sample_subview.num_utterances == 2
+        assert sample_subview.num_issuers == 1

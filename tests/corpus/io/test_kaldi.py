@@ -1,35 +1,47 @@
 import os
-import shutil
-import tempfile
-import unittest
 
 from audiomate import corpus
 from audiomate import issuers
 from audiomate.corpus import io
+
+import pytest
+
 from tests import resources
 
 
-class KaldiReaderTest(unittest.TestCase):
-    def setUp(self):
-        self.reader = io.KaldiReader()
-        self.test_path = resources.sample_corpus_path('kaldi')
+@pytest.fixture
+def reader():
+    return io.KaldiReader()
 
-    def test_load_tracks(self):
-        ds = self.reader.load(self.test_path)
+
+@pytest.fixture
+def writer():
+    return io.KaldiWriter()
+
+
+@pytest.fixture
+def sample_path():
+    return resources.sample_corpus_path('kaldi')
+
+
+class TestKaldiReader:
+
+    def test_load_tracks(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         assert ds.num_tracks == 4
 
         assert ds.tracks['file-1'].idx == 'file-1'
-        assert ds.tracks['file-1'].path == os.path.join(self.test_path, 'files', 'wav_1.wav')
+        assert ds.tracks['file-1'].path == os.path.join(sample_path, 'files', 'wav_1.wav')
         assert ds.tracks['file-2'].idx == 'file-2'
-        assert ds.tracks['file-2'].path == os.path.join(self.test_path, 'files', 'wav_2.wav')
+        assert ds.tracks['file-2'].path == os.path.join(sample_path, 'files', 'wav_2.wav')
         assert ds.tracks['file-3'].idx == 'file-3'
-        assert ds.tracks['file-3'].path == os.path.join(self.test_path, 'files', 'wav_3.wav')
+        assert ds.tracks['file-3'].path == os.path.join(sample_path, 'files', 'wav_3.wav')
         assert ds.tracks['file-4'].idx == 'file-4'
-        assert ds.tracks['file-4'].path == os.path.join(self.test_path, 'files', 'wav_4.wav')
+        assert ds.tracks['file-4'].path == os.path.join(sample_path, 'files', 'wav_4.wav')
 
-    def test_load_issuers(self):
-        ds = self.reader.load(self.test_path)
+    def test_load_issuers(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         assert ds.num_issuers == 3
 
@@ -51,8 +63,8 @@ class KaldiReaderTest(unittest.TestCase):
         assert ds.issuers['speaker-3'].age_group == issuers.AgeGroup.UNKNOWN
         assert ds.issuers['speaker-3'].native_language is None
 
-    def test_load_utterances(self):
-        ds = self.reader.load(self.test_path)
+    def test_load_utterances(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         assert ds.num_utterances == 5
 
@@ -86,8 +98,8 @@ class KaldiReaderTest(unittest.TestCase):
         assert ds.utterances['utt-5'].start == 0
         assert ds.utterances['utt-5'].end == -1
 
-    def test_load_label_lists(self):
-        ds = self.reader.load(self.test_path)
+    def test_load_label_lists(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         utt_1 = ds.utterances['utt-1']
         utt_2 = ds.utterances['utt-2']
@@ -108,19 +120,15 @@ class KaldiReaderTest(unittest.TestCase):
         assert utt_4.label_lists[corpus.LL_WORD_TRANSCRIPT].labels[0].end == -1
 
 
-class KaldiWriterTest(unittest.TestCase):
-    def setUp(self):
-        self.writer = io.KaldiWriter()
+class TestKaldiWriter:
 
-    def test_save(self):
+    def test_save(self, writer, tmpdir):
         ds = resources.create_dataset()
-        path = tempfile.mkdtemp()
-        self.writer.save(ds, path)
+        path = tmpdir.strpath
+        writer.save(ds, path)
 
         assert 'segments' in os.listdir(path)
         assert 'text' in os.listdir(path)
         assert 'utt2spk' in os.listdir(path)
         assert 'spk2gender' in os.listdir(path)
         assert 'wav.scp' in os.listdir(path)
-
-        shutil.rmtree(path, ignore_errors=True)

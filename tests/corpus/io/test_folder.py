@@ -1,11 +1,9 @@
-import unittest
-
 from audiomate.corpus import io
 
 from tests import resources
 
 
-class FolderReaderTest(unittest.TestCase):
+class TestFolderReader:
 
     def test_load(self):
         path = resources.sample_corpus_path('folder')

@@ -1,5 +1,3 @@
-import unittest
-
 import numpy as np
 import librosa
 import pytest
@@ -11,8 +9,9 @@ from audiomate import issuers
 from tests import resources
 
 
-class UtteranceTest(unittest.TestCase):
-    def setUp(self):
+class TestUtterance:
+
+    def setup_method(self):
         self.ll_1 = annotations.LabelList(idx='alpha', labels=[
             annotations.Label('a', 3.2, 4.5),
             annotations.Label('b', 5.1, 8.9),
@@ -41,12 +40,19 @@ class UtteranceTest(unittest.TestCase):
 
         self.track = tracks.FileTrack('wav', resources.sample_wav_file('wav_1.wav'))
         self.issuer = issuers.Issuer('toni')
-        self.utt = tracks.Utterance('test', self.track, issuer=self.issuer, start=1.25, end=1.30, label_lists=[
-            self.ll_1,
-            self.ll_2,
-            self.ll_duplicate_idx,
-            self.ll_3
-        ])
+        self.utt = tracks.Utterance(
+            'test',
+            self.track,
+            issuer=self.issuer,
+            start=1.25,
+            end=1.30,
+            label_lists=[
+                self.ll_1,
+                self.ll_2,
+                self.ll_duplicate_idx,
+                self.ll_3
+            ]
+        )
 
     def test_end_abs(self):
         assert self.utt.end_abs == 1.30

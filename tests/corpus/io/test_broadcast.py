@@ -1,31 +1,40 @@
 import os
-import unittest
 
 from audiomate import issuers
 from audiomate.corpus import io
+
 from tests import resources
 
+import pytest
 
-class BroadcastReaderTest(unittest.TestCase):
-    def setUp(self):
-        self.reader = io.BroadcastReader()
-        self.test_path = resources.sample_corpus_path('broadcast')
 
-    def test_load_tracks(self):
-        ds = self.reader.load(self.test_path)
+@pytest.fixture
+def reader():
+    return io.BroadcastReader()
+
+
+@pytest.fixture
+def sample_path():
+    return resources.sample_corpus_path('broadcast')
+
+
+class TestBroadcastReader:
+
+    def test_load_tracks(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         assert ds.num_tracks == 4
         assert ds.tracks['file-1'].idx == 'file-1'
-        assert ds.tracks['file-1'].path == os.path.join(self.test_path, 'files', 'a', 'wav_1.wav')
+        assert ds.tracks['file-1'].path == os.path.join(sample_path, 'files', 'a', 'wav_1.wav')
         assert ds.tracks['file-2'].idx == 'file-2'
-        assert ds.tracks['file-2'].path == os.path.join(self.test_path, 'files', 'b', 'wav_2.wav')
+        assert ds.tracks['file-2'].path == os.path.join(sample_path, 'files', 'b', 'wav_2.wav')
         assert ds.tracks['file-3'].idx == 'file-3'
-        assert ds.tracks['file-3'].path == os.path.join(self.test_path, 'files', 'c', 'wav_3.wav')
+        assert ds.tracks['file-3'].path == os.path.join(sample_path, 'files', 'c', 'wav_3.wav')
         assert ds.tracks['file-4'].idx == 'file-4'
-        assert ds.tracks['file-4'].path == os.path.join(self.test_path, 'files', 'd', 'wav_4.wav')
+        assert ds.tracks['file-4'].path == os.path.join(sample_path, 'files', 'd', 'wav_4.wav')
 
-    def test_load_issuers(self):
-        ds = self.reader.load(self.test_path)
+    def test_load_issuers(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         assert ds.num_issuers == 3
 
@@ -44,8 +53,8 @@ class BroadcastReaderTest(unittest.TestCase):
         assert ds.issuers['speaker-3'].idx == 'speaker-3'
         assert len(ds.issuers['speaker-3'].info) == 0
 
-    def test_load_utterances(self):
-        ds = self.reader.load(self.test_path)
+    def test_load_utterances(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         assert ds.num_utterances == 5
 
@@ -79,8 +88,8 @@ class BroadcastReaderTest(unittest.TestCase):
         assert ds.utterances['utt-5'].start == 0
         assert ds.utterances['utt-5'].end == -1
 
-    def test_load_label_lists(self):
-        ds = self.reader.load(self.test_path)
+    def test_load_label_lists(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         utt_1 = ds.utterances['utt-1']
         utt_2 = ds.utterances['utt-2']
@@ -102,8 +111,8 @@ class BroadcastReaderTest(unittest.TestCase):
         assert utt_1.label_lists['jingles'].labels[1].start == 80
         assert utt_1.label_lists['jingles'].labels[1].end == 82.4
 
-    def test_load_label_meta(self):
-        ds = self.reader.load(self.test_path)
+    def test_load_label_meta(self, reader, sample_path):
+        ds = reader.load(sample_path)
 
         utt_1 = ds.utterances['utt-1']
 

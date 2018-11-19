@@ -1,11 +1,10 @@
-import unittest
-
 import numpy as np
 
 from audiomate.processing import pipeline
 
 
-class MeanVarianceNormTest(unittest.TestCase):
+class TestMeanVarianceNorm:
+
     def test_compute(self):
         frame = np.random.random_sample(5)
         mean = float(np.mean(frame))

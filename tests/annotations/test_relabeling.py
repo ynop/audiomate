@@ -6,7 +6,7 @@ from audiomate.annotations import Label, LabelList
 from audiomate.annotations import relabeling
 
 
-class TestLabelListUtilities(object):
+class TestLabelListUtilities:
 
     def test_relabel_maps_a_onto_b(self):
         label_list = LabelList(labels=[

@@ -1,6 +1,4 @@
 import os
-import shutil
-import tempfile
 
 import pytest
 
@@ -163,13 +161,6 @@ class TestDefaultReader:
 
 
 class TestDefaultWriter:
-    def setUp(self):
-        self.writer = io.DefaultWriter()
-        self.ds = resources.create_dataset()
-        self.path = tempfile.mkdtemp()
-
-    def tearDown(self):
-        shutil.rmtree(self.path, ignore_errors=True)
 
     def test_save_files_exist(self, writer, sample_corpus, tmpdir):
         writer.save(sample_corpus, tmpdir.strpath)

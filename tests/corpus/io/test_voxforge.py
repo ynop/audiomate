@@ -1,11 +1,11 @@
 import os
 
-import pytest
-import requests_mock
-
 from audiomate import corpus
 from audiomate import issuers
 from audiomate.corpus.io import voxforge
+
+import pytest
+import requests_mock
 
 from tests import resources
 

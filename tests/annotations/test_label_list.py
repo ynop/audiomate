@@ -1,5 +1,3 @@
-import unittest
-
 import pytest
 
 from audiomate import tracks
@@ -8,24 +6,28 @@ from audiomate.annotations import Label, LabelList
 from tests import resources
 
 
-class TestLabelList(unittest.TestCase):
+@pytest.fixture
+def sample_label():
+    file_track = tracks.FileTrack('wav', resources.sample_wav_file('wav_1.wav'))
+    utt = tracks.Utterance('utt', file_track, start=0.3, end=-1)
+    test_label = Label('a', start=0.5, end=-1)
+    ll = LabelList()
+    ll.append(test_label)
+    utt.set_label_list(ll)
 
-    def setUp(self):
-        file_track = tracks.FileTrack('wav', resources.sample_wav_file('wav_1.wav'))
-        utt = tracks.Utterance('utt', file_track, start=0.3, end=-1)
-        ll = LabelList()
-        self.test_label = Label('a', start=0.5, end=-1)
-        ll.append(self.test_label)
-        utt.set_label_list(ll)
+    return test_label
 
-    def test_start_abs(self):
-        assert self.test_label.start_abs == pytest.approx(0.8)
 
-    def test_end_abs(self):
-        assert self.test_label.end_abs == pytest.approx(2.5951875)
+class TestLabelList:
 
-    def test_duration(self):
-        assert self.test_label.duration == pytest.approx(1.7951875)
+    def test_start_abs(self, sample_label):
+        assert sample_label.start_abs == pytest.approx(0.8)
+
+    def test_end_abs(self, sample_label):
+        assert sample_label.end_abs == pytest.approx(2.5951875)
+
+    def test_duration(self, sample_label):
+        assert sample_label.duration == pytest.approx(1.7951875)
 
     def test_append(self):
         ll = LabelList()
@@ -60,32 +62,32 @@ class TestLabelList(unittest.TestCase):
         ranges = ll.ranges()
 
         r = next(ranges)
-        self.assertEqual(3.2, r[0])
-        self.assertEqual(4.5, r[1])
-        self.assertIn(ll[0], r[2])
+        assert 3.2 == r[0]
+        assert 4.5 == r[1]
+        assert ll[0] in r[2]
 
         r = next(ranges)
-        self.assertEqual(5.1, r[0])
-        self.assertEqual(7.2, r[1])
-        self.assertIn(ll[1], r[2])
+        assert 5.1 == r[0]
+        assert 7.2 == r[1]
+        assert ll[1] in r[2]
 
         r = next(ranges)
-        self.assertEqual(7.2, r[0])
-        self.assertEqual(8.9, r[1])
-        self.assertIn(ll[1], r[2])
-        self.assertIn(ll[2], r[2])
+        assert 7.2 == r[0]
+        assert 8.9 == r[1]
+        assert ll[1] in r[2]
+        assert ll[2] in r[2]
 
         r = next(ranges)
-        self.assertEqual(8.9, r[0])
-        self.assertEqual(10.5, r[1])
-        self.assertIn(ll[2], r[2])
+        assert 8.9 == r[0]
+        assert 10.5 == r[1]
+        assert ll[2] in r[2]
 
         r = next(ranges)
-        self.assertEqual(10.5, r[0])
-        self.assertEqual(14, r[1])
-        self.assertIn(ll[3], r[2])
+        assert 10.5 == r[0]
+        assert 14 == r[1]
+        assert ll[3] in r[2]
 
-        with self.assertRaises(StopIteration):
+        with pytest.raises(StopIteration):
             next(ranges)
 
     def test_ranges_with_empty(self):
@@ -99,37 +101,37 @@ class TestLabelList(unittest.TestCase):
         ranges = ll.ranges(yield_ranges_without_labels=True)
 
         r = next(ranges)
-        self.assertEqual(3.2, r[0])
-        self.assertEqual(4.5, r[1])
-        self.assertIn(ll[0], r[2])
+        assert 3.2 == r[0]
+        assert 4.5 == r[1]
+        assert ll[0] in r[2]
 
         r = next(ranges)
-        self.assertEqual(4.5, r[0])
-        self.assertEqual(5.1, r[1])
-        self.assertEqual(0, len(r[2]))
+        assert 4.5 == r[0]
+        assert 5.1 == r[1]
+        assert 0 == len(r[2])
 
         r = next(ranges)
-        self.assertEqual(5.1, r[0])
-        self.assertEqual(7.2, r[1])
-        self.assertIn(ll[1], r[2])
+        assert 5.1 == r[0]
+        assert 7.2 == r[1]
+        assert ll[1] in r[2]
 
         r = next(ranges)
-        self.assertEqual(7.2, r[0])
-        self.assertEqual(8.9, r[1])
-        self.assertIn(ll[1], r[2])
-        self.assertIn(ll[2], r[2])
+        assert 7.2 == r[0]
+        assert 8.9 == r[1]
+        assert ll[1] in r[2]
+        assert ll[2] in r[2]
 
         r = next(ranges)
-        self.assertEqual(8.9, r[0])
-        self.assertEqual(10.5, r[1])
-        self.assertIn(ll[2], r[2])
+        assert 8.9 == r[0]
+        assert 10.5 == r[1]
+        assert ll[2] in r[2]
 
         r = next(ranges)
-        self.assertEqual(10.5, r[0])
-        self.assertEqual(14, r[1])
-        self.assertIn(ll[3], r[2])
+        assert 10.5 == r[0]
+        assert 14 == r[1]
+        assert ll[3] in r[2]
 
-        with self.assertRaises(StopIteration):
+        with pytest.raises(StopIteration):
             next(ranges)
 
     def test_ranges_include_labels(self):
@@ -141,11 +143,11 @@ class TestLabelList(unittest.TestCase):
         ranges = ll.ranges(include_labels=['a'])
 
         r = next(ranges)
-        self.assertEqual(3.2, r[0])
-        self.assertEqual(4.5, r[1])
-        self.assertIn(ll[0], r[2])
+        assert 3.2 == r[0]
+        assert 4.5 == r[1]
+        assert ll[0] in r[2]
 
-        with self.assertRaises(StopIteration):
+        with pytest.raises(StopIteration):
             next(ranges)
 
     def test_ranges_zero_to_end(self):
@@ -157,22 +159,22 @@ class TestLabelList(unittest.TestCase):
         ranges = ll.ranges()
 
         r = next(ranges)
-        self.assertEqual(0, r[0])
-        self.assertEqual(5.1, r[1])
-        self.assertIn(ll[0], r[2])
+        assert 0 == r[0]
+        assert 5.1 == r[1]
+        assert ll[0] in r[2]
 
         r = next(ranges)
-        self.assertEqual(5.1, r[0])
-        self.assertEqual(8.9, r[1])
-        self.assertIn(ll[0], r[2])
-        self.assertIn(ll[1], r[2])
+        assert 5.1 == r[0]
+        assert 8.9 == r[1]
+        assert ll[0] in r[2]
+        assert ll[1] in r[2]
 
         r = next(ranges)
-        self.assertEqual(8.9, r[0])
-        self.assertEqual(-1, r[1])
-        self.assertIn(ll[0], r[2])
+        assert 8.9 == r[0]
+        assert -1 == r[1]
+        assert ll[0] in r[2]
 
-        with self.assertRaises(StopIteration):
+        with pytest.raises(StopIteration):
             next(ranges)
 
     def test_ranges_with_same_start_times(self):
@@ -196,7 +198,7 @@ class TestLabelList(unittest.TestCase):
         assert len(r[2]) == 1
         assert ll[1] in r[2]
 
-        with self.assertRaises(StopIteration):
+        with pytest.raises(StopIteration):
             next(ranges)
 
     def test_label_count(self):
@@ -210,9 +212,9 @@ class TestLabelList(unittest.TestCase):
 
         res = ll.label_count()
 
-        self.assertEqual(2, res['a'])
-        self.assertEqual(1, res['b'])
-        self.assertEqual(2, res['c'])
+        assert 2 == res['a']
+        assert 1 == res['b']
+        assert 2 == res['c']
 
     def test_label_total_durations(self):
         ll = LabelList(labels=[
