@@ -31,7 +31,7 @@ def test_all_downloaders_creatable():
 
 
 def test_unknown_downloader_creation_throws():
-    with pytest.raises(UnknownDownloaderException, msg='Unknown downloader: does_not_exist'):
+    with pytest.raises(UnknownDownloaderException, message='Unknown downloader: does_not_exist'):
         create_downloader_of_type('does_not_exist')
 
 
@@ -57,7 +57,7 @@ def test_all_readers_creatable():
 
 
 def test_unknown_reader_creation_throws():
-    with pytest.raises(UnknownReaderException, msg='Unknown reader: does_not_exist'):
+    with pytest.raises(UnknownReaderException, message='Unknown reader: does_not_exist'):
         create_reader_of_type('does_not_exist')
 
 
@@ -83,5 +83,5 @@ def test_all_writers_creatable():
 
 
 def test_unknown_writer_creation_throws():
-    with pytest.raises(UnknownWriterException, msg='Unknown writer: does_not_exist'):
+    with pytest.raises(UnknownWriterException, message='Unknown writer: does_not_exist'):
         create_writer_of_type('does_not_exist')
