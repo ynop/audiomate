@@ -6,7 +6,8 @@ import h5py
 
 import pytest
 
-from audiomate.corpus import assets
+from audiomate import tracks
+from audiomate import containers
 from audiomate import processing
 
 from tests import resources
@@ -49,24 +50,25 @@ def processor():
 
 @pytest.fixture()
 def sample_utterance():
-    file = assets.File('test_file', resources.sample_wav_file('wav_1.wav'))
-    utterance = assets.Utterance('test', file)
+    file_track = tracks.FileTrack('test_file', resources.sample_wav_file('wav_1.wav'))
+    utterance = tracks.Utterance('test', file_track)
     return utterance
 
 
 class TestProcessor:
 
     #
-    # process_file
+    # process_track
     #
 
-    def test_process_file(self, processor, tmpdir):
+    def test_process_track(self, processor, tmpdir):
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(22)
 
         librosa.output.write_wav(wav_path, wav_content, 4)
+        file_track = tracks.FileTrack('idx', wav_path)
 
-        processed = processor.process_file(wav_path, frame_size=4, hop_size=2)
+        processed = processor.process_track(file_track, frame_size=4, hop_size=2)
 
         assert processed.shape == (10, 4)
         assert processed.dtype == np.float32
@@ -79,13 +81,14 @@ class TestProcessor:
         assert processor.called_with_utterance == [None]
         assert processor.called_with_corpus == [None]
 
-    def test_process_file_smaller_than_frame_size(self, processor, tmpdir):
+    def test_process_track_smaller_than_frame_size(self, processor, tmpdir):
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(22)
 
         librosa.output.write_wav(wav_path, wav_content, 16000)
+        file_track = tracks.FileTrack('idx', wav_path)
 
-        processed = processor.process_file(wav_path, frame_size=4096, hop_size=2048, sr=16000)
+        processed = processor.process_track(file_track, frame_size=4096, hop_size=2048, sr=16000)
 
         assert processed.shape == (1, 4096)
         assert np.allclose(processed[0], np.pad(wav_content, (0, 4074), mode='constant'), atol=0.0001)
@@ -96,22 +99,24 @@ class TestProcessor:
         assert processor.called_with_utterance == [None]
         assert processor.called_with_corpus == [None]
 
-    def test_process_empty_file_raises_error(self, processor, tmpdir):
+    def test_process_empty_track_raises_error(self, processor, tmpdir):
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(0)
 
         librosa.output.write_wav(wav_path, wav_content, 16000)
+        file_track = tracks.FileTrack('idx', wav_path)
 
         with pytest.raises(ValueError):
-            processor.process_file(wav_path, frame_size=4096, hop_size=2048, sr=16000)
+            processor.process_track(file_track, frame_size=4096, hop_size=2048, sr=16000)
 
-    def test_process_file_with_downsampling(self, processor, tmpdir):
+    def test_process_track_with_downsampling(self, processor, tmpdir):
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(22)
 
         librosa.output.write_wav(wav_path, wav_content, 4)
+        file_track = tracks.FileTrack('idx', wav_path)
 
-        processed = processor.process_file(wav_path, frame_size=4, hop_size=2, sr=2)
+        processed = processor.process_track(file_track, frame_size=4, hop_size=2, sr=2)
 
         assert processed.shape == (5, 4)
 
@@ -122,16 +127,17 @@ class TestProcessor:
         assert processor.called_with_corpus == [None]
 
     #
-    #   process_file_online
+    #   process_track_online
     #
 
-    def test_process_file_online(self, processor, tmpdir):
+    def test_process_track_online(self, processor, tmpdir):
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(174)
 
         librosa.output.write_wav(wav_path, wav_content, 16000)
+        track = tracks.FileTrack('idx', wav_path)
 
-        chunks = list(processor.process_file_online(wav_path, frame_size=20, hop_size=10, chunk_size=8))
+        chunks = list(processor.process_track_online(track, frame_size=20, hop_size=10, chunk_size=8))
 
         assert len(chunks) == 3
         assert np.allclose(chunks[0][0], wav_content[0:20], atol=0.0001)
@@ -144,13 +150,14 @@ class TestProcessor:
         assert processor.called_with_utterance == [None, None, None]
         assert processor.called_with_corpus == [None, None, None]
 
-    def test_process_file_online_no_rest_frame(self, processor, tmpdir):
+    def test_process_track_online_no_rest_frame(self, processor, tmpdir):
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(170)
 
         librosa.output.write_wav(wav_path, wav_content, 16000)
+        track = tracks.FileTrack('idx', wav_path)
 
-        chunks = list(processor.process_file_online(wav_path, frame_size=20, hop_size=10, chunk_size=8))
+        chunks = list(processor.process_track_online(track, frame_size=20, hop_size=10, chunk_size=8))
 
         assert len(chunks) == 2
         assert np.allclose(chunks[0][0], wav_content[0:20], atol=0.0001)
@@ -264,7 +271,7 @@ class TestProcessor:
         processor.mock_hop_size_scale = 5
         processor.process_corpus(ds, feat_path, frame_size=4096, hop_size=2048)
 
-        fc = assets.FeatureContainer(feat_path)
+        fc = containers.FeatureContainer(feat_path)
         fc.open()
 
         assert fc.frame_size == 10240
@@ -293,23 +300,6 @@ class TestProcessor:
             assert f['utt-4'].shape == (7, 4096)
             assert f['utt-5'].shape == (20, 4096)
 
-    def test_process_corpus_online_with_downsampling(self, processor, tmpdir):
-        ds = resources.create_dataset()
-        feat_path = os.path.join(tmpdir.strpath, 'feats')
-
-        processor.process_corpus_online(ds, feat_path, frame_size=4096, hop_size=2048, sr=8000)
-
-        with h5py.File(feat_path, 'r') as f:
-            utts = set(f.keys())
-
-            assert utts == set(ds.utterances.keys())
-
-            assert f['utt-1'].shape == (10, 4096)
-            assert f['utt-2'].shape == (10, 4096)
-            assert f['utt-3'].shape == (5, 4096)
-            assert f['utt-4'].shape == (3, 4096)
-            assert f['utt-5'].shape == (10, 4096)
-
     def test_process_corpus_online_sets_container_attributes(self, processor, tmpdir):
         ds = resources.create_dataset()
         feat_path = os.path.join(tmpdir.strpath, 'feats')
@@ -320,17 +310,6 @@ class TestProcessor:
             assert feat_container.frame_size == 4096
             assert feat_container.hop_size == 2048
             assert feat_container.sampling_rate == 16000
-
-    def test_process_corpus_online_sets_container_attributes_with_downsampling(self, processor, tmpdir):
-        ds = resources.create_dataset()
-        feat_path = os.path.join(tmpdir.strpath, 'feats')
-
-        feat_container = processor.process_corpus_online(ds, feat_path, frame_size=4096, hop_size=2048, sr=8000)
-
-        with feat_container:
-            assert feat_container.frame_size == 4096
-            assert feat_container.hop_size == 2048
-            assert feat_container.sampling_rate == 8000
 
     def test_process_corpus_online_ignore_returning_none(self, processor, tmpdir):
         ds = resources.create_dataset()
@@ -352,7 +331,7 @@ class TestProcessor:
         processor.mock_hop_size_scale = 0.25
         processor.process_corpus_online(ds, feat_path, frame_size=4096, hop_size=2048)
 
-        fc = assets.FeatureContainer(feat_path)
+        fc = containers.FeatureContainer(feat_path)
         fc.open()
 
         assert fc.frame_size == 2048
@@ -370,7 +349,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(30).reshape(5, 6)
 
         with in_feats:
@@ -383,7 +362,7 @@ class TestProcessor:
 
         processor.process_features(ds, in_feats, out_feat_path)
 
-        out_feats = assets.FeatureContainer(out_feat_path)
+        out_feats = containers.FeatureContainer(out_feat_path)
 
         with out_feats:
             assert len(out_feats.keys()) == 5
@@ -400,7 +379,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(30).reshape(5, 6)
 
         with in_feats:
@@ -413,7 +392,7 @@ class TestProcessor:
 
         processor.process_features_online(ds, in_feats, out_feat_path)
 
-        out_feats = assets.FeatureContainer(out_feat_path)
+        out_feats = containers.FeatureContainer(out_feat_path)
 
         with out_feats:
             assert len(out_feats.keys()) == 5
@@ -430,7 +409,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(90).reshape(15, 6)
 
         with in_feats:
@@ -443,7 +422,7 @@ class TestProcessor:
 
         processor.process_features_online(ds, in_feats, out_feat_path, chunk_size=4)
 
-        out_feats = assets.FeatureContainer(out_feat_path)
+        out_feats = containers.FeatureContainer(out_feat_path)
 
         assert len(processor.called_with_data) == 4 * 5
         assert processor.called_with_data[0].shape == (4, 6)
@@ -464,7 +443,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(90).reshape(15, 6)
 
         with in_feats:
@@ -489,7 +468,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(30).reshape(5, 6)
 
         with in_feats:
@@ -504,7 +483,7 @@ class TestProcessor:
         processor.mock_hop_size_scale = 2.0
         processor.process_features(ds, in_feats, out_feat_path)
 
-        out_feats = assets.FeatureContainer(out_feat_path)
+        out_feats = containers.FeatureContainer(out_feat_path)
 
         with out_feats:
             assert out_feats.frame_size == 800
@@ -516,7 +495,7 @@ class TestProcessor:
         in_feat_path = os.path.join(tmpdir.strpath, 'in_feats')
         out_feat_path = os.path.join(tmpdir.strpath, 'out_feats')
 
-        in_feats = assets.FeatureContainer(in_feat_path)
+        in_feats = containers.FeatureContainer(in_feat_path)
         utt_feats = np.arange(30).reshape(5, 6)
 
         with in_feats:
@@ -531,7 +510,7 @@ class TestProcessor:
         processor.mock_hop_size_scale = 2.0
         processor.process_features_online(ds, in_feats, out_feat_path)
 
-        out_feats = assets.FeatureContainer(out_feat_path)
+        out_feats = containers.FeatureContainer(out_feat_path)
 
         with out_feats:
             assert out_feats.frame_size == 800

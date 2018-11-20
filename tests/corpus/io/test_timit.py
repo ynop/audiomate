@@ -3,8 +3,8 @@ import os
 import pytest
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus import io
-from audiomate.corpus import assets
 from tests import resources
 
 
@@ -20,10 +20,10 @@ def data_path():
 
 class TestTimitReader:
 
-    def test_load_correct_number_of_files(self, reader, data_path):
+    def test_load_correct_number_of_tracks(self, reader, data_path):
         ds = reader.load(data_path)
 
-        assert ds.num_files == 9
+        assert ds.num_tracks == 9
 
     @pytest.mark.parametrize('idx,path', [
         ('dr1-mkls0-sa1', os.path.join('TRAIN', 'DR1', 'MKLS0', 'SA1.WAV')),
@@ -36,11 +36,11 @@ class TestTimitReader:
         ('dr1-mjsw0-sx20', os.path.join('TEST', 'DR1', 'MJSW0', 'SX20.WAV')),
         ('dr2-fpas0-sx224', os.path.join('TEST', 'DR2', 'FPAS0', 'SX224.WAV'))
     ])
-    def test_load_files(self, idx, path, reader, data_path):
+    def test_load_tracks(self, idx, path, reader, data_path):
         ds = reader.load(data_path)
 
-        assert ds.files[idx].idx == idx
-        assert ds.files[idx].path == os.path.join(data_path, path)
+        assert ds.tracks[idx].idx == idx
+        assert ds.tracks[idx].path == os.path.join(data_path, path)
 
     def test_load_correct_number_of_utterances(self, reader, data_path):
         ds = reader.load(data_path)
@@ -62,7 +62,7 @@ class TestTimitReader:
         ds = reader.load(data_path)
 
         assert ds.utterances[idx].idx == idx
-        assert ds.utterances[idx].file.idx == idx
+        assert ds.utterances[idx].track.idx == idx
         assert ds.utterances[idx].issuer.idx == issuer_idx
         assert ds.utterances[idx].start == 0
         assert ds.utterances[idx].end == -1
@@ -73,19 +73,19 @@ class TestTimitReader:
         assert ds.num_issuers == 7
 
     @pytest.mark.parametrize('idx,gender,num_utt', [
-        ('DAC1', assets.Gender.FEMALE, 1),
-        ('JSW0', assets.Gender.MALE, 2),
-        ('PAS0', assets.Gender.FEMALE, 1),
-        ('KLS0', assets.Gender.MALE, 2),
-        ('RCG0', assets.Gender.MALE, 1),
-        ('KJO0', assets.Gender.MALE, 1),
-        ('RFK0', assets.Gender.MALE, 1)
+        ('DAC1', issuers.Gender.FEMALE, 1),
+        ('JSW0', issuers.Gender.MALE, 2),
+        ('PAS0', issuers.Gender.FEMALE, 1),
+        ('KLS0', issuers.Gender.MALE, 2),
+        ('RCG0', issuers.Gender.MALE, 1),
+        ('KJO0', issuers.Gender.MALE, 1),
+        ('RFK0', issuers.Gender.MALE, 1)
     ])
     def test_load_issuers(self, idx, gender, num_utt, reader, data_path):
         ds = reader.load(data_path)
 
         assert ds.issuers[idx].idx == idx
-        assert type(ds.issuers[idx]) == assets.Speaker
+        assert type(ds.issuers[idx]) == issuers.Speaker
         assert ds.issuers[idx].gender == gender
         assert len(ds.issuers[idx].utterances) == num_utt
 

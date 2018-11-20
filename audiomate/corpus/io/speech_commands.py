@@ -2,7 +2,7 @@ import glob
 import os
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import annotations
 from audiomate.corpus.subset import subview
 from audiomate.utils import textfile
 from . import base
@@ -54,7 +54,7 @@ class SpeechCommandsReader(base.CorpusReader):
 
             utt = corpus.new_utterance(file_idx, file_idx, issuer_idx)
 
-            labels = assets.LabelList.create_single(command, idx=audiomate.corpus.LL_WORD_TRANSCRIPT)
+            labels = annotations.LabelList.create_single(command, idx=audiomate.corpus.LL_WORD_TRANSCRIPT)
             utt.set_label_list(labels)
 
     @staticmethod

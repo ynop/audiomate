@@ -2,7 +2,8 @@ import os
 import glob
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import annotations
+from audiomate import issuers
 from audiomate.utils import download
 from audiomate.utils import files
 from . import base
@@ -76,11 +77,11 @@ class FreeSpokenDigitReader(base.CorpusReader):
             issuer_idx = '_'.join(idx_parts[1:-1])
 
             if issuer_idx not in corpus.issuers.keys():
-                issuer = assets.Speaker(issuer_idx)
+                issuer = issuers.Speaker(issuer_idx)
                 corpus.import_issuers(issuer)
 
             utterance = corpus.new_utterance(file_idx, file_idx, issuer_idx)
-            utterance.set_label_list(assets.LabelList.create_single(str(digit),
-                                                                    idx=audiomate.corpus.LL_WORD_TRANSCRIPT))
+            utterance.set_label_list(annotations.LabelList.create_single(str(digit),
+                                                                         idx=audiomate.corpus.LL_WORD_TRANSCRIPT))
 
         return corpus

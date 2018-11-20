@@ -1,12 +1,11 @@
 import os
-import shutil
-import tempfile
-import unittest
 
 import pytest
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import tracks
+from audiomate import containers
+from audiomate import issuers
 from audiomate.corpus.subset import subview
 from audiomate.corpus.io import MusanReader, KaldiWriter
 from audiomate.corpus.io import UnknownWriterException, UnknownReaderException
@@ -14,68 +13,73 @@ from audiomate.corpus.io import UnknownWriterException, UnknownReaderException
 from .. import resources
 
 
-class CorpusTest(unittest.TestCase):
-    def setUp(self):
-        self.tempdir = tempfile.mkdtemp()
-        self.corpus = audiomate.Corpus(self.tempdir)
+@pytest.fixture
+def corpus():
+    corpus = audiomate.Corpus()
 
-        self.ex_file = assets.File('existing_file', '../any/path.wav')
-        self.ex_issuer = assets.Issuer('existing_issuer')
-        self.ex_utterance = assets.Utterance('existing_utt', self.ex_file, issuer=self.ex_issuer)
+    ex_file = tracks.FileTrack('existing_file', '../any/path.wav')
+    ex_issuer = issuers.Issuer('existing_issuer')
+    ex_utterance = tracks.Utterance('existing_utt', ex_file, issuer=ex_issuer)
 
-        self.corpus.files['existing_file'] = self.ex_file
-        self.corpus.issuers['existing_issuer'] = self.ex_issuer
-        self.corpus.utterances['existing_utt'] = self.ex_utterance
+    corpus.tracks['existing_file'] = ex_file
+    corpus.issuers['existing_issuer'] = ex_issuer
+    corpus.utterances['existing_utt'] = ex_utterance
 
-    def tearDown(self):
-        shutil.rmtree(self.tempdir, ignore_errors=True)
+    return corpus
+
+
+class TestCorpus:
 
     #
-    # FILE ADD
+    # TRACK ADD
     #
 
-    def test_new_file(self):
-        self.corpus.new_file('../some/path.wav', 'fid')
+    def test_new_file(self, corpus):
+        corpus.new_file('../some/path.wav', 'fid')
 
-        assert self.corpus.num_files == 2
-        assert self.corpus.files['fid'].idx == 'fid'
-        assert self.corpus.files['fid'].path == os.path.abspath(os.path.join(os.getcwd(), '../some/path.wav'))
+        assert corpus.num_tracks == 2
+        assert corpus.tracks['fid'].idx == 'fid'
+        assert corpus.tracks['fid'].path == os.path.abspath(
+            os.path.join(os.getcwd(), '../some/path.wav')
+        )
 
-    def test_new_file_duplicate_idx(self):
-        self.corpus.new_file('../some/other/path.wav', 'existing_file')
+    def test_new_file_duplicate_idx(self, corpus):
+        corpus.new_file('../some/other/path.wav', 'existing_file')
 
-        assert self.corpus.num_files == 2
-        assert self.corpus.files['existing_file_1'].idx == 'existing_file_1'
-        assert self.corpus.files['existing_file_1'].path == os.path.abspath(
-            os.path.join(os.getcwd(), '../some/other/path.wav'))
+        assert corpus.num_tracks == 2
+        assert corpus.tracks['existing_file_1'].idx == 'existing_file_1'
+        assert corpus.tracks['existing_file_1'].path == os.path.abspath(
+            os.path.join(os.getcwd(), '../some/other/path.wav')
+        )
 
-    def test_new_file_copy_file(self):
+    def test_new_file_copy_file(self, corpus, tmpdir):
         file_path = resources.sample_wav_file('wav_1.wav')
 
-        self.corpus.new_file(file_path, 'fid', copy_file=True)
+        corpus.path = tmpdir.strpath
+        corpus.new_file(file_path, 'fid', copy_file=True)
 
-        assert self.corpus.num_files == 2
-        assert self.corpus.files['fid'].path == os.path.join(self.tempdir, 'files', 'fid.wav')
+        assert corpus.num_tracks == 2
+        assert corpus.tracks['fid'].path == os.path.join(tmpdir.strpath, 'files', 'fid.wav')
 
-    def test_import_files(self):
-        importing_files = [
-            assets.File('a', '/some/path.wav'),
-            assets.File('b', '/some/other/path.wav'),
-            assets.File('existing_file', '/some/otherer/path.wav'),
+    def test_import_tracks(self, corpus):
+        importing_tracks = [
+            tracks.FileTrack('a', '/some/path.wav'),
+            tracks.FileTrack('b', '/some/other/path.wav'),
+            tracks.FileTrack('existing_file', '/some/otherer/path.wav'),
         ]
 
-        idx_mapping = self.corpus.import_files(importing_files)
+        idx_mapping = corpus.import_tracks(importing_tracks)
 
-        assert self.corpus.num_files == 4
+        assert corpus.num_tracks == 4
 
-        assert 'a' in self.corpus.files.keys()
-        assert self.corpus.files['a'].path == '/some/path.wav'
+        assert 'a' in corpus.tracks.keys()
+        assert corpus.tracks['a'].path == '/some/path.wav'
 
-        assert 'b' in self.corpus.files.keys()
-        assert self.corpus.files['b'].path == '/some/other/path.wav'
+        assert 'b' in corpus.tracks.keys()
+        assert corpus.tracks['b'].path == '/some/other/path.wav'
 
-        assert 'existing_file_1' in self.corpus.files.keys()
-        assert self.corpus.files['existing_file_1'].path == '/some/otherer/path.wav'
+        assert 'existing_file_1' in corpus.tracks.keys()
+        assert corpus.tracks['existing_file_1'].path == '/some/otherer/path.wav'
 
         assert len(idx_mapping) == 3
         assert 'a' in idx_mapping['a'].idx
@@ -86,96 +90,103 @@ class CorpusTest(unittest.TestCase):
     #   UTT ADD
     #
 
-    def test_new_utterance(self):
-        self.corpus.new_utterance('some_utt', 'existing_file', issuer_idx='existing_issuer', start=0, end=20)
+    def test_new_utterance(self, corpus):
+        corpus.new_utterance('some_utt', 'existing_file',
+                             issuer_idx='existing_issuer', start=0, end=20)
 
-        assert self.corpus.num_utterances == 2
-        assert self.corpus.utterances['some_utt'].idx == 'some_utt'
-        assert self.corpus.utterances['some_utt'].file.idx == 'existing_file'
-        assert self.corpus.utterances['some_utt'].issuer.idx == 'existing_issuer'
-        assert self.corpus.utterances['some_utt'].start == 0
-        assert self.corpus.utterances['some_utt'].end == 20
+        assert corpus.num_utterances == 2
+        assert corpus.utterances['some_utt'].idx == 'some_utt'
+        assert corpus.utterances['some_utt'].track.idx == 'existing_file'
+        assert corpus.utterances['some_utt'].issuer.idx == 'existing_issuer'
+        assert corpus.utterances['some_utt'].start == 0
+        assert corpus.utterances['some_utt'].end == 20
 
-    def test_new_utterance_duplicate_idx(self):
-        self.corpus.new_utterance('existing_utt', 'existing_file', issuer_idx='existing_issuer', start=0, end=20)
+    def test_new_utterance_duplicate_idx(self, corpus):
+        corpus.new_utterance('existing_utt', 'existing_file',
+                             issuer_idx='existing_issuer', start=0, end=20)
 
-        assert self.corpus.num_utterances == 2
-        assert self.corpus.utterances['existing_utt_1'].idx == 'existing_utt_1'
-        assert self.corpus.utterances['existing_utt_1'].file.idx == 'existing_file'
-        assert self.corpus.utterances['existing_utt_1'].issuer.idx == 'existing_issuer'
-        assert self.corpus.utterances['existing_utt_1'].start == 0
-        assert self.corpus.utterances['existing_utt_1'].end == 20
+        assert corpus.num_utterances == 2
+        assert corpus.utterances['existing_utt_1'].idx == 'existing_utt_1'
+        assert corpus.utterances['existing_utt_1'].track.idx == 'existing_file'
+        assert corpus.utterances['existing_utt_1'].issuer.idx == 'existing_issuer'
+        assert corpus.utterances['existing_utt_1'].start == 0
+        assert corpus.utterances['existing_utt_1'].end == 20
 
-    def test_new_utterance_value_error_if_file_unknown(self):
+    def test_new_utterance_value_error_if_track_unknown(self, corpus):
         with pytest.raises(ValueError):
-            self.corpus.new_utterance('some_utt', 'some_file', issuer_idx='iid', start=0, end=20)
+            corpus.new_utterance('some_utt', 'some_file', issuer_idx='iid', start=0, end=20)
 
-    def test_import_utterances(self):
+    def test_import_utterances(self, corpus):
         importing_utterances = [
-            assets.Utterance('a', self.ex_file, self.ex_issuer, 0, 10),
-            assets.Utterance('b', self.ex_file, self.ex_issuer, 10, 20),
-            assets.Utterance('existing_utt', self.ex_file, self.ex_issuer, 20, 30)
+            tracks.Utterance('a', corpus.tracks['existing_file'],
+                             corpus.issuers['existing_issuer'], 0, 10),
+            tracks.Utterance('b', corpus.tracks['existing_file'],
+                             corpus.issuers['existing_issuer'], 10, 20),
+            tracks.Utterance('existing_utt', corpus.tracks['existing_file'],
+                             corpus.issuers['existing_issuer'], 20, 30)
         ]
 
-        mapping = self.corpus.import_utterances(importing_utterances)
+        mapping = corpus.import_utterances(importing_utterances)
 
-        assert self.corpus.num_utterances == 4
-        assert 'a' in self.corpus.utterances.keys()
-        assert 'b' in self.corpus.utterances.keys()
-        assert 'existing_utt_1' in self.corpus.utterances.keys()
+        assert corpus.num_utterances == 4
+        assert 'a' in corpus.utterances.keys()
+        assert 'b' in corpus.utterances.keys()
+        assert 'existing_utt_1' in corpus.utterances.keys()
 
         assert len(mapping) == 3
         assert mapping['a'].idx == 'a'
         assert mapping['b'].idx == 'b'
         assert mapping['existing_utt'].idx == 'existing_utt_1'
 
-    def test_import_utterance_no_file(self):
+    def test_import_utterance_no_track(self, corpus):
         importing_utterances = [
-            assets.Utterance('a', assets.File('notexist', 'notexist'), self.ex_issuer, 0, 10)
+            tracks.Utterance('a', tracks.FileTrack('notexist', 'notexist'),
+                             corpus.issuers['existing_issuer'], 0, 10)
         ]
 
         with pytest.raises(ValueError):
-            self.corpus.import_utterances(importing_utterances)
+            corpus.import_utterances(importing_utterances)
 
-    def test_import_utterance_no_issuer(self):
+    def test_import_utterance_no_issuer(self, corpus):
         importing_utterances = [
-            assets.Utterance('a', self.ex_file, assets.Issuer('notexist'), 0, 10)
+            tracks.Utterance('a', corpus.tracks['existing_file'],
+                             issuers.Issuer('notexist'), 0, 10)
         ]
 
         with pytest.raises(ValueError):
-            self.corpus.import_utterances(importing_utterances)
+            corpus.import_utterances(importing_utterances)
 
     #
     #   ISSUER ADD
     #
 
-    def test_new_issuer(self):
-        self.corpus.new_issuer('some_iss', info={'hallo': 'velo'})
+    def test_new_issuer(self, corpus):
+        corpus.new_issuer('some_iss', info={'hallo': 'velo'})
 
-        assert self.corpus.num_issuers == 2
-        assert self.corpus.issuers['some_iss'].idx == 'some_iss'
-        assert self.corpus.issuers['some_iss'].info['hallo'] == 'velo'
+        assert corpus.num_issuers == 2
+        assert corpus.issuers['some_iss'].idx == 'some_iss'
+        assert corpus.issuers['some_iss'].info['hallo'] == 'velo'
 
-    def test_new_issuer_duplicate_idx(self):
-        self.corpus.new_issuer('existing_issuer', info={'hallo': 'velo'})
+    def test_new_issuer_duplicate_idx(self, corpus):
+        corpus.new_issuer('existing_issuer', info={'hallo': 'velo'})
 
-        assert self.corpus.num_issuers == 2
-        assert self.corpus.issuers['existing_issuer_1'].idx == 'existing_issuer_1'
-        assert self.corpus.issuers['existing_issuer_1'].info['hallo'] == 'velo'
+        assert corpus.num_issuers == 2
+        assert corpus.issuers['existing_issuer_1'].idx == 'existing_issuer_1'
+        assert corpus.issuers['existing_issuer_1'].info['hallo'] == 'velo'
 
-    def test_import_issuers(self):
+    def test_import_issuers(self, corpus):
         importing_issuers = [
-            assets.Issuer('a'),
-            assets.Issuer('b'),
-            assets.Issuer('existing_issuer')
+            issuers.Issuer('a'),
+            issuers.Issuer('b'),
+            issuers.Issuer('existing_issuer')
         ]
 
-        mapping = self.corpus.import_issuers(importing_issuers)
+        mapping = corpus.import_issuers(importing_issuers)
 
-        assert self.corpus.num_issuers == 4
-        assert 'a' in self.corpus.issuers.keys()
-        assert 'b' in self.corpus.issuers.keys()
-        assert 'existing_issuer_1' in self.corpus.issuers.keys()
+        assert corpus.num_issuers == 4
+        assert 'a' in corpus.issuers.keys()
+        assert 'b' in corpus.issuers.keys()
+        assert 'existing_issuer_1' in corpus.issuers.keys()
 
         assert len(mapping) == 3
         assert mapping['a'].idx == 'a'
@@ -186,25 +197,28 @@ class CorpusTest(unittest.TestCase):
     #   FEAT CONT ADD
     #
 
-    def test_new_feature_container(self):
-        self.corpus.new_feature_container('mfcc')
+    def test_new_feature_container(self, corpus, tmpdir):
+        corpus.path = tmpdir.strpath
+        corpus.new_feature_container('mfcc')
 
-        assert self.corpus.num_feature_containers == 1
-        assert self.corpus.feature_containers['mfcc'].path == os.path.join(self.tempdir, 'features', 'mfcc')
+        assert corpus.num_feature_containers == 1
+        assert corpus.feature_containers['mfcc'].path == os.path.join(
+            tmpdir.strpath, 'features', 'mfcc'
+        )
 
     #
     #   SUBVIEW ADD
     #
-    def test_import_subview(self):
+    def test_import_subview(self, corpus):
         train_set = subview.Subview(None, filter_criteria=[
             subview.MatchingUtteranceIdxFilter(utterance_idxs={'existing_utt'})
         ])
 
-        self.corpus.import_subview('train', train_set)
+        corpus.import_subview('train', train_set)
 
-        assert self.corpus.num_subviews == 1
-        assert self.corpus.subviews['train'] == train_set
-        assert self.corpus.subviews['train'].corpus == self.corpus
+        assert corpus.num_subviews == 1
+        assert corpus.subviews['train'] == train_set
+        assert corpus.subviews['train'].corpus == corpus
 
     #
     #   CREATION
@@ -214,16 +228,16 @@ class CorpusTest(unittest.TestCase):
         original = resources.create_dataset()
         copy = audiomate.Corpus.from_corpus(original)
 
-        assert copy.num_files == 4
+        assert copy.num_tracks == 4
         assert copy.num_issuers == 3
         assert copy.num_utterances == 5
         assert copy.num_subviews == 2
         assert copy.num_feature_containers == 2
 
-        original.files['wav-1'].path = '/changed/path.wav'
-        assert original.files['wav-1'].path != copy.files['wav-1'].path
+        original.tracks['wav-1'].path = '/changed/path.wav'
+        assert original.tracks['wav-1'].path != copy.tracks['wav-1'].path
 
-    def test_from_corpus_only_utterances_and_files(self):
+    def test_from_corpus_only_utterances_and_tracks(self):
         ds = audiomate.Corpus()
         ds.new_file('/random/path', 'file_1')
         ds.new_file('/random/path2', 'file_2')
@@ -232,7 +246,7 @@ class CorpusTest(unittest.TestCase):
 
         copy = audiomate.Corpus.from_corpus(ds)
 
-        assert copy.num_files == 2
+        assert copy.num_tracks == 2
         assert copy.num_utterances == 2
         assert copy.num_issuers == 0
 
@@ -252,11 +266,11 @@ class CorpusTest(unittest.TestCase):
 
         assert corpus.name == 'default'
         assert corpus.path == resources.sample_corpus_path('default')
-        assert corpus.num_files == 4
-        assert 'file-1' in corpus.files
-        assert 'file-2' in corpus.files
-        assert 'file-3' in corpus.files
-        assert 'file-4' in corpus.files
+        assert corpus.num_tracks == 6
+        assert 'file-1' in corpus.tracks
+        assert 'file-2' in corpus.tracks
+        assert 'file-3' in corpus.tracks
+        assert 'file-4' in corpus.tracks
 
     def test_load_with_custom_reader_specified_by_name(self):
         corpus = audiomate.Corpus()
@@ -264,12 +278,12 @@ class CorpusTest(unittest.TestCase):
 
         assert corpus.name == 'musan'
         assert corpus.path == resources.sample_corpus_path('musan')
-        assert corpus.num_files == 5
-        assert 'music-fma-0000' in corpus.files
-        assert 'noise-free-sound-0000' in corpus.files
-        assert 'noise-free-sound-0001' in corpus.files
-        assert 'speech-librivox-0000' in corpus.files
-        assert 'speech-librivox-0001' in corpus.files
+        assert corpus.num_tracks == 5
+        assert 'music-fma-0000' in corpus.tracks
+        assert 'noise-free-sound-0000' in corpus.tracks
+        assert 'noise-free-sound-0001' in corpus.tracks
+        assert 'speech-librivox-0000' in corpus.tracks
+        assert 'speech-librivox-0001' in corpus.tracks
 
     def test_load_with_custom_reader_specified_by_instance(self):
         corpus = audiomate.Corpus()
@@ -277,50 +291,50 @@ class CorpusTest(unittest.TestCase):
 
         assert corpus.name == 'musan'
         assert corpus.path == resources.sample_corpus_path('musan')
-        assert corpus.num_files == 5
-        assert 'music-fma-0000' in corpus.files
-        assert 'noise-free-sound-0000' in corpus.files
-        assert 'noise-free-sound-0001' in corpus.files
-        assert 'speech-librivox-0000' in corpus.files
-        assert 'speech-librivox-0001' in corpus.files
+        assert corpus.num_tracks == 5
+        assert 'music-fma-0000' in corpus.tracks
+        assert 'noise-free-sound-0000' in corpus.tracks
+        assert 'noise-free-sound-0001' in corpus.tracks
+        assert 'speech-librivox-0000' in corpus.tracks
+        assert 'speech-librivox-0001' in corpus.tracks
 
     #
     #    CORPUS SAVING
     #
 
-    def test_save_at_corpus_path_throws_exception_when_writer_does_not_exist(self):
+    def test_save_at_corpus_path_throws_exception_when_writer_does_not_exist(self, tmpdir):
         corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('default'))
 
         assert corpus.name == 'default'
         assert corpus.path == resources.sample_corpus_path('default')
-        assert corpus.num_files == 4
+        assert corpus.num_tracks == 6
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 0
 
-        corpus.path = self.tempdir
+        corpus.path = tmpdir.strpath
         with pytest.raises(UnknownWriterException):
             corpus.save(writer='does_not_exist')
 
-        assert len(os.listdir(self.tempdir)) == 0
+        assert len(os.listdir(tmpdir.strpath)) == 0
 
-    def test_save_at_corpus_path_with_default_writer_when_writer_unspecified(self):
+    def test_save_at_corpus_path_with_default_writer_when_writer_unspecified(self, tmpdir):
         corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('default'))
 
         assert corpus.name == 'default'
         assert corpus.path == resources.sample_corpus_path('default')
-        assert corpus.num_files == 4
+        assert corpus.num_tracks == 6
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 0
 
-        corpus.path = self.tempdir
+        corpus.path = tmpdir.strpath
         corpus.save()
 
-        tempdir_contents = os.listdir(self.tempdir)
-        assert len(tempdir_contents) == 9
+        tempdir_contents = os.listdir(tmpdir.strpath)
+        assert len(tempdir_contents) == 10
 
         assert 'files.txt' in tempdir_contents
         assert 'issuers.json' in tempdir_contents
@@ -329,24 +343,24 @@ class CorpusTest(unittest.TestCase):
         assert 'utt_issuers.txt' in tempdir_contents
         assert 'utterances.txt' in tempdir_contents
 
-    def test_save_at_corpus_path_with_writer_specified_by_name(self):
+    def test_save_at_corpus_path_with_writer_specified_by_name(self, tmpdir):
         corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('kaldi'), reader='kaldi')
 
         assert corpus.name == 'kaldi'
         assert corpus.path == resources.sample_corpus_path('kaldi')
-        assert corpus.path != self.tempdir
-        assert corpus.num_files == 4
+        assert corpus.path != tmpdir.strpath
+        assert corpus.num_tracks == 4
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 0
 
-        corpus.path = self.tempdir
+        corpus.path = tmpdir.strpath
         corpus.save(writer='kaldi')
 
-        assert corpus.path == self.tempdir
+        assert corpus.path == tmpdir.strpath
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 5
 
         assert 'segments' in tempdir_contents
@@ -355,24 +369,24 @@ class CorpusTest(unittest.TestCase):
         assert 'utt2spk' in tempdir_contents
         assert 'wav.scp' in tempdir_contents
 
-    def test_save_at_corpus_path_with_writer_specified_by_instance(self):
+    def test_save_at_corpus_path_with_writer_specified_by_instance(self, tmpdir):
         corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('kaldi'), reader='kaldi')
 
         assert corpus.name == 'kaldi'
         assert corpus.path == resources.sample_corpus_path('kaldi')
-        assert corpus.path != self.tempdir
-        assert corpus.num_files == 4
+        assert corpus.path != tmpdir.strpath
+        assert corpus.num_tracks == 4
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 0
 
-        corpus.path = self.tempdir
+        corpus.path = tmpdir.strpath
         corpus.save(writer=KaldiWriter())
 
-        assert corpus.path == self.tempdir
+        assert corpus.path == tmpdir.strpath
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 5
 
         assert 'segments' in tempdir_contents
@@ -381,37 +395,37 @@ class CorpusTest(unittest.TestCase):
         assert 'utt2spk' in tempdir_contents
         assert 'wav.scp' in tempdir_contents
 
-    def test_save_at_path_throws_exception_when_writer_does_not_exist(self):
+    def test_save_at_path_throws_exception_when_writer_does_not_exist(self, tmpdir):
         corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('default'))
 
         assert corpus.name == 'default'
         assert corpus.path == resources.sample_corpus_path('default')
-        assert corpus.num_files == 4
+        assert corpus.num_tracks == 6
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 0
 
         with pytest.raises(UnknownWriterException):
-            corpus.save_at(self.tempdir, writer='does_not_exist')
+            corpus.save_at(tmpdir.strpath, writer='does_not_exist')
 
-        assert len(os.listdir(self.tempdir)) == 0
+        assert len(os.listdir(tmpdir.strpath)) == 0
 
-    def test_save_at_path_with_default_writer_when_writer_unspecified(self):
+    def test_save_at_path_with_default_writer_when_writer_unspecified(self, tmpdir):
         corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('default'))
 
         assert corpus.name == 'default'
         assert corpus.path == resources.sample_corpus_path('default')
-        assert corpus.num_files == 4
+        assert corpus.num_tracks == 6
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 0
 
-        corpus.save_at(self.tempdir)
+        corpus.save_at(tmpdir.strpath)
 
-        tempdir_contents = os.listdir(self.tempdir)
-        assert len(tempdir_contents) == 9
+        tempdir_contents = os.listdir(tmpdir.strpath)
+        assert len(tempdir_contents) == 10
 
         assert 'files.txt' in tempdir_contents
         assert 'issuers.json' in tempdir_contents
@@ -420,23 +434,23 @@ class CorpusTest(unittest.TestCase):
         assert 'utt_issuers.txt' in tempdir_contents
         assert 'utterances.txt' in tempdir_contents
 
-    def test_save_at_path_with_writer_specified_by_name(self):
+    def test_save_at_path_with_writer_specified_by_name(self, tmpdir):
         corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('kaldi'), reader='kaldi')
 
         assert corpus.name == 'kaldi'
         assert corpus.path == resources.sample_corpus_path('kaldi')
-        assert corpus.path != self.tempdir
-        assert corpus.num_files == 4
+        assert corpus.path != tmpdir.strpath
+        assert corpus.num_tracks == 4
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 0
 
-        corpus.save_at(self.tempdir, writer='kaldi')
+        corpus.save_at(tmpdir.strpath, writer='kaldi')
 
-        assert corpus.path == self.tempdir
+        assert corpus.path == tmpdir.strpath
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 5
 
         assert 'segments' in tempdir_contents
@@ -445,23 +459,23 @@ class CorpusTest(unittest.TestCase):
         assert 'utt2spk' in tempdir_contents
         assert 'wav.scp' in tempdir_contents
 
-    def test_save_at_path_with_writer_specified_by_instance(self):
+    def test_save_at_path_with_writer_specified_by_instance(self, tmpdir):
         corpus = audiomate.Corpus()
         corpus = corpus.load(resources.sample_corpus_path('kaldi'), reader='kaldi')
 
         assert corpus.name == 'kaldi'
         assert corpus.path == resources.sample_corpus_path('kaldi')
-        assert corpus.path != self.tempdir
-        assert corpus.num_files == 4
+        assert corpus.path != tmpdir.strpath
+        assert corpus.num_tracks == 4
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 0
 
-        corpus.save_at(self.tempdir, writer=KaldiWriter())
+        corpus.save_at(tmpdir.strpath, writer=KaldiWriter())
 
-        assert corpus.path == self.tempdir
+        assert corpus.path == tmpdir.strpath
 
-        tempdir_contents = os.listdir(self.tempdir)
+        tempdir_contents = os.listdir(tmpdir.strpath)
         assert len(tempdir_contents) == 5
 
         assert 'segments' in tempdir_contents
@@ -470,19 +484,21 @@ class CorpusTest(unittest.TestCase):
         assert 'utt2spk' in tempdir_contents
         assert 'wav.scp' in tempdir_contents
 
-    def test_merge_corpus_files(self):
+    def test_merge_corpus_tracks(self):
         main_corpus = resources.create_dataset()
         merging_corpus = resources.create_multi_label_corpus()
 
         main_corpus.merge_corpus(merging_corpus)
 
-        assert main_corpus.num_files == 8
+        assert main_corpus.num_tracks == 8
 
-        assert set(main_corpus.files.keys()) == {'wav-1', 'wav_2', 'wav_3', 'wav_4',
-                                                 'wav-1_1', 'wav_2_1', 'wav_3_1', 'wav_4_1'}
+        assert set(main_corpus.tracks.keys()) == {
+            'wav-1', 'wav_2', 'wav_3', 'wav_4',
+            'wav-1_1', 'wav_2_1', 'wav_3_1', 'wav_4_1'
+        }
 
-        assert main_corpus.files['wav-1_1'].idx == 'wav-1_1'
-        assert main_corpus.files['wav-1_1'].path == merging_corpus.files['wav-1'].path
+        assert main_corpus.tracks['wav-1_1'].idx == 'wav-1_1'
+        assert main_corpus.tracks['wav-1_1'].path == merging_corpus.tracks['wav-1'].path
 
     def test_merge_corpus_issuers(self):
         main_corpus = resources.create_dataset()
@@ -492,8 +508,10 @@ class CorpusTest(unittest.TestCase):
 
         assert main_corpus.num_issuers == 6
 
-        assert set(main_corpus.issuers.keys()) == {'spk-1', 'spk-2', 'spk-3',
-                                                   'spk-1_1', 'spk-2_1', 'spk-3_1'}
+        assert set(main_corpus.issuers.keys()) == {
+            'spk-1', 'spk-2', 'spk-3',
+            'spk-1_1', 'spk-2_1', 'spk-3_1'
+        }
 
         assert main_corpus.issuers['spk-1_1'].idx == 'spk-1_1'
         assert main_corpus.issuers['spk-1_1'].info == merging_corpus.issuers['spk-1'].info
@@ -507,11 +525,13 @@ class CorpusTest(unittest.TestCase):
 
         assert main_corpus.num_utterances == 13
 
-        assert set(main_corpus.utterances.keys()) == {'utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5',
-                                                      'utt-1_1', 'utt-2_1', 'utt-3_1', 'utt-4_1', 'utt-5_1',
-                                                      'utt-6', 'utt-7', 'utt-8'}
+        assert set(main_corpus.utterances.keys()) == {
+            'utt-1', 'utt-2', 'utt-3', 'utt-4', 'utt-5',
+            'utt-1_1', 'utt-2_1', 'utt-3_1', 'utt-4_1',
+            'utt-5_1', 'utt-6', 'utt-7', 'utt-8'
+        }
 
-        assert main_corpus.utterances['utt-2_1'].file == main_corpus.files['wav_2_1']
+        assert main_corpus.utterances['utt-2_1'].track == main_corpus.tracks['wav_2_1']
         assert main_corpus.utterances['utt-2_1'].issuer == main_corpus.issuers['spk-1_1']
         assert main_corpus.utterances['utt-2_1'].start == merging_corpus.utterances['utt-2'].start
         assert main_corpus.utterances['utt-2_1'].end == merging_corpus.utterances['utt-2'].end
@@ -544,7 +564,9 @@ class CorpusTest(unittest.TestCase):
 
         assert main_corpus.subviews.keys() == {'train', 'dev', 'train_1', 'dev_1'}
         assert main_corpus.subviews['train_1'].corpus == main_corpus
-        assert set(main_corpus.subviews['train_1'].filter_criteria[0].utterance_idxs) == {'utt-4_1', 'utt-5_1', 'utt-6'}
+        assert set(main_corpus.subviews['train_1'].filter_criteria[0].utterance_idxs) == {
+            'utt-4_1', 'utt-5_1', 'utt-6'
+        }
 
     def test_merge_corpus_feature_containers(self):
         main_corpus = resources.create_dataset()
@@ -554,9 +576,12 @@ class CorpusTest(unittest.TestCase):
 
         assert main_corpus.num_feature_containers == 4
 
-        assert set(main_corpus.feature_containers.keys()) == {'mfcc', 'mel', 'mfcc_1', 'energy'}
-        assert main_corpus.feature_containers['mfcc_1'].path == merging_corpus.feature_containers['mfcc'].path
-        assert main_corpus.feature_containers['energy'].path == merging_corpus.feature_containers['energy'].path
+        main_feats = main_corpus.feature_containers
+        merge_feats = merging_corpus.feature_containers
+
+        assert set(main_feats.keys()) == {'mfcc', 'mel', 'mfcc_1', 'energy'}
+        assert main_feats['mfcc_1'].path == merge_feats['mfcc'].path
+        assert main_feats['energy'].path == merge_feats['energy'].path
 
     def test_merge_corpora(self):
         ds1 = resources.create_dataset()
@@ -565,8 +590,40 @@ class CorpusTest(unittest.TestCase):
 
         ds = audiomate.Corpus.merge_corpora([ds1, ds2, ds3])
 
-        assert ds.num_files == 12
+        assert ds.num_tracks == 12
         assert ds.num_utterances == 21
         assert ds.num_issuers == 9
         assert ds.num_subviews == 4
         assert ds.num_feature_containers == 4
+
+    #
+    # Varia
+    #
+
+    def test_relocate_audio_to_single_container(self, tmpdir):
+        corpus = audiomate.Corpus.load(resources.sample_corpus_path('default'))
+
+        target_container_path = os.path.join(tmpdir.strpath, 'audio')
+        corpus.relocate_audio_to_single_container(target_container_path)
+
+        assert os.path.isfile(target_container_path)
+
+        cont = containers.AudioContainer(target_container_path)
+        cont.open()
+
+        assert cont.keys() == [
+            'file-1',
+            'file-2',
+            'file-3',
+            'file-4',
+            'file-5',
+            'file-6',
+        ]
+
+        assert corpus.tracks['file-1'].idx == 'file-1'
+        assert corpus.tracks['file-1'].container.path == cont.path
+
+        assert corpus.utterances['utt-1'].track.idx == 'file-1'
+        assert corpus.utterances['utt-1'].track.container.path == cont.path
+
+        cont.close()

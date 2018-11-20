@@ -5,7 +5,10 @@ import re
 import json
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import containers
+from audiomate import tracks
+from audiomate import annotations
+from audiomate import issuers
 from audiomate.corpus.subset import subview
 from audiomate.utils import textfile
 from audiomate.utils import jsonfile
@@ -17,6 +20,7 @@ UTTERANCE_FILE_NAME = 'utterances.txt'
 UTT_ISSUER_FILE_NAME = 'utt_issuers.txt'
 LABEL_FILE_PREFIX = 'labels'
 FEAT_CONTAINER_FILE_NAME = 'features.txt'
+AUDIO_CONTAINER_FILE_NAME = 'audio.txt'
 SUBVIEW_FILE_PREFIX = 'subview'
 
 LABEL_META_REGEX = r'(.*) \[(\{.*\})\]'
@@ -46,6 +50,7 @@ class DefaultReader(base.CorpusReader):
 
     def _load(self, path):
         file_path = os.path.join(path, FILES_FILE_NAME)
+        audio_path = os.path.join(path, AUDIO_CONTAINER_FILE_NAME)
         issuer_path = os.path.join(path, ISSUER_FILE_NAME)
         utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
         utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
@@ -54,6 +59,7 @@ class DefaultReader(base.CorpusReader):
         corpus = audiomate.Corpus(path=path)
 
         DefaultReader.read_files(file_path, corpus)
+        DefaultReader.read_tracks_from_audio_containers(audio_path, corpus)
         DefaultReader.read_issuers(issuer_path, corpus)
         utt_id_to_issuer = DefaultReader.read_utt_to_issuer_mapping(utt_issuer_path, corpus)
         DefaultReader.read_utterances(utterance_path, corpus, utt_id_to_issuer)
@@ -67,7 +73,7 @@ class DefaultReader(base.CorpusReader):
     def read_files(file_path, corpus):
         path = os.path.dirname(file_path)
         for file_idx, file_path in textfile.read_key_value_lines(file_path, separator=' ').items():
-            corpus.new_file(os.path.join(path, file_path), file_idx=file_idx, copy_file=False)
+            corpus.new_file(os.path.join(path, file_path), track_idx=file_idx, copy_file=False)
 
     @staticmethod
     def read_issuers(file_path, corpus):
@@ -81,23 +87,23 @@ class DefaultReader(base.CorpusReader):
             issuer_info = issuer_data.get('info', {})
 
             if issuer_type == 'speaker':
-                gender = assets.Gender(issuer_data.get('gender', 'unknown').lower())
-                age_group = assets.AgeGroup(issuer_data.get('age_group', 'unknown').lower())
+                gender = issuers.Gender(issuer_data.get('gender', 'unknown').lower())
+                age_group = issuers.AgeGroup(issuer_data.get('age_group', 'unknown').lower())
                 native_language = issuer_data.get('native_language', None)
 
-                issuer = assets.Speaker(issuer_idx,
-                                        gender=gender,
-                                        age_group=age_group,
-                                        native_language=native_language,
-                                        info=issuer_info)
+                issuer = issuers.Speaker(issuer_idx,
+                                         gender=gender,
+                                         age_group=age_group,
+                                         native_language=native_language,
+                                         info=issuer_info)
             elif issuer_type == 'artist':
                 name = issuer_data.get('name', None)
 
-                issuer = assets.Artist(issuer_idx,
-                                       name=name,
-                                       info=issuer_info)
+                issuer = issuers.Artist(issuer_idx,
+                                        name=name,
+                                        info=issuer_info)
             else:
-                issuer = assets.Issuer(issuer_idx, info=issuer_info)
+                issuer = issuers.Issuer(issuer_idx, info=issuer_info)
 
             corpus.import_issuers(issuer)
 
@@ -157,10 +163,10 @@ class DefaultReader(base.CorpusReader):
                     meta = json.loads(meta_json)
                     label = meta_match.group(1)
 
-                utterance_labels[record[0]].append(assets.Label(label, start, end, meta=meta))
+                utterance_labels[record[0]].append(annotations.Label(label, start, end, meta=meta))
 
             for utterance_idx, labels in utterance_labels.items():
-                ll = assets.LabelList(idx=key, labels=labels)
+                ll = annotations.LabelList(idx=key, labels=labels)
                 corpus.utterances[utterance_idx].set_label_list(ll)
 
     @staticmethod
@@ -170,6 +176,30 @@ class DefaultReader(base.CorpusReader):
             containers = textfile.read_key_value_lines(feat_path, separator=' ')
             for container_name, container_path in containers.items():
                 corpus.new_feature_container(container_name, path=os.path.join(base_path, container_path))
+
+    @staticmethod
+    def read_tracks_from_audio_containers(audio_path, corpus):
+        if os.path.isfile(audio_path):
+            base_path = os.path.dirname(audio_path)
+            audio_tracks = textfile.read_separated_lines(audio_path,
+                                                         separator=' ',
+                                                         max_columns=3)
+
+            audio_containers = {}
+
+            for entry in audio_tracks:
+                track_idx = entry[0]
+                container_path = entry[1]
+                key = entry[2]
+
+                if container_path in audio_containers.keys():
+                    container = audio_containers[key]
+                else:
+                    abs_path = os.path.abspath(os.path.join(base_path, container_path))
+                    container = containers.AudioContainer(abs_path)
+
+                track = tracks.ContainerTrack(track_idx, container, key)
+                corpus.import_tracks(track)
 
     @staticmethod
     def read_subviews(path, corpus):
@@ -195,12 +225,14 @@ class DefaultWriter(base.CorpusWriter):
 
     def _save(self, corpus, path):
         file_path = os.path.join(path, FILES_FILE_NAME)
+        audio_path = os.path.join(path, AUDIO_CONTAINER_FILE_NAME)
         issuer_path = os.path.join(path, ISSUER_FILE_NAME)
         utterance_path = os.path.join(path, UTTERANCE_FILE_NAME)
         utt_issuer_path = os.path.join(path, UTT_ISSUER_FILE_NAME)
         container_path = os.path.join(path, FEAT_CONTAINER_FILE_NAME)
 
-        DefaultWriter.write_files(file_path, corpus, path)
+        DefaultWriter.write_file_tracks(file_path, corpus, path)
+        DefaultWriter.write_container_tracks(audio_path, corpus, path)
         DefaultWriter.write_issuers(issuer_path, corpus)
         DefaultWriter.write_utterances(utterance_path, corpus)
         DefaultWriter.write_utt_to_issuer_mapping(utt_issuer_path, corpus)
@@ -209,9 +241,37 @@ class DefaultWriter(base.CorpusWriter):
         DefaultWriter.write_subviews(path, corpus)
 
     @staticmethod
-    def write_files(file_path, corpus, path):
-        file_records = [[file.idx, os.path.relpath(file.path, path)] for file in corpus.files.values()]
+    def write_file_tracks(file_path, corpus, path):
+        file_records = []
+
+        for file in corpus.tracks.values():
+            if isinstance(file, tracks.FileTrack):
+                file_records.append([
+                    file.idx,
+                    os.path.relpath(file.path, path)
+                ])
+
         textfile.write_separated_lines(file_path, file_records, separator=' ', sort_by_column=0)
+
+    @staticmethod
+    def write_container_tracks(audio_path, corpus, path):
+        container_records = set({})
+
+        for track in corpus.tracks.values():
+            if isinstance(track, tracks.ContainerTrack):
+                rel_path = os.path.relpath(track.container.path, path)
+                container_records.add((
+                    track.idx,
+                    rel_path,
+                    track.key
+                ))
+
+        textfile.write_separated_lines(
+            audio_path,
+            container_records,
+            separator=' ',
+            sort_by_column=0
+        )
 
     @staticmethod
     def write_issuers(file_path, corpus):
@@ -223,19 +283,19 @@ class DefaultWriter(base.CorpusWriter):
             if issuer.info is not None and len(issuer.info) > 0:
                 issuer_data['info'] = issuer.info
 
-            if type(issuer) == assets.Speaker:
+            if type(issuer) == issuers.Speaker:
                 issuer_data['type'] = 'speaker'
 
-                if issuer.gender != assets.Gender.UNKNOWN:
+                if issuer.gender != issuers.Gender.UNKNOWN:
                     issuer_data['gender'] = issuer.gender.value
 
-                if issuer.age_group != assets.AgeGroup.UNKNOWN:
+                if issuer.age_group != issuers.AgeGroup.UNKNOWN:
                     issuer_data['age_group'] = issuer.age_group.value
 
                 if issuer.native_language not in ['', None]:
                     issuer_data['native_language'] = issuer.native_language
 
-            elif type(issuer) == assets.Artist:
+            elif type(issuer) == issuers.Artist:
                 if issuer.name not in ['', None]:
                     issuer_data['name'] = issuer.name
 
@@ -245,7 +305,7 @@ class DefaultWriter(base.CorpusWriter):
 
     @staticmethod
     def write_utterances(utterance_path, corpus):
-        utterance_records = {utterance.idx: [utterance.file.idx, utterance.start, utterance.end] for
+        utterance_records = {utterance.idx: [utterance.track.idx, utterance.start, utterance.end] for
                              utterance in corpus.utterances.values()}
         textfile.write_separated_lines(utterance_path, utterance_records, separator=' ', sort_by_column=0)
 

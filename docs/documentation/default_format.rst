@@ -146,3 +146,20 @@ Example:
 
     mfcc mfcc_features
     fbank fbank_features
+
+**audio.txt**
+
+Contains a list of tracks that are stored in audio-containers.
+Every entry consists of a track-id, the relative path to the container and
+a key that identifies the track in the audio-container.
+
+.. code-block:: bash
+
+    <track-id> <audio-container-path> <audio-container-key>
+
+Example:
+
+.. code-block:: bash
+
+    track-1 ../audio.hdf5 track-1
+    track-2 ../audio.hdf5 track-2x

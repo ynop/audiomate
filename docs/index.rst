@@ -28,13 +28,17 @@ This should ease the use of audio datasets for example for machine learning task
     :maxdepth: 2
     :caption: Package Reference
 
+    reference/tracks
+    reference/annotations
+    reference/issuers
+    reference/containers
     reference/corpus
-    reference/assets
     reference/io
     reference/subset
     reference/validation
-    reference/corpus_utils
     reference/processing
+    reference/encoding
+    reference/feeding
     reference/formats
     reference/utils
 

@@ -2,7 +2,9 @@ import copy
 import os
 import shutil
 
-from audiomate.corpus import assets
+from audiomate import tracks
+from audiomate import containers
+from audiomate import issuers
 from audiomate.utils import naming
 from . import base
 from . import subset
@@ -15,7 +17,7 @@ class Corpus(base.CorpusView):
     """
     The Corpus class represents a single corpus.
     It extends :py:class:`audiomate.corpus.CorpusView` with the functionality for loading and saving.
-    Furthermore it provides the functionality for adding/modifying assets of the corpus like files
+    Furthermore it provides the functionality for adding/modifying assets of the corpus like tracks
     and utterances.
 
     Args:
@@ -26,7 +28,7 @@ class Corpus(base.CorpusView):
         super(Corpus, self).__init__()
 
         self.path = path
-        self._files = {}
+        self._tracks = {}
         self._utterances = {}
         self._issuers = {}
         self._feature_containers = {}
@@ -40,8 +42,8 @@ class Corpus(base.CorpusView):
             return os.path.basename(os.path.abspath(self.path))
 
     @property
-    def files(self):
-        return self._files
+    def tracks(self):
+        return self._tracks
 
     @property
     def utterances(self):
@@ -120,29 +122,29 @@ class Corpus(base.CorpusView):
         return reader.load(path)
 
     #
-    # File
+    # Track
     #
 
-    def new_file(self, path, file_idx, copy_file=False):
+    def new_file(self, path, track_idx, copy_file=False):
         """
-        Adds a new file to the corpus with the given data.
+        Adds a new audio file to the corpus with the given data.
 
         Parameters:
             path (str): Path of the file to add.
-            file_idx (str): The id to associate the file with.
+            track_idx (str): The id to associate the file-track with.
             copy_file (bool): If True the file is copied to the data set folder, otherwise the given
                               path is used directly.
 
         Returns:
-            File: The newly added File.
+            FileTrack: The newly added file.
         """
 
-        new_file_idx = file_idx
+        new_file_idx = track_idx
         new_file_path = os.path.abspath(path)
 
         # Add index to idx if already existing
-        if new_file_idx in self._files.keys():
-            new_file_idx = naming.index_name_if_in_list(new_file_idx, self._files.keys())
+        if new_file_idx in self._tracks.keys():
+            new_file_idx = naming.index_name_if_in_list(new_file_idx, self._tracks.keys())
 
         # Copy file to default file dir
         if copy_file:
@@ -157,38 +159,38 @@ class Corpus(base.CorpusView):
             shutil.copy(path, new_file_path)
 
         # Create file obj
-        new_file = assets.File(new_file_idx, new_file_path)
-        self._files[new_file_idx] = new_file
+        new_file = tracks.FileTrack(new_file_idx, new_file_path)
+        self._tracks[new_file_idx] = new_file
 
         return new_file
 
-    def import_files(self, files):
+    def import_tracks(self, import_tracks):
         """
-        Add the given files/file to the corpus.
-        If any of the given file-ids already exists, a suffix is appended so it is unique.
+        Add the given tracks/track to the corpus.
+        If any of the given track-ids already exists, a suffix is appended so it is unique.
 
         Args:
-            files (list): Either a list of or a single :py:class:`audiomate.corpus.assets.File`.
+            import_tracks (list): Either a list of or a single :py:class:`audiomate.tracks.Track`.
 
         Returns:
-            dict: A dictionary containing file idx mappings (old-file-idx/file-instance).
-                  If a file is imported, whose id already exists this mapping can be used to check
+            dict: A dictionary containing track-idx mappings (old-track-idx/track-instance).
+                  If a track is imported, whose idx already exists this mapping can be used to check
                   the new id.
         """
 
-        if isinstance(files, assets.File):
-            files = [files]
+        if isinstance(import_tracks, tracks.Track):
+            import_tracks = [import_tracks]
 
         idx_mapping = {}
 
-        for file in files:
-            idx_mapping[file.idx] = file
+        for track in import_tracks:
+            idx_mapping[track.idx] = track
 
             # Add index to idx if already existing
-            if file.idx in self._files.keys():
-                file.idx = naming.index_name_if_in_list(file.idx, self._files.keys())
+            if track.idx in self._tracks.keys():
+                track.idx = naming.index_name_if_in_list(track.idx, self._tracks.keys())
 
-            self._files[file.idx] = file
+            self._tracks[track.idx] = track
 
         return idx_mapping
 
@@ -196,18 +198,18 @@ class Corpus(base.CorpusView):
     #   Utterances
     #
 
-    def new_utterance(self, utterance_idx, file_idx, issuer_idx=None, start=0, end=-1):
+    def new_utterance(self, utterance_idx, track_idx, issuer_idx=None, start=0, end=-1):
         """
         Add a new utterance to the corpus with the given data.
 
         Parameters:
-            file_idx (str): The file id the utterance is in.
-            utterance_idx (str): The id to associate with the utterance. If None or already exists,
-                                 one is generated.
+            track_idx (str): The track id the utterance is in.
+            utterance_idx (str): The id to associate with the utterance.
+                                 If None or already exists, one is generated.
             issuer_idx (str): The issuer id to associate with the utterance.
-            start (float): Start of the utterance within the file [seconds].
-            end (float): End of the utterance within the file [seconds]. -1 equals the end of the
-                         file.
+            start (float): Start of the utterance within the track [seconds].
+            end (float): End of the utterance within the track [seconds].
+                         -1 equals the end of the track.
 
         Returns:
             Utterance: The newly added utterance.
@@ -215,9 +217,9 @@ class Corpus(base.CorpusView):
 
         new_utt_idx = utterance_idx
 
-        # Check if there is a file with the given idx
-        if file_idx not in self._files.keys():
-            raise ValueError('File with id {} does not exist!'.format(file_idx))
+        # Check if there is a track with the given idx
+        if track_idx not in self._tracks.keys():
+            raise ValueError('Track with id {} does not exist!'.format(track_idx))
 
         # Check if issuer exists
         issuer = None
@@ -232,8 +234,8 @@ class Corpus(base.CorpusView):
         if new_utt_idx in self._utterances.keys():
             new_utt_idx = naming.index_name_if_in_list(new_utt_idx, self._utterances.keys())
 
-        new_utt = assets.Utterance(new_utt_idx,
-                                   self.files[file_idx],
+        new_utt = tracks.Utterance(new_utt_idx,
+                                   self.tracks[track_idx],
                                    issuer=issuer,
                                    start=start,
                                    end=end)
@@ -248,15 +250,15 @@ class Corpus(base.CorpusView):
         If any of the given utterance-ids already exists, a suffix is appended so it is unique.
 
         Args:
-            utterances (list): Either a list of or a single :py:class:`audiomate.corpus.assets.Utterance`.
+            utterances (list): Either a list of or a single :py:class:`audiomate.tracks.Utterance`.
 
         Returns:
-            dict: A dictionary containing file idx mappings (old-utterance-idx/utterance-instance).
+            dict: A dictionary containing idx mappings (old-utterance-idx/utterance-instance).
                   If a utterance is imported, whose id already exists this mapping can be used to
                   check the new id.
         """
 
-        if isinstance(utterances, assets.Utterance):
+        if isinstance(utterances, tracks.Utterance):
             utterances = [utterances]
 
         idx_mapping = {}
@@ -264,9 +266,9 @@ class Corpus(base.CorpusView):
         for utterance in utterances:
             idx_mapping[utterance.idx] = utterance
 
-            # Check if there is a file with the given idx
-            if utterance.file not in self._files.values():
-                raise ValueError('File with id {} is not in the corpus.'.format(utterance.file.idx, utterance.idx))
+            # Check if there is a track with the given idx
+            if utterance.track not in self._tracks.values():
+                raise ValueError('Track with id {} is not in the corpus.'.format(utterance.track.idx, utterance.idx))
 
             # Check if there is a issuer with the given idx
             if utterance.issuer is not None and utterance.issuer not in self._issuers.values():
@@ -304,31 +306,31 @@ class Corpus(base.CorpusView):
         if new_issuer_idx in self._issuers.keys():
             new_issuer_idx = naming.index_name_if_in_list(new_issuer_idx, self._issuers.keys())
 
-        new_issuer = assets.Issuer(new_issuer_idx, info=info)
+        new_issuer = issuers.Issuer(new_issuer_idx, info=info)
         self._issuers[new_issuer_idx] = new_issuer
 
         return new_issuer
 
-    def import_issuers(self, issuers):
+    def import_issuers(self, new_issuers):
         """
         Add the given issuers/issuer to the corpus.
         If any of the given issuer-ids already exists, a suffix is appended so it is unique.
 
         Args:
-            issuers (list): Either a list of or a single :py:class:`audiomate.corpus.assets.Issuer`.
+            issuers (list): Either a list of or a single :py:class:`audiomate.issuers.Issuer`.
 
         Returns:
-            dict: A dictionary containing file idx mappings (old-issuer-idx/issuer-instance).
+            dict: A dictionary containing idx mappings (old-issuer-idx/issuer-instance).
                   If a issuer is imported, whose id already exists this mapping can be used to check
                   the new id.
         """
 
-        if isinstance(issuers, assets.Issuer):
-            issuers = [issuers]
+        if isinstance(new_issuers, issuers.Issuer):
+            new_issuers = [new_issuers]
 
         idx_mapping = {}
 
-        for issuer in issuers:
+        for issuer in new_issuers:
             idx_mapping[issuer.idx] = issuer
 
             # Add index to idx if already existing
@@ -372,10 +374,10 @@ class Corpus(base.CorpusView):
         else:
             new_feature_path = os.path.abspath(new_feature_path)
 
-        container = assets.FeatureContainer(new_feature_path)
-        self._feature_containers[new_feature_idx] = container
+        feat_container = containers.FeatureContainer(new_feature_path)
+        self._feature_containers[new_feature_idx] = feat_container
 
-        return container
+        return feat_container
 
     #
     #   Subviews
@@ -400,8 +402,8 @@ class Corpus(base.CorpusView):
 
     def merge_corpus(self, corpus):
         """
-        Merge the given corpus into this corpus. All assets (files, utterances, issuers, ...) are copied into
-        this corpus. If any ids (utt-idx, file-idx, issuer-idx, subview-idx, ...) are occurring in both corpora,
+        Merge the given corpus into this corpus. All assets (tracks, utterances, issuers, ...) are copied into
+        this corpus. If any ids (utt-idx, track-idx, issuer-idx, subview-idx, ...) are occurring in both corpora,
         the ids from the merging corpus are suffixed by a number (starting from 1 until no other is matching).
 
         Args:
@@ -411,7 +413,7 @@ class Corpus(base.CorpusView):
         # Create a copy, so objects aren't changed in the original merging corpus
         merging_corpus = Corpus.from_corpus(corpus)
 
-        self.import_files(corpus.files.values())
+        self.import_tracks(corpus.tracks.values())
         self.import_issuers(corpus.issuers.values())
         utterance_idx_mapping = self.import_utterances(corpus.utterances.values())
 
@@ -428,6 +430,42 @@ class Corpus(base.CorpusView):
 
         for feat_container_idx, feat_container in merging_corpus.feature_containers.items():
             self.new_feature_container(feat_container_idx, feat_container.path)
+
+    #
+    #   VARIA
+    #
+
+    def relocate_audio_to_single_container(self, target_path):
+        """
+        Copies every track to a single container.
+        Afterwards all tracks in the container are linked against
+        this single container.
+        """
+
+        cont = containers.AudioContainer(target_path)
+        cont.open()
+
+        new_tracks = {}
+
+        # First create a new container track for all existing tracks
+        for track in self.tracks.values():
+            sr = track.sampling_rate
+            samples = track.read_samples()
+
+            cont.set(track.idx, samples, sr)
+            new_track = tracks.ContainerTrack(track.idx, cont)
+
+            new_tracks[track.idx] = new_track
+
+        # Update track list of corpus
+        self._tracks = new_tracks
+
+        # Update utterances to point to new tracks
+        for utterance in self.utterances.values():
+            new_track = self.tracks[utterance.track.idx]
+            utterance.track = new_track
+
+        cont.close()
 
     #
     #   Creation
@@ -448,18 +486,18 @@ class Corpus(base.CorpusView):
 
         ds = Corpus()
 
-        # Files
-        files = copy.deepcopy(list(corpus.files.values()))
-        file_mapping = ds.import_files(files)
+        # Tracks
+        tracks = copy.deepcopy(list(corpus.tracks.values()))
+        track_mapping = ds.import_tracks(tracks)
 
         # Issuers
         issuers = copy.deepcopy(list(corpus.issuers.values()))
         issuer_mapping = ds.import_issuers(issuers)
 
-        # Utterances, with replacing changed file- and issuer-ids
+        # Utterances, with replacing changed track- and issuer-ids
         utterances = copy.deepcopy(list(corpus.utterances.values()))
         for utterance in utterances:
-            utterance.file = file_mapping[utterance.file.idx]
+            utterance.track = track_mapping[utterance.track.idx]
 
             if utterance.issuer is not None:
                 utterance.issuer = issuer_mapping[utterance.issuer.idx]

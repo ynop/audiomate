@@ -2,7 +2,8 @@ import os
 import glob
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import annotations
+from audiomate import issuers
 from audiomate.corpus import subset
 from audiomate.utils import download
 from audiomate.utils import files
@@ -100,11 +101,15 @@ class CommonVoiceReader(base.CorpusReader):
             file_path = os.path.join(path, rel_file_path)
 
             corpus.new_file(file_path, idx)
-            issuer = assets.Speaker(idx, gender=gender, age_group=age)
+            issuer = issuers.Speaker(idx, gender=gender, age_group=age)
             corpus.import_issuers(issuer)
             utterance = corpus.new_utterance(idx, idx, issuer.idx)
-            utterance.set_label_list(assets.LabelList.create_single(transcription,
-                                                                    idx=audiomate.corpus.LL_WORD_TRANSCRIPT))
+            utterance.set_label_list(
+                annotations.LabelList.create_single(
+                    transcription,
+                    idx=audiomate.corpus.LL_WORD_TRANSCRIPT
+                )
+            )
 
             utt_ids.append(idx)
 
@@ -117,21 +122,21 @@ class CommonVoiceReader(base.CorpusReader):
         """ Map age to correct age-group. """
 
         if age in [None, '']:
-            return assets.AgeGroup.UNKNOWN
+            return issuers.AgeGroup.UNKNOWN
         elif age == 'teens':
-            return assets.AgeGroup.YOUTH
+            return issuers.AgeGroup.YOUTH
         elif age in ['sixties', 'seventies', 'eighties', 'nineties']:
-            return assets.AgeGroup.SENIOR
+            return issuers.AgeGroup.SENIOR
         else:
-            return assets.AgeGroup.ADULT
+            return issuers.AgeGroup.ADULT
 
     @staticmethod
     def map_gender(gender):
         """ Map gender to correct value. """
 
         if gender == 'male':
-            return assets.Gender.MALE
+            return issuers.Gender.MALE
         elif gender == 'female':
-            return assets.Gender.FEMALE
+            return issuers.Gender.FEMALE
         else:
-            return assets.Gender.UNKNOWN
+            return issuers.Gender.UNKNOWN

@@ -18,8 +18,8 @@ def remove_punctuation(text, exceptions=[]):
     """
 
     all_but = [
-        '\w',
-        '\s'
+        r'\w',
+        r'\s'
     ]
 
     all_but.extend(exceptions)

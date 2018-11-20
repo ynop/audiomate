@@ -1,6 +1,7 @@
 import numpy as np
 import librosa
 
+from audiomate import tracks
 from audiomate.processing import pipeline
 
 from tests import resources
@@ -41,8 +42,9 @@ class TestTempogram:
         exp_tgram = librosa.feature.tempogram(onset_envelope=onsets, sr=sr, win_length=4, center=True).T
 
         # ACTUAL
+        test_file = tracks.FileTrack('idx', test_file_path)
         tgram_step = pipeline.Tempogram(win_length=4)
-        tgram_gen = tgram_step.process_file_online(test_file_path, 2048, 1024, chunk_size=5)
+        tgram_gen = tgram_step.process_track_online(test_file, 2048, 1024, chunk_size=5)
 
         chunks = list(tgram_gen)
         tgrams = np.vstack(chunks)

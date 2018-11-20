@@ -4,8 +4,8 @@ import pytest
 import requests_mock
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus.io import common_voice
-from audiomate.corpus import assets
 
 from tests import resources
 
@@ -45,10 +45,10 @@ class TestCommonVoiceDownloader:
 
 class TestCommonVoiceReader:
 
-    def test_load_correct_number_of_files(self, reader, data_path):
+    def test_load_correct_number_of_tracks(self, reader, data_path):
         ds = reader.load(data_path)
 
-        assert ds.num_files == 7
+        assert ds.num_tracks == 7
 
     @pytest.mark.parametrize('idx,path', [
         ('cv-valid-dev-sample-000000', os.path.join('cv-valid-dev', 'sample-000000.mp3')),
@@ -59,11 +59,11 @@ class TestCommonVoiceReader:
         ('cv-valid-train-sample-195733', os.path.join('cv-valid-train', 'sample-195733.mp3')),
         ('cv-valid-train-sample-195754', os.path.join('cv-valid-train', 'sample-195754.mp3'))
     ])
-    def test_load_files(self, idx, path, reader, data_path):
+    def test_load_tracks(self, idx, path, reader, data_path):
         ds = reader.load(data_path)
 
-        assert ds.files[idx].idx == idx
-        assert ds.files[idx].path == os.path.join(data_path, path)
+        assert ds.tracks[idx].idx == idx
+        assert ds.tracks[idx].path == os.path.join(data_path, path)
 
     def test_load_correct_number_of_speakers(self, reader, data_path):
         ds = reader.load(data_path)
@@ -71,13 +71,13 @@ class TestCommonVoiceReader:
         assert ds.num_issuers == 7
 
     @pytest.mark.parametrize('idx,age,gender,num_utt', [
-        ('cv-valid-dev-sample-000000', assets.AgeGroup.UNKNOWN, assets.Gender.UNKNOWN, 1),
-        ('cv-valid-dev-sample-000335', assets.AgeGroup.ADULT, assets.Gender.FEMALE, 1),
-        ('cv-valid-dev-sample-001879', assets.AgeGroup.UNKNOWN, assets.Gender.UNKNOWN, 1),
-        ('cv-valid-dev-sample-004075', assets.AgeGroup.UNKNOWN, assets.Gender.UNKNOWN, 1),
-        ('cv-valid-train-sample-000000', assets.AgeGroup.UNKNOWN, assets.Gender.UNKNOWN, 1),
-        ('cv-valid-train-sample-195733', assets.AgeGroup.ADULT, assets.Gender.MALE, 1),
-        ('cv-valid-train-sample-195754', assets.AgeGroup.UNKNOWN, assets.Gender.UNKNOWN, 1)
+        ('cv-valid-dev-sample-000000', issuers.AgeGroup.UNKNOWN, issuers.Gender.UNKNOWN, 1),
+        ('cv-valid-dev-sample-000335', issuers.AgeGroup.ADULT, issuers.Gender.FEMALE, 1),
+        ('cv-valid-dev-sample-001879', issuers.AgeGroup.UNKNOWN, issuers.Gender.UNKNOWN, 1),
+        ('cv-valid-dev-sample-004075', issuers.AgeGroup.UNKNOWN, issuers.Gender.UNKNOWN, 1),
+        ('cv-valid-train-sample-000000', issuers.AgeGroup.UNKNOWN, issuers.Gender.UNKNOWN, 1),
+        ('cv-valid-train-sample-195733', issuers.AgeGroup.ADULT, issuers.Gender.MALE, 1),
+        ('cv-valid-train-sample-195754', issuers.AgeGroup.UNKNOWN, issuers.Gender.UNKNOWN, 1)
     ])
     def test_load_issuers(self, idx, age, gender, num_utt, reader, data_path):
         ds = reader.load(data_path)
@@ -85,7 +85,7 @@ class TestCommonVoiceReader:
         assert ds.issuers[idx].idx == idx
         assert ds.issuers[idx].gender == gender
         assert ds.issuers[idx].age_group == age
-        assert type(ds.issuers[idx]) == assets.Speaker
+        assert type(ds.issuers[idx]) == issuers.Speaker
         assert len(ds.issuers[idx].utterances) == num_utt
 
     def test_load_correct_number_of_utterances(self, reader, data_path):
@@ -106,7 +106,7 @@ class TestCommonVoiceReader:
         ds = reader.load(data_path)
 
         assert ds.utterances[idx].idx == idx
-        assert ds.utterances[idx].file.idx == idx
+        assert ds.utterances[idx].track.idx == idx
         assert ds.utterances[idx].issuer.idx == issuer_idx
         assert ds.utterances[idx].start == 0
         assert ds.utterances[idx].end == -1

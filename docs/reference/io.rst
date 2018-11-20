@@ -48,6 +48,7 @@ Implementations
   Kaldi                                     x      x
   Mozilla DeepSpeech                               x
   MUSAN                           x         x
+  M-AILABS Speech Dataset         x         x
   Tatoeba                         x         x
   TIMIT                                     x
   TUDA German Distant Speech                x
@@ -134,6 +135,14 @@ MUSAN
    :members:
 
 .. autoclass:: MusanReader
+   :members:
+
+M-AILABS Speech Dataset
+^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: MailabsDownloader
+   :members:
+
+.. autoclass:: MailabsReader
    :members:
 
 Tatoeba

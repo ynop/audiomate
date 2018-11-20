@@ -1,6 +1,7 @@
 import numpy as np
 import librosa
 
+from audiomate import tracks
 from audiomate.processing import pipeline
 
 from tests import resources
@@ -39,8 +40,9 @@ class TestOnsetStrength:
         exp_onsets = exp_onsets.reshape(exp_onsets.shape[0], 1)
 
         # ACTUAL
+        test_file = tracks.FileTrack('idx', test_file_path)
         onset = pipeline.OnsetStrength()
-        onset_gen = onset.process_file_online(test_file_path, 2048, 1024, chunk_size=5)
+        onset_gen = onset.process_track_online(test_file, 2048, 1024, chunk_size=5)
 
         chunks = list(onset_gen)
         onsets = np.vstack(chunks)

@@ -1,7 +1,7 @@
 import os
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import annotations
 from audiomate.utils import download
 from audiomate.utils import files
 from . import base
@@ -79,8 +79,8 @@ class GtzanReader(base.CorpusReader):
                 file_idx = entry.name[0:-4]  # chop of .wav
                 utterance_idx = file_idx  # every file is a separate utterance
 
-                corpus.new_file(file_path, file_idx=file_idx, copy_file=False)
+                corpus.new_file(file_path, track_idx=file_idx, copy_file=False)
                 utterance = corpus.new_utterance(utterance_idx, file_idx)
-                utterance.set_label_list(assets.LabelList.create_single(type_name, idx=audiomate.corpus.LL_DOMAIN))
+                utterance.set_label_list(annotations.LabelList.create_single(type_name, idx=audiomate.corpus.LL_DOMAIN))
 
         return corpus

@@ -1,13 +1,14 @@
 import os.path
 
-from audiomate.corpus.assets import Label, LabelList
-from audiomate.formats.audacity import read_label_file, read_label_list, write_label_file, write_label_list
+from audiomate import annotations
+from audiomate.formats import audacity
 
 
-class TestAudacityFormat(object):
+class TestAudacityFormat:
+
     def test_read_label_file_en(self):
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_en.txt')
-        labels = read_label_file(path)
+        labels = audacity.read_label_file(path)
 
         assert len(labels) == 2
 
@@ -21,7 +22,7 @@ class TestAudacityFormat(object):
 
     def test_read_label_file_de(self):
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_de.txt')
-        labels = read_label_file(path)
+        labels = audacity.read_label_file(path)
 
         assert len(labels) == 2
 
@@ -35,7 +36,7 @@ class TestAudacityFormat(object):
 
     def test_read_label_file_with_empty_value(self):
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_empty_value.txt')
-        labels = read_label_file(path)
+        labels = audacity.read_label_file(path)
 
         assert len(labels) == 3
 
@@ -53,7 +54,7 @@ class TestAudacityFormat(object):
 
     def test_read_label_list_en(self):
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_en.txt')
-        ll = read_label_list(path)
+        ll = audacity.read_label_list(path)
 
         assert len(ll) == 2
 
@@ -67,7 +68,7 @@ class TestAudacityFormat(object):
 
     def test_read_label_list_de(self):
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_de.txt')
-        ll = read_label_list(path)
+        ll = audacity.read_label_list(path)
 
         assert len(ll) == 2
 
@@ -81,7 +82,7 @@ class TestAudacityFormat(object):
 
     def test_read_label_list_with_empty_value(self):
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_empty_value.txt')
-        ll = read_label_list(path)
+        ll = audacity.read_label_list(path)
 
         assert len(ll) == 3
 
@@ -104,7 +105,7 @@ class TestAudacityFormat(object):
             [11.08, 13.33, 'speech_male']
         ]
 
-        write_label_file(path, entries)
+        audacity.write_label_file(path, entries)
 
         assert os.path.isfile(path)
 
@@ -118,12 +119,12 @@ class TestAudacityFormat(object):
 
     def test_write_label_list(self, tmpdir):
         path = os.path.join(tmpdir.strpath, 'audacity_labels.txt')
-        ll = LabelList(labels=[
-            Label('music', 10.01, 11.08),
-            Label('speech_male', 11.08, 13.33),
+        ll = annotations.LabelList(labels=[
+            annotations.Label('music', 10.01, 11.08),
+            annotations.Label('speech_male', 11.08, 13.33),
         ])
 
-        write_label_list(path, ll)
+        audacity.write_label_list(path, ll)
 
         assert os.path.isfile(path)
 

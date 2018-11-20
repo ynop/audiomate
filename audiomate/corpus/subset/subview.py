@@ -61,7 +61,7 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
     A filter criterion that matches utterances based on utterance-ids.
 
     Args:
-        utterance_idxs (set): A list of utterance-ids. Only utterances in the list will pass the
+        utterance_idxs (:class:`set`): A list of utterance-ids. Only utterances in the list will pass the
                                filter
         inverse (bool): If True only utterance not in the list pass the filter.
     """
@@ -72,7 +72,7 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
 
     def match(self, utterance, corpus):
         return (utterance.idx in self.utterance_idxs and not self.inverse) \
-               or (utterance.idx not in self.utterance_idxs and self.inverse)
+            or (utterance.idx not in self.utterance_idxs and self.inverse)
 
     def serialize(self):
         inverse_indication = 'exclude' if self.inverse else 'include'
@@ -97,8 +97,8 @@ class MatchingLabelFilter(FilterCriterion):
     A filter criterion that only accepts utterances which only have the given labels.
 
     Args:
-        labels (set): A set of labels which are accepted.
-        label_list_ids (set): Only check label-lists with these ids. If empty checks all label-lists.
+        labels (:class:`set`): A set of labels which are accepted.
+        label_list_ids (:class:`set`): Only check label-lists with these ids. If empty checks all label-lists.
     """
 
     def __init__(self, labels=set(), label_list_ids=set()):
@@ -197,8 +197,8 @@ class Subview(base.CorpusView):
         return 'subview of {}'.format(self.corpus.name)
 
     @property
-    def files(self):
-        return {utterance.file.idx: utterance.file for utterance in self.utterances.values()}
+    def tracks(self):
+        return {utterance.track.idx: utterance.track for utterance in self.utterances.values()}
 
     @property
     def utterances(self):

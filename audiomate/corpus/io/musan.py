@@ -1,7 +1,8 @@
 import os
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import annotations
+from audiomate import issuers
 from audiomate.utils import textfile
 from audiomate.utils import download
 from audiomate.utils import files
@@ -65,7 +66,7 @@ class MusanReader(base.CorpusReader):
         return 'musan'
 
     def _check_for_missing_files(self, path):
-        # Some annotation files are missing anyway in the original data set
+        # Some label files are missing anyway in the original data set
         # (e.g. speech/us-gov/ANNOTATIONS). What's left would be checking for missing directories.
         return []
 
@@ -80,12 +81,12 @@ class MusanReader(base.CorpusReader):
 
         for type_name, type_directory in self._directories(path).items():
             for _, source_directory in self._directories(type_directory).items():
-                annotations_path = os.path.join(source_directory, ANN_FILE_NAME_)
-                annotations = {}
+                labels_path = os.path.join(source_directory, ANN_FILE_NAME_)
+                labels = {}
 
-                if os.path.exists(annotations_path):
-                    annotations = textfile.read_separated_lines_with_first_key(
-                        annotations_path, separator=' ', max_columns=ANN_NUM_COLUMS_[type_name])
+                if os.path.exists(labels_path):
+                    labels = textfile.read_separated_lines_with_first_key(
+                        labels_path, separator=' ', max_columns=ANN_NUM_COLUMS_[type_name])
 
                 it = os.scandir(source_directory)
 
@@ -96,11 +97,12 @@ class MusanReader(base.CorpusReader):
                     file_path = os.path.join(source_directory, entry.name)
                     file_idx = entry.name[0:-4]  # chop of .wav
                     utterance_idx = file_idx  # every file is a separate utterance
-                    issuer_idx = create_or_get_issuer[type_name](corpus, file_idx, annotations)
+                    issuer_idx = create_or_get_issuer[type_name](corpus, file_idx, labels)
 
-                    corpus.new_file(file_path, file_idx=file_idx, copy_file=False)
+                    corpus.new_file(file_path, track_idx=file_idx, copy_file=False)
                     utterance = corpus.new_utterance(utterance_idx, file_idx, issuer_idx)
-                    utterance.set_label_list(assets.LabelList.create_single(type_name, idx=audiomate.corpus.LL_DOMAIN))
+                    utterance.set_label_list(annotations.LabelList.create_single(
+                        type_name, idx=audiomate.corpus.LL_DOMAIN))
 
         return corpus
 
@@ -118,34 +120,34 @@ class MusanReader(base.CorpusReader):
 
     # noinspection PyUnusedLocal
     @staticmethod
-    def _create_or_get_noise_issuer(corpus, file_idx, annotations):
+    def _create_or_get_noise_issuer(corpus, file_idx, labels):
         return None
 
     @staticmethod
-    def _create_or_get_music_issuer(corpus, file_idx, annotations):
-        if file_idx not in annotations:
+    def _create_or_get_music_issuer(corpus, file_idx, labels):
+        if file_idx not in labels:
             return None
 
-        issuer_idx = annotations[file_idx][2]
+        issuer_idx = labels[file_idx][2]
 
         if issuer_idx not in corpus.issuers:
-            issuer = assets.Artist(issuer_idx, name=issuer_idx)
+            issuer = issuers.Artist(issuer_idx, name=issuer_idx)
             corpus.import_issuers(issuer)
 
         return issuer_idx
 
     @staticmethod
-    def _create_or_get_speech_issuer(corpus, file_idx, annotations):
-        if file_idx not in annotations:
+    def _create_or_get_speech_issuer(corpus, file_idx, labels):
+        if file_idx not in labels:
             return None
 
-        issuer = assets.Speaker(file_idx)
+        issuer = issuers.Speaker(file_idx)
 
-        if file_idx in annotations:
-            if annotations[file_idx][0] == 'm':
-                issuer.gender = assets.Gender.MALE
-            elif annotations[file_idx][0] == 'f':
-                issuer.gender = assets.Gender.FEMALE
+        if file_idx in labels:
+            if labels[file_idx][0] == 'm':
+                issuer.gender = issuers.Gender.MALE
+            elif labels[file_idx][0] == 'f':
+                issuer.gender = issuers.Gender.FEMALE
 
         corpus.import_issuers(issuer)
 

@@ -22,25 +22,25 @@ class CorpusView(metaclass=abc.ABCMeta):
         return 'undefined'
 
     #
-    #   Files
+    #   Tracks
     #
 
     @property
     @abc.abstractmethod
-    def files(self):
+    def tracks(self):
         """
-        Return the files in the corpus.
+        Return the tracks in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`audiomate.corpus.assets.File` objects with the
-            file-idx as key.
+            dict: A dictionary containing :py:class:`audiomate.track.Track` objects with the
+            track-idx as key.
         """
         return {}
 
     @property
-    def num_files(self):
-        """ Return number of files. """
-        return len(self.files)
+    def num_tracks(self):
+        """ Return number of tracks. """
+        return len(self.tracks)
 
     #
     #   Utterances
@@ -74,7 +74,7 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the issuers in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`audiomate.corpus.assets.Issuer` objects with the
+            dict: A dictionary containing :py:class:`audiomate.issuers.Issuer` objects with the
             issuer-idx as key.
         """
         return {}
@@ -95,7 +95,7 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the feature-containers in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`audiomate.corpus.assets.FeatureContainer` objects
+            dict: A dictionary containing :py:class:`audiomate.container.FeatureContainer` objects
             with the feature-idx as key.
         """
         return {}
@@ -137,7 +137,7 @@ class CorpusView(metaclass=abc.ABCMeta):
                                    are considered.
 
         Returns:
-             set: A set of distinct label-values.
+             :class:`set`: A set of distinct label-values.
         """
         values = set()
 
@@ -183,6 +183,26 @@ class CorpusView(metaclass=abc.ABCMeta):
                 duration[label_value] += utt_count
 
         return duration
+
+    def all_tokens(self, delimiter=' ', label_list_ids=None):
+        """
+        Return a list of all tokens occurring in one of the labels in the corpus.
+
+        Args:
+            delimiter (str): The delimiter used to split labels into tokens
+                             (see :meth:`audiomate.annotations.Label.tokenized`).
+            label_list_ids (list): If not None, only labels from label-lists with an idx contained in this list
+                                   are considered.
+
+        Returns:
+             :class:`set`: A set of distinct tokens.
+        """
+        tokens = set()
+
+        for utterance in self.utterances.values():
+            tokens = tokens.union(utterance.all_tokens(delimiter=delimiter, label_list_ids=label_list_ids))
+
+        return tokens
 
     #
     #   Data

@@ -3,8 +3,8 @@ import os
 import pytest
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus import io
-from audiomate.corpus import assets
 from tests import resources
 
 
@@ -45,44 +45,44 @@ class TestTudaReader:
         ids = io.TudaReader.get_ids_from_folder(os.path.join(data_path, 'dev'), 'dev')
         assert '2015-01-28-11-49-53' not in ids
 
-    def test_load_files(self, reader, data_path):
+    def test_load_tracks(self, reader, data_path):
         ds = reader.load(data_path)
 
         dev = os.path.join(data_path, 'dev')
         test = os.path.join(data_path, 'test')
         train = os.path.join(data_path, 'train')
 
-        assert ds.num_files == 10
+        assert ds.num_tracks == 10
 
-        assert ds.files['2014-03-17-13-03-33'].idx == '2014-03-17-13-03-33'
-        assert ds.files['2014-03-17-13-03-33'].path == os.path.join(train, '2014-03-17-13-03-33_Kinect-Beam.wav')
+        assert ds.tracks['2014-03-17-13-03-33'].idx == '2014-03-17-13-03-33'
+        assert ds.tracks['2014-03-17-13-03-33'].path == os.path.join(train, '2014-03-17-13-03-33_Kinect-Beam.wav')
 
-        assert ds.files['2014-03-19-15-01-56'].idx == '2014-03-19-15-01-56'
-        assert ds.files['2014-03-19-15-01-56'].path == os.path.join(train, '2014-03-19-15-01-56_Kinect-Beam.wav')
+        assert ds.tracks['2014-03-19-15-01-56'].idx == '2014-03-19-15-01-56'
+        assert ds.tracks['2014-03-19-15-01-56'].path == os.path.join(train, '2014-03-19-15-01-56_Kinect-Beam.wav')
 
-        assert ds.files['2014-08-07-13-22-38'].idx == '2014-08-07-13-22-38'
-        assert ds.files['2014-08-07-13-22-38'].path == os.path.join(train, '2014-08-07-13-22-38_Kinect-Beam.wav')
+        assert ds.tracks['2014-08-07-13-22-38'].idx == '2014-08-07-13-22-38'
+        assert ds.tracks['2014-08-07-13-22-38'].path == os.path.join(train, '2014-08-07-13-22-38_Kinect-Beam.wav')
 
-        assert ds.files['2014-08-14-14-52-00'].idx == '2014-08-14-14-52-00'
-        assert ds.files['2014-08-14-14-52-00'].path == os.path.join(train, '2014-08-14-14-52-00_Kinect-Beam.wav')
+        assert ds.tracks['2014-08-14-14-52-00'].idx == '2014-08-14-14-52-00'
+        assert ds.tracks['2014-08-14-14-52-00'].path == os.path.join(train, '2014-08-14-14-52-00_Kinect-Beam.wav')
 
-        assert ds.files['2015-01-27-11-31-32'].idx == '2015-01-27-11-31-32'
-        assert ds.files['2015-01-27-11-31-32'].path == os.path.join(dev, '2015-01-27-11-31-32_Kinect-Beam.wav')
+        assert ds.tracks['2015-01-27-11-31-32'].idx == '2015-01-27-11-31-32'
+        assert ds.tracks['2015-01-27-11-31-32'].path == os.path.join(dev, '2015-01-27-11-31-32_Kinect-Beam.wav')
 
-        assert ds.files['2015-01-28-11-35-47'].idx == '2015-01-28-11-35-47'
-        assert ds.files['2015-01-28-11-35-47'].path == os.path.join(dev, '2015-01-28-11-35-47_Kinect-Beam.wav')
+        assert ds.tracks['2015-01-28-11-35-47'].idx == '2015-01-28-11-35-47'
+        assert ds.tracks['2015-01-28-11-35-47'].path == os.path.join(dev, '2015-01-28-11-35-47_Kinect-Beam.wav')
 
-        assert ds.files['2015-01-28-12-36-24'].idx == '2015-01-28-12-36-24'
-        assert ds.files['2015-01-28-12-36-24'].path == os.path.join(dev, '2015-01-28-12-36-24_Kinect-Beam.wav')
+        assert ds.tracks['2015-01-28-12-36-24'].idx == '2015-01-28-12-36-24'
+        assert ds.tracks['2015-01-28-12-36-24'].path == os.path.join(dev, '2015-01-28-12-36-24_Kinect-Beam.wav')
 
-        assert ds.files['2015-01-27-12-34-36'].idx == '2015-01-27-12-34-36'
-        assert ds.files['2015-01-27-12-34-36'].path == os.path.join(test, '2015-01-27-12-34-36_Kinect-Beam.wav')
+        assert ds.tracks['2015-01-27-12-34-36'].idx == '2015-01-27-12-34-36'
+        assert ds.tracks['2015-01-27-12-34-36'].path == os.path.join(test, '2015-01-27-12-34-36_Kinect-Beam.wav')
 
-        assert ds.files['2015-02-03-12-08-13'].idx == '2015-02-03-12-08-13'
-        assert ds.files['2015-02-03-12-08-13'].path == os.path.join(test, '2015-02-03-12-08-13_Kinect-Beam.wav')
+        assert ds.tracks['2015-02-03-12-08-13'].idx == '2015-02-03-12-08-13'
+        assert ds.tracks['2015-02-03-12-08-13'].path == os.path.join(test, '2015-02-03-12-08-13_Kinect-Beam.wav')
 
-        assert ds.files['2015-02-10-14-31-52'].idx == '2015-02-10-14-31-52'
-        assert ds.files['2015-02-10-14-31-52'].path == os.path.join(test, '2015-02-10-14-31-52_Kinect-Beam.wav')
+        assert ds.tracks['2015-02-10-14-31-52'].idx == '2015-02-10-14-31-52'
+        assert ds.tracks['2015-02-10-14-31-52'].path == os.path.join(test, '2015-02-10-14-31-52_Kinect-Beam.wav')
 
     def test_load_speakers(self, reader, data_path):
         ds = reader.load(data_path)
@@ -90,39 +90,39 @@ class TestTudaReader:
         assert ds.num_issuers == 6
 
         assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].idx == 'cf372280-5606-4b05-9d24-3ab7805d8462'
-        assert type(ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462']) == assets.Speaker
-        assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].gender == assets.Gender.MALE
-        assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462']) == issuers.Speaker
+        assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].gender == issuers.Gender.MALE
+        assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['cf372280-5606-4b05-9d24-3ab7805d8462'].native_language == 'deu'
 
         assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].idx == '55065c47-1290-4974-997e-e77f24e7c72d'
-        assert type(ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d']) == assets.Speaker
-        assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].gender == assets.Gender.MALE
-        assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d']) == issuers.Speaker
+        assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].gender == issuers.Gender.MALE
+        assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['55065c47-1290-4974-997e-e77f24e7c72d'].native_language == 'deu'
 
         assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].idx == '755d9b71-f36e-45a6-a437-edebcfaee08d'
-        assert type(ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d']) == assets.Speaker
-        assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].gender == assets.Gender.MALE
-        assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d']) == issuers.Speaker
+        assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].gender == issuers.Gender.MALE
+        assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['755d9b71-f36e-45a6-a437-edebcfaee08d'].native_language == 'deu'
 
         assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].idx == '9e6a00c9-80f0-479d-8b36-4139a9571217'
-        assert type(ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217']) == assets.Speaker
-        assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].gender == assets.Gender.FEMALE
-        assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].age_group == assets.AgeGroup.YOUTH
+        assert type(ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217']) == issuers.Speaker
+        assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].gender == issuers.Gender.FEMALE
+        assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].age_group == issuers.AgeGroup.YOUTH
         assert ds.issuers['9e6a00c9-80f0-479d-8b36-4139a9571217'].native_language == 'deu'
 
         assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].idx == '58b8b441-684f-4753-aa16-589f1e149fa0'
-        assert type(ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0']) == assets.Speaker
-        assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].gender == assets.Gender.FEMALE
-        assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0']) == issuers.Speaker
+        assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].gender == issuers.Gender.FEMALE
+        assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['58b8b441-684f-4753-aa16-589f1e149fa0'].native_language == 'deu'
 
         assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].idx == '2a0995a7-47d8-453f-9864-5940efd3c71a'
-        assert type(ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a']) == assets.Speaker
-        assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].gender == assets.Gender.MALE
-        assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a']) == issuers.Speaker
+        assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].gender == issuers.Gender.MALE
+        assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['2a0995a7-47d8-453f-9864-5940efd3c71a'].native_language == 'deu'
 
     def test_load_utterances(self, reader, data_path):
@@ -131,34 +131,34 @@ class TestTudaReader:
         assert ds.num_utterances == 10
 
         assert ds.utterances['2014-03-17-13-03-33'].idx == '2014-03-17-13-03-33'
-        assert ds.utterances['2014-03-17-13-03-33'].file.idx == '2014-03-17-13-03-33'
+        assert ds.utterances['2014-03-17-13-03-33'].track.idx == '2014-03-17-13-03-33'
 
         assert ds.utterances['2014-03-19-15-01-56'].idx == '2014-03-19-15-01-56'
-        assert ds.utterances['2014-03-19-15-01-56'].file.idx == '2014-03-19-15-01-56'
+        assert ds.utterances['2014-03-19-15-01-56'].track.idx == '2014-03-19-15-01-56'
 
         assert ds.utterances['2014-08-07-13-22-38'].idx == '2014-08-07-13-22-38'
-        assert ds.utterances['2014-08-07-13-22-38'].file.idx == '2014-08-07-13-22-38'
+        assert ds.utterances['2014-08-07-13-22-38'].track.idx == '2014-08-07-13-22-38'
 
         assert ds.utterances['2014-08-14-14-52-00'].idx == '2014-08-14-14-52-00'
-        assert ds.utterances['2014-08-14-14-52-00'].file.idx == '2014-08-14-14-52-00'
+        assert ds.utterances['2014-08-14-14-52-00'].track.idx == '2014-08-14-14-52-00'
 
         assert ds.utterances['2015-01-27-11-31-32'].idx == '2015-01-27-11-31-32'
-        assert ds.utterances['2015-01-27-11-31-32'].file.idx == '2015-01-27-11-31-32'
+        assert ds.utterances['2015-01-27-11-31-32'].track.idx == '2015-01-27-11-31-32'
 
         assert ds.utterances['2015-01-28-11-35-47'].idx == '2015-01-28-11-35-47'
-        assert ds.utterances['2015-01-28-11-35-47'].file.idx == '2015-01-28-11-35-47'
+        assert ds.utterances['2015-01-28-11-35-47'].track.idx == '2015-01-28-11-35-47'
 
         assert ds.utterances['2015-01-28-12-36-24'].idx == '2015-01-28-12-36-24'
-        assert ds.utterances['2015-01-28-12-36-24'].file.idx == '2015-01-28-12-36-24'
+        assert ds.utterances['2015-01-28-12-36-24'].track.idx == '2015-01-28-12-36-24'
 
         assert ds.utterances['2015-01-27-12-34-36'].idx == '2015-01-27-12-34-36'
-        assert ds.utterances['2015-01-27-12-34-36'].file.idx == '2015-01-27-12-34-36'
+        assert ds.utterances['2015-01-27-12-34-36'].track.idx == '2015-01-27-12-34-36'
 
         assert ds.utterances['2015-02-03-12-08-13'].idx == '2015-02-03-12-08-13'
-        assert ds.utterances['2015-02-03-12-08-13'].file.idx == '2015-02-03-12-08-13'
+        assert ds.utterances['2015-02-03-12-08-13'].track.idx == '2015-02-03-12-08-13'
 
         assert ds.utterances['2015-02-10-14-31-52'].idx == '2015-02-10-14-31-52'
-        assert ds.utterances['2015-02-10-14-31-52'].file.idx == '2015-02-10-14-31-52'
+        assert ds.utterances['2015-02-10-14-31-52'].track.idx == '2015-02-10-14-31-52'
 
     def test_load_transcriptions(self, reader, data_path):
         ds = reader.load(data_path)

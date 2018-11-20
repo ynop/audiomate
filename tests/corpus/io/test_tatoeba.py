@@ -4,8 +4,8 @@ import pytest
 import requests_mock
 
 from audiomate import corpus
+from audiomate import issuers
 from audiomate.corpus import io
-from audiomate.corpus import assets
 from audiomate.corpus.io import tatoeba
 
 from tests import resources
@@ -213,28 +213,28 @@ class TestTatoebaDownloader:
 
 class TestTatoebaReader:
 
-    def test_load_correct_number_of_files(self, reader, sample_corpus_path):
+    def test_load_correct_number_of_tracks(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)
 
-        assert ds.num_files == 5
+        assert ds.num_tracks == 5
 
-    def test_load_files(self, reader, sample_corpus_path):
+    def test_load_tracks(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)
 
-        assert ds.files['141'].idx == '141'
-        assert ds.files['141'].path == os.path.join(sample_corpus_path, 'audio', 'eng', '141.mp3')
+        assert ds.tracks['141'].idx == '141'
+        assert ds.tracks['141'].path == os.path.join(sample_corpus_path, 'audio', 'eng', '141.mp3')
 
-        assert ds.files['247'].idx == '247'
-        assert ds.files['247'].path == os.path.join(sample_corpus_path, 'audio', 'fra', '247.mp3')
+        assert ds.tracks['247'].idx == '247'
+        assert ds.tracks['247'].path == os.path.join(sample_corpus_path, 'audio', 'fra', '247.mp3')
 
-        assert ds.files['1355'].idx == '1355'
-        assert ds.files['1355'].path == os.path.join(sample_corpus_path, 'audio', 'deu', '1355.mp3')
+        assert ds.tracks['1355'].idx == '1355'
+        assert ds.tracks['1355'].path == os.path.join(sample_corpus_path, 'audio', 'deu', '1355.mp3')
 
-        assert ds.files['1881'].idx == '1881'
-        assert ds.files['1881'].path == os.path.join(sample_corpus_path, 'audio', 'deu', '1881.mp3')
+        assert ds.tracks['1881'].idx == '1881'
+        assert ds.tracks['1881'].path == os.path.join(sample_corpus_path, 'audio', 'deu', '1881.mp3')
 
-        assert ds.files['6921520'].idx == '6921520'
-        assert ds.files['6921520'].path == os.path.join(sample_corpus_path, 'audio', 'eng', '6921520.mp3')
+        assert ds.tracks['6921520'].idx == '6921520'
+        assert ds.tracks['6921520'].path == os.path.join(sample_corpus_path, 'audio', 'eng', '6921520.mp3')
 
     def test_load_correct_number_of_speakers(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)
@@ -245,19 +245,19 @@ class TestTatoebaReader:
         ds = reader.load(sample_corpus_path)
 
         assert ds.issuers['BraveSentry'].idx == 'BraveSentry'
-        assert type(ds.issuers['BraveSentry']) == assets.Speaker
+        assert type(ds.issuers['BraveSentry']) == issuers.Speaker
         assert len(ds.issuers['BraveSentry'].utterances) == 1
 
         assert ds.issuers['gretelen'].idx == 'gretelen'
-        assert type(ds.issuers['gretelen']) == assets.Speaker
+        assert type(ds.issuers['gretelen']) == issuers.Speaker
         assert len(ds.issuers['gretelen'].utterances) == 1
 
         assert ds.issuers['Nero'].idx == 'Nero'
-        assert type(ds.issuers['Nero']) == assets.Speaker
+        assert type(ds.issuers['Nero']) == issuers.Speaker
         assert len(ds.issuers['Nero'].utterances) == 1
 
         assert ds.issuers['CK'].idx == 'CK'
-        assert type(ds.issuers['CK']) == assets.Speaker
+        assert type(ds.issuers['CK']) == issuers.Speaker
         assert len(ds.issuers['CK'].utterances) == 2
 
     def test_load_correct_number_of_utterances(self, reader, sample_corpus_path):
@@ -269,31 +269,31 @@ class TestTatoebaReader:
         ds = reader.load(sample_corpus_path)
 
         assert ds.utterances['141'].idx == '141'
-        assert ds.utterances['141'].file.idx == '141'
+        assert ds.utterances['141'].track.idx == '141'
         assert ds.utterances['141'].issuer.idx == 'BraveSentry'
         assert ds.utterances['141'].start == 0
         assert ds.utterances['141'].end == -1
 
         assert ds.utterances['247'].idx == '247'
-        assert ds.utterances['247'].file.idx == '247'
+        assert ds.utterances['247'].track.idx == '247'
         assert ds.utterances['247'].issuer.idx == 'gretelen'
         assert ds.utterances['247'].start == 0
         assert ds.utterances['247'].end == -1
 
         assert ds.utterances['1355'].idx == '1355'
-        assert ds.utterances['1355'].file.idx == '1355'
+        assert ds.utterances['1355'].track.idx == '1355'
         assert ds.utterances['1355'].issuer.idx == 'Nero'
         assert ds.utterances['1355'].start == 0
         assert ds.utterances['1355'].end == -1
 
         assert ds.utterances['1881'].idx == '1881'
-        assert ds.utterances['1881'].file.idx == '1881'
+        assert ds.utterances['1881'].track.idx == '1881'
         assert ds.utterances['1881'].issuer.idx == 'CK'
         assert ds.utterances['1881'].start == 0
         assert ds.utterances['1881'].end == -1
 
         assert ds.utterances['6921520'].idx == '6921520'
-        assert ds.utterances['6921520'].file.idx == '6921520'
+        assert ds.utterances['6921520'].track.idx == '6921520'
         assert ds.utterances['6921520'].issuer.idx == 'CK'
         assert ds.utterances['6921520'].start == 0
         assert ds.utterances['6921520'].end == -1

@@ -4,7 +4,8 @@ import struct
 import numpy as np
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import annotations
+from audiomate import issuers
 from audiomate.utils import textfile
 from . import base
 from . import default
@@ -72,11 +73,11 @@ class KaldiReader(base.CorpusReader):
 
             for speaker_idx, gender_str in speakers.items():
                 if gender_str == 'm':
-                    gender = assets.Gender.MALE
+                    gender = issuers.Gender.MALE
                 else:
-                    gender = assets.Gender.FEMALE
+                    gender = issuers.Gender.FEMALE
 
-                speaker = assets.Speaker(speaker_idx, gender=gender)
+                speaker = issuers.Speaker(speaker_idx, gender=gender)
                 corpus.import_issuers(speaker)
 
     @staticmethod
@@ -115,7 +116,7 @@ class KaldiReader(base.CorpusReader):
     def read_transcriptions(text_path, corpus):
         transcriptions = textfile.read_key_value_lines(text_path, separator=' ')
         for utt_id, transcription in transcriptions.items():
-            ll = assets.LabelList.create_single(transcription, idx=audiomate.corpus.LL_WORD_TRANSCRIPT)
+            ll = annotations.LabelList.create_single(transcription, idx=audiomate.corpus.LL_WORD_TRANSCRIPT)
             corpus.utterances[utt_id].set_label_list(ll)
 
 
@@ -145,7 +146,7 @@ class KaldiWriter(base.CorpusWriter):
         segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
 
-        default.DefaultWriter.write_files(wav_file_path, corpus, path)
+        default.DefaultWriter.write_file_tracks(wav_file_path, corpus, path)
         default.DefaultWriter.write_utterances(segments_path, corpus)
         default.DefaultWriter.write_utt_to_issuer_mapping(utt2spk_path, corpus)
 
@@ -157,10 +158,10 @@ class KaldiWriter(base.CorpusWriter):
         genders = {}
 
         for issuer in corpus.issuers.values():
-            if type(issuer) == assets.Speaker:
-                if issuer.gender == assets.Gender.MALE:
+            if type(issuer) == issuers.Speaker:
+                if issuer.gender == issuers.Gender.MALE:
                     genders[issuer.idx] = 'm'
-                elif issuer.gender == assets.Gender.FEMALE:
+                elif issuer.gender == issuers.Gender.FEMALE:
                     genders[issuer.idx] = 'f'
 
         if len(genders) > 0:

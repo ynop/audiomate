@@ -3,19 +3,18 @@ import abc
 import librosa
 import numpy as np
 
-from audiomate.corpus import assets
+from audiomate import containers
 from audiomate.utils import units
-from audiomate.utils import audio
 
 
 class Processor(metaclass=abc.ABCMeta):
     """
     The processor base class provides the functionality to process audio data on different levels
-    (Corpus, Utterance, File). For every level there is an offline and an online method.
-    In the offline mode the data is processed in one step (e.g. the whole file/utterance at once).
-    This means the ``process_frames`` method is called with all the frames of the file/utterance.
+    (Corpus, Utterance, Track). For every level there is an offline and an online method.
+    In the offline mode the data is processed in one step (e.g. the whole track/utterance at once).
+    This means the ``process_frames`` method is called with all the frames of the track/utterance.
     In online mode the data is processed in chunks, so the ``process_frames`` method is called multiple times
-    per file/utterance with different chunks.
+    per track/utterance with different chunks.
 
     To implement a concrete processor the ``process_frames`` method has to be implemented.
     This method is called in online and offline mode. So it is up to the user to determine
@@ -49,7 +48,7 @@ class Processor(metaclass=abc.ABCMeta):
         return self._process_corpus(corpus, output_path, processing_func,
                                     frame_size=frame_size, hop_size=hop_size, sr=sr)
 
-    def process_corpus_online(self, corpus, output_path, frame_size=400, hop_size=160, sr=None,
+    def process_corpus_online(self, corpus, output_path, frame_size=400, hop_size=160,
                               chunk_size=1, buffer_size=5760000):
         """
         Process all utterances of the given corpus and save the processed features in a feature-container.
@@ -60,7 +59,6 @@ class Processor(metaclass=abc.ABCMeta):
             output_path (str): A path to save the feature-container to.
             frame_size (int): The number of samples per frame.
             hop_size (int): The number of samples between two frames.
-            sr (int): Use the given sampling rate. If None uses the native sampling rate from the underlying data.
             chunk_size (int): Number of frames to process per chunk.
             buffer_size (int): Number of samples to load into memory at once.
                              The exact number of loaded samples depends on the block-size of the audioread library.
@@ -70,14 +68,17 @@ class Processor(metaclass=abc.ABCMeta):
             FeatureContainer: The feature-container containing the processed features.
         """
 
-        def processing_func(utterance, feat_container, frame_size, hop_size, sr, corpus):
-            for chunk in self.process_utterance_online(utterance, frame_size=frame_size, hop_size=hop_size, sr=sr,
-                                                       corpus=corpus, chunk_size=chunk_size,
+        def processing_func(utterance, feat_container, frame_size, hop_size, corpus, sr):
+            for chunk in self.process_utterance_online(utterance,
+                                                       frame_size=frame_size,
+                                                       hop_size=hop_size,
+                                                       corpus=corpus,
+                                                       chunk_size=chunk_size,
                                                        buffer_size=buffer_size):
                 feat_container.append(utterance.idx, chunk)
 
         return self._process_corpus(corpus, output_path, processing_func,
-                                    frame_size=frame_size, hop_size=hop_size, sr=sr)
+                                    frame_size=frame_size, hop_size=hop_size, sr=None)
 
     def process_features(self, corpus, input_features, output_path):
         """
@@ -92,7 +93,7 @@ class Processor(metaclass=abc.ABCMeta):
         Returns:
             FeatureContainer: The feature-container containing the processed features.
         """
-        feat_container = assets.FeatureContainer(output_path)
+        feat_container = containers.FeatureContainer(output_path)
         feat_container.open()
 
         input_features.open()
@@ -127,7 +128,7 @@ class Processor(metaclass=abc.ABCMeta):
         Returns:
             FeatureContainer: The feature-container containing the processed features.
         """
-        feat_container = assets.FeatureContainer(output_path)
+        feat_container = containers.FeatureContainer(output_path)
         feat_container.open()
 
         input_features.open()
@@ -175,10 +176,10 @@ class Processor(metaclass=abc.ABCMeta):
         Returns:
             np.ndarray: The processed features.
         """
-        return self.process_file(utterance.file.path, frame_size=frame_size, hop_size=hop_size, sr=sr,
-                                 start=utterance.start, end=utterance.end, utterance=utterance, corpus=corpus)
+        return self.process_track(utterance.track, frame_size=frame_size, hop_size=hop_size, sr=sr,
+                                  start=utterance.start, end=utterance.end, utterance=utterance, corpus=corpus)
 
-    def process_utterance_online(self, utterance, frame_size=400, hop_size=160, sr=None, chunk_size=1,
+    def process_utterance_online(self, utterance, frame_size=400, hop_size=160, chunk_size=1,
                                  buffer_size=5760000, corpus=None):
         """
         Process the utterance in **online** mode, chunk by chunk.
@@ -188,7 +189,6 @@ class Processor(metaclass=abc.ABCMeta):
             utterance (Utterance): The utterance to process.
             frame_size (int): The number of samples per frame.
             hop_size (int): The number of samples between two frames.
-            sr (int): Use the given sampling rate. If None uses the native sampling rate from the underlying data.
             chunk_size (int): Number of frames to process per chunk.
             buffer_size (int): Number of samples to load into memory at once.
                              The exact number of loaded samples depends on the block-size of the audioread library.
@@ -198,24 +198,34 @@ class Processor(metaclass=abc.ABCMeta):
         Returns:
             Generator: A generator that yield processed chunks.
         """
-        return self.process_file_online(utterance.file.path, frame_size=frame_size, hop_size=hop_size, sr=sr,
-                                        start=utterance.start, end=utterance.end, utterance=utterance, corpus=corpus,
-                                        chunk_size=chunk_size, buffer_size=buffer_size)
+        return self.process_track_online(utterance.track,
+                                         frame_size=frame_size,
+                                         hop_size=hop_size,
+                                         start=utterance.start,
+                                         end=utterance.end,
+                                         utterance=utterance,
+                                         corpus=corpus,
+                                         chunk_size=chunk_size,
+                                         buffer_size=buffer_size)
 
-    def process_file(self, file_path, frame_size=400, hop_size=160, sr=None,
-                     start=0, end=-1, utterance=None, corpus=None):
+    def process_track(self, track, frame_size=400, hop_size=160, sr=None,
+                      start=0, end=-1, utterance=None, corpus=None):
         """
-        Process the audio-file in **offline** mode, in one go.
+        Process the track in **offline** mode, in one go.
 
         Args:
-            file_path (str): The audio file to process.
+            track (Track): The track to process.
             frame_size (int): The number of samples per frame.
             hop_size (int): The number of samples between two frames.
-            sr (int): Use the given sampling rate. If None uses the native sampling rate from the underlying data.
-            start (float): The point within the file in seconds to start processing from.
-            end (float): The point within the file in seconds to end processing.
-            utterance (Utterance): The utterance that is associated with this file, if available.
-            corpus (Corpus): The corpus this file is part of, if available.
+            sr (int): Use the given sampling rate. If ``None``,
+                      uses the native sampling rate from the underlying data.
+            start (float): The point within the track in seconds,
+                           to start processing from.
+            end (float): The point within the track in seconds,
+                         to end processing.
+            utterance (Utterance): The utterance that is associated with
+                                   this track, if available.
+            corpus (Corpus): The corpus this track is part of, if available.
 
         Returns:
             np.ndarray: The processed features.
@@ -223,12 +233,15 @@ class Processor(metaclass=abc.ABCMeta):
         frame_settings = units.FrameSettings(frame_size, hop_size)
 
         if end > 0:
-            samples, sr = librosa.core.load(file_path, sr=sr, offset=start, duration=end - start)
+            samples = track.read_samples(sr=sr, offset=start, duration=end-start)
         else:
-            samples, sr = librosa.core.load(file_path, sr=sr, offset=start)
+            samples = track.read_samples(sr=sr, offset=start)
+
+        if sr is None:
+            sr = track.sampling_rate
 
         if samples.size <= 0:
-            raise ValueError('File {} has no samples'.format(file_path))
+            raise ValueError('Track {} has no samples'.format(track.idx))
 
         # Pad with zeros to match frames
         num_frames = frame_settings.num_frames(samples.size)
@@ -243,40 +256,52 @@ class Processor(metaclass=abc.ABCMeta):
         frames = librosa.util.frame(samples, frame_length=frame_size, hop_length=hop_size).T
         return self.process_frames(frames, sampling_rate, 0, last=True, utterance=utterance, corpus=corpus)
 
-    def process_file_online(self, file_path, frame_size=400, hop_size=160, sr=None,
-                            start=0, end=-1, utterance=None, corpus=None,
-                            chunk_size=1, buffer_size=5760000):
+    def process_track_online(self, track, frame_size=400, hop_size=160,
+                             start=0, end=-1, utterance=None, corpus=None,
+                             chunk_size=1, buffer_size=5760000):
         """
-        Process the audio-file in **online** mode, chunk by chunk.
+        Process the track in **online** mode, chunk by chunk.
         The processed chunks are yielded one after another.
 
         Args:
-            file_path (str): The audio file to process.
+            track (Track): The track to process.
             frame_size (int): The number of samples per frame.
             hop_size (int): The number of samples between two frames.
-            sr (int): Use the given sampling rate. If None uses the native sampling rate from the underlying data.
-            start (float): The point within the file in seconds to start processing from.
-            end (float): The point within the file in seconds to end processing.
-            utterance (Utterance): The utterance that is associated with this file, if available.
-            corpus (Corpus): The corpus this file is part of, if available.
+            start (float): The point within the track in seconds to start processing from.
+            end (float): The point within the trac in seconds to end processing.
+            utterance (Utterance): The utterance that is associated with this track, if available.
+            corpus (Corpus): The corpus this track is part of, if available.
             chunk_size (int): Number of frames to process per chunk.
             buffer_size (int): Number of samples to load into memory at once.
-                             The exact number of loaded samples depends on the block-size of the audioread library.
-                             So it can be of block-size higher, where the block-size is typically 1024 or 4096.
+                               The exact number of loaded samples depends
+                               on the type of track.
+                               It can be of block-size higher,
+                               where the block-size is typically 1024 or 4096.
 
         Returns:
             Generator: A generator that yield processed chunks.
         """
+
         current_frame = 0
         frames = []
 
+        duration = None
+        sr = track.sampling_rate
+
+        if end > -1:
+            duration = end - start
+
         # Process chunks that are within end bounds
-        for frame, output_sr, is_last in audio.read_frames(file_path, frame_size, hop_size,
-                                                           sr_target=sr, start=start, end=end, buffer_size=buffer_size):
+        for frame, is_last in track.read_frames(frame_size,
+                                                hop_size,
+                                                offset=start,
+                                                duration=duration,
+                                                buffer_size=buffer_size):
+
             frames.append(frame)
 
             if len(frames) == chunk_size:
-                processed = self.process_frames(np.array(frames), output_sr, current_frame,
+                processed = self.process_frames(np.array(frames), sr, current_frame,
                                                 last=is_last, utterance=utterance, corpus=corpus)
                 if processed is not None:
                     yield processed
@@ -285,7 +310,7 @@ class Processor(metaclass=abc.ABCMeta):
 
         # Process overlapping chunks with zero frames at the end
         if len(frames) > 0:
-            processed = self.process_frames(np.array(frames), output_sr, current_frame,
+            processed = self.process_frames(np.array(frames), sr, current_frame,
                                             last=True, utterance=utterance, corpus=corpus)
             yield processed
 
@@ -332,7 +357,7 @@ class Processor(metaclass=abc.ABCMeta):
 
     def _process_corpus(self, corpus, output_path, processing_func, frame_size=400, hop_size=160, sr=None):
         """ Utility function for processing a corpus with a separate processing function. """
-        feat_container = assets.FeatureContainer(output_path)
+        feat_container = containers.FeatureContainer(output_path)
         feat_container.open()
 
         sampling_rate = -1
@@ -343,7 +368,7 @@ class Processor(metaclass=abc.ABCMeta):
             if sr is None:
                 if sampling_rate > 0 and sampling_rate != utt_sampling_rate:
                     raise ValueError(
-                        'File {} has a different sampling-rate than the previous ones!'.format(utterance.file.idx))
+                        'File {} has a different sampling-rate than the previous ones!'.format(utterance.track.idx))
 
                 sampling_rate = utt_sampling_rate
 

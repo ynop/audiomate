@@ -44,22 +44,22 @@ class TestGtzanDownloader:
 
 class TestGtzanReader:
 
-    def test_load_files(self, reader, data_path):
+    def test_load_tracks(self, reader, data_path):
         ds = reader.load(data_path)
 
-        assert ds.num_files == 4
+        assert ds.num_tracks == 4
 
-        assert ds.files['bagpipe'].idx == 'bagpipe'
-        assert ds.files['bagpipe'].path == os.path.join(data_path, 'music_wav', 'bagpipe.wav')
+        assert ds.tracks['bagpipe'].idx == 'bagpipe'
+        assert ds.tracks['bagpipe'].path == os.path.join(data_path, 'music_wav', 'bagpipe.wav')
 
-        assert ds.files['ballad'].idx == 'ballad'
-        assert ds.files['ballad'].path == os.path.join(data_path, 'music_wav', 'ballad.wav')
+        assert ds.tracks['ballad'].idx == 'ballad'
+        assert ds.tracks['ballad'].path == os.path.join(data_path, 'music_wav', 'ballad.wav')
 
-        assert ds.files['acomic'].idx == 'acomic'
-        assert ds.files['acomic'].path == os.path.join(data_path, 'speech_wav', 'acomic.wav')
+        assert ds.tracks['acomic'].idx == 'acomic'
+        assert ds.tracks['acomic'].path == os.path.join(data_path, 'speech_wav', 'acomic.wav')
 
-        assert ds.files['acomic2'].idx == 'acomic2'
-        assert ds.files['acomic2'].path == os.path.join(data_path, 'speech_wav', 'acomic2.wav')
+        assert ds.tracks['acomic2'].idx == 'acomic2'
+        assert ds.tracks['acomic2'].path == os.path.join(data_path, 'speech_wav', 'acomic2.wav')
 
     def test_load_issuers(self, reader, data_path):
         ds = reader.load(data_path)
@@ -72,25 +72,25 @@ class TestGtzanReader:
         assert ds.num_utterances == 4
 
         assert ds.utterances['bagpipe'].idx == 'bagpipe'
-        assert ds.utterances['bagpipe'].file.idx == 'bagpipe'
+        assert ds.utterances['bagpipe'].track.idx == 'bagpipe'
         assert ds.utterances['bagpipe'].issuer is None
         assert ds.utterances['bagpipe'].start == 0
         assert ds.utterances['bagpipe'].end == -1
 
         assert ds.utterances['ballad'].idx == 'ballad'
-        assert ds.utterances['ballad'].file.idx == 'ballad'
+        assert ds.utterances['ballad'].track.idx == 'ballad'
         assert ds.utterances['ballad'].issuer is None
         assert ds.utterances['ballad'].start == 0
         assert ds.utterances['ballad'].end == -1
 
         assert ds.utterances['acomic'].idx == 'acomic'
-        assert ds.utterances['acomic'].file.idx == 'acomic'
+        assert ds.utterances['acomic'].track.idx == 'acomic'
         assert ds.utterances['acomic'].issuer is None
         assert ds.utterances['acomic'].start == 0
         assert ds.utterances['acomic'].end == -1
 
         assert ds.utterances['acomic2'].idx == 'acomic2'
-        assert ds.utterances['acomic2'].file.idx == 'acomic2'
+        assert ds.utterances['acomic2'].track.idx == 'acomic2'
         assert ds.utterances['acomic2'].issuer is None
         assert ds.utterances['acomic2'].start == 0
         assert ds.utterances['acomic2'].end == -1

@@ -1,12 +1,11 @@
-import unittest
-
 import numpy as np
 import librosa
 
 from audiomate.processing import pipeline
 
 
-class MelSpectrogramTest(unittest.TestCase):
+class TestMelSpectrogram:
+
     def test_compute(self):
         samples = np.arange(8096).astype(np.float32)
         D = np.abs(librosa.core.stft(samples, n_fft=2048, hop_length=512, center=False)) ** 2
@@ -19,7 +18,8 @@ class MelSpectrogramTest(unittest.TestCase):
         assert np.array_equal(expected, res)
 
 
-class MFCCTest(unittest.TestCase):
+class TestMFCC:
+
     def test_compute(self):
         samples = np.arange(8096).astype(np.float32)
         D = np.abs(librosa.core.stft(samples, n_fft=2048, hop_length=512, center=False)) ** 2

@@ -1,11 +1,11 @@
 import os
 
+from audiomate import corpus
+from audiomate import issuers
+from audiomate.corpus.io import voxforge
+
 import pytest
 import requests_mock
-
-from audiomate import corpus
-from audiomate.corpus.io import voxforge
-from audiomate.corpus import assets
 
 from tests import resources
 
@@ -156,28 +156,28 @@ class TestVoxforgeDownloader:
 
 class TestVoxforgeReader:
 
-    def test_load_files(self, reader, sample_corpus_path):
+    def test_load_tracks(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)
 
-        assert ds.num_files == 13
+        assert ds.num_tracks == 13
 
-        assert ds.files['1337ad-20170321-czb-de11-095'].idx == '1337ad-20170321-czb-de11-095'
-        assert ds.files['1337ad-20170321-czb-de11-095'].path == os.path.join(sample_corpus_path,
-                                                                             '1337ad-20170321-czb',
-                                                                             'wav',
-                                                                             'de11-095.wav')
+        assert ds.tracks['1337ad-20170321-czb-de11-095'].idx == '1337ad-20170321-czb-de11-095'
+        assert ds.tracks['1337ad-20170321-czb-de11-095'].path == os.path.join(sample_corpus_path,
+                                                                              '1337ad-20170321-czb',
+                                                                              'wav',
+                                                                              'de11-095.wav')
 
-        assert ds.files['1337ad-20170321-czb-de11-096'].idx == '1337ad-20170321-czb-de11-096'
-        assert ds.files['1337ad-20170321-czb-de11-096'].path == os.path.join(sample_corpus_path,
-                                                                             '1337ad-20170321-czb',
-                                                                             'wav',
-                                                                             'de11-096.wav')
+        assert ds.tracks['1337ad-20170321-czb-de11-096'].idx == '1337ad-20170321-czb-de11-096'
+        assert ds.tracks['1337ad-20170321-czb-de11-096'].path == os.path.join(sample_corpus_path,
+                                                                              '1337ad-20170321-czb',
+                                                                              'wav',
+                                                                              'de11-096.wav')
 
-        assert ds.files['anonymous-20081027-njq-a0479'].idx == 'anonymous-20081027-njq-a0479'
-        assert ds.files['anonymous-20081027-njq-a0479'].path == os.path.join(sample_corpus_path,
-                                                                             'anonymous-20081027-njq',
-                                                                             'wav',
-                                                                             'a0479.wav')
+        assert ds.tracks['anonymous-20081027-njq-a0479'].idx == 'anonymous-20081027-njq-a0479'
+        assert ds.tracks['anonymous-20081027-njq-a0479'].path == os.path.join(sample_corpus_path,
+                                                                              'anonymous-20081027-njq',
+                                                                              'wav',
+                                                                              'a0479.wav')
 
     def test_load_issuers(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)
@@ -185,27 +185,27 @@ class TestVoxforgeReader:
         assert ds.num_issuers == 4
 
         assert ds.issuers['1337ad'].idx == '1337ad'
-        assert type(ds.issuers['1337ad']) == assets.Speaker
-        assert ds.issuers['1337ad'].gender == assets.Gender.FEMALE
-        assert ds.issuers['1337ad'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['1337ad']) == issuers.Speaker
+        assert ds.issuers['1337ad'].gender == issuers.Gender.FEMALE
+        assert ds.issuers['1337ad'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['1337ad'].native_language == 'deu'
 
         assert ds.issuers['anonymous-20081027-njq'].idx == 'anonymous-20081027-njq'
-        assert type(ds.issuers['anonymous-20081027-njq']) == assets.Speaker
-        assert ds.issuers['anonymous-20081027-njq'].gender == assets.Gender.MALE
-        assert ds.issuers['anonymous-20081027-njq'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['anonymous-20081027-njq']) == issuers.Speaker
+        assert ds.issuers['anonymous-20081027-njq'].gender == issuers.Gender.MALE
+        assert ds.issuers['anonymous-20081027-njq'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['anonymous-20081027-njq'].native_language == 'eng'
 
         assert ds.issuers['Katzer'].idx == 'Katzer'
-        assert type(ds.issuers['Katzer']) == assets.Speaker
-        assert ds.issuers['Katzer'].gender == assets.Gender.MALE
-        assert ds.issuers['Katzer'].age_group == assets.AgeGroup.YOUTH
+        assert type(ds.issuers['Katzer']) == issuers.Speaker
+        assert ds.issuers['Katzer'].gender == issuers.Gender.MALE
+        assert ds.issuers['Katzer'].age_group == issuers.AgeGroup.YOUTH
         assert ds.issuers['Katzer'].native_language == 'eng'
 
         assert ds.issuers['knotyouraveragejo'].idx == 'knotyouraveragejo'
-        assert type(ds.issuers['knotyouraveragejo']) == assets.Speaker
-        assert ds.issuers['knotyouraveragejo'].gender == assets.Gender.FEMALE
-        assert ds.issuers['knotyouraveragejo'].age_group == assets.AgeGroup.ADULT
+        assert type(ds.issuers['knotyouraveragejo']) == issuers.Speaker
+        assert ds.issuers['knotyouraveragejo'].gender == issuers.Gender.FEMALE
+        assert ds.issuers['knotyouraveragejo'].age_group == issuers.AgeGroup.ADULT
         assert ds.issuers['knotyouraveragejo'].native_language == 'eng'
 
     def test_load_utterances(self, reader, sample_corpus_path):
@@ -214,19 +214,19 @@ class TestVoxforgeReader:
         assert ds.num_utterances == 13
 
         assert ds.utterances['1337ad-20170321-czb-de11-095'].idx == '1337ad-20170321-czb-de11-095'
-        assert ds.utterances['1337ad-20170321-czb-de11-095'].file.idx == '1337ad-20170321-czb-de11-095'
+        assert ds.utterances['1337ad-20170321-czb-de11-095'].track.idx == '1337ad-20170321-czb-de11-095'
         assert ds.utterances['1337ad-20170321-czb-de11-095'].start == 0
         assert ds.utterances['1337ad-20170321-czb-de11-095'].end == -1
         assert ds.utterances['1337ad-20170321-czb-de11-095'].issuer.idx == '1337ad'
 
         assert ds.utterances['1337ad-20170321-czb-de11-096'].idx == '1337ad-20170321-czb-de11-096'
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].file.idx == '1337ad-20170321-czb-de11-096'
+        assert ds.utterances['1337ad-20170321-czb-de11-096'].track.idx == '1337ad-20170321-czb-de11-096'
         assert ds.utterances['1337ad-20170321-czb-de11-096'].start == 0
         assert ds.utterances['1337ad-20170321-czb-de11-096'].end == -1
         assert ds.utterances['1337ad-20170321-czb-de11-096'].issuer.idx == '1337ad'
 
         assert ds.utterances['anonymous-20081027-njq-a0479'].idx == 'anonymous-20081027-njq-a0479'
-        assert ds.utterances['anonymous-20081027-njq-a0479'].file.idx == 'anonymous-20081027-njq-a0479'
+        assert ds.utterances['anonymous-20081027-njq-a0479'].track.idx == 'anonymous-20081027-njq-a0479'
         assert ds.utterances['anonymous-20081027-njq-a0479'].start == 0
         assert ds.utterances['anonymous-20081027-njq-a0479'].end == -1
         assert ds.utterances['anonymous-20081027-njq-a0479'].issuer.idx == 'anonymous-20081027-njq'

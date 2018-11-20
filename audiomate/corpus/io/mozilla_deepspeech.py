@@ -40,7 +40,7 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
             utterance = corpus.utterances[utterance_idx]
 
             if utterance.start == 0 and utterance.end == -1:
-                audio_path = utterance.file.path
+                audio_path = utterance.track.path
             else:
                 audio_path = os.path.join(audio_folder, '{}.wav'.format(utterance.idx))
                 sampling_rate = utterance.sampling_rate

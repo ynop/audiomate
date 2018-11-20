@@ -3,7 +3,7 @@ import glob
 import re
 
 import audiomate
-from audiomate.corpus import assets
+from audiomate import annotations
 from audiomate.corpus import subset
 from . import base
 
@@ -61,7 +61,8 @@ class AEDReader(base.CorpusReader):
 
                 corpus.new_file(wav_path, basename)
                 utt = corpus.new_utterance(basename, basename)
-                utt.set_label_list(assets.LabelList.create_single(label, audiomate.corpus.LL_SOUND_CLASS))
+                label = annotations.LabelList.create_single(label, audiomate.corpus.LL_SOUND_CLASS)
+                utt.set_label_list(label)
                 utterance_ids.add(basename)
 
         return utterance_ids

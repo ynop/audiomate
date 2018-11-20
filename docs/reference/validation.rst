@@ -34,3 +34,14 @@ Label-List
 .. autoclass:: LabelCountValidator
     :members:
 
+.. autoclass:: LabelCoverageValidator
+    :members:
+
+.. autoclass:: LabelCoverageValidationResult
+    :members:
+
+.. autoclass:: LabelOverflowValidator
+    :members:
+
+.. autoclass:: LabelOverflowValidationResult
+    :members:
