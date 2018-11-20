@@ -100,11 +100,14 @@ class Utterance(object):
         if self.end >= 0:
             read_duration = self.duration
 
-        if offset > 0:
+        if offset > 0 and read_duration is not None:
             read_duration -= offset
 
         if duration is not None:
-            read_duration = min(duration, read_duration)
+            if read_duration is None:
+                read_duration = duration
+            else:
+                read_duration = min(duration, read_duration)
 
         return self.track.read_samples(sr=sr, offset=self.start + offset, duration=read_duration)
 
