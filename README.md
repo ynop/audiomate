@@ -5,9 +5,11 @@
 [![Coverage Badge](https://api.shippable.com/projects/5a1d31821e6eda0700091230/coverageBadge?branch=master)](https://app.shippable.com/github/ynop/audiomate)
 [![Documentation Status](https://readthedocs.org/projects/audiomate/badge/?version=latest)](https://audiomate.readthedocs.io/en/latest/?badge=latest)
 
-Audiomate is a library for easy access to audio datasets. It provides the datastructures for accessing/loading different datasets in a generic way. This should ease the use of audio datasets for example for machine learning tasks.
+Audiomate is a library for easy access to audio datasets.
+It provides the datastructures for accessing/loading different datasets in a generic way.
+This should ease the use of audio datasets for example for machine learning tasks.
 
-Documentation: https://audiomate.readthedocs.io/  
+Documentation: https://audiomate.readthedocs.io  
 Examples: https://github.com/ynop/audiomate/tree/master/examples
 
 Currently supported datasets:
@@ -18,6 +20,7 @@ Currently supported datasets:
 * [German Distant Speech Corpus](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/acoustic-models.html)
 * [Google Speech Commands](https://research.googleblog.com/2017/08/launching-speech-commands-dataset.html)
 * [GTZAN](https://marsyasweb.appspot.com/download/data_sets/)
+* [M-AILABS Speech Dataset](http://www.m-ailabs.bayern/en/the-mailabs-speech-dataset/)
 * [MUSAN](http://www.openslr.org/17/)
 * [Tatoeba](https://tatoeba.org/)
 * [TIMIT](https://github.com/philipperemy/timit)
@@ -35,7 +38,7 @@ Indirectly supported datasets ([Details](https://audiomate.readthedocs.io/en/v1.
 ## Installation
 
 ```sh
-pip install audiomate 
+pip install audiomate
 ```
 
 Install the latest development version:
@@ -50,7 +53,8 @@ pip install git+https://github.com/ynop/audiomate.git
 
 * [A supported version of Python 3](https://docs.python.org/devguide/index.html#status-of-python-branches)
 
-It's recommended to use a virtual environment when developing audiomate. To create one, execute the following command in the project's root directory:
+It's recommended to use a virtual environment when developing audiomate.
+To create one, execute the following command in the project's root directory:
 
 ```
 python -m venv .
