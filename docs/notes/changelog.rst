@@ -28,6 +28,8 @@ Next Version
 * All functionality regarding labels was moved to its own module
   :mod:`audiomate.annotations`.
 
+* The class :class:`audiomate.tracks.Utterance` was moved to the tracks module.
+
 **New Features**
 
 * Introducing the :mod:`audiomate.feeding` module. It provides different tools for accessing container data.
@@ -76,6 +78,9 @@ Next Version
 
 * [`#58 <https://github.com/ynop/audiomate/issues/58>`_] Keep track of number of samples per frame and between frames.
   Now the correct values will be stored in a Feature-Container, if the processor implements it correctly.
+
+* [`#72 <https://github.com/ynop/audiomate/issues/72>`_] Fix bug, when reading samples from utterance,
+  using a specific duration, while the utterance end is not defined.
 
 v2.0.0
 ------
