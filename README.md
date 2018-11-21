@@ -9,8 +9,9 @@ Audiomate is a library for easy access to audio datasets.
 It provides the datastructures for accessing/loading different datasets in a generic way.
 This should ease the use of audio datasets for example for machine learning tasks.
 
-Documentation: https://audiomate.readthedocs.io  
-Examples: https://github.com/ynop/audiomate/tree/master/examples
+* [Documentation](https://audiomate.readthedocs.io)   
+* [Examples](https://github.com/ynop/audiomate/tree/master/examples)   
+* [Changelog](https://audiomate.readthedocs.io/en/latest/notes/changelog.html)   
 
 Currently supported datasets:
 * [Acoustic Event Dataset](https://data.vision.ee.ethz.ch/cvl/ae_dataset/)
