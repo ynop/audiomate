@@ -4,6 +4,9 @@ Changelog
 Next Version
 ------------
 
+v3.0.0
+------
+
 **Breaking Changes**
 
 * Moved label-encoding to its own module (:mod:`audiomate.encoding`).
