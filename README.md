@@ -9,6 +9,27 @@ Audiomate is a library for easy access to audio datasets.
 It provides the datastructures for accessing/loading different datasets in a generic way.
 This should ease the use of audio datasets for example for machine learning tasks.
 
+```python
+import audiomate
+from audiomate.corpus import io
+
+# Download a dataset
+esc_downloader = io.ESC50Downloader()
+esc_downloader.download('/local/path')
+
+# Load and work with the dataset
+esc50 = audiomate.Corpus.load('/local/path', reader='esc-50')
+
+# e.g. Read the audio signal and the label of specific sample/utterance
+utterance = esc50.utterances['1-100032-A-0']
+samples = utterance.read_samples()
+label = utterance.label_lists[audiomate.corpus.LL_SOUND_CLASS][0].value
+```
+
+Furthermore it provides tools for interacting with datasets
+(validation, splitting, subsets, merge, filter), extracting features,
+feeding samples for training ML models and more.
+
 * [Documentation](https://audiomate.readthedocs.io)   
 * [Examples](https://github.com/ynop/audiomate/tree/master/examples)   
 * [Changelog](https://audiomate.readthedocs.io/en/latest/notes/changelog.html)   
