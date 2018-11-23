@@ -201,6 +201,19 @@ class TestLabelList:
         with pytest.raises(StopIteration):
             next(ranges)
 
+    def test_labels_in_range(self):
+        ll = LabelList(labels=[
+            Label('a', 3.2, 4.5),
+            Label('b', 5.1, 8.9),
+            Label('c', 7.2, 10.5),
+            Label('a', 10.5, 14),
+            Label('c', 13, 14)
+        ])
+
+        in_range = ll.labels_in_range(8.2, 12.5)
+
+        assert sorted(in_range) == sorted([ll[1], ll[2], ll[3]])
+
     def test_label_count(self):
         ll = LabelList(labels=[
             Label('a', 3.2, 4.5),
