@@ -127,6 +127,37 @@ class LabelList(object):
         if labels_to_end and len(current_range_labels) > 0:
             yield (current_range_start, -1, list(current_range_labels))
 
+    def labels_in_range(self, start, end):
+        """
+        Return a list of labels, that are within the given range.
+        Also labels that only overlap are included.
+
+        Args:
+            start (float): Start-time in seconds.
+            end (float): End-time in seconds.
+
+        Returns:
+            list: List of labels in the range.
+
+        Example:
+            >>> ll = LabelList(labels=[
+            >>>     Label('a', 3.2, 4.5),
+            >>>     Label('b', 5.1, 8.9),
+            >>>     Label('c', 7.2, 10.5),
+            >>>     Label('d', 10.5, 14)
+            >>> ])
+            >>> ll.labels_in_range(6.2, 10.1)
+            [Label('b', 5.1, 8.9), Label('c', 7.2, 10.5)]
+        """
+
+        labels = []
+
+        for label in self.labels:
+            if not (label.end < start or label.start > end):
+                labels.append(label)
+
+        return labels
+
     def label_values(self):
         """
         Return a list of all occuring label values.
