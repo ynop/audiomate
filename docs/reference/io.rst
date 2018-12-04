@@ -36,7 +36,7 @@ Implementations
   ================================  ========  =====  =======
   Format                            Download  Read   Write
   ================================  ========  =====  =======
-  Acoustic Event Dataset                      x
+  Acoustic Event Dataset            x         x
   Broadcast                                   x
   Common Voice                      x         x
   Default                                     x      x
@@ -59,6 +59,9 @@ Implementations
 
 Acoustic Event Dataset
 ^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: AEDDownloader
+   :members:
+
 .. autoclass:: AEDReader
    :members:
 
