@@ -34,9 +34,6 @@ The ``_download`` method will do the heavy work of download all the files to the
             # Download the data to target_path
 
 
-
-
-
 Corpus Reader
 -------------
 
@@ -83,7 +80,33 @@ Finally in the ``_load`` method the actual loading is done and the loaded corpus
 
             return corpus
 
+Testing
+^^^^^^^
+For testing a reader the :class:`tests.corpus.io.reader_test.CorpusReaderTest` can be used.
+It provides base test methods for checking the correctness/existence of the basic components (tracks, utterances, labels, ...).
 
+.. code-block:: python
+   
+   from tests.corpus.io import reader_test as rt
+
+   class TestMyReader(rt.CorpusReaderTest):
+      
+      #
+      # Define via EXPECTED_* variables, what components are expected to be loaded
+      #
+      EXPECTED_NUMBER_OF_TRACKS = 3
+      EXPECTED_TRACKS = [
+         rt.ExpFileTrack('file-id', '/path/to/file'),
+      ]
+
+      #
+      # Override the load method, that loads the sample-corpus.
+      #
+      def load(self):
+         return MyReader().load('/path/to/sample/corpus')
+
+
+For testing any custom functionality specific test-methods can be added as well.
 
 Corpus Writer
 -------------
