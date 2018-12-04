@@ -15,7 +15,7 @@ from .folder import FolderReader  # noqa: F401
 from .esc import ESC50Downloader, ESC50Reader  # noqa: F401
 from .mozilla_deepspeech import MozillaDeepSpeechWriter  # noqa: F401
 from .voxforge import VoxforgeDownloader, VoxforgeReader  # noqa: F401
-from .aed import AEDReader  # noqa: F401
+from .aed import AEDReader, AEDDownloader  # noqa: F401
 from .urbansound import Urbansound8kReader  # noqa: F401
 from .timit import TimitReader  # noqa: F401
 from .swc import SWCReader  # noqa: F401

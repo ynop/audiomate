@@ -10,6 +10,9 @@ Next Version
   downloader (:class:`audiomate.corpus.io.RouenDownloader`) for the
   `LITIS Rouen Audio scene dataset <https://sites.google.com/site/alainrakotomamonjy/home/audio-scene>`_.
 
+* Added downloader (:class:`audiomate.corpus.io.AEDDownloader`) for the
+  `Acoustic Event Dataset <https://data.vision.ee.ethz.ch/cvl/ae_dataset/>`_.
+
 v3.0.0
 ------
 
