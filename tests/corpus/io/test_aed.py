@@ -1,9 +1,11 @@
 import os
 
+import requests_mock
 import pytest
 
 from audiomate import corpus
 from audiomate.corpus import io
+from audiomate.corpus.io import aed
 from tests import resources
 
 
@@ -13,8 +15,34 @@ def reader():
 
 
 @pytest.fixture
+def downloader():
+    return io.AEDDownloader()
+
+
+@pytest.fixture
 def data_path():
     return resources.sample_corpus_path('aed')
+
+
+@pytest.fixture()
+def zip_data():
+    with open(resources.get_resource_path(['sample_files', 'zip_sample_with_subfolder.zip']), 'rb') as f:
+        return f.read()
+
+
+class TestAEDDownloader:
+
+    def test_download(self, zip_data, downloader, tmpdir):
+        target_folder = tmpdir.strpath
+
+        with requests_mock.Mocker() as mock:
+            mock.get(aed.DATA_URL, content=zip_data)
+
+            downloader.download(target_folder)
+
+        assert os.path.isfile(os.path.join(target_folder, 'a.txt'))
+        assert os.path.isfile(os.path.join(target_folder, 'subsub', 'b.txt'))
+        assert os.path.isfile(os.path.join(target_folder, 'subsub', 'c.txt'))
 
 
 class TestAEDReader:
