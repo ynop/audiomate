@@ -4,6 +4,12 @@ Changelog
 Next Version
 ------------
 
+**New Features**
+
+* Added reader (:class:`audiomate.corpus.io.RouenReader`) and
+  downloader (:class:`audiomate.corpus.io.RouenDownloader`) for the
+  `LITIS Rouen Audio scene dataset <https://sites.google.com/site/alainrakotomamonjy/home/audio-scene>`_.
+
 v3.0.0
 ------
 

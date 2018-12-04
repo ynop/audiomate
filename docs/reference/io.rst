@@ -33,28 +33,29 @@ Implementations
 .. table:: Support for Reading and Writing by Format
 
 
-  ==============================  ========  =====  =======
-  Format                          Download  Read   Write
-  ==============================  ========  =====  =======
-  Acoustic Event Dataset                    x
-  Broadcast                                 x
-  Common Voice                    x         x
-  Default                                   x      x
-  ESC-50                          x         x
-  Free-Spoken-Digit-Dataset       x         x
-  Folder                                    x
-  Google Speech Commands                    x
-  GTZAN                           x         x
-  Kaldi                                     x      x
-  Mozilla DeepSpeech                               x
-  MUSAN                           x         x
-  M-AILABS Speech Dataset         x         x
-  Tatoeba                         x         x
-  TIMIT                                     x
-  TUDA German Distant Speech                x
-  Urbansound8k                              x
-  VoxForge                        x         x
-  ==============================  ========  =====  =======
+  ================================  ========  =====  =======
+  Format                            Download  Read   Write
+  ================================  ========  =====  =======
+  Acoustic Event Dataset                      x
+  Broadcast                                   x
+  Common Voice                      x         x
+  Default                                     x      x
+  ESC-50                            x         x
+  Free-Spoken-Digit-Dataset         x         x
+  Folder                                      x
+  Google Speech Commands                      x
+  GTZAN                             x         x
+  Kaldi                                       x      x
+  Mozilla DeepSpeech                                 x
+  MUSAN                             x         x
+  M-AILABS Speech Dataset           x         x
+  LITIS Rouen Audio scene dataset   x         x
+  Tatoeba                           x         x
+  TIMIT                                       x
+  TUDA German Distant Speech                  x
+  Urbansound8k                                x
+  VoxForge                          x         x
+  ================================  ========  =====  =======
 
 Acoustic Event Dataset
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -143,6 +144,14 @@ M-AILABS Speech Dataset
    :members:
 
 .. autoclass:: MailabsReader
+   :members:
+
+LITIS Rouen Audio scene dataset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: RouenDownloader
+   :members:
+
+.. autoclass:: RouenReader
    :members:
 
 Tatoeba

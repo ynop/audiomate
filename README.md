@@ -44,6 +44,7 @@ Currently supported datasets:
 * [GTZAN](https://marsyasweb.appspot.com/download/data_sets/)
 * [M-AILABS Speech Dataset](http://www.m-ailabs.bayern/en/the-mailabs-speech-dataset/)
 * [MUSAN](http://www.openslr.org/17/)
+* [LITIS Rouen Audio scene dataset](https://sites.google.com/site/alainrakotomamonjy/home/audio-scene)
 * [Tatoeba](https://tatoeba.org/)
 * [TIMIT](https://github.com/philipperemy/timit)
 * [Urbansound8k](http://urbansounddataset.weebly.com/urbansound8k.html)
