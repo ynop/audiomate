@@ -127,7 +127,7 @@ class LabelList(object):
         if labels_to_end and len(current_range_labels) > 0:
             yield (current_range_start, -1, list(current_range_labels))
 
-    def labels_in_range(self, start, end):
+    def labels_in_range(self, start, end, fully_included=False):
         """
         Return a list of labels, that are within the given range.
         Also labels that only overlap are included.
@@ -135,6 +135,10 @@ class LabelList(object):
         Args:
             start (float): Start-time in seconds.
             end (float): End-time in seconds.
+            fully_included (bool): If ``True``, only labels fully included
+                                   in the range are returned. Otherwise
+                                   also overlapping ones are returned.
+                                   (default ``False``)
 
         Returns:
             list: List of labels in the range.
@@ -152,9 +156,15 @@ class LabelList(object):
 
         labels = []
 
-        for label in self.labels:
-            if not (label.end < start or label.start > end):
-                labels.append(label)
+        if fully_included:
+            for label in self.labels:
+                if label.start >= start and label.end <= end:
+                    labels.append(label)
+
+        else:
+            for label in self.labels:
+                if not (label.end < start or label.start > end):
+                    labels.append(label)
 
         return labels
 

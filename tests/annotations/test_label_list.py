@@ -214,6 +214,19 @@ class TestLabelList:
 
         assert sorted(in_range) == sorted([ll[1], ll[2], ll[3]])
 
+    def test_labels_in_range_returns_only_fully_included(self):
+        ll = LabelList(labels=[
+            Label('a', 3.2, 4.5),
+            Label('b', 5.1, 8.9),
+            Label('c', 7.2, 10.5),
+            Label('a', 10.5, 14),
+            Label('c', 13, 15)
+        ])
+
+        in_range = ll.labels_in_range(7.2, 14.99, fully_included=True)
+
+        assert sorted(in_range) == sorted([ll[2], ll[3]])
+
     def test_label_count(self):
         ll = LabelList(labels=[
             Label('a', 3.2, 4.5),
