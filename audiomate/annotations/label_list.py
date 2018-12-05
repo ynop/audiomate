@@ -127,7 +127,7 @@ class LabelList(object):
         if labels_to_end and len(current_range_labels) > 0:
             yield (current_range_start, -1, list(current_range_labels))
 
-    def labels_in_range(self, start, end):
+    def labels_in_range(self, start, end, fully_included=False):
         """
         Return a list of labels, that are within the given range.
         Also labels that only overlap are included.
@@ -135,6 +135,10 @@ class LabelList(object):
         Args:
             start (float): Start-time in seconds.
             end (float): End-time in seconds.
+            fully_included (bool): If ``True``, only labels fully included
+                                   in the range are returned. Otherwise
+                                   also overlapping ones are returned.
+                                   (default ``False``)
 
         Returns:
             list: List of labels in the range.
@@ -152,9 +156,15 @@ class LabelList(object):
 
         labels = []
 
-        for label in self.labels:
-            if not (label.end < start or label.start > end):
-                labels.append(label)
+        if fully_included:
+            for label in self.labels:
+                if label.start >= start and label.end <= end:
+                    labels.append(label)
+
+        else:
+            for label in self.labels:
+                if not (label.end < start or label.start > end):
+                    labels.append(label)
 
         return labels
 
@@ -489,3 +499,36 @@ class LabelList(object):
         return LabelList(idx=idx, labels=[
             Label(value=value)
         ])
+
+    @classmethod
+    def with_label_values(cls, values, idx='default'):
+        """
+        Create a new label-list containing labels with the given values.
+        All labels will have default start/end values of 0 and -1.
+
+        Args:
+            values (list): List of values (str) that should be created and appended
+                           to the label-list.
+            idx (str): The idx of the label-list.
+
+        Returns:
+            (LabelList): New label-list.
+
+        Example:
+            >>> ll = LabelList.with_label_values(['a', 'x', 'z'], idx='letters')
+            >>> ll.idx
+            'letters'
+            >>> ll.labels
+            [
+                Label('a', 0, -1),
+                Label('x', 0, -1),
+                Label('z', 0, -1),
+            ]
+        """
+
+        ll = LabelList(idx=idx)
+
+        for label_value in values:
+            ll.append(Label(label_value))
+
+        return ll

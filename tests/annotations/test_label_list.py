@@ -214,6 +214,19 @@ class TestLabelList:
 
         assert sorted(in_range) == sorted([ll[1], ll[2], ll[3]])
 
+    def test_labels_in_range_returns_only_fully_included(self):
+        ll = LabelList(labels=[
+            Label('a', 3.2, 4.5),
+            Label('b', 5.1, 8.9),
+            Label('c', 7.2, 10.5),
+            Label('a', 10.5, 14),
+            Label('c', 13, 15)
+        ])
+
+        in_range = ll.labels_in_range(7.2, 14.99, fully_included=True)
+
+        assert sorted(in_range) == sorted([ll[2], ll[3]])
+
     def test_label_count(self):
         ll = LabelList(labels=[
             Label('a', 3.2, 4.5),
@@ -492,3 +505,25 @@ class TestLabelList:
 
         assert len(res[1]) == 1
         assert res[1][0] == Label('c', 0.0, pytest.approx(0.8))
+
+    def test_with_label_values(self):
+        ll = LabelList.with_label_values([
+            'a',
+            'b',
+            'c',
+        ])
+
+        assert len(ll) == 3
+        assert ll.idx == 'default'
+        assert ll[0].value == 'a'
+        assert ll[1].value == 'b'
+        assert ll[2].value == 'c'
+
+    def test_with_label_values_sets_correct_idx(self):
+        ll = LabelList.with_label_values([
+            'a',
+            'b',
+            'c',
+        ], idx='letters')
+
+        assert ll.idx == 'letters'

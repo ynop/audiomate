@@ -13,6 +13,10 @@ Next Version
 * Added downloader (:class:`audiomate.corpus.io.AEDDownloader`) for the
   `Acoustic Event Dataset <https://data.vision.ee.ethz.ch/cvl/ae_dataset/>`_.
 
+* [`#69 <https://github.com/ynop/audiomate/issues/69>`_] Method to get labels within range: :meth:`audiomate.annotations.LabelList.labels_in_range`.
+
+* [`#68 <https://github.com/ynop/audiomate/issues/68>`_] Add convenience method to create Label-List with list of label values: :meth:`audiomate.annotations.LabelList.with_label_values`.
+
 v3.0.0
 ------
 
