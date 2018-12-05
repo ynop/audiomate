@@ -499,3 +499,36 @@ class LabelList(object):
         return LabelList(idx=idx, labels=[
             Label(value=value)
         ])
+
+    @classmethod
+    def with_label_values(cls, values, idx='default'):
+        """
+        Create a new label-list containing labels with the given values.
+        All labels will have default start/end values of 0 and -1.
+
+        Args:
+            values (list): List of values (str) that should be created and appended
+                           to the label-list.
+            idx (str): The idx of the label-list.
+
+        Returns:
+            (LabelList): New label-list.
+
+        Example:
+            >>> ll = LabelList.with_label_values(['a', 'x', 'z'], idx='letters')
+            >>> ll.idx
+            'letters'
+            >>> ll.labels
+            [
+                Label('a', 0, -1),
+                Label('x', 0, -1),
+                Label('z', 0, -1),
+            ]
+        """
+
+        ll = LabelList(idx=idx)
+
+        for label_value in values:
+            ll.append(Label(label_value))
+
+        return ll

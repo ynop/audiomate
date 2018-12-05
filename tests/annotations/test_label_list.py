@@ -505,3 +505,25 @@ class TestLabelList:
 
         assert len(res[1]) == 1
         assert res[1][0] == Label('c', 0.0, pytest.approx(0.8))
+
+    def test_with_label_values(self):
+        ll = LabelList.with_label_values([
+            'a',
+            'b',
+            'c',
+        ])
+
+        assert len(ll) == 3
+        assert ll.idx == 'default'
+        assert ll[0].value == 'a'
+        assert ll[1].value == 'b'
+        assert ll[2].value == 'c'
+
+    def test_with_label_values_sets_correct_idx(self):
+        ll = LabelList.with_label_values([
+            'a',
+            'b',
+            'c',
+        ], idx='letters')
+
+        assert ll.idx == 'letters'
