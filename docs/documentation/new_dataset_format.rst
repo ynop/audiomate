@@ -33,6 +33,9 @@ The ``_download`` method will do the heavy work of download all the files to the
         def _download(self, target_path):
             # Download the data to target_path
 
+In the module :mod:`audiomate.corpus.io.downloader`, common base classes for downloaders are implemented. This is useful since for a lot of corpora the way of downloading is similar.
+
+* :class:`audiomate.corpus.io.ArchiveDownloader`: For corpora based on a single archive.
 
 Corpus Reader
 -------------

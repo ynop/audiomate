@@ -2,12 +2,14 @@ from audiomate.corpus.io import CorpusDownloader, available_downloaders, create_
 from audiomate.corpus.io import CorpusReader, available_readers, create_reader_of_type
 from audiomate.corpus.io import CorpusWriter, available_writers, create_writer_of_type
 from audiomate.corpus.io import UnknownDownloaderException, UnknownReaderException, UnknownWriterException
+from audiomate.corpus.io.downloader import ArchiveDownloader
 
 import pytest
 
 
 def test_all_downloaders_registered():
     expected_downloaders = CorpusDownloader.__subclasses__()
+    expected_downloaders.remove(ArchiveDownloader)
     actual_downloaders = available_downloaders()
 
     assert len(expected_downloaders) == len(actual_downloaders), \
@@ -22,6 +24,7 @@ def test_all_downloaders_registered():
 
 def test_all_downloaders_creatable():
     expected_downloaders = CorpusDownloader.__subclasses__()
+    expected_downloaders.remove(ArchiveDownloader)
 
     for expected_downloader in expected_downloaders:
         assert isinstance(

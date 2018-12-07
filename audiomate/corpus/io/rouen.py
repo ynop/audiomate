@@ -3,34 +3,28 @@ import re
 
 import audiomate
 from audiomate import annotations
-from audiomate.utils import download
-from audiomate.utils import files
 from . import base
+from . import downloader
 
 DATA_URL = 'http://asi.insa-rouen.fr/enseignants/~arakoto/data_rouen.zip'
 
 LABEL_PATTERN = r'(.*?)(\d+)'
 
 
-class RouenDownloader(base.CorpusDownloader):
+class RouenDownloader(downloader.ArchiveDownloader):
     """
     Downloader for the LITIS Rouen Audio scene dataset.
     """
 
+    def __init__(self):
+        super(RouenDownloader, self).__init__(
+            DATA_URL,
+            move_files_up=True
+        )
+
     @classmethod
     def type(cls):
         return 'rouen'
-
-    def _download(self, target_path):
-        os.makedirs(target_path, exist_ok=True)
-        tmp_file = os.path.join(target_path, 'tmp_ark.zip')
-
-        download.download_file(DATA_URL, tmp_file)
-        download.extract_zip(tmp_file, target_path)
-
-        files.move_all_files_from_subfolders_to_top(target_path)
-
-        os.remove(tmp_file)
 
 
 class RouenReader(base.CorpusReader):

@@ -5,34 +5,27 @@ import re
 import audiomate
 from audiomate import annotations
 from audiomate.corpus import subset
-from audiomate.utils import download
-from audiomate.utils import files
 from . import base
+from . import downloader
 
 DATA_URL = 'https://data.vision.ee.ethz.ch/cvl/ae_dataset/ae_dataset.zip'
-
 LABEL_PATTERN = re.compile(r'(.*)_\d')
 
 
-class AEDDownloader(base.CorpusDownloader):
+class AEDDownloader(downloader.ArchiveDownloader):
     """
     Downloader for the Acoustic Event Dataset.
     """
 
+    def __init__(self):
+        super(AEDDownloader, self).__init__(
+            DATA_URL,
+            move_files_up=True
+        )
+
     @classmethod
     def type(cls):
         return 'aed'
-
-    def _download(self, target_path):
-        os.makedirs(target_path, exist_ok=True)
-        tmp_file = os.path.join(target_path, 'tmp_ark.zip')
-
-        download.download_file(DATA_URL, tmp_file)
-        download.extract_zip(tmp_file, target_path)
-
-        files.move_all_files_from_subfolders_to_top(target_path)
-
-        os.remove(tmp_file)
 
 
 class AEDReader(base.CorpusReader):

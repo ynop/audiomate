@@ -4,14 +4,13 @@ import glob
 import audiomate
 from audiomate import annotations
 from audiomate import issuers
-from audiomate.utils import download
-from audiomate.utils import files
 from . import base
+from . import downloader
 
 MASTER_DOWNLOAD_URL = 'https://github.com/Jakobovski/free-spoken-digit-dataset/archive/master.zip'
 
 
-class FreeSpokenDigitDownloader(base.CorpusDownloader):
+class FreeSpokenDigitDownloader(downloader.ArchiveDownloader):
     """
     Downloader for the Free-Spoken-Digit dataset.
 
@@ -22,24 +21,16 @@ class FreeSpokenDigitDownloader(base.CorpusDownloader):
 
     def __init__(self, url=None):
         if url is None:
-            self.url = MASTER_DOWNLOAD_URL
-        else:
-            self.url = url
+            url = MASTER_DOWNLOAD_URL
+
+        super(FreeSpokenDigitDownloader, self).__init__(
+            url,
+            move_files_up=True
+        )
 
     @classmethod
     def type(cls):
         return 'free-spoken-digits'
-
-    def _download(self, target_path):
-        os.makedirs(target_path, exist_ok=True)
-        tmp_file = os.path.join(target_path, 'tmp_ark.zip')
-
-        download.download_file(self.url, tmp_file)
-        download.extract_zip(tmp_file, target_path)
-
-        files.move_all_files_from_subfolders_to_top(target_path, delete_subfolders=True)
-
-        os.remove(tmp_file)
 
 
 class FreeSpokenDigitReader(base.CorpusReader):

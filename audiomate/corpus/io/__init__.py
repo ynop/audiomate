@@ -4,6 +4,8 @@ used to convert between formats.
 """
 
 from .base import CorpusDownloader, CorpusReader, CorpusWriter
+from .downloader import ArchiveDownloader
+
 from .broadcast import BroadcastReader  # noqa: F401
 from .default import DefaultReader, DefaultWriter  # noqa: F401
 from .gtzan import GtzanDownloader, GtzanReader  # noqa: F401
@@ -27,7 +29,8 @@ from .rouen import RouenDownloader, RouenReader  # noqa: F401
 
 __downloaders = {}
 for cls in CorpusDownloader.__subclasses__():
-    __downloaders[cls.type()] = cls
+    if cls != ArchiveDownloader:
+        __downloaders[cls.type()] = cls
 
 __readers = {}
 for cls in CorpusReader.__subclasses__():
