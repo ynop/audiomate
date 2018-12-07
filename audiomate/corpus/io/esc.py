@@ -4,16 +4,15 @@ import collections
 import audiomate
 from audiomate import annotations
 from audiomate.corpus import subset
-from . import base
 from audiomate.utils import textfile
-from audiomate.utils import download
-from audiomate.utils import files
+from . import base
+from . import downloader
 
 DOWNLOAD_URL = 'https://github.com/karoldvl/ESC-50/archive/master.zip'
 META_FILE_PATH = os.path.join('meta', 'esc50.csv')
 
 
-class ESC50Downloader(base.CorpusDownloader):
+class ESC50Downloader(downloader.ArchiveDownloader):
     """
     Downloader for the ESC-50 dataset.
 
@@ -23,24 +22,16 @@ class ESC50Downloader(base.CorpusDownloader):
 
     def __init__(self, url=None):
         if url is None:
-            self.url = DOWNLOAD_URL
-        else:
-            self.url = url
+            url = DOWNLOAD_URL
+
+        super(ESC50Downloader, self).__init__(
+            url,
+            move_files_up=True
+        )
 
     @classmethod
     def type(cls):
         return 'esc-50'
-
-    def _download(self, target_path):
-        os.makedirs(target_path, exist_ok=True)
-        tmp_file = os.path.join(target_path, 'tmp_ark.zip')
-
-        download.download_file(self.url, tmp_file)
-        download.extract_zip(tmp_file, target_path)
-
-        files.move_all_files_from_subfolders_to_top(target_path)
-
-        os.remove(tmp_file)
 
 
 class ESC50Reader(base.CorpusReader):

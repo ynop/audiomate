@@ -4,9 +4,8 @@ import audiomate
 from audiomate import annotations
 from audiomate import issuers
 from audiomate.utils import textfile
-from audiomate.utils import download
-from audiomate.utils import files
 from . import base
+from . import downloader
 
 DOWNLOAD_URL = 'http://www.openslr.org/resources/17/musan.tar.gz'
 
@@ -17,7 +16,7 @@ ANN_NUM_COLUMS_ = {'music': 4, 'noise': 1, 'speech': 3}
 ANN_FILE_NAME_ = 'ANNOTATIONS'
 
 
-class MusanDownloader(base.CorpusDownloader):
+class MusanDownloader(downloader.ArchiveDownloader):
     """
     Downloader for the MUSAN Corpus.
 
@@ -28,24 +27,16 @@ class MusanDownloader(base.CorpusDownloader):
 
     def __init__(self, url=None):
         if url is None:
-            self.url = DOWNLOAD_URL
-        else:
-            self.url = url
+            url = DOWNLOAD_URL
+
+        super(MusanDownloader, self).__init__(
+            url,
+            move_files_up=True
+        )
 
     @classmethod
     def type(cls):
         return 'musan'
-
-    def _download(self, target_path):
-        os.makedirs(target_path, exist_ok=True)
-        tmp_file = os.path.join(target_path, 'tmp_ark.tar.gz')
-
-        download.download_file(self.url, tmp_file)
-        download.extract_tar(tmp_file, target_path)
-
-        files.move_all_files_from_subfolders_to_top(target_path, delete_subfolders=True)
-
-        os.remove(tmp_file)
 
 
 class MusanReader(base.CorpusReader):

@@ -13,6 +13,11 @@ Base Classes
    :inherited-members:
    :private-members:
 
+.. autoclass:: ArchiveDownloader
+   :members:
+   :inherited-members:
+   :private-members:
+
 .. autoclass:: CorpusReader
    :members:
    :inherited-members:
