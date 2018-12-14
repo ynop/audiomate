@@ -134,13 +134,33 @@ class TestKaldiWriter:
         assert 'spk2gender' in os.listdir(path)
         assert 'wav.scp' in os.listdir(path)
 
-    def test_write_segments(self, writer, tmpdir):
+    def test_write_wav_scp(self, writer, tmpdir):
         ds = resources.create_dataset()
         path = tmpdir.strpath
         writer.save(ds, path)
 
-        with open(os.path.join(path, 'segments'), 'r') as f:
-            content = f.read()
+        content = textfile.read_separated_lines(
+            os.path.join(path, 'wav.scp'),
+            separator=' ',
+            max_columns=2
+        )
+
+        wav_base = resources.get_resource_path(['wav_files'])
+        wav_base = os.path.abspath(wav_base)
+
+        assert content[0][0] == 'wav-1'
+        assert content[0][1] == os.path.join(wav_base, 'wav_1.wav')
+        assert content[1][0] == 'wav_2'
+        assert content[1][1] == os.path.join(wav_base, 'wav_2.wav')
+        assert content[2][0] == 'wav_3'
+        assert content[2][1] == os.path.join(wav_base, 'wav_3.wav')
+        assert content[3][0] == 'wav_4'
+        assert content[3][1] == os.path.join(wav_base, 'wav_4.wav')
+
+    def test_write_segments(self, writer, tmpdir):
+        ds = resources.create_dataset()
+        path = tmpdir.strpath
+        writer.save(ds, path)
 
         content = textfile.read_separated_lines(
             os.path.join(path, 'segments'),

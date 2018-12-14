@@ -4,6 +4,7 @@ import struct
 import numpy as np
 
 import audiomate
+from audiomate import tracks
 from audiomate import annotations
 from audiomate import issuers
 from audiomate.utils import textfile
@@ -146,13 +147,26 @@ class KaldiWriter(base.CorpusWriter):
         segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
 
-        default.DefaultWriter.write_file_tracks(wav_file_path, corpus, path)
+        KaldiWriter.write_file_tracks(wav_file_path, corpus, path)
         KaldiWriter.write_segments(segments_path, corpus)
         default.DefaultWriter.write_utt_to_issuer_mapping(utt2spk_path, corpus)
 
         self._write_genders(spk2gender_path, corpus)
         self._write_transcriptions(text_path, corpus)
         self._write_features(path, corpus)
+
+    @staticmethod
+    def write_file_tracks(file_path, corpus, path):
+        file_records = []
+
+        for file in corpus.tracks.values():
+            if isinstance(file, tracks.FileTrack):
+                file_records.append([
+                    file.idx,
+                    os.path.abspath(file.path)
+                ])
+
+        textfile.write_separated_lines(file_path, file_records, separator=' ', sort_by_column=0)
 
     @staticmethod
     def write_segments(utterance_path, corpus):
