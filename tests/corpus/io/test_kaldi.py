@@ -3,6 +3,7 @@ import os
 from audiomate import corpus
 from audiomate import issuers
 from audiomate.corpus import io
+from audiomate.utils import textfile
 
 import pytest
 
@@ -132,3 +133,42 @@ class TestKaldiWriter:
         assert 'utt2spk' in os.listdir(path)
         assert 'spk2gender' in os.listdir(path)
         assert 'wav.scp' in os.listdir(path)
+
+    def test_write_segments(self, writer, tmpdir):
+        ds = resources.create_dataset()
+        path = tmpdir.strpath
+        writer.save(ds, path)
+
+        with open(os.path.join(path, 'segments'), 'r') as f:
+            content = f.read()
+
+        content = textfile.read_separated_lines(
+            os.path.join(path, 'segments'),
+            separator=' ',
+            max_columns=4
+        )
+
+        assert content[0][0] == 'utt-1'
+        assert content[0][1] == 'wav-1'
+        assert float(content[0][2]) == pytest.approx(0)
+        assert float(content[0][3]) == pytest.approx(2.5951875)
+
+        assert content[1][0] == 'utt-2'
+        assert content[1][1] == 'wav_2'
+        assert float(content[1][2]) == pytest.approx(0)
+        assert float(content[1][3]) == pytest.approx(2.5951875)
+
+        assert content[2][0] == 'utt-3'
+        assert content[2][1] == 'wav_3'
+        assert float(content[2][2]) == pytest.approx(0)
+        assert float(content[2][3]) == pytest.approx(1.5)
+
+        assert content[3][0] == 'utt-4'
+        assert content[3][1] == 'wav_3'
+        assert float(content[3][2]) == pytest.approx(1.5)
+        assert float(content[3][3]) == pytest.approx(2.5)
+
+        assert content[4][0] == 'utt-5'
+        assert content[4][1] == 'wav_4'
+        assert float(content[4][2]) == pytest.approx(0)
+        assert float(content[4][3]) == pytest.approx(2.5951875)

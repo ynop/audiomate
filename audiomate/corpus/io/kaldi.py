@@ -147,12 +147,23 @@ class KaldiWriter(base.CorpusWriter):
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
 
         default.DefaultWriter.write_file_tracks(wav_file_path, corpus, path)
-        default.DefaultWriter.write_utterances(segments_path, corpus)
+        KaldiWriter.write_segments(segments_path, corpus)
         default.DefaultWriter.write_utt_to_issuer_mapping(utt2spk_path, corpus)
 
         self._write_genders(spk2gender_path, corpus)
         self._write_transcriptions(text_path, corpus)
         self._write_features(path, corpus)
+
+    @staticmethod
+    def write_segments(utterance_path, corpus):
+        utterances = corpus.utterances.values()
+        utterance_records = {u.idx: [u.track.idx, u.start, u.end_abs] for u in utterances}
+        textfile.write_separated_lines(
+            utterance_path,
+            utterance_records,
+            separator=' ',
+            sort_by_column=0
+        )
 
     def _write_genders(self, gender_path, corpus):
         genders = {}
