@@ -2,6 +2,7 @@ import os
 import struct
 
 import numpy as np
+import scipy
 
 import audiomate
 from audiomate import tracks
@@ -128,8 +129,8 @@ class KaldiWriter(base.CorpusWriter):
     .. seealso::
 
        `Kaldi: Data preparation <http://kaldi-asr.org/doc/data_prep.html>`_
-          Describes how a data set has to be structured to be understood by Kaldi and the format of the individual
-          files.
+          Describes how a data set has to be structured to be
+          understood by Kaldi and the format of the individual files.
     """
 
     def __init__(self, main_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT, main_feature_idx='default'):
@@ -147,7 +148,7 @@ class KaldiWriter(base.CorpusWriter):
         segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
 
-        KaldiWriter.write_file_tracks(wav_file_path, corpus, path)
+        KaldiWriter.write_tracks(wav_file_path, corpus, path)
         KaldiWriter.write_segments(segments_path, corpus)
         default.DefaultWriter.write_utt_to_issuer_mapping(utt2spk_path, corpus)
 
@@ -156,14 +157,35 @@ class KaldiWriter(base.CorpusWriter):
         self._write_features(path, corpus)
 
     @staticmethod
-    def write_file_tracks(file_path, corpus, path):
+    def write_tracks(file_path, corpus, path):
         file_records = []
 
-        for file in corpus.tracks.values():
-            if isinstance(file, tracks.FileTrack):
+        export_path = os.path.join(path, 'audio')
+
+        for track in corpus.tracks.values():
+            if isinstance(track, tracks.FileTrack):
                 file_records.append([
-                    file.idx,
-                    os.path.abspath(file.path)
+                    track.idx,
+                    os.path.abspath(track.path)
+                ])
+
+            elif isinstance(track, tracks.ContainerTrack):
+                if not os.path.isdir(export_path):
+                    os.makedirs(export_path)
+
+                target_path = os.path.join(
+                    export_path,
+                    '{}.wav'.format(track.idx)
+                )
+
+                max_value = np.iinfo(np.int16).max
+                samples = (track.read_samples() * max_value).astype(np.int16)
+                sampling_rate = track.sampling_rate
+                scipy.io.wavfile.write(target_path, sampling_rate, samples)
+
+                file_records.append([
+                    track.idx,
+                    target_path
                 ])
 
         textfile.write_separated_lines(file_path, file_records, separator=' ', sort_by_column=0)

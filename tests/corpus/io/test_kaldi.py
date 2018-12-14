@@ -1,6 +1,9 @@
 import os
 
+import numpy as np
+
 from audiomate import corpus
+from audiomate import tracks
 from audiomate import issuers
 from audiomate.corpus import io
 from audiomate.utils import textfile
@@ -192,3 +195,40 @@ class TestKaldiWriter:
         assert content[4][1] == 'wav_4'
         assert float(content[4][2]) == pytest.approx(0)
         assert float(content[4][3]) == pytest.approx(2.5951875)
+
+    def test_exports_wavs_from_container_tracks(self, writer, tmpdir):
+        path = tmpdir.strpath
+        container_ds_path = os.path.join(path, 'container_ds')
+        out_path = os.path.join(path, 'export')
+
+        ds = resources.create_dataset()
+        ds.relocate_audio_to_single_container(container_ds_path)
+
+        writer.save(ds, out_path)
+
+        print(os.listdir(out_path))
+
+        track_path = os.path.join(out_path, 'audio', 'wav-1.wav')
+        track = tracks.FileTrack(None, track_path)
+        assert os.path.isfile(track_path)
+        assert track.duration == pytest.approx(2.5951875)
+        assert np.allclose(
+            track.read_samples(),
+            ds.tracks['wav-1'].read_samples(),
+            atol=1e-05
+        )
+
+        track_path = os.path.join(out_path, 'audio', 'wav_2.wav')
+        track = tracks.FileTrack(None, track_path)
+        assert os.path.isfile(track_path)
+        assert track.duration == pytest.approx(2.5951875)
+
+        track_path = os.path.join(out_path, 'audio', 'wav_3.wav')
+        track = tracks.FileTrack(None, track_path)
+        assert os.path.isfile(track_path)
+        assert track.duration == pytest.approx(2.5951875)
+
+        track_path = os.path.join(out_path, 'audio', 'wav_4.wav')
+        track = tracks.FileTrack(None, track_path)
+        assert os.path.isfile(track_path)
+        assert track.duration == pytest.approx(2.5951875)
