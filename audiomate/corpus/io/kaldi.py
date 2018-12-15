@@ -2,8 +2,10 @@ import os
 import struct
 
 import numpy as np
+import scipy
 
 import audiomate
+from audiomate import tracks
 from audiomate import annotations
 from audiomate import issuers
 from audiomate.utils import textfile
@@ -127,8 +129,8 @@ class KaldiWriter(base.CorpusWriter):
     .. seealso::
 
        `Kaldi: Data preparation <http://kaldi-asr.org/doc/data_prep.html>`_
-          Describes how a data set has to be structured to be understood by Kaldi and the format of the individual
-          files.
+          Describes how a data set has to be structured to be
+          understood by Kaldi and the format of the individual files.
     """
 
     def __init__(self, main_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT, main_feature_idx='default'):
@@ -146,13 +148,58 @@ class KaldiWriter(base.CorpusWriter):
         segments_path = os.path.join(path, SEGMENTS_FILE_NAME)
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
 
-        default.DefaultWriter.write_file_tracks(wav_file_path, corpus, path)
-        default.DefaultWriter.write_utterances(segments_path, corpus)
+        KaldiWriter.write_tracks(wav_file_path, corpus, path)
+        KaldiWriter.write_segments(segments_path, corpus)
         default.DefaultWriter.write_utt_to_issuer_mapping(utt2spk_path, corpus)
 
         self._write_genders(spk2gender_path, corpus)
         self._write_transcriptions(text_path, corpus)
         self._write_features(path, corpus)
+
+    @staticmethod
+    def write_tracks(file_path, corpus, path):
+        file_records = []
+
+        export_path = os.path.join(path, 'audio')
+
+        for track in corpus.tracks.values():
+            if isinstance(track, tracks.FileTrack):
+                file_records.append([
+                    track.idx,
+                    os.path.abspath(track.path)
+                ])
+
+            elif isinstance(track, tracks.ContainerTrack):
+                if not os.path.isdir(export_path):
+                    os.makedirs(export_path)
+
+                target_path = os.path.join(
+                    export_path,
+                    '{}.wav'.format(track.idx)
+                )
+
+                max_value = np.iinfo(np.int16).max
+                samples = (track.read_samples() * max_value).astype(np.int16)
+                sampling_rate = track.sampling_rate
+                scipy.io.wavfile.write(target_path, sampling_rate, samples)
+
+                file_records.append([
+                    track.idx,
+                    target_path
+                ])
+
+        textfile.write_separated_lines(file_path, file_records, separator=' ', sort_by_column=0)
+
+    @staticmethod
+    def write_segments(utterance_path, corpus):
+        utterances = corpus.utterances.values()
+        utterance_records = {u.idx: [u.track.idx, u.start, u.end_abs] for u in utterances}
+        textfile.write_separated_lines(
+            utterance_path,
+            utterance_records,
+            separator=' ',
+            sort_by_column=0
+        )
 
     def _write_genders(self, gender_path, corpus):
         genders = {}

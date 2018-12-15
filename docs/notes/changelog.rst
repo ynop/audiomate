@@ -17,6 +17,11 @@ Next Version
 
 * [`#68 <https://github.com/ynop/audiomate/issues/68>`_] Add convenience method to create Label-List with list of label values: :meth:`audiomate.annotations.LabelList.with_label_values`.
 
+
+**Fixes**
+
+* [`#76 <https://github.com/ynop/audiomate/issues/76>`_][`#77 <https://github.com/ynop/audiomate/issues/77>`_][`#78 <https://github.com/ynop/audiomate/issues/78>`_] Multiple fixes on KaldiWriter
+
 v3.0.0
 ------
 
