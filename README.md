@@ -55,7 +55,7 @@ Currently supported formats:
 * [Mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech)
 * [Custom Formats](https://ynop.github.io/audiomate/documentation/formats.html)
 
-Indirectly supported datasets ([Details](https://audiomate.readthedocs.io/en/v1.0.0/documentation/indirect_support.html)):
+Indirectly supported datasets ([Details](https://audiomate.readthedocs.io/en/latest/documentation/indirect_support.html)):
 * [Spoken Wikipedia Corpora](https://nats.gitlab.io/swc/)
 
 ## Installation
