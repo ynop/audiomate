@@ -1,5 +1,6 @@
 import os
 
+import numpy as np
 import pytest
 
 import audiomate
@@ -627,3 +628,28 @@ class TestCorpus:
         assert corpus.utterances['utt-1'].track.container.path == cont.path
 
         cont.close()
+
+    def test_relocate_audio_to_wav_files(self, tmpdir):
+        old_corpus = audiomate.Corpus.load(resources.sample_corpus_path('default'))
+        new_corpus = audiomate.Corpus.from_corpus(old_corpus)
+
+        target_path = os.path.join(tmpdir.strpath, 'audio')
+        new_corpus.relocate_audio_to_wav_files(target_path)
+
+        assert os.path.isdir(target_path)
+
+        old_track = old_corpus.tracks['file-1']
+        new_track = new_corpus.tracks['file-1']
+        assert new_track.path == os.path.join(target_path, 'file-1.wav')
+        assert np.allclose(
+            old_track.read_samples(),
+            new_track.read_samples()
+        )
+
+        old_track = old_corpus.tracks['file-5']
+        new_track = new_corpus.tracks['file-5']
+        assert new_track.path == os.path.join(target_path, 'file-5.wav')
+        assert np.allclose(
+            old_track.read_samples(),
+            new_track.read_samples()
+        )
