@@ -1,6 +1,7 @@
 import librosa
 import audioread
 import numpy as np
+import scipy
 
 
 def process_buffer(buffer, n_channels):
@@ -127,3 +128,19 @@ def read_frames(file_path, frame_size, hop_size, start=0.0, end=-1.0, buffer_siz
             constant_values=0
         )
         yield rest_samples, True
+
+
+def write_wav(path, samples, sr=16000):
+    """
+    Write to given samples to a wav file.
+    The samples are expected to be floating point numbers
+    in the range of -1.0 to 1.0.
+
+    Args:
+        path (str): The path to write the wav to.
+        samples (np.array): A float array .
+        sr (int): The sampling rate.
+    """
+    max_value = np.abs(np.iinfo(np.int16).min)
+    data = (samples * max_value).astype(np.int16)
+    scipy.io.wavfile.write(path, sr, data)
