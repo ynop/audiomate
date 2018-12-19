@@ -3,6 +3,7 @@ import os
 import numpy as np
 import librosa
 
+from audiomate import tracks
 from audiomate.utils import audio
 
 
@@ -62,3 +63,20 @@ def test_read_frames_matches_length(tmpdir):
 
     assert last[:-1] == [False] * (len(data) - 1)
     assert last[-1]
+
+
+def test_write_wav(tmpdir):
+    samples = np.random.random(50000)
+    sr = 16000
+    path = os.path.join(tmpdir.strpath, 'audio.wav')
+
+    audio.write_wav(path, samples, sr=sr)
+
+    assert os.path.isfile(path)
+
+    track = tracks.FileTrack('idx', path)
+    assert np.allclose(
+        samples,
+        track.read_samples(),
+        atol=1.e-04
+    )

@@ -6,6 +6,7 @@ from audiomate import tracks
 from audiomate import containers
 from audiomate import issuers
 from audiomate.utils import naming
+from audiomate.utils import audio
 from . import base
 from . import subset
 
@@ -466,6 +467,36 @@ class Corpus(base.CorpusView):
             utterance.track = new_track
 
         cont.close()
+
+    def relocate_audio_to_wav_files(self, target_path):
+        """
+        Copies every track to its own wav file in the given folder.
+        Every track will be stored at ``target_path/track_id.wav``.
+        """
+
+        if not os.path.isdir(target_path):
+            os.makedirs(target_path)
+
+        new_tracks = {}
+
+        # First create a new container track for all existing tracks
+        for track in self.tracks.values():
+            track_path = os.path.join(target_path, '{}.wav'.format(track.idx))
+            sr = track.sampling_rate
+            samples = track.read_samples()
+
+            audio.write_wav(track_path, samples, sr=sr)
+            new_track = tracks.FileTrack(track.idx, track_path)
+
+            new_tracks[track.idx] = new_track
+
+        # Update track list of corpus
+        self._tracks = new_tracks
+
+        # Update utterances to point to new tracks
+        for utterance in self.utterances.values():
+            new_track = self.tracks[utterance.track.idx]
+            utterance.track = new_track
 
     #
     #   Creation
