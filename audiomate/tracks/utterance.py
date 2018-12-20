@@ -1,4 +1,5 @@
 import collections
+import copy
 
 import numpy as np
 
@@ -39,6 +40,26 @@ class Utterance(object):
 
         if self.issuer is not None:
             self.issuer.utterances.add(self)
+
+    def __copy__(self):
+        return Utterance(
+            self.idx,
+            self.track,
+            issuer=self.issuer,
+            start=self.start,
+            end=self.end,
+            label_lists=list(self.label_lists.values())
+        )
+
+    def __deepcopy__(self, memo):
+        return Utterance(
+            self.idx,
+            copy.deepcopy(self.track, memo),
+            issuer=copy.deepcopy(self.issuer, memo),
+            start=self.start,
+            end=self.end,
+            label_lists=copy.deepcopy(list(self.label_lists.values()), memo)
+        )
 
     @property
     def end_abs(self):

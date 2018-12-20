@@ -1,4 +1,5 @@
 import abc
+import copy
 
 
 class Track(abc.ABC):
@@ -12,6 +13,12 @@ class Track(abc.ABC):
 
     def __init__(self, idx):
         self.idx = idx
+
+    def __copy__(self):
+        return Track(self.idx)
+
+    def __deepcopy(self, memo):
+        return copy.copy(self)
 
     @property
     @abc.abstractmethod

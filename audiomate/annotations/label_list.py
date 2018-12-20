@@ -1,4 +1,5 @@
 import collections
+import copy
 import heapq
 import bisect
 
@@ -491,6 +492,22 @@ class LabelList(object):
 
     def __len__(self):
         return self.labels.__len__()
+
+    def __copy__(self):
+        # utterance is ignored intentionally,
+        # since it is kind of a weak ref
+        return LabelList(
+            idx=self.idx,
+            labels=self.labels
+        )
+
+    def __deepcopy__(self, memo):
+        # utterance is ignored intentionally,
+        # since it is kind of a weak ref
+        return LabelList(
+            idx=self.idx,
+            labels=copy.deepcopy(self.labels, memo)
+        )
 
     @classmethod
     def create_single(cls, value, idx='default'):

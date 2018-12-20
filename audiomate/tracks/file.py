@@ -1,3 +1,5 @@
+import copy
+
 import librosa
 import audioread
 
@@ -18,6 +20,12 @@ class FileTrack(track.Track):
     def __init__(self, idx, path):
         super(FileTrack, self).__init__(idx)
         self.path = path
+
+    def __copy__(self):
+        return FileTrack(self.idx, self.path)
+
+    def __deepcopy(self, memo):
+        return copy.copy(self)
 
     @property
     def sampling_rate(self):

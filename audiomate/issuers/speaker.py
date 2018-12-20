@@ -1,3 +1,4 @@
+import copy
 import enum
 
 from .issuer import Issuer
@@ -43,3 +44,31 @@ class Speaker(Issuer):
 
     def __str__(self):
         return 'Speaker(idx={0}, info={1})'.format(self.idx, self.info)
+
+    def __copy__(self):
+        # self.utterances is ignored intentionally
+        # only a "weak-ref" when added to a corpus
+
+        cp = Speaker(
+            self.idx,
+            gender=self.gender,
+            age_group=self.age_group,
+            native_language=self.native_language,
+            info=self.info
+        )
+
+        return cp
+
+    def __deepcopy__(self, memo):
+        # self.utterances is ignored intentionally
+        # only a "weak-ref" when added to a corpus
+
+        cp = Speaker(
+            self.idx,
+            gender=self.gender,
+            age_group=self.age_group,
+            native_language=self.native_language,
+            info=copy.deepcopy(self.info, memo)
+        )
+
+        return cp
