@@ -98,6 +98,26 @@ python setup.py test
 
 With PyCharm you might have to change the default test runner. Otherwise, it might only suggest to use nose. To do so, go to File > Settings > Tools > Python Integrated Tools (on the Mac it's PyCharm > Preferences > Settings > Tools > Python Integrated Tools) and change the test runner to py.test.
 
+### Benchmarks
+
+In order to check the runtime of specific parts, ``pytest-benchmark`` is used. Benchmarks are normal test functions, but call the benchmark fixture for the code under test.
+
+To run benchmarks:
+
+```
+# Run all
+pytest bench
+
+# Specific benchmark
+pytest bench/corpus/test_merge_corpus.py
+```
+
+To compare between different runs:
+
+```
+pytest-benchmark compare
+```
+
 ### Editing the Documentation
 
 The documentation is written in [reStructuredText](http://docutils.sourceforge.net/rst.html) and transformed into various output formats with the help of [Sphinx](http://www.sphinx-doc.org/).

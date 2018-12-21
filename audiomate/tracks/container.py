@@ -1,3 +1,5 @@
+import copy
+
 import librosa
 import numpy as np
 
@@ -26,6 +28,20 @@ class ContainerTrack(track.Track):
             self.key = idx
         else:
             self.key = key
+
+    def __copy__(self):
+        return ContainerTrack(
+            self.idx,
+            self.container,
+            key=self.key
+        )
+
+    def __deepcopy(self, memo):
+        return ContainerTrack(
+            self.idx,
+            copy.deepcopy(self.container, memo),
+            key=self.key
+        )
 
     @property
     def sampling_rate(self):

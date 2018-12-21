@@ -1,3 +1,4 @@
+import copy
 from functools import total_ordering
 
 
@@ -43,6 +44,22 @@ class Label(object):
 
     def __repr__(self) -> str:
         return 'Label({}, {}, {})'.format(self.value, self.start, self.end)
+
+    def __copy__(self):
+        return Label(
+            self.value,
+            start=self.start,
+            end=self.end,
+            meta=self.meta
+        )
+
+    def __deepcopy__(self, memo):
+        return Label(
+            self.value,
+            start=self.start,
+            end=self.end,
+            meta=copy.deepcopy(self.meta, memo)
+        )
 
     @property
     def start_abs(self):

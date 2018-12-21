@@ -74,3 +74,5 @@ venv/
 playground
 
 pages-clone/
+
+.benchmarks/

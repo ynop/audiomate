@@ -1,3 +1,5 @@
+import copy
+
 from .issuer import Issuer
 
 
@@ -24,3 +26,27 @@ class Artist(Issuer):
 
     def __str__(self):
         return 'Artist(idx={0}, info={1})'.format(self.idx, self.info)
+
+    def __copy__(self):
+        # self.utterances is ignored intentionally
+        # only a "weak-ref" when added to a corpus
+
+        cp = Artist(
+            self.idx,
+            self.name,
+            info=self.info
+        )
+
+        return cp
+
+    def __deepcopy__(self, memo):
+        # self.utterances is ignored intentionally
+        # only a "weak-ref" when added to a corpus
+
+        cp = Artist(
+            self.idx,
+            self.name,
+            info=copy.deepcopy(self.info, memo)
+        )
+
+        return cp
