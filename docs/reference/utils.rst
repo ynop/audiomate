@@ -1,6 +1,12 @@
 audiomate.utils
 ===============
 
+Audio
+-----
+
+.. automodule:: audiomate.utils.audio
+    :members:
+
 JSON File
 ---------
 
