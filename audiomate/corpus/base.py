@@ -1,5 +1,7 @@
 import abc
 import collections
+import copy
+import math
 
 import numpy as np
 
@@ -250,3 +252,72 @@ class CorpusView(metaclass=abc.ABCMeta):
                                                        data.size)
 
         return all_stats
+
+    #
+    # Restructuring
+    #
+
+    def split_utterances_to_max_time(self, max_time=60.0, overlap=0.0):
+        """
+        Create a new corpus, where all the utterances are of given maximal duration.
+        Utterance longer than ``max_time`` are split up into multiple utterances.
+
+        .. warning::
+            Subviews and FeatureContainers are not added to the newly create corpus.
+
+        Arguments:
+            max_time (float): Maximal duration for target utterances in seconds.
+            overlap (float): Amount of overlap in seconds.
+                             The overlap is measured from the center of the splitting.
+                             (The actual overlap of two segments is 2 * overlap)
+
+        Returns:
+            Corpus: A new corpus instance.
+        """
+
+        from audiomate.corpus import Corpus
+
+        result = Corpus()
+
+        # Copy Tracks
+        tracks = copy.deepcopy(list(self.tracks.values()))
+        result.import_tracks(tracks)
+
+        # Copy Issuers
+        issuers = copy.deepcopy(list(self.issuers.values()))
+        result.import_issuers(issuers)
+
+        for utterance in self.utterances.values():
+            orig_dur = utterance.duration
+
+            if orig_dur > max_time:
+                # Compute times where the utterance is split
+                num_sub_utts = math.ceil(orig_dur / max_time)
+                sub_utt_dur = orig_dur / num_sub_utts
+                cutting_points = []
+
+                for i in range(1, num_sub_utts):
+                    cutting_points.append(i * sub_utt_dur)
+
+                sub_utts = utterance.split(cutting_points, overlap=overlap)
+
+                # Set track/issuer from new corpus
+                for sub_utt in sub_utts:
+                    sub_utt.track = result.tracks[utterance.track.idx]
+
+                    if utterance.issuer is not None:
+                        sub_utt.issuer = result.issuers[utterance.issuer.idx]
+
+                result.import_utterances(sub_utts)
+
+            # If utterance <= max_time, just copy
+            else:
+                new_utt = copy.deepcopy(utterance)
+                new_utt.track = result.tracks[new_utt.track.idx]
+
+                if new_utt.issuer is not None:
+                    new_utt.issuer = result.issuers[new_utt.issuer.idx]
+
+                result.import_utterances(new_utt)
+
+        return result

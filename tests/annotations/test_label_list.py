@@ -417,6 +417,9 @@ class TestLabelList:
         assert len(res) == 3
 
         assert len(res[2]) == 1
+        assert res[1][1].value == 'c'
+        assert res[1][1].start == 4.0
+        assert res[1][1].end == 10.5
         assert res[2][0].value == 'c'
         assert res[2][0].start == 10.5
         assert res[2][0].end == -1
@@ -505,6 +508,51 @@ class TestLabelList:
 
         assert len(res[1]) == 1
         assert res[1][0] == Label('c', 0.0, pytest.approx(0.8))
+
+    def test_split_with_overlap(self):
+        ll = LabelList(idx='test', labels=[
+            Label('a', 0.0, 4.0),
+            Label('b', 4.0, 8.0),
+            Label('c', 9.0, 12.0)
+        ])
+
+        res = ll.split([1.9, 6.2, 10.5], overlap=2.0)
+
+        assert len(res) == 4
+
+        assert len(res[0]) == 1
+        assert res[0][0] == Label('a', 0.0, 3.9)
+
+        assert len(res[1]) == 2
+        assert res[1][0] == Label('a', 0, 4.0)
+        assert res[1][1] == Label('b', 4.0, 8.0)
+
+        assert len(res[2]) == 2
+        assert res[2][0] == Label('b', 4.2, 8.0)
+        assert res[2][1] == Label('c', 9.0, 12.0)
+
+        assert len(res[3]) == 1
+        assert res[3][0] == Label('c', 9.0, 12.0)
+
+    def test_split_with_overlap_label_only_hits_overlap(self):
+        ll = LabelList(idx='test', labels=[
+            Label('a', 2.0, 5.0),
+            Label('b', 7.0, 8.0),
+        ])
+
+        res = ll.split([6.2, 10.5], overlap=2.0)
+
+        assert len(res) == 3
+
+        assert len(res[0]) == 2
+        assert res[0][0] == Label('a', 2.0, 5.0)
+        assert res[0][1] == Label('b', 7.0, 8.0)
+
+        assert len(res[1]) == 2
+        assert res[1][0] == Label('a', 4.2, 5.0)
+        assert res[1][1] == Label('b', 7.0, 8.0)
+
+        assert len(res[2]) == 0
 
     def test_with_label_values(self):
         ll = LabelList.with_label_values([

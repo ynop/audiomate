@@ -173,6 +173,8 @@ class TestUtterance:
         res = utt.split([24.5])
 
         assert len(res) == 2
+        assert res[0].start == 0.0
+        assert res[0].end == 24.5
         assert res[1].start == 24.5
         assert res[1].end == -1
 
@@ -268,3 +270,48 @@ class TestUtterance:
         assert 'words' in res[1].label_lists.keys()
         assert res[1].label_lists['words'][0].start == 0.0
         assert res[1].label_lists['words'][0].end == 16.0
+
+    def test_split_with_overlap(self):
+        ll_1 = annotations.LabelList('phones', labels=[
+            annotations.Label('alpha', start=0.0, end=30.0),
+            annotations.Label('bravo', start=20.0, end=42.0)
+        ])
+        ll_2 = annotations.LabelList('words', labels=[
+            annotations.Label('b', start=8.0, end=30.0)
+        ])
+        utt = tracks.Utterance('utt-1', 'file-x', start=10.0, end=55.0, label_lists=[ll_1, ll_2])
+
+        res = utt.split([12.0, 24.0], track_relative=False, overlap=2.0)
+
+        assert len(res) == 3
+
+        assert res[0].start == 10.0
+        assert res[0].end == 24.0
+        assert 'phones' in res[0].label_lists.keys()
+        assert res[0].label_lists['phones'][0].start == 0.0
+        assert res[0].label_lists['phones'][0].end == 14.0
+        assert 'words' in res[0].label_lists.keys()
+        assert res[0].label_lists['words'][0].start == 8.0
+        assert res[0].label_lists['words'][0].end == 14.0
+
+        assert res[1].start == 20.0
+        assert res[1].end == 36.0
+        assert 'phones' in res[1].label_lists.keys()
+        assert res[1].label_lists['phones'][0].start == 0.0
+        assert res[1].label_lists['phones'][0].end == 16.0
+        assert res[1].label_lists['phones'][1].start == 10.0
+        assert res[1].label_lists['phones'][1].end == 16.0
+        assert 'words' in res[1].label_lists.keys()
+        assert res[1].label_lists['words'][0].start == 0.0
+        assert res[1].label_lists['words'][0].end == 16.0
+
+        assert res[2].start == 32.0
+        assert res[2].end == 55.0
+        assert 'phones' in res[2].label_lists.keys()
+        assert res[2].label_lists['phones'][0].start == 0.0
+        assert res[2].label_lists['phones'][0].end == 8.0
+        assert res[2].label_lists['phones'][1].start == 0.0
+        assert res[2].label_lists['phones'][1].end == 20.0
+        assert 'words' in res[2].label_lists.keys()
+        assert res[2].label_lists['words'][0].start == 0.0
+        assert res[2].label_lists['words'][0].end == 8.0

@@ -82,3 +82,34 @@ class TestCorpusView:
         target_lls = ['test']
         expected_tokens = {'a', 'b', 'c'}
         assert corpus.all_tokens(delimiter=',', label_list_ids=target_lls) == expected_tokens
+
+    def test_split_utterances_to_max_time(self):
+        corpus = resources.create_dataset()
+        result = corpus.split_utterances_to_max_time(max_time=1.5, overlap=0.5)
+
+        assert result.num_tracks == corpus.num_tracks
+        assert result.num_issuers == corpus.num_issuers
+        assert result.num_utterances == 8
+
+        utt_len = 2.5951875
+
+        assert result.utterances['utt-1_0'].start == 0.0
+        assert result.utterances['utt-1_0'].end == utt_len / 2.0 + 0.5
+        assert result.utterances['utt-1_1'].start == utt_len / 2.0 - 0.5
+        assert result.utterances['utt-1_1'].end == -1
+
+        assert result.utterances['utt-2_0'].start == 0.0
+        assert result.utterances['utt-2_0'].end == utt_len / 2.0 + 0.5
+        assert result.utterances['utt-2_1'].start == utt_len / 2.0 - 0.5
+        assert result.utterances['utt-2_1'].end == -1
+
+        assert result.utterances['utt-3'].start == 0.0
+        assert result.utterances['utt-3'].end == 1.5
+
+        assert result.utterances['utt-4'].start == 1.5
+        assert result.utterances['utt-4'].end == 2.5
+
+        assert result.utterances['utt-5_0'].start == 0.0
+        assert result.utterances['utt-5_0'].end == utt_len / 2.0 + 0.5
+        assert result.utterances['utt-5_1'].start == utt_len / 2.0 - 0.5
+        assert result.utterances['utt-5_1'].end == -1
