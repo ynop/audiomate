@@ -17,6 +17,9 @@ Next Version
 
 * [`#68 <https://github.com/ynop/audiomate/issues/68>`_] Add convenience method to create Label-List with list of label values: :meth:`audiomate.annotations.LabelList.with_label_values`.
 
+* [`#61 <https://github.com/ynop/audiomate/issues/61>`_] Added function to split utterances of a corpus into multiple utterances with a maximal duration:
+  :meth:`audiomate.corpus.CorpusView.split_utterances_to_max_time`.
+
 
 **Fixes**
 

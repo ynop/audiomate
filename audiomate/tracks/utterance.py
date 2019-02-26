@@ -243,7 +243,7 @@ class Utterance(object):
 
         return duration
 
-    def split(self, cutting_points, track_relative=False):
+    def split(self, cutting_points, track_relative=False, overlap=0.0):
         """
         Split the utterance into x parts (sub-utterances) and return them as new utterances.
         x is defined by cutting_points (``x = len(cutting_points) + 1``).
@@ -256,6 +256,8 @@ class Utterance(object):
             cutting_points (list): List of floats defining the times in seconds where to split the utterance.
             track_relative (bool): If True, cutting-points are relative to the start of the track.
                                   Otherwise they are relative to the start of the utterance.
+            overlap (float): Amount of overlap in seconds. This amount is subtracted from a start-cutting-point,
+                             and added to a end-cutting-point.
 
         Returns:
             list: List of :class:`Utterance`'s.
@@ -282,9 +284,10 @@ class Utterance(object):
 
         for idx, label_list in self.label_lists.items():
             label_cutting_points = [x - self.start for x in cutting_points]
-            parts = label_list.split(label_cutting_points, shift_times=True)
+            parts = label_list.split(label_cutting_points, shift_times=True, overlap=overlap)
             splitted_label_lists[idx] = parts
 
+        # Only consider cutting-points within utterance.
         filtered_cutting_points = []
 
         for cutting_point in cutting_points:
@@ -297,12 +300,14 @@ class Utterance(object):
             if index == 0:
                 sub_start = self.start
             else:
-                sub_start = cutting_points[index - 1]
+                sub_start = max(self.start, cutting_points[index - 1] - overlap)
 
             if index >= len(filtered_cutting_points):
                 sub_end = self.end
+            elif self.end < 0.0:
+                sub_end = filtered_cutting_points[index] + overlap
             else:
-                sub_end = filtered_cutting_points[index]
+                sub_end = min(self.end, filtered_cutting_points[index] + overlap)
 
             new_idx = '{}_{}'.format(self.idx, index)
             new_utt = Utterance(new_idx, track=self.track, issuer=self.issuer, start=sub_start, end=sub_end)

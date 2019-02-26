@@ -364,7 +364,7 @@ class LabelList(object):
         for label in self.labels:
             fn(label)
 
-    def split(self, cutting_points, shift_times=False):
+    def split(self, cutting_points, shift_times=False, overlap=0.0):
         """
         Split the label-list into x parts and return them as new label-lists.
         x is defined by the number of cutting-points (``x == len(cutting_points) + 1``)
@@ -380,6 +380,8 @@ class LabelList(object):
             shift_times (bool): If True, start and end-time of shifted in splitted label-lists.
                                  So the start is relative to the cutting point and
                                  not to the beginning of the original label-list.
+            overlap (float): Amount of overlap in seconds. This amount is subtracted from a start-cutting-point,
+                             and added to a end-cutting-point.
 
         Returns:
             list: A list of of :class:`audiomate.annotations.LabelList`.
@@ -445,8 +447,8 @@ class LabelList(object):
                 label_end = label.end
 
             # find indices where start and end of label would be inserted in cutting_points
-            start_cut_index = bisect.bisect_right(cutting_points, label.start)
-            end_cut_index = bisect.bisect_left(cutting_points, label_end)
+            start_cut_index = bisect.bisect_right(cutting_points, label.start - overlap)
+            end_cut_index = bisect.bisect_left(cutting_points, label_end + overlap)
 
             if end_cut_index <= start_cut_index:
                 # label is between two cutting points so append to label-list with that index
@@ -466,18 +468,20 @@ class LabelList(object):
                     if index == start_cut_index:
                         sub_label_start = label.start
                     else:
-                        sub_label_start = cutting_points[index - 1]
+                        sub_label_start = max(label.start, cutting_points[index - 1] - overlap)
 
                     if index >= end_cut_index:
                         sub_label_end = label.end
+                    elif label.end < 0.0:
+                        sub_label_end = cutting_points[index] + overlap
                     else:
-                        sub_label_end = cutting_points[index]
+                        sub_label_end = min(label.end, cutting_points[index] + overlap)
 
                     if shift_times and index > 0:
-                        sub_label_start -= cutting_points[index - 1]
+                        sub_label_start -= (cutting_points[index - 1] - overlap)
 
                         if sub_label_end > 0:
-                            sub_label_end -= cutting_points[index - 1]
+                            sub_label_end -= (cutting_points[index - 1] - overlap)
 
                     new_label = Label(label.value, start=sub_label_start, end=sub_label_end)
                     label_lists[index].append(new_label)
