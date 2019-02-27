@@ -342,6 +342,65 @@ class TestLabelList:
         with pytest.raises(ValueError):
             ll.tokenized()
 
+    def test_merge_overlapping_labels(self):
+        ll = LabelList(idx='test', labels=[
+            Label('a', 0.0, 4.0),
+            Label('b', 4.0, 8.0),
+            Label('b', 7.9, 9.3),
+            Label('c', 9.0, 12.0)
+        ])
+
+        ll.merge_overlapping_labels()
+
+        assert len(ll) == 3
+
+        assert ll[0].value == 'a'
+        assert ll[1].value == 'b'
+        assert ll[2].value == 'c'
+
+        assert ll[1].start == 4.0
+        assert ll[1].end == 9.3
+
+    def test_merge_overlapping_labels_with_multiple_consecutive_overlapping(self):
+        ll = LabelList(idx='test', labels=[
+            Label('a', 0.0, 4.0),
+            Label('b', 4.0, 8.0),
+            Label('b', 7.9, 9.3),
+            Label('b', 8.9, 10.9),
+            Label('c', 9.0, 12.0)
+        ])
+
+        ll.merge_overlapping_labels()
+
+        assert len(ll) == 3
+
+        assert ll[0].value == 'a'
+        assert ll[1].value == 'b'
+        assert ll[2].value == 'c'
+
+        assert ll[1].start == 4.0
+        assert ll[1].end == 10.9
+
+    def test_merge_overlapping_labels_when_fully_contained(self):
+        ll = LabelList(idx='test', labels=[
+            Label('a', 0.0, 4.0),
+            Label('b', 4.0, 8.0),
+            Label('b', 5.0, 7.3),
+            Label('b', 7.9, 8.7),
+            Label('c', 9.0, 12.0)
+        ])
+
+        ll.merge_overlapping_labels()
+
+        assert len(ll) == 3
+
+        assert ll[0].value == 'a'
+        assert ll[1].value == 'b'
+        assert ll[2].value == 'c'
+
+        assert ll[1].start == 4.0
+        assert ll[1].end == 8.7
+
     def test_split(self):
         ll = LabelList(idx='test', labels=[
             Label('a', 0.0, 4.0),
