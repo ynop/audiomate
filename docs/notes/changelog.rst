@@ -20,6 +20,12 @@ Next Version
 * [`#61 <https://github.com/ynop/audiomate/issues/61>`_] Added function to split utterances of a corpus into multiple utterances with a maximal duration:
   :meth:`audiomate.corpus.CorpusView.split_utterances_to_max_time`.
 
+* Add functions to check for overlap between labels: :meth:`audiomate.annotations.Label.do_overlap` and
+  :meth:`audiomate.annotations.Label.overlap_duration`.
+
+* Add function to merge equal labels that overlap within a label-list:
+  :meth:`audiomate.annotations.LabelList.merge_overlapping_labels`.
+
 
 **Fixes**
 
