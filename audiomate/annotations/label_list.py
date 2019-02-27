@@ -364,6 +364,54 @@ class LabelList(object):
         for label in self.labels:
             fn(label)
 
+    def merge_overlapping_labels(self):
+        """
+        Merge overlapping labels with the same value.
+
+        Example:
+            >>> ll = LabelList(labels=[
+            ...     Label('a_label', 1.0, 2.0),
+            ...     Label('a_label', 1.5, 2.7),
+            ...     Label('b_label', 1.0, 2.0),
+            ... ])
+            >>> ll.merge_overlapping_labels()
+            >>> ll.labels
+            [
+                Label('a_label', 1.0, 2.7),
+                Label('b_label', 1.0, 2.0),
+            ]
+        """
+
+        current_index = 0
+
+        while current_index < (len(self.labels) - 1):
+            ref_label = self.labels[current_index]
+            overlapping = []
+
+            merged_start = ref_label.start
+            merged_end = ref_label.end
+
+            for i in range(current_index + 1, len(self.labels)):
+                other_label = self.labels[i]
+
+                if ref_label.value == other_label.value and ref_label.do_overlap(other_label):
+                    overlapping.append(i)
+                    merged_start = min(ref_label.start, other_label.start)
+
+                    if merged_end < 0 or other_label.end < 0:
+                        merged_end = -1
+                    else:
+                        merged_end = max(merged_end, other_label.end)
+
+            if len(overlapping) > 0:
+                ref_label.start = merged_start
+                ref_label.end = merged_end
+
+                for index in sorted(overlapping, reverse=True):
+                    del self.labels[index]
+            else:
+                current_index += 1
+
     def split(self, cutting_points, shift_times=False, overlap=0.0):
         """
         Split the label-list into x parts and return them as new label-lists.
