@@ -154,3 +154,42 @@ class Label(object):
             tokens.remove('')
 
         return tokens
+
+    def overlap_duration(self, other_label):
+        """
+        Return the duration of the overlapping part between this label and ``other_label``.
+
+        Args:
+            other_label (Label): Another label to check.
+
+        Return:
+            float: The duration of overlap in seconds.
+
+        Example:
+            >>> label_a = Label('a', 3.4, 5.6)
+            >>> label_b = Label('b', 4.8, 6.2)
+            >>> label_a.overlap_duration(label_b)
+            0.8
+        """
+        this_end = self.end
+        other_end = other_label.end
+
+        if this_end < 0:
+            this_end = self.end_abs
+
+        if other_end < 0:
+            other_end = other_label.end_abs
+
+        if this_end == -1:
+            this_end = other_end
+
+        if other_end == -1:
+            if this_end == -1:
+                raise ValueError('Cannot determine overlap duration if both labels have an infinite end')
+            else:
+                other_end = this_end
+
+        start_overlap = max(self.start, other_label.start)
+        end_overlap = min(this_end, other_end)
+
+        return max(0, end_overlap - start_overlap)

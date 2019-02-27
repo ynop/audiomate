@@ -5,6 +5,7 @@ from audiomate import tracks
 from audiomate import annotations
 from audiomate import issuers
 
+import pytest
 from tests import resources
 
 
@@ -183,3 +184,52 @@ class TestLabel:
         label = annotations.Label('wie,kann, ich, dass machen')
 
         assert label.tokenized(delimiter=',') == ['wie', 'kann', 'ich', 'dass machen']
+
+    def test_overlap_duration_other_fully_contained(self):
+        label = annotations.Label('a', 2.5, 9.5)
+        label_other = annotations.Label('a', 4.8, 8.4)
+
+        assert label.overlap_duration(label_other) == pytest.approx(8.4 - 4.8)
+
+    def test_overlap_duration_this_fully_contained(self):
+        label = annotations.Label('a', 4.8, 8.4)
+        label_other = annotations.Label('a', 2.5, 9.5)
+
+        assert label.overlap_duration(label_other) == pytest.approx(8.4 - 4.8)
+
+    def test_overlap_duration_left(self):
+        label = annotations.Label('a', 4.8, 8.4)
+        label_other = annotations.Label('a', 2.5, 5.3)
+
+        assert label.overlap_duration(label_other) == pytest.approx(5.3 - 4.8)
+
+    def test_overlap_duration_right(self):
+        label = annotations.Label('a', 4.8, 8.4)
+        label_other = annotations.Label('a', 7.5, 9.2)
+
+        assert label.overlap_duration(label_other) == pytest.approx(8.4 - 7.5)
+
+    def test_overlap_duration_none(self):
+        label = annotations.Label('a', 4.8, 8.4)
+        label_other = annotations.Label('a', 8.5, 9.2)
+
+        assert label.overlap_duration(label_other) == 0.0
+
+    def test_overlap_duration_this_infinite(self):
+        label = annotations.Label('a', 4.8, -1)
+        label_other = annotations.Label('a', 8.5, 9.2)
+
+        assert label.overlap_duration(label_other) == pytest.approx(9.2 - 8.5)
+
+    def test_overlap_duration_other_infinite(self):
+        label = annotations.Label('a', 4.8, 9.3)
+        label_other = annotations.Label('a', 8.5, -1)
+
+        assert label.overlap_duration(label_other) == pytest.approx(9.3 - 8.5)
+
+    def test_overlap_duration_both_infinite_raises_error(self):
+        label = annotations.Label('a', 4.8, -1)
+        label_other = annotations.Label('a', 8.5, -1)
+
+        with pytest.raises(ValueError):
+            label.overlap_duration(label_other)
