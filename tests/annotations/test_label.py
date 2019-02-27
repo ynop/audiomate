@@ -185,6 +185,84 @@ class TestLabel:
 
         assert label.tokenized(delimiter=',') == ['wie', 'kann', 'ich', 'dass machen']
 
+    def test_do_overlap_other_fully_contained(self):
+        label = annotations.Label('a', 2.5, 9.5)
+        label_other = annotations.Label('a', 4.8, 8.4)
+
+        assert label.overlap_duration(label_other) == pytest.approx(8.4 - 4.8)
+
+    def test_do_overlap_this_fully_contained(self):
+        label = annotations.Label('a', 4.8, 8.4)
+        label_other = annotations.Label('a', 2.5, 9.5)
+
+        assert label.do_overlap(label_other)
+
+    def test_do_overlap_left(self):
+        label = annotations.Label('a', 4.8, 8.4)
+        label_other = annotations.Label('a', 2.5, 5.3)
+
+        assert label.do_overlap(label_other)
+
+    def test_do_overlap_right(self):
+        label = annotations.Label('a', 4.8, 8.4)
+        label_other = annotations.Label('a', 7.5, 9.2)
+
+        assert label.do_overlap(label_other)
+
+    def test_do_overlap_none_right(self):
+        label = annotations.Label('a', 4.8, 8.4)
+        label_other = annotations.Label('a', 8.5, 9.2)
+
+        assert not label.do_overlap(label_other)
+
+    def test_do_overlap_none_left(self):
+        label = annotations.Label('a', 4.8, 8.4)
+        label_other = annotations.Label('a', 1.2, 3.2)
+
+        assert not label.do_overlap(label_other)
+
+    def test_do_overlap_none_self_infinite(self):
+        label = annotations.Label('a', 4.8, -1)
+        label_other = annotations.Label('a', 1.2, 3.2)
+
+        assert not label.do_overlap(label_other)
+
+    def test_do_overlap_none_other_infinite(self):
+        label = annotations.Label('a', 4.8, 10.5)
+        label_other = annotations.Label('a', 10.6, -1)
+
+        assert not label.do_overlap(label_other)
+
+    def test_do_overlap_this_infinite(self):
+        label = annotations.Label('a', 4.8, -1)
+        label_other = annotations.Label('a', 8.5, 9.2)
+
+        assert label.do_overlap(label_other)
+
+    def test_do_overlap_other_infinite(self):
+        label = annotations.Label('a', 4.8, 9.3)
+        label_other = annotations.Label('a', 8.5, -1)
+
+        assert label.do_overlap(label_other)
+
+    def test_do_overlap_both_infinite(self):
+        label = annotations.Label('a', 4.8, -1)
+        label_other = annotations.Label('a', 8.5, -1)
+
+        assert label.do_overlap(label_other)
+
+    def test_do_overlap_adjacent_allowed(self):
+        label = annotations.Label('a', 4.8, 8.5)
+        label_other = annotations.Label('a', 8.5, 9.3)
+
+        assert label.do_overlap(label_other, adjacent=True)
+
+    def test_do_overlap_adjacent_disallowed(self):
+        label = annotations.Label('a', 4.8, 8.5)
+        label_other = annotations.Label('a', 8.5, 9.3)
+
+        assert not label.do_overlap(label_other, adjacent=False)
+
     def test_overlap_duration_other_fully_contained(self):
         label = annotations.Label('a', 2.5, 9.5)
         label_other = annotations.Label('a', 4.8, 8.4)

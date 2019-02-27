@@ -155,20 +155,66 @@ class Label(object):
 
         return tokens
 
+    def do_overlap(self, other_label, adjacent=True):
+        """
+        Determine whether ``other_label`` overlaps with this label.
+        If ``adjacent==True``, adjacent labels are also considered as overlapping.
+
+        Args:
+            other_label (Label): Another label.
+            adjacent (bool): If ``True``, adjacent labels are considered as overlapping.
+
+        Returns:
+            bool: ``True`` if the two labels overlap, ``False`` otherwise.
+        """
+        this_end = self.end
+        other_end = other_label.end
+
+        if this_end < 0:
+            this_end = self.end_abs
+
+        if other_end < 0:
+            other_end = other_label.end_abs
+
+        if this_end == -1 and other_end == -1:
+            return True
+
+        if this_end == -1:
+            if adjacent:
+                return other_end >= self.start
+            else:
+                return other_end > self.start
+
+        if other_end == -1:
+            if adjacent:
+                return this_end >= other_label.start
+            else:
+                return this_end > other_label.start
+
+        if this_end <= other_label.start:
+            if not adjacent or this_end < other_label.start:
+                return False
+
+        if other_end < self.start:
+            if not adjacent or other_end < self.start:
+                return False
+
+        return True
+
     def overlap_duration(self, other_label):
         """
         Return the duration of the overlapping part between this label and ``other_label``.
 
         Args:
-            other_label (Label): Another label to check.
+            other_label(Label): Another label to check.
 
         Return:
             float: The duration of overlap in seconds.
 
         Example:
-            >>> label_a = Label('a', 3.4, 5.6)
-            >>> label_b = Label('b', 4.8, 6.2)
-            >>> label_a.overlap_duration(label_b)
+            >> > label_a = Label('a', 3.4, 5.6)
+            >> > label_b = Label('b', 4.8, 6.2)
+            >> > label_a.overlap_duration(label_b)
             0.8
         """
         this_end = self.end
