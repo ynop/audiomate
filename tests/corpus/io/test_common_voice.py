@@ -1,149 +1,106 @@
 import os
 
-import pytest
-import requests_mock
-
 from audiomate import corpus
 from audiomate import issuers
 from audiomate.corpus.io import common_voice
 
 from tests import resources
+from . import reader_test as rt
 
 
-@pytest.fixture()
-def reader():
-    return common_voice.CommonVoiceReader()
+class TestCommonVoiceReader(rt.CorpusReaderTest):
 
+    SAMPLE_PATH = resources.sample_corpus_path('common_voice')
+    FILE_TRACK_BASE_PATH = os.path.join(SAMPLE_PATH, 'clips')
 
-@pytest.fixture()
-def tar_data():
-    with open(resources.get_resource_path(['sample_files', 'cv_corpus_v1.tar.gz']), 'rb') as f:
-        return f.read()
+    EXPECTED_NUMBER_OF_TRACKS = 9
+    EXPECTED_TRACKS = [
+        rt.ExpFileTrack('c4b', 'c4b.wav'),
+        rt.ExpFileTrack('8ea', '8ea.wav'),
+        rt.ExpFileTrack('67c', '67c.wav'),
+        rt.ExpFileTrack('f08', 'f08.wav'),
+        rt.ExpFileTrack('b5c', 'b5c.wav'),
+        rt.ExpFileTrack('8f4', '8f4.wav'),
+        rt.ExpFileTrack('7f4', '7f4.wav'),
+        rt.ExpFileTrack('059', '059.wav'),
+        rt.ExpFileTrack('d08', 'd08.wav'),
+    ]
 
+    EXPECTED_NUMBER_OF_ISSUERS = 7
+    EXPECTED_ISSUERS = [
+        rt.ExpSpeaker('17e', 1, issuers.Gender.MALE, issuers.AgeGroup.SENIOR, None),
+        rt.ExpSpeaker('cb3', 2, issuers.Gender.MALE, issuers.AgeGroup.ADULT, None),
+        rt.ExpSpeaker('aa3', 2, issuers.Gender.FEMALE, issuers.AgeGroup.ADULT, None),
+        rt.ExpSpeaker('90a', 1, issuers.Gender.MALE, issuers.AgeGroup.ADULT, None),
+        rt.ExpSpeaker('b0f', 1, issuers.Gender.UNKNOWN, issuers.AgeGroup.UNKNOWN, None),
+        rt.ExpSpeaker('5ec', 1, issuers.Gender.UNKNOWN, issuers.AgeGroup.UNKNOWN, None),
+        rt.ExpSpeaker('72d', 1, issuers.Gender.UNKNOWN, issuers.AgeGroup.UNKNOWN, None),
+    ]
 
-@pytest.fixture
-def data_path():
-    return resources.sample_corpus_path('common_voice')
+    EXPECTED_NUMBER_OF_UTTERANCES = 9
+    EXPECTED_UTTERANCES = [
+        rt.ExpUtterance('c4b', 'c4b', '17e', 0, -1),
+        rt.ExpUtterance('8ea', '8ea', 'cb3', 0, -1),
+        rt.ExpUtterance('67c', '67c', 'cb3', 0, -1),
+        rt.ExpUtterance('f08', 'f08', 'aa3', 0, -1),
+        rt.ExpUtterance('b5c', 'b5c', 'aa3', 0, -1),
+        rt.ExpUtterance('8f4', '8f4', '90a', 0, -1),
+        rt.ExpUtterance('7f4', '7f4', 'b0f', 0, -1),
+        rt.ExpUtterance('059', '059', '5ec', 0, -1),
+        rt.ExpUtterance('d08', 'd08', '72d', 0, -1),
+    ]
 
+    EXPECTED_LABEL_LISTS = {
+        'c4b': [
+            rt.ExpLabelList(corpus.LL_WORD_TRANSCRIPT, 1),
+        ],
+        'f08': [
+            rt.ExpLabelList(corpus.LL_WORD_TRANSCRIPT, 1),
+        ],
+        '8f4': [
+            rt.ExpLabelList(corpus.LL_WORD_TRANSCRIPT, 1),
+        ],
+        'd08': [
+            rt.ExpLabelList(corpus.LL_WORD_TRANSCRIPT, 1)
+        ],
+    }
 
-class TestCommonVoiceDownloader:
+    EXPECTED_LABELS = {
+        'c4b': [
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Man sollte', 0, -1),
+        ],
+        'f08': [
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Valentin', 0, -1),
+        ],
+        '8f4': [
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Es', 0, -1),
+        ],
+        '7f4': [
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Zieht euch', 0, -1),
+        ],
+    }
 
-    def test_download(self, tar_data, tmpdir):
-        target_folder = tmpdir.strpath
-        downloader = common_voice.CommonVoiceDownloader()
+    EXPECTED_NUMBER_OF_SUBVIEWS = 3
 
-        with requests_mock.Mocker() as mock:
-            mock.get(common_voice.DOWNLOAD_V1, content=tar_data)
+    EXPECTED_SUBVIEWS = [
+        rt.ExpSubview('train', [
+            'c4b',
+            '8ea',
+            '67c',
+            'f08',
+            'b5c',
+        ]),
+        rt.ExpSubview('dev', [
+            '8f4',
+            '7f4',
+            '059',
+            'd08',
+        ]),
+        rt.ExpSubview('validated', [
+            '8f4',
+        ]),
+    ]
 
-            downloader.download(target_folder)
-
-        assert os.path.isfile(os.path.join(target_folder, 'cv-valid-dev.csv'))
-        assert os.path.isdir(os.path.join(target_folder, 'cv-valid-dev'))
-        assert os.path.isfile(os.path.join(target_folder, 'cv-valid-train.csv'))
-        assert os.path.isdir(os.path.join(target_folder, 'cv-valid-train'))
-
-
-class TestCommonVoiceReader:
-
-    def test_load_correct_number_of_tracks(self, reader, data_path):
-        ds = reader.load(data_path)
-
-        assert ds.num_tracks == 7
-
-    @pytest.mark.parametrize('idx,path', [
-        ('cv-valid-dev-sample-000000', os.path.join('cv-valid-dev', 'sample-000000.mp3')),
-        ('cv-valid-dev-sample-000335', os.path.join('cv-valid-dev', 'sample-000335.mp3')),
-        ('cv-valid-dev-sample-001879', os.path.join('cv-valid-dev', 'sample-001879.mp3')),
-        ('cv-valid-dev-sample-004075', os.path.join('cv-valid-dev', 'sample-004075.mp3')),
-        ('cv-valid-train-sample-000000', os.path.join('cv-valid-train', 'sample-000000.mp3')),
-        ('cv-valid-train-sample-195733', os.path.join('cv-valid-train', 'sample-195733.mp3')),
-        ('cv-valid-train-sample-195754', os.path.join('cv-valid-train', 'sample-195754.mp3'))
-    ])
-    def test_load_tracks(self, idx, path, reader, data_path):
-        ds = reader.load(data_path)
-
-        assert ds.tracks[idx].idx == idx
-        assert ds.tracks[idx].path == os.path.join(data_path, path)
-
-    def test_load_correct_number_of_speakers(self, reader, data_path):
-        ds = reader.load(data_path)
-
-        assert ds.num_issuers == 7
-
-    @pytest.mark.parametrize('idx,age,gender,num_utt', [
-        ('cv-valid-dev-sample-000000', issuers.AgeGroup.UNKNOWN, issuers.Gender.UNKNOWN, 1),
-        ('cv-valid-dev-sample-000335', issuers.AgeGroup.ADULT, issuers.Gender.FEMALE, 1),
-        ('cv-valid-dev-sample-001879', issuers.AgeGroup.UNKNOWN, issuers.Gender.UNKNOWN, 1),
-        ('cv-valid-dev-sample-004075', issuers.AgeGroup.UNKNOWN, issuers.Gender.UNKNOWN, 1),
-        ('cv-valid-train-sample-000000', issuers.AgeGroup.UNKNOWN, issuers.Gender.UNKNOWN, 1),
-        ('cv-valid-train-sample-195733', issuers.AgeGroup.ADULT, issuers.Gender.MALE, 1),
-        ('cv-valid-train-sample-195754', issuers.AgeGroup.UNKNOWN, issuers.Gender.UNKNOWN, 1)
-    ])
-    def test_load_issuers(self, idx, age, gender, num_utt, reader, data_path):
-        ds = reader.load(data_path)
-
-        assert ds.issuers[idx].idx == idx
-        assert ds.issuers[idx].gender == gender
-        assert ds.issuers[idx].age_group == age
-        assert type(ds.issuers[idx]) == issuers.Speaker
-        assert len(ds.issuers[idx].utterances) == num_utt
-
-    def test_load_correct_number_of_utterances(self, reader, data_path):
-        ds = reader.load(data_path)
-
-        assert ds.num_utterances == 7
-
-    @pytest.mark.parametrize('idx, issuer_idx', [
-        ('cv-valid-dev-sample-000000', 'cv-valid-dev-sample-000000'),
-        ('cv-valid-dev-sample-000335', 'cv-valid-dev-sample-000335'),
-        ('cv-valid-dev-sample-001879', 'cv-valid-dev-sample-001879'),
-        ('cv-valid-dev-sample-004075', 'cv-valid-dev-sample-004075'),
-        ('cv-valid-train-sample-000000', 'cv-valid-train-sample-000000'),
-        ('cv-valid-train-sample-195733', 'cv-valid-train-sample-195733'),
-        ('cv-valid-train-sample-195754', 'cv-valid-train-sample-195754')
-    ])
-    def test_load_utterances(self, idx, issuer_idx, reader, data_path):
-        ds = reader.load(data_path)
-
-        assert ds.utterances[idx].idx == idx
-        assert ds.utterances[idx].track.idx == idx
-        assert ds.utterances[idx].issuer.idx == issuer_idx
-        assert ds.utterances[idx].start == 0
-        assert ds.utterances[idx].end == -1
-
-    @pytest.mark.parametrize('idx, transcription', [
-        ('cv-valid-dev-sample-000000', 'be careful with your prognostications said the stranger'),
-        ('cv-valid-dev-sample-000335', 'love required them to stay with the people they loved'),
-        ('cv-valid-dev-sample-001879', "who's down there with you"),
-        ('cv-valid-dev-sample-004075', "the city sealer's office"),
-        ('cv-valid-train-sample-000000', "trust in your heart but never forget that you're in the desert"),
-        ('cv-valid-train-sample-195733', 'the battles may last for a long time perhaps even years'),
-        ('cv-valid-train-sample-195754', 'the silicon sealant has dried')
-    ])
-    def test_load_transcription(self, idx, transcription, reader, data_path):
-        ds = reader.load(data_path)
-
-        ll = ds.utterances[idx].label_lists[corpus.LL_WORD_TRANSCRIPT]
-
-        assert len(ll) == 1
-        assert ll[0].value == transcription
-        assert ll[0].start == 0
-        assert ll[0].end == -1
-
-    def test_load_correct_number_of_subviews(self, reader, data_path):
-        ds = reader.load(data_path)
-
-        assert ds.num_subviews == 2
-
-    @pytest.mark.parametrize('idx, utts', [
-        ('cv-valid-dev', ['cv-valid-dev-sample-000000', 'cv-valid-dev-sample-000335',
-                          'cv-valid-dev-sample-001879', 'cv-valid-dev-sample-004075']),
-        ('cv-valid-train', ['cv-valid-train-sample-000000', 'cv-valid-train-sample-195733',
-                            'cv-valid-train-sample-195754'])
-    ])
-    def test_subviews(self, idx, utts, reader, data_path):
-        ds = reader.load(data_path)
-
-        assert idx in ds.subviews.keys()
-        assert ds.subviews[idx].num_utterances == len(utts)
-        assert set(ds.subviews[idx].utterances.keys()) == set(utts)
+    def load(self):
+        reader = common_voice.CommonVoiceReader()
+        return reader.load(self.SAMPLE_PATH)

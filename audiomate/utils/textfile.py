@@ -7,7 +7,7 @@ import os
 from audiomate.utils import text
 
 
-def read_separated_lines(path, separator=' ', max_columns=-1):
+def read_separated_lines(path, separator=' ', max_columns=-1, keep_empty=False):
     """
     Reads a text file where each line represents a record with some separated columns.
 
@@ -15,16 +15,18 @@ def read_separated_lines(path, separator=' ', max_columns=-1):
         path (str): Path to the file to read.
         separator (str): Separator that is used to split the columns.
         max_columns (int): Number of max columns (if the separator occurs within the last column).
+        keep_empty (bool): If True empty columns are returned as well.
 
     Returns:
         list: A list containing a list for each line read.
     """
 
-    gen = read_separated_lines_generator(path, separator, max_columns)
+    gen = read_separated_lines_generator(path, separator, max_columns, keep_empty=keep_empty)
     return list(gen)
 
 
-def read_separated_lines_with_first_key(path: str, separator: str = ' ', max_columns: int = -1):
+def read_separated_lines_with_first_key(path: str, separator: str = ' ', max_columns: int = -1,
+                                        keep_empty: bool = False):
     """
     Reads the separated lines of a file and return a dictionary with the first column as keys, value
     is a list with the rest of the columns.
@@ -33,11 +35,12 @@ def read_separated_lines_with_first_key(path: str, separator: str = ' ', max_col
         path (str): Path to the file to read.
         separator (str): Separator that is used to split the columns.
         max_columns (str): Number of max columns (if the separator occurs within the last column).
+        keep_empty (bool): If True empty columns are returned as well.
 
     Returns:
         dict: Dictionary with list of column values and first column value as key.
     """
-    gen = read_separated_lines_generator(path, separator, max_columns)
+    gen = read_separated_lines_generator(path, separator, max_columns, keep_empty=keep_empty)
 
     dic = {}
 
@@ -114,7 +117,7 @@ def write_separated_lines(path, values, separator=' ', sort_by_column=0):
 
 
 def read_separated_lines_generator(path, separator=' ', max_columns=-1,
-                                   ignore_lines_starting_with=[]):
+                                   ignore_lines_starting_with=[], keep_empty=False):
     """
     Creates a generator through all lines of a file and returns the splitted line.
 
@@ -123,6 +126,7 @@ def read_separated_lines_generator(path, separator=' ', max_columns=-1,
         separator: Separator that is used to split the columns.
         max_columns: Number of max columns (if the separator occurs within the last column).
         ignore_lines_starting_with: Lines starting with a string in this list will be ignored.
+        keep_empty (bool): If True empty columns are returned as well.
     """
     if not os.path.isfile(path):
         print('File doesnt exist or is no file: {}'.format(path))
@@ -136,7 +140,11 @@ def read_separated_lines_generator(path, separator=' ', max_columns=-1,
         max_splits = -1
 
     for line in f:
-        stripped_line = line.strip()
+        if keep_empty:
+            stripped_line = line
+        else:
+            stripped_line = line.strip()
+
         should_ignore = text.starts_with_prefix_in_list(stripped_line, ignore_lines_starting_with)
 
         if not should_ignore and stripped_line != '':
