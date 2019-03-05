@@ -7,33 +7,6 @@ from audiomate import issuers
 from audiomate.corpus import subset
 from audiomate.utils import textfile
 from . import base
-from . import downloader
-
-DOWNLOAD_V1 = 'https://s3.us-east-2.amazonaws.com/common-voice-data-download/cv_corpus_v1.tar.gz'
-
-
-class CommonVoiceDownloader(downloader.ArchiveDownloader):
-    """
-    Downloader for the Common Voice Corpus.
-
-    Args:
-        url (str): The url to download the dataset from. If not given the default URL is used.
-                   It is expected to be a tar.gz file.
-    """
-
-    def __init__(self, url=None):
-        if url is None:
-            url = DOWNLOAD_V1
-
-        super(CommonVoiceDownloader, self).__init__(
-            url,
-            ark_type=downloader.ArkType.TAR,
-            move_files_up=True
-        )
-
-    @classmethod
-    def type(cls):
-        return 'common-voice'
 
 
 class CommonVoiceReader(base.CorpusReader):
@@ -67,7 +40,7 @@ class CommonVoiceReader(base.CorpusReader):
         """ Return a list with ids of all available subsets (based on existing csv-files). """
         all = []
 
-        for path in glob.glob(os.path.join(path, '*.csv')):
+        for path in glob.glob(os.path.join(path, '*.tsv')):
             file_name = os.path.split(path)[1]
             basename = os.path.splitext(file_name)[0]
             all.append(basename)
@@ -77,25 +50,53 @@ class CommonVoiceReader(base.CorpusReader):
     @staticmethod
     def load_subset(corpus, path, subset_idx):
         """ Load subset into corpus. """
-        csv_file = os.path.join(path, '{}.csv'.format(subset_idx))
-        utt_ids = []
+        csv_file = os.path.join(path, '{}.tsv'.format(subset_idx))
+        subset_utt_ids = []
 
-        for entry in textfile.read_separated_lines_generator(csv_file, separator=',', max_columns=8,
-                                                             ignore_lines_starting_with=['filename']):
-            rel_file_path = entry[0]
-            filename = os.path.split(rel_file_path)[1]
-            basename = os.path.splitext(filename)[0]
-            transcription = entry[1]
-            age = CommonVoiceReader.map_age(entry[4])
-            gender = CommonVoiceReader.map_gender(entry[5])
+        entries = textfile.read_separated_lines_generator(
+            csv_file,
+            separator='\t',
+            max_columns=8,
+            ignore_lines_starting_with=['client_id'],
+            keep_empty=True
+        )
 
-            idx = '{}-{}'.format(subset_idx, basename)
-            file_path = os.path.join(path, rel_file_path)
+        for entry in entries:
 
-            corpus.new_file(file_path, idx)
-            issuer = issuers.Speaker(idx, gender=gender, age_group=age)
-            corpus.import_issuers(issuer)
-            utterance = corpus.new_utterance(idx, idx, issuer.idx)
+            file_idx = CommonVoiceReader.create_assets_if_needed(
+                corpus,
+                path,
+                entry
+            )
+            subset_utt_ids.append(file_idx)
+
+        filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utt_ids))
+        subview = subset.Subview(corpus, filter_criteria=[filter])
+        corpus.import_subview(subset_idx, subview)
+
+    @staticmethod
+    def create_assets_if_needed(corpus, path, entry):
+        """ Create File/Utterance/Issuer, if they not already exist and return utt-idx. """
+        file_idx = entry[1]
+
+        if file_idx not in corpus.utterances.keys():
+            speaker_idx = entry[0]
+            transcription = entry[2]
+
+            age = CommonVoiceReader.map_age(entry[5])
+            gender = CommonVoiceReader.map_gender(entry[6])
+
+            file_path = os.path.join(path, 'clips', '{}.wav'.format(file_idx))
+
+            corpus.new_file(file_path, file_idx)
+
+            if speaker_idx in corpus.issuers.keys():
+                issuer = corpus.issuers[speaker_idx]
+            else:
+                issuer = issuers.Speaker(speaker_idx, gender=gender, age_group=age)
+                corpus.import_issuers(issuer)
+
+            utterance = corpus.new_utterance(file_idx, file_idx, issuer.idx)
             utterance.set_label_list(
                 annotations.LabelList.create_single(
                     transcription,
@@ -103,11 +104,7 @@ class CommonVoiceReader(base.CorpusReader):
                 )
             )
 
-            utt_ids.append(idx)
-
-        filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(utt_ids))
-        subview = subset.Subview(corpus, filter_criteria=[filter])
-        corpus.import_subview(subset_idx, subview)
+        return file_idx
 
     @staticmethod
     def map_age(age):

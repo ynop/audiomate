@@ -23,7 +23,7 @@ from .timit import TimitReader  # noqa: F401
 from .swc import SWCReader  # noqa: F401
 from .free_spoken_digits import FreeSpokenDigitDownloader, FreeSpokenDigitReader  # noqa: F401
 from .tatoeba import TatoebaDownloader, TatoebaReader  # noqa: F401
-from .common_voice import CommonVoiceDownloader, CommonVoiceReader  # noqa: F401
+from .common_voice import CommonVoiceReader  # noqa: F401
 from .mailabs import MailabsDownloader, MailabsReader  # noqa: F401
 from .rouen import RouenDownloader, RouenReader  # noqa: F401
 
