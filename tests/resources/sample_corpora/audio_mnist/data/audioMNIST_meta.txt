@@ -1,0 +1,39 @@
+
+{
+    "01": {
+        "accent": "german", 
+        "age": 30, 
+        "gender": "male", 
+        "native speaker": "no", 
+        "origin": "Europe, Germany, Wuerzburg", 
+        "recordingdate": "17-06-22-11-04-28", 
+        "recordingroom": "Kino"
+    }, 
+    "02": {
+        "accent": "German", 
+        "age": "25", 
+        "gender": "male", 
+        "native speaker": "no", 
+        "origin": "Europe, Germany, Hamburg", 
+        "recordingdate": "17-06-26-17-57-29", 
+        "recordingroom": "Kino"
+    }, 
+    "03": {
+        "accent": "German", 
+        "age": "44", 
+        "gender": "female", 
+        "native speaker": "no", 
+        "origin": "Europe, Germany, Bremen", 
+        "recordingdate": "17-06-30-17-34-51", 
+        "recordingroom": "Kino"
+    }, 
+    "04": {
+        "accent": "German", 
+        "age": "12", 
+        "gender": "male", 
+        "native speaker": "no", 
+        "origin": "Europe, Germany, Helmstedt", 
+        "recordingdate": "17-06-30-18-09-14", 
+        "recordingroom": "Kino"
+    }
+}

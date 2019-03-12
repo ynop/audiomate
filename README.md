@@ -30,12 +30,13 @@ Furthermore it provides tools for interacting with datasets
 (validation, splitting, subsets, merge, filter), extracting features,
 feeding samples for training ML models and more.
 
-* [Documentation](https://audiomate.readthedocs.io)   
-* [Examples](https://github.com/ynop/audiomate/tree/master/examples)   
-* [Changelog](https://audiomate.readthedocs.io/en/latest/notes/changelog.html)   
+* [Documentation](https://audiomate.readthedocs.io)
+* [Examples](https://github.com/ynop/audiomate/tree/master/examples)
+* [Changelog](https://audiomate.readthedocs.io/en/latest/notes/changelog.html)
 
 Currently supported datasets:
 * [Acoustic Event Dataset](https://data.vision.ee.ethz.ch/cvl/ae_dataset/)
+* [AudioMNIST](https://github.com/soerenab/AudioMNIST)
 * [Mozilla Common Voice](https://voice.mozilla.org/)
 * [ESC-50](https://github.com/karoldvl/ESC-50)
 * [Free Spoken Digit Dataset](https://github.com/Jakobovski/free-spoken-digit-dataset)
@@ -142,5 +143,3 @@ Versions is handled using [bump2version](https://github.com/c4urself/bump2versio
 ```
 bump2version [major,minor,patch,release,num]
 ```
-
-

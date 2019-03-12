@@ -26,6 +26,10 @@ Next Version
 * Add function to merge equal labels that overlap within a label-list:
   :meth:`audiomate.annotations.LabelList.merge_overlapping_labels`.
 
+* Added reader (:class:`audiomate.corpus.io.AudioMNISTReader`) and
+  downloader (:class:`audiomate.corpus.io.AudioMNISTDownloader`) for the
+  `AudioMNIST dataset <https://github.com/soerenab/AudioMNIST>`_.
+
 
 **Fixes**
 
