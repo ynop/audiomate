@@ -42,6 +42,7 @@ Implementations
   Format                            Download  Read   Write
   ================================  ========  =====  =======
   Acoustic Event Dataset            x         x
+  AudioMNIST                        x         x
   Broadcast                                   x
   Common Voice                                x
   Default                                     x      x
@@ -68,6 +69,14 @@ Acoustic Event Dataset
    :members:
 
 .. autoclass:: AEDReader
+   :members:
+
+AudioMNIST
+^^^^^^^^^^
+.. autoclass:: AudioMNISTDownloader
+   :members:
+
+.. autoclass:: AudioMNISTReader
    :members:
 
 Broadcast
