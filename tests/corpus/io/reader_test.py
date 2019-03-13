@@ -164,7 +164,7 @@ class CorpusReaderTest:
                     'Utterance is expected to have no issuer'
             else:
                 assert actual.issuer.idx == exp.issuer_idx, \
-                    'Issuer-idx of utterance is wrong'
+                    'Issuer-idx of utterance {} is wrong'.format(idx)
 
     # ----------------------------------------------------------------------
     # ISSUERS
