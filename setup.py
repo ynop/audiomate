@@ -11,16 +11,16 @@ PYTEST_VERSION_ = '4.0.0'
 
 # Packages required in 'production'
 REQUIRED = [
-    'llvmlite == 0.27.0',
-    'audioread >= 2.1.0',
-    'numpy >= 1.14.0',
-    'scipy >= 1.1.0',
-    'librosa >= 0.6.0',
-    'h5py >= 2.7.1',
-    'networkx >= 2.0',
-    'beautifulsoup4 >= 4.6.0',
-    'lxml >= 4.1.1',
-    'requests >= 2.18.4'
+    'llvmlite == 0.28.0',
+    'audioread == 2.1.6',
+    'numpy == 1.16.2',
+    'scipy == 1.2.1',
+    'librosa == 0.6.3',
+    'h5py == 2.9.0',
+    'networkx == 2.2',
+    'beautifulsoup4 == 4.7.1',
+    'lxml == 4.3.2',
+    'requests == 2.21.0'
 ]
 
 # Packages required for dev/ci enrionment
