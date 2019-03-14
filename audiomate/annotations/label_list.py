@@ -116,17 +116,17 @@ class LabelList(object):
                 if include_labels is None or label.value in include_labels:
                     current_range_labels.append(label)
 
-                    if label.end == -1:
+                    if label.end == float('inf'):
                         labels_to_end = True
                     else:
-                        heapq.heappush(events, (label.end, -1, label))
+                        heapq.heappush(events, (label.end, float('inf'), label))
             else:
                 current_range_labels.remove(label)
 
             current_range_start = next_event[0]
 
         if labels_to_end and len(current_range_labels) > 0:
-            yield (current_range_start, -1, list(current_range_labels))
+            yield (current_range_start, float('inf'), list(current_range_labels))
 
     def labels_in_range(self, start, end, fully_included=False):
         """
@@ -397,11 +397,7 @@ class LabelList(object):
                 if ref_label.value == other_label.value and ref_label.do_overlap(other_label):
                     overlapping.append(i)
                     merged_start = min(ref_label.start, other_label.start)
-
-                    if merged_end < 0 or other_label.end < 0:
-                        merged_end = -1
-                    else:
-                        merged_end = max(merged_end, other_label.end)
+                    merged_end = max(merged_end, other_label.end)
 
             if len(overlapping) > 0:
                 ref_label.start = merged_start
@@ -504,9 +500,7 @@ class LabelList(object):
 
                 if shift_times and start_cut_index > 0:
                     new_label.start -= cutting_points[start_cut_index - 1]
-
-                    if new_label.end > 0:
-                        new_label.end -= cutting_points[start_cut_index - 1]
+                    new_label.end -= cutting_points[start_cut_index - 1]
 
                 label_lists[start_cut_index].append(new_label)
             else:
@@ -520,16 +514,12 @@ class LabelList(object):
 
                     if index >= end_cut_index:
                         sub_label_end = label.end
-                    elif label.end < 0.0:
-                        sub_label_end = cutting_points[index] + overlap
                     else:
                         sub_label_end = min(label.end, cutting_points[index] + overlap)
 
                     if shift_times and index > 0:
                         sub_label_start -= (cutting_points[index - 1] - overlap)
-
-                        if sub_label_end > 0:
-                            sub_label_end -= (cutting_points[index - 1] - overlap)
+                        sub_label_end -= (cutting_points[index - 1] - overlap)
 
                     new_label = Label(label.value, start=sub_label_start, end=sub_label_end)
                     label_lists[index].append(new_label)
@@ -573,7 +563,7 @@ class LabelList(object):
     def with_label_values(cls, values, idx='default'):
         """
         Create a new label-list containing labels with the given values.
-        All labels will have default start/end values of 0 and -1.
+        All labels will have default start/end values of 0 and ``inf``.
 
         Args:
             values (list): List of values (str) that should be created and appended
@@ -589,9 +579,9 @@ class LabelList(object):
             'letters'
             >>> ll.labels
             [
-                Label('a', 0, -1),
-                Label('x', 0, -1),
-                Label('z', 0, -1),
+                Label('a', 0, inf),
+                Label('x', 0, inf),
+                Label('z', 0, inf),
             ]
         """
 

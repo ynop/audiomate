@@ -58,13 +58,13 @@ class TestDefaultReader:
         assert ds.utterances['utt-1'].track.idx == 'file-1'
         assert ds.utterances['utt-1'].issuer.idx == 'speaker-1'
         assert ds.utterances['utt-1'].start == 0
-        assert ds.utterances['utt-1'].end == -1
+        assert ds.utterances['utt-1'].end == float('inf')
 
         assert ds.utterances['utt-2'].idx == 'utt-2'
         assert ds.utterances['utt-2'].track.idx == 'file-2'
         assert ds.utterances['utt-2'].issuer.idx == 'speaker-1'
         assert ds.utterances['utt-2'].start == 0
-        assert ds.utterances['utt-2'].end == -1
+        assert ds.utterances['utt-2'].end == float('inf')
 
         assert ds.utterances['utt-3'].idx == 'utt-3'
         assert ds.utterances['utt-3'].track.idx == 'file-3'
@@ -82,7 +82,7 @@ class TestDefaultReader:
         assert ds.utterances['utt-5'].track.idx == 'file-4'
         assert ds.utterances['utt-5'].issuer.idx == 'speaker-3'
         assert ds.utterances['utt-5'].start == 0
-        assert ds.utterances['utt-5'].end == -1
+        assert ds.utterances['utt-5'].end == float('inf')
 
     def test_load_issuers(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)

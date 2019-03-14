@@ -199,7 +199,7 @@ class Corpus(base.CorpusView):
     #   Utterances
     #
 
-    def new_utterance(self, utterance_idx, track_idx, issuer_idx=None, start=0, end=-1):
+    def new_utterance(self, utterance_idx, track_idx, issuer_idx=None, start=0, end=float('inf')):
         """
         Add a new utterance to the corpus with the given data.
 
@@ -210,7 +210,7 @@ class Corpus(base.CorpusView):
             issuer_idx (str): The issuer id to associate with the utterance.
             start (float): Start of the utterance within the track [seconds].
             end (float): End of the utterance within the track [seconds].
-                         -1 equals the end of the track.
+                         ``inf`` equals the end of the track.
 
         Returns:
             Utterance: The newly added utterance.

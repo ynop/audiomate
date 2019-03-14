@@ -309,17 +309,16 @@ class LabelOverflowValidator(base.Validator):
 
         if self.label_list_idx in utterance.label_lists.keys():
             ll = utterance.label_lists[self.label_list_idx]
+            start = 0
+            end = utterance.duration
 
             for label in ll:
-                start = 0
-                end = utterance.duration
-
                 if start - label.start > self.threshold:
-                    label_end = start if label.end == -1 else label.end
+                    label_end = label.end if label.end != float('inf') else end
                     overflow_end = min(start, label_end)
                     overflow_segments.append((label.start, overflow_end, label.value))
 
-                if end >= 0 and label.end - end > self.threshold:
+                if label.end != float('inf') and label.end - end > self.threshold:
                     overflow_start = max(end, label.start)
                     overflow_segments.append((overflow_start, label.end, label.value))
 

@@ -61,16 +61,16 @@ class TestESC50Reader(rt.CorpusReaderTest):
 
     EXPECTED_NUMBER_OF_UTTERANCES = 10
     EXPECTED_UTTERANCES = [
-        rt.ExpUtterance('1-119125-A-45', '1-119125-A-45', None, 0, -1),
-        rt.ExpUtterance('1-12654-B-15', '1-12654-B-15', None, 0, -1),
-        rt.ExpUtterance('1-155858-E-25', '1-155858-E-25', None, 0, -1),
-        rt.ExpUtterance('1-155858-F-25', '1-155858-F-25', None, 0, -1),
-        rt.ExpUtterance('1-15689-A-4', '1-15689-A-4', None, 0, -1),
-        rt.ExpUtterance('1-17124-A-43', '1-17124-A-43', None, 0, -1),
-        rt.ExpUtterance('1-18755-A-4', '1-18755-A-4', None, 0, -1),
-        rt.ExpUtterance('1-18755-B-4', '1-18755-B-4', None, 0, -1),
-        rt.ExpUtterance('1-18757-A-4', '1-18757-A-4', None, 0, -1),
-        rt.ExpUtterance('1-18810-A-49', '1-18810-A-49', None, 0, -1),
+        rt.ExpUtterance('1-119125-A-45', '1-119125-A-45', None, 0, float('inf')),
+        rt.ExpUtterance('1-12654-B-15', '1-12654-B-15', None, 0, float('inf')),
+        rt.ExpUtterance('1-155858-E-25', '1-155858-E-25', None, 0, float('inf')),
+        rt.ExpUtterance('1-155858-F-25', '1-155858-F-25', None, 0, float('inf')),
+        rt.ExpUtterance('1-15689-A-4', '1-15689-A-4', None, 0, float('inf')),
+        rt.ExpUtterance('1-17124-A-43', '1-17124-A-43', None, 0, float('inf')),
+        rt.ExpUtterance('1-18755-A-4', '1-18755-A-4', None, 0, float('inf')),
+        rt.ExpUtterance('1-18755-B-4', '1-18755-B-4', None, 0, float('inf')),
+        rt.ExpUtterance('1-18757-A-4', '1-18757-A-4', None, 0, float('inf')),
+        rt.ExpUtterance('1-18810-A-49', '1-18810-A-49', None, 0, float('inf')),
     ]
 
     EXPECTED_NUMBER_OF_ISSUERS = 0
@@ -89,13 +89,13 @@ class TestESC50Reader(rt.CorpusReaderTest):
 
     EXPECTED_LABELS = {
         '1-119125-A-45': [
-            rt.ExpLabel(corpus.LL_SOUND_CLASS, 0, 'train', 0, -1),
+            rt.ExpLabel(corpus.LL_SOUND_CLASS, 0, 'train', 0, float('inf')),
         ],
         '1-15689-A-4': [
-            rt.ExpLabel(corpus.LL_SOUND_CLASS, 0, 'frog', 0, -1),
+            rt.ExpLabel(corpus.LL_SOUND_CLASS, 0, 'frog', 0, float('inf')),
         ],
         '1-18810-A-49': [
-            rt.ExpLabel(corpus.LL_SOUND_CLASS, 0, 'hand_saw', 0, -1),
+            rt.ExpLabel(corpus.LL_SOUND_CLASS, 0, 'hand_saw', 0, float('inf')),
         ],
     }
 

@@ -94,19 +94,19 @@ class TestAEDReader:
         assert ds.utterances['acoustic_guitar_16'].track.idx == 'acoustic_guitar_16'
         assert ds.utterances['acoustic_guitar_16'].issuer is None
         assert ds.utterances['acoustic_guitar_16'].start == 0
-        assert ds.utterances['acoustic_guitar_16'].end == -1
+        assert ds.utterances['acoustic_guitar_16'].end == float('inf')
 
         assert ds.utterances['airplane_23'].idx == 'airplane_23'
         assert ds.utterances['airplane_23'].track.idx == 'airplane_23'
         assert ds.utterances['airplane_23'].issuer is None
         assert ds.utterances['airplane_23'].start == 0
-        assert ds.utterances['airplane_23'].end == -1
+        assert ds.utterances['airplane_23'].end == float('inf')
 
         assert ds.utterances['tone_12'].idx == 'tone_12'
         assert ds.utterances['tone_12'].track.idx == 'tone_12'
         assert ds.utterances['tone_12'].issuer is None
         assert ds.utterances['tone_12'].start == 0
-        assert ds.utterances['tone_12'].end == -1
+        assert ds.utterances['tone_12'].end == float('inf')
 
     def test_load_issuers(self, reader, data_path):
         ds = reader.load(data_path)
@@ -120,19 +120,19 @@ class TestAEDReader:
         assert len(utt.label_lists) == 1
         assert utt.label_lists[corpus.LL_SOUND_CLASS][0].value == 'airplane'
         assert utt.label_lists[corpus.LL_SOUND_CLASS][0].start == 0
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == -1
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == float('inf')
 
         utt = ds.utterances['tone_12']
         assert len(utt.label_lists) == 1
         assert utt.label_lists[corpus.LL_SOUND_CLASS][0].value == 'tone'
         assert utt.label_lists[corpus.LL_SOUND_CLASS][0].start == 0
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == -1
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == float('inf')
 
         utt = ds.utterances['acoustic_guitar_16']
         assert len(utt.label_lists) == 1
         assert utt.label_lists[corpus.LL_SOUND_CLASS][0].value == 'acoustic_guitar'
         assert utt.label_lists[corpus.LL_SOUND_CLASS][0].start == 0
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == -1
+        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == float('inf')
 
     def test_load_fold_subsets(self, reader, data_path):
         ds = reader.load(data_path)

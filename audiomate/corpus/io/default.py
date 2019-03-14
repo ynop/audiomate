@@ -127,13 +127,16 @@ class DefaultReader(base.CorpusReader):
         for utterance_idx, utt_info in utterances.items():
             issuer_idx = None
             start = 0
-            end = -1
+            end = float('inf')
 
             if len(utt_info) > 1:
                 start = float(utt_info[1])
 
             if len(utt_info) > 2:
                 end = float(utt_info[2])
+
+                if end == -1:
+                    end = float('inf')
 
             if utterance_idx in utt_idx_to_issuer.keys():
                 issuer_idx = utt_idx_to_issuer[utterance_idx].idx
@@ -157,6 +160,9 @@ class DefaultReader(base.CorpusReader):
                 end = float(record[2])
                 meta = None
                 meta_match = META_PATTERN.match(label)
+
+                if end == -1:
+                    end = float('inf')
 
                 if meta_match is not None:
                     meta_json = meta_match.group(2)
@@ -305,8 +311,18 @@ class DefaultWriter(base.CorpusWriter):
 
     @staticmethod
     def write_utterances(utterance_path, corpus):
-        utterance_records = {utterance.idx: [utterance.track.idx, utterance.start, utterance.end] for
-                             utterance in corpus.utterances.values()}
+        utterance_records = {}
+
+        for utterance in corpus.utterances.values():
+            track_idx = utterance.track.idx
+            start = utterance.start
+            end = utterance.end
+
+            if end == float('inf'):
+                end = -1
+
+            utterance_records[utterance.idx] = [track_idx, start, end]
+
         textfile.write_separated_lines(utterance_path, utterance_records, separator=' ', sort_by_column=0)
 
     @staticmethod
@@ -327,11 +343,17 @@ class DefaultWriter(base.CorpusWriter):
             for label_list_idx, label_list in utterance.label_lists.items():
                 utt_records = []
                 for l in label_list:
+                    start = l.start
+                    end = l.end
+
+                    if end == float('inf'):
+                        end = -1
+
                     if len(l.meta) > 0:
                         value = '{} [{}]'.format(l.value, json.dumps(l.meta, sort_keys=True))
-                        utt_records.append((utterance.idx, l.start, l.end, value))
+                        utt_records.append((utterance.idx, start, end, value))
                     else:
-                        utt_records.append((utterance.idx, l.start, l.end, l.value))
+                        utt_records.append((utterance.idx, start, end, l.value))
 
                 records[label_list_idx].extend(utt_records)
 

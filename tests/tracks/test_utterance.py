@@ -58,15 +58,19 @@ class TestUtterance:
         assert self.utt.end_abs == 1.30
 
     def test_end_abs_end_of_track(self):
-        utt = tracks.Utterance('utt', self.track, start=0.3, end=-1)
+        utt = tracks.Utterance('utt', self.track, start=0.3)
         assert utt.end_abs == pytest.approx(2.5951875)
 
     def test_duration(self):
         assert self.utt.duration == pytest.approx(0.05)
 
     def test_duration_end_of_track(self):
-        utt = tracks.Utterance('utt', self.track, start=0.3, end=-1)
+        utt = tracks.Utterance('utt', self.track, start=0.3)
         assert utt.duration == pytest.approx(2.2951875)
+
+    def test_duration_longer_than_track(self):
+        utt = tracks.Utterance('utt', self.track, start=0.3, end=255.0)
+        assert utt.duration == pytest.approx(254.7)
 
     def test_issuer_relation_on_creation(self):
         assert self.utt.issuer == self.issuer
@@ -125,7 +129,7 @@ class TestUtterance:
         assert np.array_equal(self.utt.read_samples(offset=0.01, duration=0.03), expected)
 
     def test_read_samples_with_duration_no_end_set(self):
-        self.utt.end = -1
+        self.utt.end = float('inf')
 
         expected, __ = librosa.core.load(self.track.path, sr=None, offset=1.26, duration=0.03)
         assert np.array_equal(self.utt.read_samples(offset=0.01, duration=0.03), expected)
@@ -169,14 +173,14 @@ class TestUtterance:
         assert 'words' in res[2].label_lists.keys()
 
     def test_split_endless(self):
-        utt = tracks.Utterance('utt-1', None, start=0.0, end=-1)
+        utt = tracks.Utterance('utt-1', None, start=0.0)
         res = utt.split([24.5])
 
         assert len(res) == 2
         assert res[0].start == 0.0
         assert res[0].end == 24.5
         assert res[1].start == 24.5
-        assert res[1].end == -1
+        assert res[1].end == float('inf')
 
     def test_split_sets_track(self):
         file = tracks.FileTrack('file-1', '/some/path')
@@ -197,7 +201,7 @@ class TestUtterance:
         assert res[1].issuer == issuer
 
     def test_split_without_cutting_points_raises_error(self):
-        utt = tracks.Utterance('utt-1', None, start=0.0, end=-1)
+        utt = tracks.Utterance('utt-1', None, start=0.0)
 
         with pytest.raises(ValueError):
             utt.split([])

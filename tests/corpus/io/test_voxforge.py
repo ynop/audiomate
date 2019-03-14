@@ -216,19 +216,19 @@ class TestVoxforgeReader:
         assert ds.utterances['1337ad-20170321-czb-de11-095'].idx == '1337ad-20170321-czb-de11-095'
         assert ds.utterances['1337ad-20170321-czb-de11-095'].track.idx == '1337ad-20170321-czb-de11-095'
         assert ds.utterances['1337ad-20170321-czb-de11-095'].start == 0
-        assert ds.utterances['1337ad-20170321-czb-de11-095'].end == -1
+        assert ds.utterances['1337ad-20170321-czb-de11-095'].end == float('inf')
         assert ds.utterances['1337ad-20170321-czb-de11-095'].issuer.idx == '1337ad'
 
         assert ds.utterances['1337ad-20170321-czb-de11-096'].idx == '1337ad-20170321-czb-de11-096'
         assert ds.utterances['1337ad-20170321-czb-de11-096'].track.idx == '1337ad-20170321-czb-de11-096'
         assert ds.utterances['1337ad-20170321-czb-de11-096'].start == 0
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].end == -1
+        assert ds.utterances['1337ad-20170321-czb-de11-096'].end == float('inf')
         assert ds.utterances['1337ad-20170321-czb-de11-096'].issuer.idx == '1337ad'
 
         assert ds.utterances['anonymous-20081027-njq-a0479'].idx == 'anonymous-20081027-njq-a0479'
         assert ds.utterances['anonymous-20081027-njq-a0479'].track.idx == 'anonymous-20081027-njq-a0479'
         assert ds.utterances['anonymous-20081027-njq-a0479'].start == 0
-        assert ds.utterances['anonymous-20081027-njq-a0479'].end == -1
+        assert ds.utterances['anonymous-20081027-njq-a0479'].end == float('inf')
         assert ds.utterances['anonymous-20081027-njq-a0479'].issuer.idx == 'anonymous-20081027-njq'
 
     def test_load_transcriptions(self, reader, sample_corpus_path):

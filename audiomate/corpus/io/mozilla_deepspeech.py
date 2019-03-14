@@ -39,7 +39,7 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
         for utterance_idx in sorted(corpus.utterances.keys()):
             utterance = corpus.utterances[utterance_idx]
 
-            if utterance.start == 0 and utterance.end == -1:
+            if utterance.start == 0 and utterance.end == float('inf'):
                 audio_path = utterance.track.path
             else:
                 audio_path = os.path.join(audio_folder, '{}.wav'.format(utterance.idx))

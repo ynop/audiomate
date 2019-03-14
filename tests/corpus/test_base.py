@@ -96,12 +96,12 @@ class TestCorpusView:
         assert result.utterances['utt-1_0'].start == 0.0
         assert result.utterances['utt-1_0'].end == utt_len / 2.0 + 0.5
         assert result.utterances['utt-1_1'].start == utt_len / 2.0 - 0.5
-        assert result.utterances['utt-1_1'].end == -1
+        assert result.utterances['utt-1_1'].end == float('inf')
 
         assert result.utterances['utt-2_0'].start == 0.0
         assert result.utterances['utt-2_0'].end == utt_len / 2.0 + 0.5
         assert result.utterances['utt-2_1'].start == utt_len / 2.0 - 0.5
-        assert result.utterances['utt-2_1'].end == -1
+        assert result.utterances['utt-2_1'].end == float('inf')
 
         assert result.utterances['utt-3'].start == 0.0
         assert result.utterances['utt-3'].end == 1.5
@@ -112,4 +112,4 @@ class TestCorpusView:
         assert result.utterances['utt-5_0'].start == 0.0
         assert result.utterances['utt-5_0'].end == utt_len / 2.0 + 0.5
         assert result.utterances['utt-5_1'].start == utt_len / 2.0 - 0.5
-        assert result.utterances['utt-5_1'].end == -1
+        assert result.utterances['utt-5_1'].end == float('inf')

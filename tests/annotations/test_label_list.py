@@ -1,33 +1,9 @@
 import pytest
 
-from audiomate import tracks
 from audiomate.annotations import Label, LabelList
-
-from tests import resources
-
-
-@pytest.fixture
-def sample_label():
-    file_track = tracks.FileTrack('wav', resources.sample_wav_file('wav_1.wav'))
-    utt = tracks.Utterance('utt', file_track, start=0.3, end=-1)
-    test_label = Label('a', start=0.5, end=-1)
-    ll = LabelList()
-    ll.append(test_label)
-    utt.set_label_list(ll)
-
-    return test_label
 
 
 class TestLabelList:
-
-    def test_start_abs(self, sample_label):
-        assert sample_label.start_abs == pytest.approx(0.8)
-
-    def test_end_abs(self, sample_label):
-        assert sample_label.end_abs == pytest.approx(2.5951875)
-
-    def test_duration(self, sample_label):
-        assert sample_label.duration == pytest.approx(1.7951875)
 
     def test_append(self):
         ll = LabelList()
@@ -152,7 +128,7 @@ class TestLabelList:
 
     def test_ranges_zero_to_end(self):
         ll = LabelList(labels=[
-            Label('a', 0, -1),
+            Label('a', 0, float('inf')),
             Label('b', 5.1, 8.9)
         ])
 
@@ -171,7 +147,7 @@ class TestLabelList:
 
         r = next(ranges)
         assert 8.9 == r[0]
-        assert -1 == r[1]
+        assert float('inf') == r[1]
         assert ll[0] in r[2]
 
         with pytest.raises(StopIteration):
@@ -264,7 +240,7 @@ class TestLabelList:
         assert ll.idx == 'default'
         assert ll[0].value == 'bob'
         assert ll[0].start == 0
-        assert ll[0].end == -1
+        assert ll[0].end == float('inf')
 
     def test_create_single_with_custom_idx(self):
         ll = LabelList.create_single('bob', idx='name')
@@ -273,7 +249,7 @@ class TestLabelList:
         assert ll.idx == 'name'
         assert ll[0].value == 'bob'
         assert ll[0].start == 0
-        assert ll[0].end == -1
+        assert ll[0].end == float('inf')
 
     def test_join(self):
         ll = LabelList(idx='test', labels=[
@@ -306,7 +282,7 @@ class TestLabelList:
     def test_join_raises_error_if_overlap_is_higher_than_threshold_given_an_endless_label(self):
         ll = LabelList(idx='test', labels=[
             Label('a', 0.0, 4.0),
-            Label('b', 4.5, -1),
+            Label('b', 4.5, float('inf')),
             Label('c', 9.0, 12.0)
         ])
 
@@ -335,7 +311,7 @@ class TestLabelList:
     def test_tokenized_raises_error_if_overlap_is_higher_than_threshold_given_an_endless_label(self):
         ll = LabelList(idx='test', labels=[
             Label('a u t', 0.0, 4.0),
-            Label('b x', 4.5, -1),
+            Label('b x', 4.5, float('inf')),
             Label('c', 9.0, 12.0)
         ])
 
@@ -468,7 +444,7 @@ class TestLabelList:
     def test_split_with_endless_label(self):
         ll = LabelList(idx='test', labels=[
             Label('a', 0.0, 4.0),
-            Label('c', 4.0, -1)
+            Label('c', 4.0, float('inf'))
         ])
 
         res = ll.split([1.9, 10.5])
@@ -481,7 +457,7 @@ class TestLabelList:
         assert res[1][1].end == 10.5
         assert res[2][0].value == 'c'
         assert res[2][0].start == 10.5
-        assert res[2][0].end == -1
+        assert res[2][0].end == float('inf')
 
     def test_split_with_cutting_point_after_last_label(self):
         ll = LabelList(idx='test', labels=[
