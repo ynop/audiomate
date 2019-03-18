@@ -20,7 +20,8 @@ REQUIRED = [
     'networkx == 2.2',
     'beautifulsoup4 == 4.7.1',
     'lxml == 4.3.2',
-    'requests == 2.21.0'
+    'requests == 2.21.0',
+    'intervaltree == 3.0.2',
 ]
 
 # Packages required for dev/ci enrionment

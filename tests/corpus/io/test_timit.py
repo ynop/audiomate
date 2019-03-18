@@ -94,39 +94,39 @@ class TestTimitReader(rt.CorpusReaderTest):
 
     EXPECTED_LABELS = {
         'dr1-mkls0-sa1': [
-            rt.ExpLabel(RAW_LL, 0, 'She had your dark suit in greasy wash water all year.', 0, float('inf')),
-            rt.ExpLabel(WORD_LL, 0, 'she', 0.210625, 0.4275),
-            rt.ExpLabel(PHONE_LL, 0, 'h#', 0.0, 0.210625),
+            rt.ExpLabel(RAW_LL, 'She had your dark suit in greasy wash water all year.', 0, float('inf')),
+            rt.ExpLabel(WORD_LL, 'she', 0.210625, 0.4275),
+            rt.ExpLabel(PHONE_LL, 'h#', 0.0, 0.210625),
         ],
         'dr1-mkls0-sa2': [
-            rt.ExpLabel(RAW_LL, 0, 'Don\'t ask me to carry an oily rag like that.', 0, float('inf')),
-            rt.ExpLabel(WORD_LL, 1, 'ask', 0.3625, 0.645),
-            rt.ExpLabel(PHONE_LL, 1, 'd', 0.209375, 0.244375),
+            rt.ExpLabel(RAW_LL, 'Don\'t ask me to carry an oily rag like that.', 0, float('inf')),
+            rt.ExpLabel(WORD_LL, 'ask', 0.3625, 0.645),
+            rt.ExpLabel(PHONE_LL, 'd', 0.209375, 0.244375),
         ],
         'dr1-mrcg0-sx78': [
-            rt.ExpLabel(RAW_LL, 0, 'Doctors prescribe drugs too freely.', 0, float('inf')),
-            rt.ExpLabel(WORD_LL, 4, 'freely', 1.8575, 2.2898125),
-            rt.ExpLabel(PHONE_LL, 4, 't', 0.348125, 0.37375),
+            rt.ExpLabel(RAW_LL, 'Doctors prescribe drugs too freely.', 0, float('inf')),
+            rt.ExpLabel(WORD_LL, 'freely', 1.8575, 2.2898125),
+            rt.ExpLabel(PHONE_LL, 't', 0.348125, 0.37375),
         ],
         'dr2-mkjo0-si1517': [
-            rt.ExpLabel(RAW_LL, 0, 'Hired, hard lackeys of the warmongering capitalists.', 0, float('inf')),
-            rt.ExpLabel(WORD_LL, 5, 'warmongering', 1.461125, 2.18275),
-            rt.ExpLabel(PHONE_LL, 41, 'h#', 2.9075, 3.1),
+            rt.ExpLabel(RAW_LL, 'Hired, hard lackeys of the warmongering capitalists.', 0, float('inf')),
+            rt.ExpLabel(WORD_LL, 'warmongering', 1.461125, 2.18275),
+            rt.ExpLabel(PHONE_LL, 'h#', 2.9075, 3.1),
         ],
         'dr2-mrfk0-sx176': [
-            rt.ExpLabel(RAW_LL, 0, 'Buying a thoroughbred horse requires intuition and expertise.', 0, float('inf'))
+            rt.ExpLabel(RAW_LL, 'Buying a thoroughbred horse requires intuition and expertise.', 0, float('inf'))
         ],
         'dr1-fdac1-sa2': [
-            rt.ExpLabel(RAW_LL, 0, 'Don\'t ask me to carry an oily rag like that.', 0, float('inf')),
+            rt.ExpLabel(RAW_LL, 'Don\'t ask me to carry an oily rag like that.', 0, float('inf')),
         ],
         'dr1-mjsw0-sa1': [
-            rt.ExpLabel(RAW_LL, 0, 'She had your dark suit in greasy wash water all year.', 0, float('inf')),
+            rt.ExpLabel(RAW_LL, 'She had your dark suit in greasy wash water all year.', 0, float('inf')),
         ],
         'dr1-mjsw0-sx20': [
-            rt.ExpLabel(RAW_LL, 0, 'She wore warm, fleecy, woolen overalls.', 0, float('inf')),
+            rt.ExpLabel(RAW_LL, 'She wore warm, fleecy, woolen overalls.', 0, float('inf')),
         ],
         'dr2-fpas0-sx224': [
-            rt.ExpLabel(RAW_LL, 0, 'How good is your endurance?', 0, float('inf')),
+            rt.ExpLabel(RAW_LL, 'How good is your endurance?', 0, float('inf')),
         ],
     }
 

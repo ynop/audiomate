@@ -64,16 +64,16 @@ class TestAudioMNISTReader(rt.CorpusReaderTest):
 
     EXPECTED_LABELS = {
         '0_01_0': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '0', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '0', 0, float('inf')),
         ],
         '1_01_0': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '1', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '1', 0, float('inf')),
         ],
         '4_03_0': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '4', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '4', 0, float('inf')),
         ],
         '0_04_0': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '0', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '0', 0, float('inf')),
         ],
     }
 

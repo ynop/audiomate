@@ -24,12 +24,6 @@ Relabeling
 .. automodule:: audiomate.annotations.relabeling
     :members:
 
-Label Cleaning
---------------
-
-.. automodule:: audiomate.annotations.label_cleaning
-    :members:
-
 Exceptions
 ----------
 .. autoexception:: audiomate.annotations.relabeling.UnmappedLabelsException

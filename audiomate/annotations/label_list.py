@@ -1,7 +1,7 @@
 import collections
 import copy
-import heapq
-import bisect
+
+import intervaltree
 
 from .label import Label
 
@@ -19,6 +19,7 @@ class LabelList(object):
 
     Attributes:
         utterance (Utterance): The utterance this label-list is belonging to.
+        label_tree (IntervalTree): The interval-tree storing the labels.
 
     Example:
         >>> label_list = LabelList(idx='transcription', labels=[
@@ -28,16 +29,55 @@ class LabelList(object):
         >>> ])
     """
 
-    __slots__ = ['idx', 'labels', 'utterance']
+    __slots__ = ['idx', 'label_tree', 'utterance']
 
-    def __init__(self, idx='default', labels=[]):
+    def __init__(self, idx='default', labels=None):
         self.idx = idx
         self.utterance = None
 
-        self.labels = []
-        self.extend(labels)
+        self.label_tree = intervaltree.IntervalTree()
 
-    def append(self, label):
+        if labels is not None:
+            self.update(labels)
+
+    def __eq__(self, other):
+        data_this = (self.idx, self.label_tree)
+        data_other = (other.idx, other.label_tree)
+        return data_this == data_other
+
+    def __iter__(self):
+        for interval in self.label_tree:
+            yield interval.data
+
+    def __len__(self):
+        return self.label_tree.__len__()
+
+    def __copy__(self):
+        # utterance is ignored intentionally,
+        # since it is kind of a weak ref
+        return LabelList(
+            idx=self.idx,
+            labels=[iv.data for iv in self.label_tree]
+        )
+
+    def __deepcopy__(self, memo):
+        # utterance is ignored intentionally,
+        # since it is kind of a weak ref
+        return LabelList(
+            idx=self.idx,
+            labels=copy.deepcopy([iv.data for iv in self.label_tree], memo)
+        )
+
+    @property
+    def labels(self):
+        """ Return list of labels. """
+        return list(self)
+
+    #
+    #   Alteration
+    #
+
+    def add(self, label):
         """
         Add a label to the end of the list.
 
@@ -45,9 +85,15 @@ class LabelList(object):
             label (Label): The label to add.
         """
         label.label_list = self
-        self.labels.append(label)
+        self.label_tree.addi(label.start, label.end, label)
 
-    def extend(self, labels):
+    def addl(self, value, start=0.0, end=float('inf')):
+        """
+        Shortcut for ``add(Label(value, start, end))``.
+        """
+        self.add(Label(value, start=start, end=end))
+
+    def update(self, labels):
         """
         Add a list of labels to the end of the list.
 
@@ -55,119 +101,133 @@ class LabelList(object):
             labels (list): Labels to add.
         """
         for label in labels:
-            self.append(label)
+            self.add(label)
 
-    def ranges(self, yield_ranges_without_labels=False, include_labels=None):
+    def apply(self, fn):
         """
-        Generate all ranges of the label-list. A range is defined
-        as a part of the label-list for which the same labels are defined.
+        Apply the given function `fn` to every label in this label list.
+        `fn` is a function of one argument that receives the current label
+        which can then be edited in place.
 
         Args:
-            yield_ranges_without_labels (bool): If True also yields ranges for
-                                                which no labels are defined.
-            include_labels (list): If not empty, only the label values in
-                                   the list will be considered.
-
-        Returns:
-            generator: A generator which yields one range
-            (tuple start/end/list-of-labels) at a time.
+            fn (func): Function to apply to every label
 
         Example:
             >>> ll = LabelList(labels=[
-            >>>     Label('a', 3.2, 4.5),
-            >>>     Label('b', 5.1, 8.9),
-            >>>     Label('c', 7.2, 10.5),
-            >>>     Label('d', 10.5, 14)
-            >>> ])
-            >>> ranges = ll.ranges()
-            >>> next(ranges)
-            (3.2, 4.5, [<audiomate.annotations.Label at 0x1090527c8>])
-            >>> next(ranges)
-            (4.5, 5.1, [])
-            >>> next(ranges)
-            (5.1, 7.2, [<audiomate.annotations.label.Label at 0x1090484c8>])
+            ...     Label('a_label', 1.0, 2.0),
+            ...     Label('another_label', 2.0, 3.0)
+            ... ])
+            >>> def shift_labels(label):
+            ...     label.start += 1.0
+            ...     label.end += 1.0
+            ...
+            >>> ll.apply(shift_labels)
+            >>> ll.labels
+            [Label(a_label, 2.0, 3.0), Label(another_label, 3.0, 4.0)]
         """
+        for label in self.labels:
+            fn(label)
 
-        # all label start events
-        events = [(l.start, 1, l) for l in self.labels]
-        labels_to_end = False
-        heapq.heapify(events)
-
-        current_range_labels = []
-        current_range_start = -123
-
-        while len(events) > 0:
-            next_event = heapq.heappop(events)
-            label = next_event[2]
-
-            # Return current range if its not the first event
-            # and not the same time as the previous event
-            if -1 < current_range_start < next_event[0]:
-
-                if len(current_range_labels) > 0 or yield_ranges_without_labels:
-                    yield (
-                        current_range_start,
-                        next_event[0],
-                        list(current_range_labels)
-                    )
-
-            # Update labels and add the "end" event
-            if next_event[1] == 1:
-                if include_labels is None or label.value in include_labels:
-                    current_range_labels.append(label)
-
-                    if label.end == float('inf'):
-                        labels_to_end = True
-                    else:
-                        heapq.heappush(events, (label.end, float('inf'), label))
-            else:
-                current_range_labels.remove(label)
-
-            current_range_start = next_event[0]
-
-        if labels_to_end and len(current_range_labels) > 0:
-            yield (current_range_start, float('inf'), list(current_range_labels))
-
-    def labels_in_range(self, start, end, fully_included=False):
+    def merge_overlaps(self, threshold=0.0):
         """
-        Return a list of labels, that are within the given range.
-        Also labels that only overlap are included.
+        Merge overlapping labels with the same value.
+        Two labels are considered overlapping,
+        if ``l2.start - l1.end < threshold``.
 
         Args:
-            start (float): Start-time in seconds.
-            end (float): End-time in seconds.
-            fully_included (bool): If ``True``, only labels fully included
-                                   in the range are returned. Otherwise
-                                   also overlapping ones are returned.
-                                   (default ``False``)
-
-        Returns:
-            list: List of labels in the range.
+            threshold (float): Maximal distance between two labels
+                               to be considered as overlapping.
+                               (default: 0.0)
 
         Example:
             >>> ll = LabelList(labels=[
-            >>>     Label('a', 3.2, 4.5),
-            >>>     Label('b', 5.1, 8.9),
-            >>>     Label('c', 7.2, 10.5),
-            >>>     Label('d', 10.5, 14)
-            >>> ])
-            >>> ll.labels_in_range(6.2, 10.1)
-            [Label('b', 5.1, 8.9), Label('c', 7.2, 10.5)]
+            ...     Label('a_label', 1.0, 2.0),
+            ...     Label('a_label', 1.5, 2.7),
+            ...     Label('b_label', 1.0, 2.0),
+            ... ])
+            >>> ll.merge_overlapping_labels()
+            >>> ll.labels
+            [
+                Label('a_label', 1.0, 2.7),
+                Label('b_label', 1.0, 2.0),
+            ]
         """
 
-        labels = []
+        updated_labels = []
+        all_intervals = self.label_tree.copy()
 
-        if fully_included:
-            for label in self.labels:
-                if label.start >= start and label.end <= end:
-                    labels.append(label)
+        # recursivly find a group of overlapping labels with the same value
+        def recursive_overlaps(interval):
+            range_start = interval.begin - threshold
+            range_end = interval.end + threshold
 
-        else:
-            for label in self.labels:
-                if not (label.end < start or label.start > end):
-                    labels.append(label)
+            direct_overlaps = all_intervals.overlap(range_start, range_end)
+            all_overlaps = [interval]
+            all_intervals.discard(interval)
 
-        return labels
+            for overlap in direct_overlaps:
+                if overlap.data.value == interval.data.value:
+                    all_overlaps.extend(recursive_overlaps(overlap))
+
+            return all_overlaps
+
+        # For every remaining interval
+        # - Find overlapping intervals recursively
+        # - Remove them
+        # - Create a concatenated new label
+        while not all_intervals.is_empty():
+            next_interval = list(all_intervals)[0]
+            overlapping = recursive_overlaps(next_interval)
+
+            ov_start = float('inf')
+            ov_end = 0.0
+            ov_value = next_interval.data.value
+
+            for overlap in overlapping:
+                ov_start = min(ov_start, overlap.begin)
+                ov_end = max(ov_end, overlap.end)
+                all_intervals.discard(overlap)
+
+            updated_labels.append(Label(
+                ov_value,
+                ov_start,
+                ov_end
+            ))
+
+        # Replace the old labels with the updated ones
+        self.label_tree.clear()
+        self.update(updated_labels)
+
+    #
+    #   Statistics
+    #
+
+    def label_total_duration(self):
+        """
+        Return for each distinct label value the total duration of all occurrences.
+
+        Returns:
+            dict: A dictionary containing for every label-value (key)
+                  the total duration in seconds (value).
+
+        Example:
+            >>> ll = LabelList(labels=[
+            >>>     Label('a', 3, 5),
+            >>>     Label('b', 5, 8),
+            >>>     Label('a', 8, 10),
+            >>>     Label('b', 10, 14),
+            >>>     Label('a', 15, 18.5)
+            >>> ])
+            >>> ll.label_total_duration()
+            {'a': 7.5 'b': 7.0}
+        """
+
+        durations = collections.defaultdict(float)
+
+        for label in self:
+            durations[label.value] += label.duration
+
+        return durations
 
     def label_values(self):
         """
@@ -235,6 +295,10 @@ class LabelList(object):
             tokens = tokens.union(set(label.tokenized(delimiter=delimiter)))
 
         return tokens
+
+    #
+    #   Query Label Values
+    #
 
     def join(self, delimiter=' ', overlap_threshold=0.1):
         """
@@ -312,106 +376,141 @@ class LabelList(object):
 
         return tokens
 
-    def label_total_duration(self):
+    #
+    #   Restructuring
+    #
+
+    def separated(self):
         """
-        Return for each distinct label value the total duration of all occurrences.
+        Create a separate Label-List for every distinct label-value.
 
         Returns:
-            dict: A dictionary containing for every label-value (key)
-                  the total duration in seconds (value).
+            dict: A dictionary with distinct label-values as keys.
+                  Every value is a LabelList containing only labels with the same value.
 
         Example:
-            >>> ll = LabelList(labels=[
-            >>>     Label('a', 3, 5),
-            >>>     Label('b', 5, 8),
-            >>>     Label('a', 8, 10),
-            >>>     Label('b', 10, 14),
-            >>>     Label('a', 15, 18.5)
+            >>> ll = LabelList(idx='some', labels=[
+            >>>     Label('a', start=0, end=4),
+            >>>     Label('b', start=3.95, end=6.0),
+            >>>     Label('a', start=7.0, end=10.2),
+            >>>     Label('b', start=10.3, end=14.0)
             >>> ])
-            >>> ll.label_total_duration()
-            {'a': 7.5 'b': 7.0}
+            >>> s = ll.separate()
+            >>> s['a'].labels
+            [Label('a', start=0, end=4), Label('a', start=7.0, end=10.2)]
+            >>> s['b'].labels
+            [Label('b', start=3.95, end=6.0), Label('b', start=10.3, end=14.0)]
         """
+        separated_lls = collections.defaultdict(LabelList)
 
-        durations = collections.defaultdict(float)
+        for label in self.labels:
+            separated_lls[label.value].add(label)
 
-        for label in self:
-            durations[label.value] += label.duration
+        for ll in separated_lls.values():
+            ll.idx = self.idx
 
-        return durations
+        return separated_lls
 
-    def apply(self, fn):
+    def labels_in_range(self, start, end, fully_included=False):
         """
-        Apply the given function `fn` to every label in this label list.
-        `fn` is a function of one argument that receives the current label
-        which can then be edited in place.
+        Return a list of labels, that are within the given range.
+        Also labels that only overlap are included.
 
         Args:
-            fn (func): Function to apply to every label
+            start(float): Start-time in seconds.
+            end(float): End-time in seconds.
+            fully_included(bool): If ``True``, only labels fully included
+                                   in the range are returned. Otherwise
+                                   also overlapping ones are returned.
+                                   (default ``False``)
+
+        Returns:
+            list: List of labels in the range.
 
         Example:
             >>> ll = LabelList(labels=[
-            ...     Label('a_label', 1.0, 2.0),
-            ...     Label('another_label', 2.0, 3.0)
-            ... ])
-            >>> def shift_labels(label):
-            ...     label.start += 1.0
-            ...     label.end += 1.0
-            ...
-            >>> ll.apply(shift_labels)
-            >>> ll.labels
-            [Label(a_label, 2.0, 3.0), Label(another_label, 3.0, 4.0)]
+            >>>     Label('a', 3.2, 4.5),
+            >>>     Label('b', 5.1, 8.9),
+            >>>     Label('c', 7.2, 10.5),
+            >>>     Label('d', 10.5, 14)
+            >>>])
+            >>> ll.labels_in_range(6.2, 10.1)
+            [Label('b', 5.1, 8.9), Label('c', 7.2, 10.5)]
         """
-        for label in self.labels:
-            fn(label)
 
-    def merge_overlapping_labels(self):
+        if fully_included:
+            intervals = self.label_tree.envelop(start, end)
+        else:
+            intervals = self.label_tree.overlap(start, end)
+
+        return [iv.data for iv in intervals]
+
+    def ranges(self, yield_ranges_without_labels=False, include_labels=None):
         """
-        Merge overlapping labels with the same value.
+        Generate all ranges of the label-list. A range is defined
+        as a part of the label-list for which the same labels are defined.
+
+        Args:
+            yield_ranges_without_labels(bool): If True also yields ranges for
+                                                which no labels are defined.
+            include_labels(list): If not empty, only the label values in
+                                   the list will be considered.
+
+        Returns:
+            generator: A generator which yields one range
+            (tuple start/end/list-of-labels) at a time.
 
         Example:
             >>> ll = LabelList(labels=[
-            ...     Label('a_label', 1.0, 2.0),
-            ...     Label('a_label', 1.5, 2.7),
-            ...     Label('b_label', 1.0, 2.0),
-            ... ])
-            >>> ll.merge_overlapping_labels()
-            >>> ll.labels
-            [
-                Label('a_label', 1.0, 2.7),
-                Label('b_label', 1.0, 2.0),
-            ]
+            >>>     Label('a', 3.2, 4.5),
+            >>>     Label('b', 5.1, 8.9),
+            >>>     Label('c', 7.2, 10.5),
+            >>>     Label('d', 10.5, 14)
+            >>>])
+            >>> ranges = ll.ranges()
+            >>> next(ranges)
+            (3.2, 4.5, [ < audiomate.annotations.Label at 0x1090527c8 > ])
+            >>> next(ranges)
+            (4.5, 5.1, [])
+            >>> next(ranges)
+            (5.1, 7.2, [ < audiomate.annotations.label.Label at 0x1090484c8 > ])
         """
 
-        current_index = 0
+        tree_copy = self.label_tree.copy()
 
-        while current_index < (len(self.labels) - 1):
-            ref_label = self.labels[current_index]
-            overlapping = []
+        # Remove labels not included
+        if include_labels is not None:
+            for iv in list(tree_copy):
+                if iv.data.value not in include_labels:
+                    tree_copy.remove(iv)
 
-            merged_start = ref_label.start
-            merged_end = ref_label.end
+        def reduce(x, y):
+            x.append(y)
+            return x
 
-            for i in range(current_index + 1, len(self.labels)):
-                other_label = self.labels[i]
+        # Split labels when overlapping and merge equal ranges to a list of labels
+        tree_copy.split_overlaps()
+        tree_copy.merge_equals(data_reducer=reduce, data_initializer=[])
 
-                if ref_label.value == other_label.value and ref_label.do_overlap(other_label):
-                    overlapping.append(i)
-                    merged_start = min(ref_label.start, other_label.start)
-                    merged_end = max(merged_end, other_label.end)
+        intervals = sorted(tree_copy)
+        last_end = intervals[0].begin
 
-            if len(overlapping) > 0:
-                ref_label.start = merged_start
-                ref_label.end = merged_end
+        # yield range by range
+        for i in range(len(intervals)):
+            iv = intervals[i]
 
-                for index in sorted(overlapping, reverse=True):
-                    del self.labels[index]
-            else:
-                current_index += 1
+            # yield an empty range if necessary
+            if yield_ranges_without_labels and iv.begin > last_end:
+                yield (last_end, iv.begin, [])
+
+            yield (iv.begin, iv.end, iv.data)
+
+            last_end = iv.end
 
     def split(self, cutting_points, shift_times=False, overlap=0.0):
         """
         Split the label-list into x parts and return them as new label-lists.
-        x is defined by the number of cutting-points (``x == len(cutting_points) + 1``)
+        x is defined by the number of cutting-points(``x == len(cutting_points) + 1``)
 
         The result is a list of label-lists corresponding to each part.
         Label-list 0 contains labels between ``0`` and ``cutting_points[0]``.
@@ -419,16 +518,16 @@ class LabelList(object):
         And so on.
 
         Args:
-            cutting_points (list): List of floats defining the points in seconds,
-                                   where the label-list is splitted.
-            shift_times (bool): If True, start and end-time of shifted in splitted label-lists.
-                                 So the start is relative to the cutting point and
-                                 not to the beginning of the original label-list.
-            overlap (float): Amount of overlap in seconds. This amount is subtracted from a start-cutting-point,
-                             and added to a end-cutting-point.
+            cutting_points(list): List of floats defining the points in seconds,
+                                  where the label-list is splitted.
+            shift_times(bool): If True, start and end-time are shifted in splitted label-lists.
+                               So the start is relative to the cutting point and
+                               not to the beginning of the original label-list.
+            overlap(float): Amount of overlap in seconds. This amount is subtracted
+                            from a start-cutting-point, and added to a end-cutting-point.
 
         Returns:
-            list: A list of of :class:`audiomate.annotations.LabelList`.
+            list: A list of of: class: `audiomate.annotations.LabelList`.
 
         Example:
 
@@ -436,7 +535,7 @@ class LabelList(object):
             >>>     Label('a', 0, 5),
             >>>     Label('b', 5, 10),
             >>>     Label('c', 11, 15),
-            >>> ])
+            >>>])
             >>>
             >>> res = ll.split([4.1, 8.9, 12.0])
             >>> len(res)
@@ -456,13 +555,13 @@ class LabelList(object):
             >>> res[3].labels
             [Label('c', 12.0, 15.0)]
 
-        If ``shift_times=True``, the times are adjusted to be relative
+        If ``shift_times = True``, the times are adjusted to be relative
         to the cutting-points for every label-list but the first.
 
             >>> ll = LabelList(labels=[
             >>>     Label('a', 0, 5),
             >>>     Label('b', 5, 10),
-            >>> ])
+            >>>])
             >>>
             >>> res = ll.split([4.6])
             >>> len(res)
@@ -479,77 +578,47 @@ class LabelList(object):
         if len(cutting_points) == 0:
             raise ValueError('At least one cutting-point is needed!')
 
+        # we have to loop in sorted order
         cutting_points = sorted(cutting_points)
 
-        label_lists = [LabelList(idx=self.idx) for _ in range(len(cutting_points) + 1)]
+        splits = []
+        iv_start = 0.0
 
-        for label in sorted(self.labels):
-            if label.end < 0:
-                # if label end is unknown (end of utt) we assume its past the last cutting point
-                label_end = cutting_points[-1] + 1000.0
+        for i in range(len(cutting_points) + 1):
+            if i < len(cutting_points):
+                iv_end = cutting_points[i]
             else:
-                label_end = label.end
+                iv_end = float('inf')
 
-            # find indices where start and end of label would be inserted in cutting_points
-            start_cut_index = bisect.bisect_right(cutting_points, label.start - overlap)
-            end_cut_index = bisect.bisect_left(cutting_points, label_end + overlap)
+            # get all intervals intersecting range
+            intervals = self.label_tree.overlap(
+                iv_start - overlap,
+                iv_end + overlap
+            )
 
-            if end_cut_index <= start_cut_index:
-                # label is between two cutting points so append to label-list with that index
-                new_label = Label(label.value, start=label.start, end=label.end)
+            cp_splits = LabelList(idx=self.idx)
 
-                if shift_times and start_cut_index > 0:
-                    new_label.start -= cutting_points[start_cut_index - 1]
-                    new_label.end -= cutting_points[start_cut_index - 1]
+            # Extract labels from intervals with updated times
+            for iv in intervals:
+                label = copy.deepcopy(iv.data)
+                label.start = max(0, iv_start - overlap, label.start)
+                label.end = min(iv_end + overlap, label.end)
 
-                label_lists[start_cut_index].append(new_label)
-            else:
-                # Cutting-points with index between start_cut_index, end_cut_index are within current label
-                # Therefore we split the label
-                for index in range(start_cut_index, end_cut_index + 1):
-                    if index == start_cut_index:
-                        sub_label_start = label.start
-                    else:
-                        sub_label_start = max(label.start, cutting_points[index - 1] - overlap)
+                if shift_times:
+                    orig_start = max(0, iv_start - overlap)
+                    label.start -= orig_start
+                    label.end -= orig_start
 
-                    if index >= end_cut_index:
-                        sub_label_end = label.end
-                    else:
-                        sub_label_end = min(label.end, cutting_points[index] + overlap)
+                cp_splits.add(label)
 
-                    if shift_times and index > 0:
-                        sub_label_start -= (cutting_points[index - 1] - overlap)
-                        sub_label_end -= (cutting_points[index - 1] - overlap)
+            splits.append(cp_splits)
+            iv_start = iv_end
 
-                    new_label = Label(label.value, start=sub_label_start, end=sub_label_end)
-                    label_lists[index].append(new_label)
+        return splits
 
-        return label_lists
-
-    def __getitem__(self, item):
-        return self.labels.__getitem__(item)
-
-    def __iter__(self):
-        return self.labels.__iter__()
-
-    def __len__(self):
-        return self.labels.__len__()
-
-    def __copy__(self):
-        # utterance is ignored intentionally,
-        # since it is kind of a weak ref
-        return LabelList(
-            idx=self.idx,
-            labels=self.labels
-        )
-
-    def __deepcopy__(self, memo):
-        # utterance is ignored intentionally,
-        # since it is kind of a weak ref
-        return LabelList(
-            idx=self.idx,
-            labels=copy.deepcopy(self.labels, memo)
-        )
+    #
+    #   Convenience Constructors
+    #
 
     @classmethod
     def create_single(cls, value, idx='default'):
@@ -566,9 +635,9 @@ class LabelList(object):
         All labels will have default start/end values of 0 and ``inf``.
 
         Args:
-            values (list): List of values (str) that should be created and appended
+            values(list): List of values(str) that should be created and appended
                            to the label-list.
-            idx (str): The idx of the label-list.
+            idx(str): The idx of the label-list.
 
         Returns:
             (LabelList): New label-list.
@@ -588,6 +657,6 @@ class LabelList(object):
         ll = LabelList(idx=idx)
 
         for label_value in values:
-            ll.append(Label(label_value))
+            ll.add(Label(label_value))
 
         return ll

@@ -10,6 +10,10 @@ Next Version
   In order to prevent ``-1`` checks in different methods/places ``float('inf')`` is now used.
   This makes it easier to implement stuff like label overlapping.
 
+* :class:`audiomate.annotations.LabelList` is now backed by an interval-tree instead of a simple list. Therefore the labels have no fixed order anymore. The interval-tree provides functionality for operations like merging, splitting, finding overlaps with much lower code complexity.
+
+* Removed module :mod:`audiomate.annotations.label_cleaning`, since those methods are available on :class:`audiomate.annotations.LabelList` directly.
+
 **New Features**
 
 * Added reader (:class:`audiomate.corpus.io.RouenReader`) and
@@ -40,6 +44,7 @@ Next Version
 **Fixes**
 
 * [`#76 <https://github.com/ynop/audiomate/issues/76>`_][`#77 <https://github.com/ynop/audiomate/issues/77>`_][`#78 <https://github.com/ynop/audiomate/issues/78>`_] Multiple fixes on KaldiWriter
+
 
 v3.0.0
 ------

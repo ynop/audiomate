@@ -3,4 +3,4 @@ utt-1 files/a/music.txt music
 utt-2 files/b/labels.txt
 utt-3 files/c/part1.txt
 utt-4 files/c/part2.txt
-utt-5 files/d/label.txt
+utt-5 files/d/labels.txt

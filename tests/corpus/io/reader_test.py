@@ -3,6 +3,7 @@ from collections import namedtuple
 
 from audiomate import tracks
 from audiomate import issuers
+from audiomate import annotations
 
 import pytest
 
@@ -16,9 +17,19 @@ ExpContainerTrack = namedtuple(
     ['idx', 'key', 'container_path']
 )
 
+ExpIssuer = namedtuple(
+    'Issuer',
+    ['idx', 'num_utterances']
+)
+
 ExpSpeaker = namedtuple(
     'Speaker',
     ['idx', 'num_utterances', 'gender', 'age_group', 'native_lang']
+)
+
+ExpArtist = namedtuple(
+    'Artist',
+    ['idx', 'num_utterances', 'name']
 )
 
 ExpUtterance = namedtuple(
@@ -33,7 +44,7 @@ ExpLabelList = namedtuple(
 
 ExpLabel = namedtuple(
     'Label',
-    ['ll_idx', 'index', 'value', 'start', 'end']
+    ['ll_idx', 'value', 'start', 'end']
 )
 
 ExpSubview = namedtuple(
@@ -207,6 +218,14 @@ class CorpusReaderTest:
                     'AgeGroup of speaker "{}" is wrong'.format(idx)
                 assert actual.native_language == exp.native_lang, \
                     'Native language of speaker "{}" is wrong'.format(idx)
+            elif isinstance(exp, ExpArtist):
+                assert isinstance(actual, issuers.Artist), \
+                    'Issuer "{}" has a wrong type'.format(idx)
+                assert actual.name == exp.name, \
+                    'Name of artist "{}" is wrong'.format(idx)
+            elif isinstance(exp, ExpIssuer):
+                assert isinstance(actual, issuers.Issuer), \
+                    'Issuer "{}" has a wrong type'.format(idx)
 
     # ----------------------------------------------------------------------
     # LABEL / LABELLISTS
@@ -232,7 +251,7 @@ class CorpusReaderTest:
                         idx, actual_ll.idx
                     )
                 assert len(actual_ll) == exp_ll.num_labels, \
-                    'Number of labels in label-lists is wrong'
+                    '[{}] Number of labels in label-list "{}" is wrong'.format(utt_idx, idx)
 
     def test_labels(self):
         corpus = self.load()
@@ -242,14 +261,10 @@ class CorpusReaderTest:
 
             for exp in utt_labels:
                 ll = utt.label_lists[exp.ll_idx]
-                actual = ll[exp.index]
+                expected = annotations.Label(exp.value, exp.start, exp.end)
 
-                assert actual.value == exp.value, \
-                    'Value of label is wrong'
-                assert actual.start == exp.start, \
-                    'Start time of label is wrong'
-                assert actual.end == exp.end, \
-                    'End time of label is wrong'
+                assert expected in list(ll), \
+                    '{} not in LabelList {}'.format(expected, ll.idx)
 
     # ----------------------------------------------------------------------
     # SUBVIEWS

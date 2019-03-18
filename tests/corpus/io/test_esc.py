@@ -89,13 +89,13 @@ class TestESC50Reader(rt.CorpusReaderTest):
 
     EXPECTED_LABELS = {
         '1-119125-A-45': [
-            rt.ExpLabel(corpus.LL_SOUND_CLASS, 0, 'train', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_SOUND_CLASS, 'train', 0, float('inf')),
         ],
         '1-15689-A-4': [
-            rt.ExpLabel(corpus.LL_SOUND_CLASS, 0, 'frog', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_SOUND_CLASS, 'frog', 0, float('inf')),
         ],
         '1-18810-A-49': [
-            rt.ExpLabel(corpus.LL_SOUND_CLASS, 0, 'hand_saw', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_SOUND_CLASS, 'hand_saw', 0, float('inf')),
         ],
     }
 

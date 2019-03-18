@@ -67,16 +67,16 @@ class TestCommonVoiceReader(rt.CorpusReaderTest):
 
     EXPECTED_LABELS = {
         'c4b': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Man sollte', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Man sollte', 0, float('inf')),
         ],
         'f08': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Valentin', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Valentin', 0, float('inf')),
         ],
         '8f4': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Es', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Es', 0, float('inf')),
         ],
         '7f4': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Zieht euch', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Zieht euch', 0, float('inf')),
         ],
     }
 

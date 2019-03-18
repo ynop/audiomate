@@ -303,30 +303,30 @@ class TestTatoebaReader:
 
         ll = ds.utterances['141'].label_lists[corpus.LL_WORD_TRANSCRIPT_RAW]
         assert len(ll) == 1
-        assert ll[0].value == 'I want you to tell me why you did that.'
-        assert ll[0].start == 0
-        assert ll[0].end == float('inf')
+        assert sorted(ll)[0].value == 'I want you to tell me why you did that.'
+        assert sorted(ll)[0].start == 0
+        assert sorted(ll)[0].end == float('inf')
 
         ll = ds.utterances['247'].label_lists[corpus.LL_WORD_TRANSCRIPT_RAW]
         assert len(ll) == 1
-        assert ll[0].value == 'Comment ça, je suis trop vieille pour ce poste ?'
-        assert ll[0].start == 0
-        assert ll[0].end == float('inf')
+        assert sorted(ll)[0].value == 'Comment ça, je suis trop vieille pour ce poste ?'
+        assert sorted(ll)[0].start == 0
+        assert sorted(ll)[0].end == float('inf')
 
         ll = ds.utterances['1355'].label_lists[corpus.LL_WORD_TRANSCRIPT_RAW]
         assert len(ll) == 1
-        assert ll[0].value == 'Wer will heiße Schokolade?'
-        assert ll[0].start == 0
-        assert ll[0].end == float('inf')
+        assert sorted(ll)[0].value == 'Wer will heiße Schokolade?'
+        assert sorted(ll)[0].start == 0
+        assert sorted(ll)[0].end == float('inf')
 
         ll = ds.utterances['1881'].label_lists[corpus.LL_WORD_TRANSCRIPT_RAW]
         assert len(ll) == 1
-        assert ll[0].value == 'Das ist zu teuer!'
-        assert ll[0].start == 0
-        assert ll[0].end == float('inf')
+        assert sorted(ll)[0].value == 'Das ist zu teuer!'
+        assert sorted(ll)[0].start == 0
+        assert sorted(ll)[0].end == float('inf')
 
         ll = ds.utterances['6921520'].label_lists[corpus.LL_WORD_TRANSCRIPT_RAW]
         assert len(ll) == 1
-        assert ll[0].value == 'He washes his car at least once a week.'
-        assert ll[0].start == 0
-        assert ll[0].end == float('inf')
+        assert sorted(ll)[0].value == 'He washes his car at least once a week.'
+        assert sorted(ll)[0].start == 0
+        assert sorted(ll)[0].end == float('inf')

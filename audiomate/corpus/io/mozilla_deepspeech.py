@@ -51,7 +51,7 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
                 scipy.io.wavfile.write(audio_path, sampling_rate, data)
 
             size = os.stat(audio_path).st_size
-            transcript = utterance.label_lists[self.transcription_label_list_idx][0].value
+            transcript = utterance.label_lists[self.transcription_label_list_idx].join()
 
             # Add to the full list
             record = [audio_path, size, transcript]

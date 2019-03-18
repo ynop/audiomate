@@ -15,10 +15,11 @@ class TestLabelListUtilities:
 
         actual = relabeling.relabel(label_list, {('a',): 'b'})
 
-        assert len(actual) == 1
-        assert actual[0].start == 3.2
-        assert actual[0].end == 4.5
-        assert actual[0].value == 'b'
+        expected = LabelList(labels=[
+            Label('b', 3.2, 4.5)
+        ])
+
+        assert actual == expected
 
     def test_relabel_flattens_partial_overlap_into_combined_label(self):
         projections = {
@@ -38,27 +39,15 @@ class TestLabelListUtilities:
 
         actual = relabeling.relabel(label_list, projections)
 
-        assert len(actual) == 5
+        expected = LabelList(labels=[
+            Label('a', 3.2, 4.0),
+            Label('a_b', 4.0, 4.2),
+            Label('a_b_c', 4.2, 4.5),
+            Label('b_c', 4.5, 4.9),
+            Label('c', 4.9, 5.1)
+        ])
 
-        assert actual[0].start == 3.2
-        assert actual[0].end == 4.0
-        assert actual[0].value == 'a'
-
-        assert actual[1].start == 4.0
-        assert actual[1].end == 4.2
-        assert actual[1].value == 'a_b'
-
-        assert actual[2].start == 4.2
-        assert actual[2].end == 4.5
-        assert actual[2].value == 'a_b_c'
-
-        assert actual[3].start == 4.5
-        assert actual[3].end == 4.9
-        assert actual[3].value == 'b_c'
-
-        assert actual[4].start == 4.9
-        assert actual[4].end == 5.1
-        assert actual[4].value == 'c'
+        assert actual == expected
 
     def test_relabel_flattens_full_overlap_into_combined_label(self):
         projections = {
@@ -74,19 +63,13 @@ class TestLabelListUtilities:
 
         actual = relabeling.relabel(label_list, projections)
 
-        assert len(actual) == 3
+        expected = LabelList(labels=[
+            Label('a', 3.2, 3.9),
+            Label('a_b', 3.9, 4.5),
+            Label('a', 4.5, 4.9)
+        ])
 
-        assert actual[0].start == 3.2
-        assert actual[0].end == 3.9
-        assert actual[0].value == 'a'
-
-        assert actual[1].start == 3.9
-        assert actual[1].end == 4.5
-        assert actual[1].value == 'a_b'
-
-        assert actual[2].start == 4.5
-        assert actual[2].end == 4.9
-        assert actual[2].value == 'a'
+        assert actual == expected
 
     def test_relabel_removes_unwanted_labels(self):
         projections = {
@@ -101,11 +84,11 @@ class TestLabelListUtilities:
 
         actual = relabeling.relabel(label_list, projections)
 
-        assert len(actual) == 1
+        expected = LabelList(labels=[
+            Label('b', 4.4, 5.1)
+        ])
 
-        assert actual[0].start == 4.4
-        assert actual[0].end == 5.1
-        assert actual[0].value == 'b'
+        assert actual == expected
 
     def test_relabel_removes_overlapping_segment(self):
         projections = {
@@ -121,15 +104,12 @@ class TestLabelListUtilities:
 
         actual = relabeling.relabel(label_list, projections)
 
-        assert len(actual) == 2
+        expected = LabelList(labels=[
+            Label('a', 3.2, 4.2),
+            Label('a', 4.7, 5.1)
+        ])
 
-        assert actual[0].start == 3.2
-        assert actual[0].end == 4.2
-        assert actual[0].value == 'a'
-
-        assert actual[1].start == 4.7
-        assert actual[1].end == 5.1
-        assert actual[1].value == 'a'
+        assert actual == expected
 
     def test_relabel_throws_error_if_unmapped_labels_are_detected(self):
         label_list = LabelList(labels=[
@@ -155,27 +135,15 @@ class TestLabelListUtilities:
 
         actual = relabeling.relabel(label_list, {('a',): 'new_label_a', ('**',): 'catch_all'})
 
-        assert len(actual) == 5
+        expected = LabelList(labels=[
+            Label('new_label_a', 3.2, 4.2),
+            Label('catch_all', 4.2, 4.3),
+            Label('catch_all', 4.3, 4.7),
+            Label('catch_all', 4.7, 4.8),
+            Label('new_label_a', 4.8, 5.1),
+        ])
 
-        assert actual[0].start == 3.2
-        assert actual[0].end == 4.2
-        assert actual[0].value == 'new_label_a'
-
-        assert actual[1].start == 4.2
-        assert actual[1].end == 4.3
-        assert actual[1].value == 'catch_all'
-
-        assert actual[2].start == 4.3
-        assert actual[2].end == 4.7
-        assert actual[2].value == 'catch_all'
-
-        assert actual[3].start == 4.7
-        assert actual[3].end == 4.8
-        assert actual[3].value == 'catch_all'
-
-        assert actual[4].start == 4.8
-        assert actual[4].end == 5.1
-        assert actual[4].value == 'new_label_a'
+        assert actual == expected
 
     def test_load_projections_from_file(self):
         path = os.path.join(os.path.dirname(__file__), 'projections.txt')

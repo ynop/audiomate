@@ -84,16 +84,16 @@ class TestFreeSpokenDigitReader(rt.CorpusReaderTest):
 
     EXPECTED_LABELS = {
         '0_jackson_0': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '0', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '0', 0, float('inf')),
         ],
         '1_jackson_0': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '1', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '1', 0, float('inf')),
         ],
         '2_theo_0': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '2', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '2', 0, float('inf')),
         ],
         '2_theo_1': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '2', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '2', 0, float('inf')),
         ],
     }
 

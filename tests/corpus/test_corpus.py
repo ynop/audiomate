@@ -6,6 +6,7 @@ import pytest
 import audiomate
 from audiomate import tracks
 from audiomate import containers
+from audiomate import annotations
 from audiomate import issuers
 from audiomate.corpus.subset import subview
 from audiomate.corpus.io import MusanReader, KaldiWriter
@@ -548,12 +549,11 @@ class TestCorpus:
 
         ll = main_corpus.utterances['utt-2_1'].label_lists['default']
 
-        assert len(ll) == 3
-        assert ll.labels[1].value == 'speech'
-        assert ll.labels[1].start == 5
-        assert ll.labels[1].end == 12
-        assert ll.labels[1].meta == {}
-        assert ll.labels[1].label_list == ll
+        assert ll == annotations.LabelList(labels=[
+            annotations.Label('music', 0, 5),
+            annotations.Label('speech', 5, 12),
+            annotations.Label('music', 13, 15)
+        ])
 
     def test_merge_corpus_subviews(self):
         main_corpus = resources.create_dataset()

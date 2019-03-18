@@ -103,16 +103,16 @@ class TestTudaReader(rt.CorpusReaderTest):
 
     EXPECTED_LABELS = {
         '2015-01-27-11-31-32_Samson': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Manche haben dass', 0, float('inf')),
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 0, 'Manche haben , dass.', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Manche haben dass', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 'Manche haben , dass.', 0, float('inf')),
         ],
         '2015-01-27-11-31-32_Realtek': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Manche haben dass', 0, float('inf')),
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 0, 'Manche haben , dass.', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Manche haben dass', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 'Manche haben , dass.', 0, float('inf')),
         ],
         '2014-03-17-13-03-33_Realtek': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Ich habe mich', 0, float('inf')),
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 0, 'Ich habe mich.', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Ich habe mich', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 'Ich habe mich.', 0, float('inf')),
         ],
         # NOT ALL LISTED
     }
