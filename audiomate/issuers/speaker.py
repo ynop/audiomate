@@ -29,7 +29,7 @@ class Speaker(Issuer):
         native_language (str): The native language of the speaker. (ISO 639-3)
 
     Attributes:
-        utterances (list): List of utterances that this issuer owns.
+        Issuer.utterances (list): List of utterances that this issuer owns.
     """
 
     __slots__ = ['gender', 'age_group', 'native_language']

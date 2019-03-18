@@ -12,7 +12,7 @@ class Issuer(object):
         info (dict): Any additional info for this issuer as dict.
 
     Attributes:
-        utterances (list): List of utterances that this issuer owns.
+        Issuer.utterances (list): List of utterances that this issuer owns.
     """
 
     __slots__ = ['idx', 'info', 'utterances']

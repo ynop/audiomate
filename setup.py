@@ -32,8 +32,8 @@ EXTRAS = {
         'pytest-runner==3.0',
         'pytest-cov==2.5.1',
         'requests_mock==1.4.0',
-        'Sphinx==1.6.5',
-        'sphinx-rtd-theme==0.2.5b1',
+        'Sphinx==1.8.5',
+        'sphinx-rtd-theme==0.4.3',
         'pytest-benchmark==3.1.1',
     ],
     'ci': [
