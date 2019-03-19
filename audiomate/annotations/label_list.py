@@ -73,6 +73,16 @@ class LabelList(object):
         """ Return list of labels. """
         return list(self)
 
+    @property
+    def start(self):
+        """ Return start of the earliest starting label (lower bound). """
+        return self.label_tree.begin()
+
+    @property
+    def end(self):
+        """ Return end of the lastly ending label (upper bound). """
+        return self.label_tree.end()
+
     #
     #   Alteration
     #

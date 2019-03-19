@@ -74,6 +74,39 @@ class TestLabelList:
             Label('c'),
         ]
 
+    def test_start(self):
+        ll = LabelList(idx='test', labels=[
+            Label('c', 9.0, 12.0),
+            Label('a', 0.2, 4.0),
+            Label('b', 4.0, 8.0),
+            Label('b', 7.9, 9.3),
+            Label('c', 12.05, 14.0),
+        ])
+
+        assert ll.start == 0.2
+
+    def test_end(self):
+        ll = LabelList(idx='test', labels=[
+            Label('c', 9.0, 12.0),
+            Label('a', 0.2, 4.0),
+            Label('b', 4.0, 8.0),
+            Label('c', 12.05, 14.0),
+            Label('b', 7.9, 9.3),
+        ])
+
+        assert ll.end == 14.0
+
+    def test_end_returns_inf(self):
+        ll = LabelList(idx='test', labels=[
+            Label('c', 9.0, 12.0),
+            Label('a', 0.2, 4.0),
+            Label('b', 4.0, float('inf')),
+            Label('c', 12.05, 14.0),
+            Label('b', 7.9, 9.3),
+        ])
+
+        assert ll.end == float('inf')
+
     def test_add(self):
         ll = LabelList()
 
