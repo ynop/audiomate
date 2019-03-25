@@ -5,12 +5,9 @@ import pytest
 from audiomate import issuers
 from audiomate.corpus import io
 from audiomate.utils import jsonfile
+
 from tests import resources
-
-
-@pytest.fixture()
-def reader():
-    return io.DefaultReader()
+from . import reader_test as rt
 
 
 @pytest.fixture()
@@ -19,145 +16,123 @@ def writer():
 
 
 @pytest.fixture()
-def sample_corpus_path():
-    return resources.sample_corpus_path('default')
-
-
-@pytest.fixture()
 def sample_corpus():
     return resources.create_dataset()
 
 
-class TestDefaultReader:
+class TestDefaultReader(rt.CorpusReaderTest):
 
-    def test_load_tracks(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
+    SAMPLE_PATH = resources.sample_corpus_path('default')
+    FILE_TRACK_BASE_PATH = os.path.join(SAMPLE_PATH, 'files')
 
-        assert ds.num_tracks == 6
-        assert ds.tracks['file-1'].idx == 'file-1'
-        assert ds.tracks['file-1'].path == os.path.join(sample_corpus_path, 'files', 'wav_1.wav')
-        assert ds.tracks['file-2'].idx == 'file-2'
-        assert ds.tracks['file-2'].path == os.path.join(sample_corpus_path, 'files', 'wav_2.wav')
-        assert ds.tracks['file-3'].idx == 'file-3'
-        assert ds.tracks['file-3'].path == os.path.join(sample_corpus_path, 'files', 'wav_3.wav')
-        assert ds.tracks['file-4'].idx == 'file-4'
-        assert ds.tracks['file-4'].path == os.path.join(sample_corpus_path, 'files', 'wav_4.wav')
-        assert ds.tracks['file-5'].idx == 'file-5'
-        assert ds.tracks['file-5'].key == 'file-5'
-        assert ds.tracks['file-5'].container.path == os.path.join(sample_corpus_path, 'audio')
-        assert ds.tracks['file-6'].idx == 'file-6'
-        assert ds.tracks['file-6'].key == 'file-6'
-        assert ds.tracks['file-6'].container.path == os.path.join(sample_corpus_path, 'audio')
+    EXPECTED_NUMBER_OF_TRACKS = 6
+    EXPECTED_TRACKS = [
+        rt.ExpFileTrack('file-1', 'wav_1.wav'),
+        rt.ExpFileTrack('file-2', 'wav_2.wav'),
+        rt.ExpFileTrack('file-3', 'wav_3.wav'),
+        rt.ExpFileTrack('file-4', 'wav_4.wav'),
+        rt.ExpContainerTrack('file-5', 'file-5', os.path.join(SAMPLE_PATH, 'audio')),
+        rt.ExpContainerTrack('file-6', 'file-6', os.path.join(SAMPLE_PATH, 'audio')),
+    ]
 
-    def test_load_utterances(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
+    EXPECTED_NUMBER_OF_ISSUERS = 3
+    EXPECTED_ISSUERS = [
+        rt.ExpSpeaker('speaker-1', 2, issuers.Gender.MALE, issuers.AgeGroup.ADULT, 'deu'),
+        rt.ExpArtist('speaker-2', 2, 'Ohooo'),
+        rt.ExpIssuer('speaker-3', 1),
+    ]
 
-        assert ds.num_utterances == 5
+    EXPECTED_NUMBER_OF_UTTERANCES = 5
+    EXPECTED_UTTERANCES = [
+        rt.ExpUtterance('utt-1', 'file-1', 'speaker-1', 0, float('inf')),
+        rt.ExpUtterance('utt-2', 'file-2', 'speaker-1', 0, float('inf')),
+        rt.ExpUtterance('utt-3', 'file-3', 'speaker-2', 0, 1.5),
+        rt.ExpUtterance('utt-4', 'file-3', 'speaker-2', 1.5, 2.5),
+        rt.ExpUtterance('utt-5', 'file-4', 'speaker-3', 0, float('inf')),
+    ]
 
-        assert ds.utterances['utt-1'].idx == 'utt-1'
-        assert ds.utterances['utt-1'].track.idx == 'file-1'
-        assert ds.utterances['utt-1'].issuer.idx == 'speaker-1'
-        assert ds.utterances['utt-1'].start == 0
-        assert ds.utterances['utt-1'].end == -1
+    EXPECTED_LABEL_LISTS = {
+        'utt-1': [
+            rt.ExpLabelList('text', 3),
+            rt.ExpLabelList('raw_text', 1),
+        ],
+        'utt-2': [
+            rt.ExpLabelList('text', 3),
+            rt.ExpLabelList('raw_text', 1),
+        ],
+        'utt-3': [
+            rt.ExpLabelList('text', 3),
+            rt.ExpLabelList('raw_text', 1),
+        ],
+        'utt-4': [
+            rt.ExpLabelList('text', 3),
+            rt.ExpLabelList('raw_text', 1),
+        ],
+        'utt-5': [
+            rt.ExpLabelList('text', 3),
+            rt.ExpLabelList('raw_text', 1),
+        ],
+    }
 
-        assert ds.utterances['utt-2'].idx == 'utt-2'
-        assert ds.utterances['utt-2'].track.idx == 'file-2'
-        assert ds.utterances['utt-2'].issuer.idx == 'speaker-1'
-        assert ds.utterances['utt-2'].start == 0
-        assert ds.utterances['utt-2'].end == -1
+    EXPECTED_LABELS = {
+        'utt-1': [
+            rt.ExpLabel('raw_text', 'who am i?', 0, float('inf')),
+        ],
+        'utt-4': [
+            rt.ExpLabel('text', 'who', 0, float('inf')),
+            rt.ExpLabel('text', 'are', 0, float('inf')),
+            rt.ExpLabel('text', 'they', 3.5, 4.2),
+        ],
+    }
 
-        assert ds.utterances['utt-3'].idx == 'utt-3'
-        assert ds.utterances['utt-3'].track.idx == 'file-3'
-        assert ds.utterances['utt-3'].issuer.idx == 'speaker-2'
-        assert ds.utterances['utt-3'].start == 0
-        assert ds.utterances['utt-3'].end == 1.5
+    EXPECTED_NUMBER_OF_SUBVIEWS = 2
+    EXPECTED_SUBVIEWS = [
+        rt.ExpSubview('train', [
+            'utt-1',
+            'utt-2',
+            'utt-3',
+        ]),
+        rt.ExpSubview('dev', [
+            'utt-4',
+            'utt-5',
+        ]),
+    ]
 
-        assert ds.utterances['utt-4'].idx == 'utt-4'
-        assert ds.utterances['utt-4'].track.idx == 'file-3'
-        assert ds.utterances['utt-4'].issuer.idx == 'speaker-2'
-        assert ds.utterances['utt-4'].start == 1.5
-        assert ds.utterances['utt-4'].end == 2.5
+    def test_load_issuers(self):
+        ds = self.load()
 
-        assert ds.utterances['utt-5'].idx == 'utt-5'
-        assert ds.utterances['utt-5'].track.idx == 'file-4'
-        assert ds.utterances['utt-5'].issuer.idx == 'speaker-3'
-        assert ds.utterances['utt-5'].start == 0
-        assert ds.utterances['utt-5'].end == -1
-
-    def test_load_issuers(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
-
-        assert ds.num_issuers == 3
-
-        assert ds.issuers['speaker-1'].idx == 'speaker-1'
-        assert len(ds.issuers['speaker-1'].info) == 0
-        assert type(ds.issuers['speaker-1']) == issuers.Speaker
-        assert ds.issuers['speaker-1'].gender == issuers.Gender.MALE
-        assert ds.issuers['speaker-1'].age_group == issuers.AgeGroup.ADULT
-        assert ds.issuers['speaker-1'].native_language == 'deu'
-
-        assert ds.issuers['speaker-2'].idx == 'speaker-2'
-        assert len(ds.issuers['speaker-2'].info) == 0
-        assert type(ds.issuers['speaker-2']) == issuers.Artist
-        assert ds.issuers['speaker-2'].name == 'Ohooo'
-
-        assert ds.issuers['speaker-3'].idx == 'speaker-3'
         assert len(ds.issuers['speaker-3'].info) == 1
         assert ds.issuers['speaker-3'].info['region'] == 'zh'
 
-    def test_load_label_lists(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
-
-        utt_1 = ds.utterances['utt-1']
-        utt_3 = ds.utterances['utt-3']
-        utt_4 = ds.utterances['utt-4']
-
-        assert 'text' in utt_1.label_lists.keys()
-        assert 'raw_text' in utt_3.label_lists.keys()
-
-        assert len(utt_4.label_lists['text'].labels) == 3
-        assert utt_4.label_lists['text'].labels[1].value == 'are'
-
-        assert utt_4.label_lists['text'].labels[2].start == 3.5
-        assert utt_4.label_lists['text'].labels[2].end == 4.2
-
-    def test_load_label_meta(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
+    def test_load_label_meta(self):
+        ds = self.load()
 
         utt_2 = ds.utterances['utt-2']
         utt_3 = ds.utterances['utt-3']
         utt_4 = ds.utterances['utt-4']
 
-        assert len(utt_2.label_lists['text'].labels[0].meta) == 3
-        assert utt_2.label_lists['text'].labels[0].meta['pron'] == 'huu'
-        assert utt_2.label_lists['text'].labels[0].meta['duration'] == 2.3
-        assert utt_2.label_lists['text'].labels[0].meta['stressed']
+        utt_2_labels = sorted(utt_2.label_lists['text'].labels)
+        utt_3_labels = sorted(utt_3.label_lists['text'].labels)
+        utt_4_labels = sorted(utt_4.label_lists['text'].labels)
 
-        assert len(utt_3.label_lists['text'].labels[0].meta) == 0
+        assert len(utt_2_labels[1].meta) == 3
+        assert utt_2_labels[1].meta['pron'] == 'huu'
+        assert utt_2_labels[1].meta['duration'] == 2.3
+        assert utt_2_labels[1].meta['stressed']
 
-        assert len(utt_4.label_lists['text'].labels[2].meta) == 1
-        assert utt_4.label_lists['text'].labels[2].meta['ex.'] == 19
+        assert len(utt_3_labels[0].meta) == 0
 
-    def test_load_features(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
+        assert len(utt_4_labels[2].meta) == 1
+        assert utt_4_labels[2].meta['ex.'] == 19
 
-        assert ds.feature_containers['mfcc'].path == os.path.join(sample_corpus_path, 'features', 'mfcc')
-        assert ds.feature_containers['fbank'].path == os.path.join(sample_corpus_path, 'features', 'fbank')
+    def test_load_features(self):
+        ds = self.load()
 
-    def test_load_subviews(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
+        assert ds.feature_containers['mfcc'].path == os.path.join(self.SAMPLE_PATH, 'features', 'mfcc')
+        assert ds.feature_containers['fbank'].path == os.path.join(self.SAMPLE_PATH, 'features', 'fbank')
 
-        assert 'train' in ds.subviews.keys()
-        assert 'dev' in ds.subviews.keys()
-
-        assert len(ds.subviews['train'].filter_criteria) == 1
-        assert len(ds.subviews['dev'].filter_criteria) == 1
-
-        assert ds.subviews['train'].filter_criteria[0].utterance_idxs == {'utt-1', 'utt-2', 'utt-3'}
-        assert ds.subviews['dev'].filter_criteria[0].utterance_idxs == {'utt-4', 'utt-5'}
-
-        assert not ds.subviews['train'].filter_criteria[0].inverse
-        assert not ds.subviews['dev'].filter_criteria[0].inverse
+    def load(self):
+        return io.DefaultReader().load(self.SAMPLE_PATH)
 
 
 class TestDefaultWriter:
@@ -197,19 +172,19 @@ class TestDefaultWriter:
                                                                                        file_3_path,
                                                                                        file_4_path)
 
-    def test_save_container_tracks(self, writer, reader, sample_corpus_path, tmpdir):
+    def test_save_container_tracks(self, writer, tmpdir):
         # make sure relative path changes in contrast to self.ds.path
         out_path = os.path.join(tmpdir.strpath, 'somesubdir')
         os.makedirs(out_path)
 
-        sample_corpus = reader.load(sample_corpus_path)
+        sample_corpus = io.DefaultReader().load(TestDefaultReader.SAMPLE_PATH)
 
         writer.save(sample_corpus, out_path)
 
         with open(os.path.join(out_path, 'audio.txt'), 'r') as f:
             file_content = f.read()
 
-        rel_path = os.path.relpath(os.path.join(sample_corpus_path, 'audio'), out_path)
+        rel_path = os.path.relpath(os.path.join(TestDefaultReader.SAMPLE_PATH, 'audio'), out_path)
         assert file_content.strip() == '\n'.join((
             'file-5 {} file-5'.format(rel_path),
             'file-6 {} file-6'.format(rel_path)

@@ -87,7 +87,7 @@ def read_label_list(path):
     ll = annotations.LabelList()
 
     for record in read_label_file(path):
-        ll.append(annotations.Label(record[2], start=record[0], end=record[1]))
+        ll.add(annotations.Label(record[2], start=record[0], end=record[1]))
 
     return ll
 

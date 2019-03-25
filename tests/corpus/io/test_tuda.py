@@ -62,26 +62,26 @@ class TestTudaReader(rt.CorpusReaderTest):
     EXPECTED_NUMBER_OF_UTTERANCES = 48
     EXPECTED_UTTERANCES = [
         # DEV
-        rt.ExpUtterance('2015-01-27-11-31-32_Kinect-Beam', '2015-01-27-11-31-32_Kinect-Beam', SPK_75, 0, -1),
-        rt.ExpUtterance('2015-01-27-11-31-32_Kinect-RAW', '2015-01-27-11-31-32_Kinect-RAW', SPK_75, 0, -1),
-        rt.ExpUtterance('2015-01-27-11-31-32_Realtek', '2015-01-27-11-31-32_Realtek', SPK_75, 0, -1),
-        rt.ExpUtterance('2015-01-27-11-31-32_Samson', '2015-01-27-11-31-32_Samson', SPK_75, 0, -1),
-        rt.ExpUtterance('2015-01-28-12-36-24_Yamaha', '2015-01-28-12-36-24_Yamaha', SPK_9e, 0, -1),
+        rt.ExpUtterance('2015-01-27-11-31-32_Kinect-Beam', '2015-01-27-11-31-32_Kinect-Beam', SPK_75, 0, float('inf')),
+        rt.ExpUtterance('2015-01-27-11-31-32_Kinect-RAW', '2015-01-27-11-31-32_Kinect-RAW', SPK_75, 0, float('inf')),
+        rt.ExpUtterance('2015-01-27-11-31-32_Realtek', '2015-01-27-11-31-32_Realtek', SPK_75, 0, float('inf')),
+        rt.ExpUtterance('2015-01-27-11-31-32_Samson', '2015-01-27-11-31-32_Samson', SPK_75, 0, float('inf')),
+        rt.ExpUtterance('2015-01-28-12-36-24_Yamaha', '2015-01-28-12-36-24_Yamaha', SPK_9e, 0, float('inf')),
         # TEST
-        rt.ExpUtterance('2015-01-27-12-34-36_Kinect-Beam', '2015-01-27-12-34-36_Kinect-Beam', SPK_58, 0, -1),
-        rt.ExpUtterance('2015-01-27-12-34-36_Kinect-RAW', '2015-01-27-12-34-36_Kinect-RAW', SPK_58, 0, -1),
-        rt.ExpUtterance('2015-01-27-12-34-36_Realtek', '2015-01-27-12-34-36_Realtek', SPK_58, 0, -1),
-        rt.ExpUtterance('2015-01-27-12-34-36_Samson', '2015-01-27-12-34-36_Samson', SPK_58, 0, -1),
-        rt.ExpUtterance('2015-01-27-12-34-36_Yamaha', '2015-01-27-12-34-36_Yamaha', SPK_58, 0, -1),
+        rt.ExpUtterance('2015-01-27-12-34-36_Kinect-Beam', '2015-01-27-12-34-36_Kinect-Beam', SPK_58, 0, float('inf')),
+        rt.ExpUtterance('2015-01-27-12-34-36_Kinect-RAW', '2015-01-27-12-34-36_Kinect-RAW', SPK_58, 0, float('inf')),
+        rt.ExpUtterance('2015-01-27-12-34-36_Realtek', '2015-01-27-12-34-36_Realtek', SPK_58, 0, float('inf')),
+        rt.ExpUtterance('2015-01-27-12-34-36_Samson', '2015-01-27-12-34-36_Samson', SPK_58, 0, float('inf')),
+        rt.ExpUtterance('2015-01-27-12-34-36_Yamaha', '2015-01-27-12-34-36_Yamaha', SPK_58, 0, float('inf')),
         # TRAIN
         rt.ExpUtterance('2014-03-17-10-26-07_Microsoft-Kinect-Raw',
-                        '2014-03-17-10-26-07_Microsoft-Kinect-Raw', SPK_40, 0, -1),
-        rt.ExpUtterance('2014-03-17-10-26-07_Realtek', '2014-03-17-10-26-07_Realtek', SPK_40, 0, -1),
-        rt.ExpUtterance('2014-03-17-10-26-07_Yamaha', '2014-03-17-10-26-07_Yamaha', SPK_40, 0, -1),
-        rt.ExpUtterance('2014-03-17-13-03-33_Kinect-Beam', '2014-03-17-13-03-33_Kinect-Beam', SPK_cf, 0, -1),
-        rt.ExpUtterance('2014-03-17-13-03-33_Realtek', '2014-03-17-13-03-33_Realtek', SPK_cf, 0, -1),
-        rt.ExpUtterance('2014-03-17-13-03-33_Yamaha', '2014-03-17-13-03-33_Yamaha', SPK_cf, 0, -1),
-        rt.ExpUtterance('2014-03-19-15-01-56_Kinect-Beam', '2014-03-19-15-01-56_Kinect-Beam', SPK_cf, 0, -1),
+                        '2014-03-17-10-26-07_Microsoft-Kinect-Raw', SPK_40, 0, float('inf')),
+        rt.ExpUtterance('2014-03-17-10-26-07_Realtek', '2014-03-17-10-26-07_Realtek', SPK_40, 0, float('inf')),
+        rt.ExpUtterance('2014-03-17-10-26-07_Yamaha', '2014-03-17-10-26-07_Yamaha', SPK_40, 0, float('inf')),
+        rt.ExpUtterance('2014-03-17-13-03-33_Kinect-Beam', '2014-03-17-13-03-33_Kinect-Beam', SPK_cf, 0, float('inf')),
+        rt.ExpUtterance('2014-03-17-13-03-33_Realtek', '2014-03-17-13-03-33_Realtek', SPK_cf, 0, float('inf')),
+        rt.ExpUtterance('2014-03-17-13-03-33_Yamaha', '2014-03-17-13-03-33_Yamaha', SPK_cf, 0, float('inf')),
+        rt.ExpUtterance('2014-03-19-15-01-56_Kinect-Beam', '2014-03-19-15-01-56_Kinect-Beam', SPK_cf, 0, float('inf')),
         # NOT ALL LISTED
     ]
 
@@ -103,16 +103,16 @@ class TestTudaReader(rt.CorpusReaderTest):
 
     EXPECTED_LABELS = {
         '2015-01-27-11-31-32_Samson': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Manche haben dass', 0, -1),
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 0, 'Manche haben , dass.', 0, -1),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Manche haben dass', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 'Manche haben , dass.', 0, float('inf')),
         ],
         '2015-01-27-11-31-32_Realtek': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Manche haben dass', 0, -1),
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 0, 'Manche haben , dass.', 0, -1),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Manche haben dass', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 'Manche haben , dass.', 0, float('inf')),
         ],
         '2014-03-17-13-03-33_Realtek': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Ich habe mich', 0, -1),
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 0, 'Ich habe mich.', 0, -1),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Ich habe mich', 0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW, 'Ich habe mich.', 0, float('inf')),
         ],
         # NOT ALL LISTED
     }

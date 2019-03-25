@@ -14,7 +14,7 @@ class Artist(Issuer):
         info (dict): Any additional info for this speaker as dict.
 
     Attributes:
-        utterances (list): List of utterances that this issuer owns.
+        Issuer.utterances (list): List of utterances that this issuer owns.
     """
 
     __slots__ = ['name']

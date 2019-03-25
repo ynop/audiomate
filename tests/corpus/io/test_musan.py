@@ -97,31 +97,31 @@ class TestMusanReader:
         assert ds.utterances['music-fma-0000'].track.idx == 'music-fma-0000'
         assert ds.utterances['music-fma-0000'].issuer.idx == 'Quiet_Music_for_Tiny_Robots'
         assert ds.utterances['music-fma-0000'].start == 0
-        assert ds.utterances['music-fma-0000'].end == -1
+        assert ds.utterances['music-fma-0000'].end == float('inf')
 
         assert ds.utterances['noise-free-sound-0000'].idx == 'noise-free-sound-0000'
         assert ds.utterances['noise-free-sound-0000'].track.idx == 'noise-free-sound-0000'
         assert ds.utterances['noise-free-sound-0000'].issuer is None
         assert ds.utterances['noise-free-sound-0000'].start == 0
-        assert ds.utterances['noise-free-sound-0000'].end == -1
+        assert ds.utterances['noise-free-sound-0000'].end == float('inf')
 
         assert ds.utterances['noise-free-sound-0001'].idx == 'noise-free-sound-0001'
         assert ds.utterances['noise-free-sound-0001'].track.idx == 'noise-free-sound-0001'
         assert ds.utterances['noise-free-sound-0001'].issuer is None
         assert ds.utterances['noise-free-sound-0001'].start == 0
-        assert ds.utterances['noise-free-sound-0001'].end == -1
+        assert ds.utterances['noise-free-sound-0001'].end == float('inf')
 
         assert ds.utterances['speech-librivox-0000'].idx == 'speech-librivox-0000'
         assert ds.utterances['speech-librivox-0000'].track.idx == 'speech-librivox-0000'
         assert ds.utterances['speech-librivox-0000'].issuer.idx == 'speech-librivox-0000'
         assert ds.utterances['speech-librivox-0000'].start == 0
-        assert ds.utterances['speech-librivox-0000'].end == -1
+        assert ds.utterances['speech-librivox-0000'].end == float('inf')
 
         assert ds.utterances['speech-librivox-0001'].idx == 'speech-librivox-0001'
         assert ds.utterances['speech-librivox-0001'].track.idx == 'speech-librivox-0001'
         assert ds.utterances['speech-librivox-0001'].issuer.idx == 'speech-librivox-0001'
         assert ds.utterances['speech-librivox-0001'].start == 0
-        assert ds.utterances['speech-librivox-0001'].end == -1
+        assert ds.utterances['speech-librivox-0001'].end == float('inf')
 
     def test_load_label_lists(self, reader, sample_path):
         ds = reader.load(sample_path)

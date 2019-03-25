@@ -12,7 +12,7 @@ class Label(object):
         start (float): Start of the label within the utterance in seconds.
                        (default: 0)
         end (float): End of the label within the utterance in seconds.
-                     (default: -1) (-1 defines the end of the utterance)
+                     (default: inf) (inf defines the end of the utterance)
         meta (dict): A dictionary containing additional information
                      for the label.
 
@@ -21,7 +21,7 @@ class Label(object):
     """
     __slots__ = ['value', 'start', 'end', 'label_list', 'meta']
 
-    def __init__(self, value, start=0, end=-1, meta=None):
+    def __init__(self, value, start=0, end=float('inf'), meta=None):
         self.value = value
         self.start = start
         self.end = end
@@ -34,11 +34,8 @@ class Label(object):
         return data_this == data_other
 
     def __lt__(self, other):
-        self_end = float('inf') if self.end == -1 else self.end
-        other_end = float('inf') if other.end == -1 else other.end
-
-        data_this = (self.start, self_end, self.value.lower())
-        data_other = (other.start, other_end, other.value.lower())
+        data_this = (self.start, self.end, self.value.lower())
+        data_other = (other.start, other.end, other.value.lower())
 
         return data_this < data_other
 
@@ -84,7 +81,7 @@ class Label(object):
         """
         if self.label_list is None or self.label_list.utterance is None:
             return self.end
-        elif self.end == -1:
+        elif self.end == float('inf'):
             return self.label_list.utterance.end_abs
         else:
             return self.end + self.label_list.utterance.start
@@ -110,7 +107,7 @@ class Label(object):
         """
         duration = None
 
-        if self.end >= 0 or self.label_list.utterance.end >= 0:
+        if self.end != float('inf') or self.label_list.utterance.end >= 0:
             duration = self.duration
 
         track = self.label_list.utterance.track
@@ -162,7 +159,8 @@ class Label(object):
 
         Args:
             other_label (Label): Another label.
-            adjacent (bool): If ``True``, adjacent labels are considered as overlapping.
+            adjacent (bool): If ``True``, adjacent labels are
+                             considered as overlapping.
 
         Returns:
             bool: ``True`` if the two labels overlap, ``False`` otherwise.
@@ -170,40 +168,25 @@ class Label(object):
         this_end = self.end
         other_end = other_label.end
 
-        if this_end < 0:
+        if this_end == float('inf'):
             this_end = self.end_abs
 
-        if other_end < 0:
+        if other_end == float('inf'):
             other_end = other_label.end_abs
 
-        if this_end == -1 and other_end == -1:
-            return True
+        if adjacent:
+            first_ends_before = this_end < other_label.start
+            second_ends_before = other_end < self.start
+        else:
+            first_ends_before = this_end <= other_label.start
+            second_ends_before = other_end <= self.start
 
-        if this_end == -1:
-            if adjacent:
-                return other_end >= self.start
-            else:
-                return other_end > self.start
-
-        if other_end == -1:
-            if adjacent:
-                return this_end >= other_label.start
-            else:
-                return this_end > other_label.start
-
-        if this_end <= other_label.start:
-            if not adjacent or this_end < other_label.start:
-                return False
-
-        if other_end < self.start:
-            if not adjacent or other_end < self.start:
-                return False
-
-        return True
+        return not (first_ends_before or second_ends_before)
 
     def overlap_duration(self, other_label):
         """
-        Return the duration of the overlapping part between this label and ``other_label``.
+        Return the duration of the overlapping part between this label
+        and ``other_label``.
 
         Args:
             other_label(Label): Another label to check.
@@ -212,28 +195,19 @@ class Label(object):
             float: The duration of overlap in seconds.
 
         Example:
-            >> > label_a = Label('a', 3.4, 5.6)
-            >> > label_b = Label('b', 4.8, 6.2)
-            >> > label_a.overlap_duration(label_b)
+            >>> label_a = Label('a', 3.4, 5.6)
+            >>> label_b = Label('b', 4.8, 6.2)
+            >>> label_a.overlap_duration(label_b)
             0.8
         """
         this_end = self.end
         other_end = other_label.end
 
-        if this_end < 0:
+        if this_end == float('inf'):
             this_end = self.end_abs
 
-        if other_end < 0:
+        if other_end == float('inf'):
             other_end = other_label.end_abs
-
-        if this_end == -1:
-            this_end = other_end
-
-        if other_end == -1:
-            if this_end == -1:
-                raise ValueError('Cannot determine overlap duration if both labels have an infinite end')
-            else:
-                other_end = this_end
 
         start_overlap = max(self.start, other_label.start)
         end_overlap = min(this_end, other_end)

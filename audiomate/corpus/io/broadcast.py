@@ -2,6 +2,7 @@ import os
 import json
 
 import audiomate
+from audiomate import annotations
 from audiomate.formats import audacity
 from audiomate.utils import textfile
 from . import base
@@ -76,8 +77,17 @@ class BroadcastReader(base.CorpusReader):
             if len(record) > 2:
                 label_idx = record[2]
 
-            ll = audacity.read_label_list(label_path)
-            ll.idx = label_idx
-            ll.apply(extract_meta_from_label_value)
+            ll = annotations.LabelList(idx=label_idx)
 
+            for label in audacity.read_label_file(label_path):
+                start = label[0]
+                end = label[1]
+                value = label[2]
+
+                if end < 0:
+                    end = float('inf')
+
+                ll.addl(value, start, end)
+
+            ll.apply(extract_meta_from_label_value)
             corpus.utterances[utt_idx].set_label_list(ll)

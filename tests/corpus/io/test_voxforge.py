@@ -216,35 +216,38 @@ class TestVoxforgeReader:
         assert ds.utterances['1337ad-20170321-czb-de11-095'].idx == '1337ad-20170321-czb-de11-095'
         assert ds.utterances['1337ad-20170321-czb-de11-095'].track.idx == '1337ad-20170321-czb-de11-095'
         assert ds.utterances['1337ad-20170321-czb-de11-095'].start == 0
-        assert ds.utterances['1337ad-20170321-czb-de11-095'].end == -1
+        assert ds.utterances['1337ad-20170321-czb-de11-095'].end == float('inf')
         assert ds.utterances['1337ad-20170321-czb-de11-095'].issuer.idx == '1337ad'
 
         assert ds.utterances['1337ad-20170321-czb-de11-096'].idx == '1337ad-20170321-czb-de11-096'
         assert ds.utterances['1337ad-20170321-czb-de11-096'].track.idx == '1337ad-20170321-czb-de11-096'
         assert ds.utterances['1337ad-20170321-czb-de11-096'].start == 0
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].end == -1
+        assert ds.utterances['1337ad-20170321-czb-de11-096'].end == float('inf')
         assert ds.utterances['1337ad-20170321-czb-de11-096'].issuer.idx == '1337ad'
 
         assert ds.utterances['anonymous-20081027-njq-a0479'].idx == 'anonymous-20081027-njq-a0479'
         assert ds.utterances['anonymous-20081027-njq-a0479'].track.idx == 'anonymous-20081027-njq-a0479'
         assert ds.utterances['anonymous-20081027-njq-a0479'].start == 0
-        assert ds.utterances['anonymous-20081027-njq-a0479'].end == -1
+        assert ds.utterances['anonymous-20081027-njq-a0479'].end == float('inf')
         assert ds.utterances['anonymous-20081027-njq-a0479'].issuer.idx == 'anonymous-20081027-njq'
 
     def test_load_transcriptions(self, reader, sample_corpus_path):
         ds = reader.load(sample_corpus_path)
 
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == \
+        ll_idx = corpus.LL_WORD_TRANSCRIPT
+        raw_idx = corpus.LL_WORD_TRANSCRIPT_RAW
+
+        assert ds.utterances['1337ad-20170321-czb-de11-096'].label_lists[ll_idx].labels[0].value == \
             'ES HANDELT SICH UM GETRENNTE RECHTSSYSTEME UND NUR EINES IST ANWENDBAR'
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == \
+        assert ds.utterances['1337ad-20170321-czb-de11-096'].label_lists[raw_idx].labels[0].value == \
             'Es handelt sich um getrennte Rechtssysteme und nur eines ist anwendbar.'
 
-        assert ds.utterances['Katzer-20140410-lyk-b0167'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == \
+        assert ds.utterances['Katzer-20140410-lyk-b0167'].label_lists[ll_idx].labels[0].value == \
             'A LITTLE BEFORE DAWN OF THE DAY FOLLOWING THE FIRE RELIEF CAME'
-        assert ds.utterances['Katzer-20140410-lyk-b0167'].label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == \
+        assert ds.utterances['Katzer-20140410-lyk-b0167'].label_lists[raw_idx].labels[0].value == \
             'A little before dawn of the day following, the fire relief came.'
 
-        assert ds.utterances['anonymous-20081027-njq-a0479'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == \
+        assert ds.utterances['anonymous-20081027-njq-a0479'].label_lists[ll_idx].labels[0].value == \
             'I TRIED TO READ GEORGE MOORE LAST NIGHT AND WAS DREADFULLY BORED'
-        assert ds.utterances['anonymous-20081027-njq-a0479'].label_lists[corpus.LL_WORD_TRANSCRIPT_RAW][0].value == \
+        assert ds.utterances['anonymous-20081027-njq-a0479'].label_lists[raw_idx].labels[0].value == \
             'I tried to read George Moore last night, and was dreadfully bored.'

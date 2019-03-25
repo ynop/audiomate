@@ -61,10 +61,10 @@ class TestFreeSpokenDigitReader(rt.CorpusReaderTest):
 
     EXPECTED_NUMBER_OF_UTTERANCES = 4
     EXPECTED_UTTERANCES = [
-        rt.ExpUtterance('0_jackson_0', '0_jackson_0', 'jackson', 0, -1),
-        rt.ExpUtterance('1_jackson_0', '1_jackson_0', 'jackson', 0, -1),
-        rt.ExpUtterance('2_theo_0', '2_theo_0', 'theo', 0, -1),
-        rt.ExpUtterance('2_theo_1', '2_theo_1', 'theo', 0, -1)
+        rt.ExpUtterance('0_jackson_0', '0_jackson_0', 'jackson', 0, float('inf')),
+        rt.ExpUtterance('1_jackson_0', '1_jackson_0', 'jackson', 0, float('inf')),
+        rt.ExpUtterance('2_theo_0', '2_theo_0', 'theo', 0, float('inf')),
+        rt.ExpUtterance('2_theo_1', '2_theo_1', 'theo', 0, float('inf'))
     ]
 
     EXPECTED_LABEL_LISTS = {
@@ -84,16 +84,16 @@ class TestFreeSpokenDigitReader(rt.CorpusReaderTest):
 
     EXPECTED_LABELS = {
         '0_jackson_0': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '0', 0, -1),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '0', 0, float('inf')),
         ],
         '1_jackson_0': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '1', 0, -1),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '1', 0, float('inf')),
         ],
         '2_theo_0': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '2', 0, -1),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '2', 0, float('inf')),
         ],
         '2_theo_1': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, '2', 0, -1),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, '2', 0, float('inf')),
         ],
     }
 

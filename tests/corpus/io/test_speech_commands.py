@@ -77,112 +77,114 @@ class TestSpeechCommandsReader:
         assert ds.utterances['0b77ee66_nohash_0_bed'].idx == '0b77ee66_nohash_0_bed'
         assert ds.utterances['0b77ee66_nohash_0_bed'].track.idx == '0b77ee66_nohash_0_bed'
         assert ds.utterances['0b77ee66_nohash_0_bed'].start == 0
-        assert ds.utterances['0b77ee66_nohash_0_bed'].end == -1
+        assert ds.utterances['0b77ee66_nohash_0_bed'].end == float('inf')
         assert ds.utterances['0b77ee66_nohash_1_bed'].idx == '0b77ee66_nohash_1_bed'
         assert ds.utterances['0b77ee66_nohash_1_bed'].track.idx == '0b77ee66_nohash_1_bed'
         assert ds.utterances['0b77ee66_nohash_1_bed'].start == 0
-        assert ds.utterances['0b77ee66_nohash_1_bed'].end == -1
+        assert ds.utterances['0b77ee66_nohash_1_bed'].end == float('inf')
         assert ds.utterances['0b77ee66_nohash_2_bed'].idx == '0b77ee66_nohash_2_bed'
         assert ds.utterances['0b77ee66_nohash_2_bed'].track.idx == '0b77ee66_nohash_2_bed'
         assert ds.utterances['0b77ee66_nohash_2_bed'].start == 0
-        assert ds.utterances['0b77ee66_nohash_2_bed'].end == -1
+        assert ds.utterances['0b77ee66_nohash_2_bed'].end == float('inf')
         assert ds.utterances['0bde966a_nohash_0_bed'].idx == '0bde966a_nohash_0_bed'
         assert ds.utterances['0bde966a_nohash_0_bed'].track.idx == '0bde966a_nohash_0_bed'
         assert ds.utterances['0bde966a_nohash_0_bed'].start == 0
-        assert ds.utterances['0bde966a_nohash_0_bed'].end == -1
+        assert ds.utterances['0bde966a_nohash_0_bed'].end == float('inf')
         assert ds.utterances['0bde966a_nohash_1_bed'].idx == '0bde966a_nohash_1_bed'
         assert ds.utterances['0bde966a_nohash_1_bed'].track.idx == '0bde966a_nohash_1_bed'
         assert ds.utterances['0bde966a_nohash_1_bed'].start == 0
-        assert ds.utterances['0bde966a_nohash_1_bed'].end == -1
+        assert ds.utterances['0bde966a_nohash_1_bed'].end == float('inf')
         assert ds.utterances['0c40e715_nohash_0_bed'].idx == '0c40e715_nohash_0_bed'
         assert ds.utterances['0c40e715_nohash_0_bed'].track.idx == '0c40e715_nohash_0_bed'
         assert ds.utterances['0c40e715_nohash_0_bed'].start == 0
-        assert ds.utterances['0c40e715_nohash_0_bed'].end == -1
+        assert ds.utterances['0c40e715_nohash_0_bed'].end == float('inf')
 
         assert ds.utterances['d5c41d6a_nohash_0_marvin'].idx == 'd5c41d6a_nohash_0_marvin'
         assert ds.utterances['d5c41d6a_nohash_0_marvin'].track.idx == 'd5c41d6a_nohash_0_marvin'
         assert ds.utterances['d5c41d6a_nohash_0_marvin'].start == 0
-        assert ds.utterances['d5c41d6a_nohash_0_marvin'].end == -1
+        assert ds.utterances['d5c41d6a_nohash_0_marvin'].end == float('inf')
         assert ds.utterances['d7a58714_nohash_0_marvin'].idx == 'd7a58714_nohash_0_marvin'
         assert ds.utterances['d7a58714_nohash_0_marvin'].track.idx == 'd7a58714_nohash_0_marvin'
         assert ds.utterances['d7a58714_nohash_0_marvin'].start == 0
-        assert ds.utterances['d7a58714_nohash_0_marvin'].end == -1
+        assert ds.utterances['d7a58714_nohash_0_marvin'].end == float('inf')
         assert ds.utterances['d8a5ace5_nohash_0_marvin'].idx == 'd8a5ace5_nohash_0_marvin'
         assert ds.utterances['d8a5ace5_nohash_0_marvin'].track.idx == 'd8a5ace5_nohash_0_marvin'
         assert ds.utterances['d8a5ace5_nohash_0_marvin'].start == 0
-        assert ds.utterances['d8a5ace5_nohash_0_marvin'].end == -1
+        assert ds.utterances['d8a5ace5_nohash_0_marvin'].end == float('inf')
 
         assert ds.utterances['0a7c2a8d_nohash_0_one'].idx == '0a7c2a8d_nohash_0_one'
         assert ds.utterances['0a7c2a8d_nohash_0_one'].track.idx == '0a7c2a8d_nohash_0_one'
         assert ds.utterances['0a7c2a8d_nohash_0_one'].start == 0
-        assert ds.utterances['0a7c2a8d_nohash_0_one'].end == -1
+        assert ds.utterances['0a7c2a8d_nohash_0_one'].end == float('inf')
         assert ds.utterances['0b77ee66_nohash_0_one'].idx == '0b77ee66_nohash_0_one'
         assert ds.utterances['0b77ee66_nohash_0_one'].track.idx == '0b77ee66_nohash_0_one'
         assert ds.utterances['0b77ee66_nohash_0_one'].start == 0
-        assert ds.utterances['0b77ee66_nohash_0_one'].end == -1
+        assert ds.utterances['0b77ee66_nohash_0_one'].end == float('inf')
         assert ds.utterances['c1b7c224_nohash_0_one'].idx == 'c1b7c224_nohash_0_one'
         assert ds.utterances['c1b7c224_nohash_0_one'].track.idx == 'c1b7c224_nohash_0_one'
         assert ds.utterances['c1b7c224_nohash_0_one'].start == 0
-        assert ds.utterances['c1b7c224_nohash_0_one'].end == -1
+        assert ds.utterances['c1b7c224_nohash_0_one'].end == float('inf')
         assert ds.utterances['c1b7c224_nohash_1_one'].idx == 'c1b7c224_nohash_1_one'
         assert ds.utterances['c1b7c224_nohash_1_one'].track.idx == 'c1b7c224_nohash_1_one'
         assert ds.utterances['c1b7c224_nohash_1_one'].start == 0
-        assert ds.utterances['c1b7c224_nohash_1_one'].end == -1
+        assert ds.utterances['c1b7c224_nohash_1_one'].end == float('inf')
 
     def test_read_labels(self, reader, sample_path):
         ds = reader.load(sample_path)
 
+        ll_idx = corpus.LL_WORD_TRANSCRIPT
+
         assert len(ds.utterances['0b77ee66_nohash_0_bed'].label_lists) == 1
-        assert len(ds.utterances['0b77ee66_nohash_0_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['0b77ee66_nohash_0_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'bed'
+        assert len(ds.utterances['0b77ee66_nohash_0_bed'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['0b77ee66_nohash_0_bed'].label_lists[ll_idx].labels[0].value == 'bed'
 
         assert len(ds.utterances['0b77ee66_nohash_1_bed'].label_lists) == 1
-        assert len(ds.utterances['0b77ee66_nohash_1_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['0b77ee66_nohash_1_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'bed'
+        assert len(ds.utterances['0b77ee66_nohash_1_bed'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['0b77ee66_nohash_1_bed'].label_lists[ll_idx].labels[0].value == 'bed'
 
         assert len(ds.utterances['0b77ee66_nohash_2_bed'].label_lists) == 1
-        assert len(ds.utterances['0b77ee66_nohash_2_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['0b77ee66_nohash_2_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'bed'
+        assert len(ds.utterances['0b77ee66_nohash_2_bed'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['0b77ee66_nohash_2_bed'].label_lists[ll_idx].labels[0].value == 'bed'
 
         assert len(ds.utterances['0bde966a_nohash_0_bed'].label_lists) == 1
-        assert len(ds.utterances['0bde966a_nohash_0_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['0bde966a_nohash_0_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'bed'
+        assert len(ds.utterances['0bde966a_nohash_0_bed'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['0bde966a_nohash_0_bed'].label_lists[ll_idx].labels[0].value == 'bed'
 
         assert len(ds.utterances['0bde966a_nohash_1_bed'].label_lists) == 1
-        assert len(ds.utterances['0bde966a_nohash_1_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['0bde966a_nohash_1_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'bed'
+        assert len(ds.utterances['0bde966a_nohash_1_bed'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['0bde966a_nohash_1_bed'].label_lists[ll_idx].labels[0].value == 'bed'
 
         assert len(ds.utterances['0c40e715_nohash_0_bed'].label_lists) == 1
-        assert len(ds.utterances['0c40e715_nohash_0_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['0c40e715_nohash_0_bed'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'bed'
+        assert len(ds.utterances['0c40e715_nohash_0_bed'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['0c40e715_nohash_0_bed'].label_lists[ll_idx].labels[0].value == 'bed'
 
         assert len(ds.utterances['d5c41d6a_nohash_0_marvin'].label_lists) == 1
-        assert len(ds.utterances['d5c41d6a_nohash_0_marvin'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['d5c41d6a_nohash_0_marvin'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'marvin'
+        assert len(ds.utterances['d5c41d6a_nohash_0_marvin'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['d5c41d6a_nohash_0_marvin'].label_lists[ll_idx].labels[0].value == 'marvin'
 
         assert len(ds.utterances['d7a58714_nohash_0_marvin'].label_lists) == 1
-        assert len(ds.utterances['d7a58714_nohash_0_marvin'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['d7a58714_nohash_0_marvin'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'marvin'
+        assert len(ds.utterances['d7a58714_nohash_0_marvin'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['d7a58714_nohash_0_marvin'].label_lists[ll_idx].labels[0].value == 'marvin'
 
         assert len(ds.utterances['d8a5ace5_nohash_0_marvin'].label_lists) == 1
-        assert len(ds.utterances['d8a5ace5_nohash_0_marvin'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['d8a5ace5_nohash_0_marvin'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'marvin'
+        assert len(ds.utterances['d8a5ace5_nohash_0_marvin'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['d8a5ace5_nohash_0_marvin'].label_lists[ll_idx].labels[0].value == 'marvin'
 
         assert len(ds.utterances['0a7c2a8d_nohash_0_one'].label_lists) == 1
-        assert len(ds.utterances['0a7c2a8d_nohash_0_one'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['0a7c2a8d_nohash_0_one'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'one'
+        assert len(ds.utterances['0a7c2a8d_nohash_0_one'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['0a7c2a8d_nohash_0_one'].label_lists[ll_idx].labels[0].value == 'one'
 
         assert len(ds.utterances['0b77ee66_nohash_0_one'].label_lists) == 1
-        assert len(ds.utterances['0b77ee66_nohash_0_one'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['0b77ee66_nohash_0_one'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'one'
+        assert len(ds.utterances['0b77ee66_nohash_0_one'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['0b77ee66_nohash_0_one'].label_lists[ll_idx].labels[0].value == 'one'
 
         assert len(ds.utterances['c1b7c224_nohash_0_one'].label_lists) == 1
-        assert len(ds.utterances['c1b7c224_nohash_0_one'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['c1b7c224_nohash_0_one'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'one'
+        assert len(ds.utterances['c1b7c224_nohash_0_one'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['c1b7c224_nohash_0_one'].label_lists[ll_idx].labels[0].value == 'one'
 
         assert len(ds.utterances['c1b7c224_nohash_1_one'].label_lists) == 1
-        assert len(ds.utterances['c1b7c224_nohash_1_one'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels) == 1
-        assert ds.utterances['c1b7c224_nohash_1_one'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value == 'one'
+        assert len(ds.utterances['c1b7c224_nohash_1_one'].label_lists[ll_idx].labels) == 1
+        assert ds.utterances['c1b7c224_nohash_1_one'].label_lists[ll_idx].labels[0].value == 'one'
 
     def test_read_subvies(self, reader, sample_path):
         ds = reader.load(sample_path)

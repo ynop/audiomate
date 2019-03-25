@@ -6,22 +6,14 @@ import pytest
 from audiomate import corpus
 from audiomate.corpus import io
 from audiomate.corpus.io import aed
+
 from tests import resources
-
-
-@pytest.fixture
-def reader():
-    return io.AEDReader()
+from . import reader_test as rt
 
 
 @pytest.fixture
 def downloader():
     return io.AEDDownloader()
-
-
-@pytest.fixture
-def data_path():
-    return resources.sample_corpus_path('aed')
 
 
 @pytest.fixture()
@@ -45,99 +37,77 @@ class TestAEDDownloader:
         assert os.path.isfile(os.path.join(target_folder, 'subsub', 'c.txt'))
 
 
-class TestAEDReader:
+class TestAEDReader(rt.CorpusReaderTest):
 
-    def test_load_tracks(self, reader, data_path):
-        ds = reader.load(data_path)
+    SAMPLE_PATH = resources.sample_corpus_path('aed')
+    FILE_TRACK_BASE_PATH = SAMPLE_PATH
 
-        test_path = os.path.join(data_path, 'test')
-        train_path = os.path.join(data_path, 'train')
+    EXPECTED_NUMBER_OF_TRACKS = 10
+    EXPECTED_TRACKS = [
+        rt.ExpFileTrack('acoustic_guitar_16', os.path.join('test', 'acoustic_guitar_16.wav')),
+        rt.ExpFileTrack('footstep_300', os.path.join('test', 'footstep_300.wav')),
+        rt.ExpFileTrack('violin_36', os.path.join('test', 'violin_36.wav')),
+        rt.ExpFileTrack('airplane_1', os.path.join('train', 'airplane', 'airplane_1.wav')),
+        rt.ExpFileTrack('airplane_23', os.path.join('train', 'airplane', 'airplane_23.wav')),
+        rt.ExpFileTrack('airplane_33', os.path.join('train', 'airplane', 'airplane_33.wav')),
+        rt.ExpFileTrack('footstep_16', os.path.join('train', 'footstep', 'footstep_16.wav')),
+        rt.ExpFileTrack('helicopter_9', os.path.join('train', 'helicopter', 'helicopter_9.wav')),
+        rt.ExpFileTrack('tone_12', os.path.join('train', 'tone', 'tone_12.wav')),
+        rt.ExpFileTrack('tone_35', os.path.join('train', 'tone', 'tone_35.wav')),
+    ]
 
-        assert ds.num_tracks == 10
+    EXPECTED_NUMBER_OF_ISSUERS = 0
 
-        assert ds.tracks['acoustic_guitar_16'].idx == 'acoustic_guitar_16'
-        assert ds.tracks['acoustic_guitar_16'].path == os.path.join(test_path, 'acoustic_guitar_16.wav')
+    EXPECTED_NUMBER_OF_UTTERANCES = 10
+    EXPECTED_UTTERANCES = [
+        rt.ExpUtterance('acoustic_guitar_16', 'acoustic_guitar_16', None, 0, float('inf')),
+        rt.ExpUtterance('footstep_300', 'footstep_300', None, 0, float('inf')),
+        rt.ExpUtterance('violin_36', 'violin_36', None, 0, float('inf')),
+        rt.ExpUtterance('airplane_1', 'airplane_1', None, 0, float('inf')),
+        rt.ExpUtterance('airplane_23', 'airplane_23', None, 0, float('inf')),
+        rt.ExpUtterance('airplane_33', 'airplane_33', None, 0, float('inf')),
+        rt.ExpUtterance('footstep_16', 'footstep_16', None, 0, float('inf')),
+        rt.ExpUtterance('helicopter_9', 'helicopter_9', None, 0, float('inf')),
+        rt.ExpUtterance('tone_12', 'tone_12', None, 0, float('inf')),
+        rt.ExpUtterance('tone_35', 'tone_35', None, 0, float('inf')),
+    ]
 
-        assert ds.tracks['footstep_300'].idx == 'footstep_300'
-        assert ds.tracks['footstep_300'].path == os.path.join(test_path, 'footstep_300.wav')
+    EXPECTED_LABEL_LISTS = {
+        'airplane_23': [rt.ExpLabelList(corpus.LL_SOUND_CLASS, 1)],
+        'tone_12': [rt.ExpLabelList(corpus.LL_SOUND_CLASS, 1)],
+        'acoustic_guitar_16': [rt.ExpLabelList(corpus.LL_SOUND_CLASS, 1)],
+    }
 
-        assert ds.tracks['violin_36'].idx == 'violin_36'
-        assert ds.tracks['violin_36'].path == os.path.join(test_path, 'violin_36.wav')
+    EXPECTED_LABELS = {
+        'airplane_23': [
+            rt.ExpLabel(corpus.LL_SOUND_CLASS, 'airplane', 0, float('inf')),
+        ],
+        'tone_12': [
+            rt.ExpLabel(corpus.LL_SOUND_CLASS, 'tone', 0, float('inf')),
+        ],
+        'acoustic_guitar_16': [
+            rt.ExpLabel(corpus.LL_SOUND_CLASS, 'acoustic_guitar', 0, float('inf')),
+        ],
+    }
 
-        assert ds.tracks['airplane_1'].idx == 'airplane_1'
-        assert ds.tracks['airplane_1'].path == os.path.join(train_path, 'airplane', 'airplane_1.wav')
+    EXPECTED_NUMBER_OF_SUBVIEWS = 2
+    EXPECTED_SUBVIEWS = [
+        rt.ExpSubview('train', [
+            'airplane_1',
+            'airplane_23',
+            'airplane_33',
+            'footstep_16',
+            'helicopter_9',
+            'tone_12',
+            'tone_35',
+        ]),
+        rt.ExpSubview('test', [
+            'acoustic_guitar_16',
+            'footstep_300',
+            'violin_36',
+        ]),
+    ]
 
-        assert ds.tracks['airplane_23'].idx == 'airplane_23'
-        assert ds.tracks['airplane_23'].path == os.path.join(train_path, 'airplane', 'airplane_23.wav')
-
-        assert ds.tracks['airplane_33'].idx == 'airplane_33'
-        assert ds.tracks['airplane_33'].path == os.path.join(train_path, 'airplane', 'airplane_33.wav')
-
-        assert ds.tracks['footstep_16'].idx == 'footstep_16'
-        assert ds.tracks['footstep_16'].path == os.path.join(train_path, 'footstep', 'footstep_16.wav')
-
-        assert ds.tracks['helicopter_9'].idx == 'helicopter_9'
-        assert ds.tracks['helicopter_9'].path == os.path.join(train_path, 'helicopter', 'helicopter_9.wav')
-
-        assert ds.tracks['tone_12'].idx == 'tone_12'
-        assert ds.tracks['tone_12'].path == os.path.join(train_path, 'tone', 'tone_12.wav')
-
-        assert ds.tracks['tone_35'].idx == 'tone_35'
-        assert ds.tracks['tone_35'].path == os.path.join(train_path, 'tone', 'tone_35.wav')
-
-    def test_load_utterances(self, reader, data_path):
-        ds = reader.load(data_path)
-
-        assert ds.num_utterances == 10
-
-        assert ds.utterances['acoustic_guitar_16'].idx == 'acoustic_guitar_16'
-        assert ds.utterances['acoustic_guitar_16'].track.idx == 'acoustic_guitar_16'
-        assert ds.utterances['acoustic_guitar_16'].issuer is None
-        assert ds.utterances['acoustic_guitar_16'].start == 0
-        assert ds.utterances['acoustic_guitar_16'].end == -1
-
-        assert ds.utterances['airplane_23'].idx == 'airplane_23'
-        assert ds.utterances['airplane_23'].track.idx == 'airplane_23'
-        assert ds.utterances['airplane_23'].issuer is None
-        assert ds.utterances['airplane_23'].start == 0
-        assert ds.utterances['airplane_23'].end == -1
-
-        assert ds.utterances['tone_12'].idx == 'tone_12'
-        assert ds.utterances['tone_12'].track.idx == 'tone_12'
-        assert ds.utterances['tone_12'].issuer is None
-        assert ds.utterances['tone_12'].start == 0
-        assert ds.utterances['tone_12'].end == -1
-
-    def test_load_issuers(self, reader, data_path):
-        ds = reader.load(data_path)
-
-        assert ds.num_issuers == 0
-
-    def test_load_labels(self, reader, data_path):
-        ds = reader.load(data_path)
-
-        utt = ds.utterances['airplane_23']
-        assert len(utt.label_lists) == 1
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].value == 'airplane'
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].start == 0
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == -1
-
-        utt = ds.utterances['tone_12']
-        assert len(utt.label_lists) == 1
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].value == 'tone'
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].start == 0
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == -1
-
-        utt = ds.utterances['acoustic_guitar_16']
-        assert len(utt.label_lists) == 1
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].value == 'acoustic_guitar'
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].start == 0
-        assert utt.label_lists[corpus.LL_SOUND_CLASS][0].end == -1
-
-    def test_load_fold_subsets(self, reader, data_path):
-        ds = reader.load(data_path)
-
-        assert len(ds.subviews) == 2
-
-        assert ds.subviews['train'].num_utterances == 7
-        assert ds.subviews['test'].num_utterances == 3
+    def load(self):
+        reader = io.AEDReader()
+        return reader.load(self.SAMPLE_PATH)

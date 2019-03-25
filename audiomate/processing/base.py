@@ -209,7 +209,7 @@ class Processor(metaclass=abc.ABCMeta):
                                          buffer_size=buffer_size)
 
     def process_track(self, track, frame_size=400, hop_size=160, sr=None,
-                      start=0, end=-1, utterance=None, corpus=None):
+                      start=0, end=float('inf'), utterance=None, corpus=None):
         """
         Process the track in **offline** mode, in one go.
 
@@ -232,7 +232,7 @@ class Processor(metaclass=abc.ABCMeta):
         """
         frame_settings = units.FrameSettings(frame_size, hop_size)
 
-        if end > 0:
+        if end != float('inf'):
             samples = track.read_samples(sr=sr, offset=start, duration=end-start)
         else:
             samples = track.read_samples(sr=sr, offset=start)
@@ -257,7 +257,7 @@ class Processor(metaclass=abc.ABCMeta):
         return self.process_frames(frames, sampling_rate, 0, last=True, utterance=utterance, corpus=corpus)
 
     def process_track_online(self, track, frame_size=400, hop_size=160,
-                             start=0, end=-1, utterance=None, corpus=None,
+                             start=0, end=float('inf'), utterance=None, corpus=None,
                              chunk_size=1, buffer_size=5760000):
         """
         Process the track in **online** mode, chunk by chunk.
@@ -288,7 +288,7 @@ class Processor(metaclass=abc.ABCMeta):
         duration = None
         sr = track.sampling_rate
 
-        if end > -1:
+        if end != float('inf'):
             duration = end - start
 
         # Process chunks that are within end bounds

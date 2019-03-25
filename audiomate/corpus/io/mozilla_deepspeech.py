@@ -39,7 +39,7 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
         for utterance_idx in sorted(corpus.utterances.keys()):
             utterance = corpus.utterances[utterance_idx]
 
-            if utterance.start == 0 and utterance.end == -1:
+            if utterance.start == 0 and utterance.end == float('inf'):
                 audio_path = utterance.track.path
             else:
                 audio_path = os.path.join(audio_folder, '{}.wav'.format(utterance.idx))
@@ -51,7 +51,7 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
                 scipy.io.wavfile.write(audio_path, sampling_rate, data)
 
             size = os.stat(audio_path).st_size
-            transcript = utterance.label_lists[self.transcription_label_list_idx][0].value
+            transcript = utterance.label_lists[self.transcription_label_list_idx].join()
 
             # Add to the full list
             record = [audio_path, size, transcript]

@@ -24,17 +24,20 @@ def process_buffer(buffer, n_channels):
     return samples
 
 
-def read_blocks(file_path, start=0.0, end=-1.0, buffer_size=5760000):
+def read_blocks(file_path, start=0.0, end=float('inf'), buffer_size=5760000):
     """
     Read an audio file block after block. The blocks are yielded one by one.
 
     Args:
         file_path (str): Path to the file to read.
         start (float): Start in seconds to read from.
-        end (float): End in seconds to read to. -1.0 means to the end of the file.
-        buffer_size (int): Number of samples to load into memory at once and return as a single block.
-                           The exact number of loaded samples depends on the block-size of the audioread library.
-                           So it can be of x higher, where the x is typically 1024 or 4096.
+        end (float): End in seconds to read to.
+                     ``inf`` means to the end of the file.
+        buffer_size (int): Number of samples to load into memory at once and
+                           return as a single block. The exact number of loaded
+                           samples depends on the block-size of the
+                           audioread library. So it can be of x higher,
+                           where the x is typically 1024 or 4096.
 
     Returns:
         Generator: A generator yielding the samples for every block.
@@ -48,11 +51,10 @@ def read_blocks(file_path, start=0.0, end=-1.0, buffer_size=5760000):
         sr_native = input_file.samplerate
 
         start_sample = int(np.round(sr_native * start)) * n_channels
+        end_sample = end
 
-        if end > 0:
+        if end_sample != np.inf:
             end_sample = int(np.round(sr_native * end)) * n_channels
-        else:
-            end_sample = np.inf
 
         for block in input_file:
             block = librosa.util.buf_to_float(block)
@@ -84,7 +86,8 @@ def read_blocks(file_path, start=0.0, end=-1.0, buffer_size=5760000):
             yield process_buffer(buffer, n_channels)
 
 
-def read_frames(file_path, frame_size, hop_size, start=0.0, end=-1.0, buffer_size=5760000):
+def read_frames(file_path, frame_size, hop_size, start=0.0,
+                end=float('inf'), buffer_size=5760000):
     """
     Read an audio file frame by frame. The frames are yielded one after another.
 
@@ -93,14 +96,18 @@ def read_frames(file_path, frame_size, hop_size, start=0.0, end=-1.0, buffer_siz
         frame_size (int): The number of samples per frame.
         hop_size (int): The number of samples between two frames.
         start (float): Start in seconds to read from.
-        end (float): End in seconds to read to. -1.0 means to the end of the file.
-        buffer_size (int): Number of samples to load into memory at once and return as a single block.
-                           The exact number of loaded samples depends on the block-size of the audioread library.
-                           So it can be of x higher, where the x is typically 1024 or 4096.
+        end (float): End in seconds to read to.
+                     ``inf`` means to the end of the file.
+        buffer_size (int): Number of samples to load into memory at once
+                           and return as a single block.
+                           The exact number of loaded samples depends on the
+                           block-size of the audioread library. So it can be
+                           of x higher, where the x is typically 1024 or 4096.
 
     Returns:
-        Generator: A generator yielding a tuple for every frame. The first item is the frame
-        and the second a boolean indicating if it is the last frame.
+        Generator: A generator yielding a tuple for every frame.
+        The first item is the frame and
+        the second a boolean indicating if it is the last frame.
     """
     rest_samples = np.array([], dtype=np.float32)
 

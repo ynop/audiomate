@@ -15,8 +15,15 @@ class TestUtteranceTranscriptionRatioValidator:
 
     def test_validate(self):
         ds = resources.create_dataset()
-        ds.utterances['utt-3'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value = 'max length here 11'
-        ds.utterances['utt-4'].label_lists[corpus.LL_WORD_TRANSCRIPT][0].value = 'too long here'
+        ds.utterances['utt-3'].set_label_list(annotations.LabelList.create_single(
+            'max length here 11',
+            idx=corpus.LL_WORD_TRANSCRIPT
+        ))
+
+        ds.utterances['utt-4'].set_label_list(annotations.LabelList.create_single(
+            'too long here',
+            idx=corpus.LL_WORD_TRANSCRIPT
+        ))
 
         val = validation.UtteranceTranscriptionRatioValidator(10, corpus.LL_WORD_TRANSCRIPT)
         result = val.validate(ds)
@@ -35,7 +42,7 @@ class TestLabelCountValidator:
 
     def test_validate(self):
         ds = resources.create_dataset()
-        ds.utterances['utt-3'].label_lists[corpus.LL_WORD_TRANSCRIPT].labels = []
+        ds.utterances['utt-3'].set_label_list(annotations.LabelList(idx=corpus.LL_WORD_TRANSCRIPT))
         del ds.utterances['utt-4'].label_lists[corpus.LL_WORD_TRANSCRIPT]
 
         val = validation.LabelCountValidator(1, corpus.LL_WORD_TRANSCRIPT)

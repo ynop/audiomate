@@ -39,15 +39,15 @@ class TestCommonVoiceReader(rt.CorpusReaderTest):
 
     EXPECTED_NUMBER_OF_UTTERANCES = 9
     EXPECTED_UTTERANCES = [
-        rt.ExpUtterance('c4b', 'c4b', '17e', 0, -1),
-        rt.ExpUtterance('8ea', '8ea', 'cb3', 0, -1),
-        rt.ExpUtterance('67c', '67c', 'cb3', 0, -1),
-        rt.ExpUtterance('f08', 'f08', 'aa3', 0, -1),
-        rt.ExpUtterance('b5c', 'b5c', 'aa3', 0, -1),
-        rt.ExpUtterance('8f4', '8f4', '90a', 0, -1),
-        rt.ExpUtterance('7f4', '7f4', 'b0f', 0, -1),
-        rt.ExpUtterance('059', '059', '5ec', 0, -1),
-        rt.ExpUtterance('d08', 'd08', '72d', 0, -1),
+        rt.ExpUtterance('c4b', 'c4b', '17e', 0, float('inf')),
+        rt.ExpUtterance('8ea', '8ea', 'cb3', 0, float('inf')),
+        rt.ExpUtterance('67c', '67c', 'cb3', 0, float('inf')),
+        rt.ExpUtterance('f08', 'f08', 'aa3', 0, float('inf')),
+        rt.ExpUtterance('b5c', 'b5c', 'aa3', 0, float('inf')),
+        rt.ExpUtterance('8f4', '8f4', '90a', 0, float('inf')),
+        rt.ExpUtterance('7f4', '7f4', 'b0f', 0, float('inf')),
+        rt.ExpUtterance('059', '059', '5ec', 0, float('inf')),
+        rt.ExpUtterance('d08', 'd08', '72d', 0, float('inf')),
     ]
 
     EXPECTED_LABEL_LISTS = {
@@ -67,16 +67,16 @@ class TestCommonVoiceReader(rt.CorpusReaderTest):
 
     EXPECTED_LABELS = {
         'c4b': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Man sollte', 0, -1),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Man sollte', 0, float('inf')),
         ],
         'f08': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Valentin', 0, -1),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Valentin', 0, float('inf')),
         ],
         '8f4': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Es', 0, -1),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Es', 0, float('inf')),
         ],
         '7f4': [
-            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 0, 'Zieht euch', 0, -1),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT, 'Zieht euch', 0, float('inf')),
         ],
     }
 

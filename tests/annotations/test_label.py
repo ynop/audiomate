@@ -42,7 +42,7 @@ class TestLabel:
 
     def test_lt_end_time_properly_handles_custom_infinity(self):
         a = annotations.Label('some label', 1.0, 1.9)
-        b = annotations.Label('some label', 1.0, -1)
+        b = annotations.Label('some label', 1.0, float('inf'))
 
         assert a < b
 
@@ -120,10 +120,10 @@ class TestLabel:
         path = resources.sample_wav_file('wav_1.wav')
         track = tracks.FileTrack('wav', path)
         issuer = issuers.Issuer('toni')
-        utt = tracks.Utterance('idx', track, issuer=issuer, start=1.0, end=-1)
+        utt = tracks.Utterance('idx', track, issuer=issuer, start=1.0)
 
         l1 = annotations.Label('a', 0.15, 0.448)
-        l2 = annotations.Label('a', 0.5, -1)
+        l2 = annotations.Label('a', 0.5)
         ll = annotations.LabelList(labels=[l1, l2])
 
         utt.set_label_list(ll)
@@ -222,32 +222,32 @@ class TestLabel:
         assert not label.do_overlap(label_other)
 
     def test_do_overlap_none_self_infinite(self):
-        label = annotations.Label('a', 4.8, -1)
+        label = annotations.Label('a', 4.8, float('inf'))
         label_other = annotations.Label('a', 1.2, 3.2)
 
         assert not label.do_overlap(label_other)
 
     def test_do_overlap_none_other_infinite(self):
         label = annotations.Label('a', 4.8, 10.5)
-        label_other = annotations.Label('a', 10.6, -1)
+        label_other = annotations.Label('a', 10.6, float('inf'))
 
         assert not label.do_overlap(label_other)
 
     def test_do_overlap_this_infinite(self):
-        label = annotations.Label('a', 4.8, -1)
+        label = annotations.Label('a', 4.8, float('inf'))
         label_other = annotations.Label('a', 8.5, 9.2)
 
         assert label.do_overlap(label_other)
 
     def test_do_overlap_other_infinite(self):
         label = annotations.Label('a', 4.8, 9.3)
-        label_other = annotations.Label('a', 8.5, -1)
+        label_other = annotations.Label('a', 8.5, float('inf'))
 
         assert label.do_overlap(label_other)
 
     def test_do_overlap_both_infinite(self):
-        label = annotations.Label('a', 4.8, -1)
-        label_other = annotations.Label('a', 8.5, -1)
+        label = annotations.Label('a', 4.8, float('inf'))
+        label_other = annotations.Label('a', 8.5, float('inf'))
 
         assert label.do_overlap(label_other)
 
@@ -294,20 +294,19 @@ class TestLabel:
         assert label.overlap_duration(label_other) == 0.0
 
     def test_overlap_duration_this_infinite(self):
-        label = annotations.Label('a', 4.8, -1)
+        label = annotations.Label('a', 4.8, float('inf'))
         label_other = annotations.Label('a', 8.5, 9.2)
 
         assert label.overlap_duration(label_other) == pytest.approx(9.2 - 8.5)
 
     def test_overlap_duration_other_infinite(self):
         label = annotations.Label('a', 4.8, 9.3)
-        label_other = annotations.Label('a', 8.5, -1)
+        label_other = annotations.Label('a', 8.5, float('inf'))
 
         assert label.overlap_duration(label_other) == pytest.approx(9.3 - 8.5)
 
-    def test_overlap_duration_both_infinite_raises_error(self):
-        label = annotations.Label('a', 4.8, -1)
-        label_other = annotations.Label('a', 8.5, -1)
+    def test_overlap_duration_both_infinite(self):
+        label = annotations.Label('a', 4.8, float('inf'))
+        label_other = annotations.Label('a', 8.5, float('inf'))
 
-        with pytest.raises(ValueError):
-            label.overlap_duration(label_other)
+        assert label.overlap_duration(label_other) == float('inf')

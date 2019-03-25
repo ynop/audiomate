@@ -73,25 +73,25 @@ class TestRouenReader:
         assert ds.utterances['avion1'].track.idx == 'avion1'
         assert ds.utterances['avion1'].issuer is None
         assert ds.utterances['avion1'].start == 0
-        assert ds.utterances['avion1'].end == -1
+        assert ds.utterances['avion1'].end == float('inf')
 
         assert ds.utterances['avion2'].idx == 'avion2'
         assert ds.utterances['avion2'].track.idx == 'avion2'
         assert ds.utterances['avion2'].issuer is None
         assert ds.utterances['avion2'].start == 0
-        assert ds.utterances['avion2'].end == -1
+        assert ds.utterances['avion2'].end == float('inf')
 
         assert ds.utterances['bus1'].idx == 'bus1'
         assert ds.utterances['bus1'].track.idx == 'bus1'
         assert ds.utterances['bus1'].issuer is None
         assert ds.utterances['bus1'].start == 0
-        assert ds.utterances['bus1'].end == -1
+        assert ds.utterances['bus1'].end == float('inf')
 
         assert ds.utterances['metro_rouen22'].idx == 'metro_rouen22'
         assert ds.utterances['metro_rouen22'].track.idx == 'metro_rouen22'
         assert ds.utterances['metro_rouen22'].issuer is None
         assert ds.utterances['metro_rouen22'].start == 0
-        assert ds.utterances['metro_rouen22'].end == -1
+        assert ds.utterances['metro_rouen22'].end == float('inf')
 
     def test_load_issuers(self, reader, data_path):
         ds = reader.load(data_path)

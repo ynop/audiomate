@@ -78,7 +78,7 @@ class TimitReader(base.CorpusReader):
                             for record in words:
                                 start = int(record[0]) / 16000
                                 end = int(record[1]) / 16000
-                                word_ll.append(annotations.Label(record[2], start=start, end=end))
+                                word_ll.addl(record[2], start=start, end=end)
 
                             utt.set_label_list(word_ll)
 
@@ -87,7 +87,7 @@ class TimitReader(base.CorpusReader):
                             for record in phones:
                                 start = int(record[0]) / 16000
                                 end = int(record[1]) / 16000
-                                phone_ll.append(annotations.Label(record[2], start=start, end=end))
+                                phone_ll.addl(record[2], start=start, end=end)
 
                             utt.set_label_list(phone_ll)
 

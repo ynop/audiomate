@@ -48,31 +48,31 @@ class TestUrbansound8kReader:
         assert ds.utterances['100032-3-0-0'].track.idx == '100032-3-0-0'
         assert ds.utterances['100032-3-0-0'].issuer is None
         assert ds.utterances['100032-3-0-0'].start == 0
-        assert ds.utterances['100032-3-0-0'].end == -1
+        assert ds.utterances['100032-3-0-0'].end == float('inf')
 
         assert ds.utterances['100263-2-0-117'].idx == '100263-2-0-117'
         assert ds.utterances['100263-2-0-117'].track.idx == '100263-2-0-117'
         assert ds.utterances['100263-2-0-117'].issuer is None
         assert ds.utterances['100263-2-0-117'].start == 0
-        assert ds.utterances['100263-2-0-117'].end == -1
+        assert ds.utterances['100263-2-0-117'].end == float('inf')
 
         assert ds.utterances['145612-6-3-0'].idx == '145612-6-3-0'
         assert ds.utterances['145612-6-3-0'].track.idx == '145612-6-3-0'
         assert ds.utterances['145612-6-3-0'].issuer is None
         assert ds.utterances['145612-6-3-0'].start == 0
-        assert ds.utterances['145612-6-3-0'].end == -1
+        assert ds.utterances['145612-6-3-0'].end == float('inf')
 
         assert ds.utterances['145683-6-5-0'].idx == '145683-6-5-0'
         assert ds.utterances['145683-6-5-0'].track.idx == '145683-6-5-0'
         assert ds.utterances['145683-6-5-0'].issuer is None
         assert ds.utterances['145683-6-5-0'].start == 0
-        assert ds.utterances['145683-6-5-0'].end == -1
+        assert ds.utterances['145683-6-5-0'].end == float('inf')
 
         assert ds.utterances['79377-9-0-4'].idx == '79377-9-0-4'
         assert ds.utterances['79377-9-0-4'].track.idx == '79377-9-0-4'
         assert ds.utterances['79377-9-0-4'].issuer is None
         assert ds.utterances['79377-9-0-4'].start == 0
-        assert ds.utterances['79377-9-0-4'].end == -1
+        assert ds.utterances['79377-9-0-4'].end == float('inf')
 
     def test_load_issuers(self, reader, data_path):
         ds = reader.load(data_path)
@@ -84,33 +84,33 @@ class TestUrbansound8kReader:
 
         assert len(ds.utterances['100032-3-0-0'].label_lists) == 1
         assert len(ds.utterances['100032-3-0-0'].label_lists[corpus.LL_SOUND_CLASS]) == 1
-        assert ds.utterances['100032-3-0-0'].label_lists[corpus.LL_SOUND_CLASS][0].value == 'dog_bark'
-        assert ds.utterances['100032-3-0-0'].label_lists[corpus.LL_SOUND_CLASS][0].start == 0
-        assert ds.utterances['100032-3-0-0'].label_lists[corpus.LL_SOUND_CLASS][0].end == -1
+        assert ds.utterances['100032-3-0-0'].label_lists[corpus.LL_SOUND_CLASS].labels[0].value == 'dog_bark'
+        assert ds.utterances['100032-3-0-0'].label_lists[corpus.LL_SOUND_CLASS].labels[0].start == 0
+        assert ds.utterances['100032-3-0-0'].label_lists[corpus.LL_SOUND_CLASS].labels[0].end == float('inf')
 
         assert len(ds.utterances['100263-2-0-117'].label_lists) == 1
         assert len(ds.utterances['100263-2-0-117'].label_lists[corpus.LL_SOUND_CLASS]) == 1
-        assert ds.utterances['100263-2-0-117'].label_lists[corpus.LL_SOUND_CLASS][0].value == 'children_playing'
-        assert ds.utterances['100263-2-0-117'].label_lists[corpus.LL_SOUND_CLASS][0].start == 0
-        assert ds.utterances['100263-2-0-117'].label_lists[corpus.LL_SOUND_CLASS][0].end == -1
+        assert ds.utterances['100263-2-0-117'].label_lists[corpus.LL_SOUND_CLASS].labels[0].value == 'children_playing'
+        assert ds.utterances['100263-2-0-117'].label_lists[corpus.LL_SOUND_CLASS].labels[0].start == 0
+        assert ds.utterances['100263-2-0-117'].label_lists[corpus.LL_SOUND_CLASS].labels[0].end == float('inf')
 
         assert len(ds.utterances['145612-6-3-0'].label_lists) == 1
         assert len(ds.utterances['145612-6-3-0'].label_lists[corpus.LL_SOUND_CLASS]) == 1
-        assert ds.utterances['145612-6-3-0'].label_lists[corpus.LL_SOUND_CLASS][0].value == 'gun_shot'
-        assert ds.utterances['145612-6-3-0'].label_lists[corpus.LL_SOUND_CLASS][0].start == 0
-        assert ds.utterances['145612-6-3-0'].label_lists[corpus.LL_SOUND_CLASS][0].end == -1
+        assert ds.utterances['145612-6-3-0'].label_lists[corpus.LL_SOUND_CLASS].labels[0].value == 'gun_shot'
+        assert ds.utterances['145612-6-3-0'].label_lists[corpus.LL_SOUND_CLASS].labels[0].start == 0
+        assert ds.utterances['145612-6-3-0'].label_lists[corpus.LL_SOUND_CLASS].labels[0].end == float('inf')
 
         assert len(ds.utterances['145683-6-5-0'].label_lists) == 1
         assert len(ds.utterances['145683-6-5-0'].label_lists[corpus.LL_SOUND_CLASS]) == 1
-        assert ds.utterances['145683-6-5-0'].label_lists[corpus.LL_SOUND_CLASS][0].value == 'gun_shot'
-        assert ds.utterances['145683-6-5-0'].label_lists[corpus.LL_SOUND_CLASS][0].start == 0
-        assert ds.utterances['145683-6-5-0'].label_lists[corpus.LL_SOUND_CLASS][0].end == -1
+        assert ds.utterances['145683-6-5-0'].label_lists[corpus.LL_SOUND_CLASS].labels[0].value == 'gun_shot'
+        assert ds.utterances['145683-6-5-0'].label_lists[corpus.LL_SOUND_CLASS].labels[0].start == 0
+        assert ds.utterances['145683-6-5-0'].label_lists[corpus.LL_SOUND_CLASS].labels[0].end == float('inf')
 
         assert len(ds.utterances['79377-9-0-4'].label_lists) == 1
         assert len(ds.utterances['79377-9-0-4'].label_lists[corpus.LL_SOUND_CLASS]) == 1
-        assert ds.utterances['79377-9-0-4'].label_lists[corpus.LL_SOUND_CLASS][0].value == 'street_music'
-        assert ds.utterances['79377-9-0-4'].label_lists[corpus.LL_SOUND_CLASS][0].start == 0
-        assert ds.utterances['79377-9-0-4'].label_lists[corpus.LL_SOUND_CLASS][0].end == -1
+        assert ds.utterances['79377-9-0-4'].label_lists[corpus.LL_SOUND_CLASS].labels[0].value == 'street_music'
+        assert ds.utterances['79377-9-0-4'].label_lists[corpus.LL_SOUND_CLASS].labels[0].start == 0
+        assert ds.utterances['79377-9-0-4'].label_lists[corpus.LL_SOUND_CLASS].labels[0].end == float('inf')
 
     def test_load_fold_subsets(self, reader, data_path):
         ds = reader.load(data_path)

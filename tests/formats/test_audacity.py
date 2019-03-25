@@ -56,47 +56,29 @@ class TestAudacityFormat:
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_en.txt')
         ll = audacity.read_label_list(path)
 
-        assert len(ll) == 2
-
-        assert ll[0].start == 43352.824046
-        assert ll[0].end == 43525.837661
-        assert ll[0].value == 'music'
-
-        assert ll[1].start == 43512.446969
-        assert ll[1].end == 43531.343483
-        assert ll[1].value == 'speech_male'
+        assert ll == annotations.LabelList(labels=[
+            annotations.Label('music', 43352.824046, 43525.837661),
+            annotations.Label('speech_male', 43512.446969, 43531.343483),
+        ])
 
     def test_read_label_list_de(self):
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_de.txt')
         ll = audacity.read_label_list(path)
 
-        assert len(ll) == 2
-
-        assert ll[0].start == 43352.824046
-        assert ll[0].end == 43525.837661
-        assert ll[0].value == 'music'
-
-        assert ll[1].start == 43512.446969
-        assert ll[1].end == 43531.343483
-        assert ll[1].value == 'speech_male'
+        assert ll == annotations.LabelList(labels=[
+            annotations.Label('music', 43352.824046, 43525.837661),
+            annotations.Label('speech_male', 43512.446969, 43531.343483),
+        ])
 
     def test_read_label_list_with_empty_value(self):
         path = os.path.join(os.path.dirname(__file__), 'audacity_labels_empty_value.txt')
         ll = audacity.read_label_list(path)
 
-        assert len(ll) == 3
-
-        assert ll[0].start == 1
-        assert ll[0].end == 4
-        assert ll[0].value == 'music'
-
-        assert ll[1].start == 4
-        assert ll[1].end == 7
-        assert ll[1].value == ''
-
-        assert ll[2].start == 7
-        assert ll[2].end == 9
-        assert ll[2].value == 'speech_male'
+        assert ll == annotations.LabelList(labels=[
+            annotations.Label('music', 1, 4),
+            annotations.Label('', 4, 7),
+            annotations.Label('speech_male', 7, 9),
+        ])
 
     def test_write_label_file(self, tmpdir):
         path = os.path.join(tmpdir.strpath, 'audacity_labels.txt')

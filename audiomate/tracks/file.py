@@ -105,7 +105,7 @@ class FileTrack(track.Track):
         if duration is not None:
             end = offset + duration
         else:
-            end = -1
+            end = float('inf')
 
         return audio.read_frames(
             self.path,

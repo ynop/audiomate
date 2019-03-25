@@ -90,13 +90,16 @@ class KaldiReader(base.CorpusReader):
                                                                       max_columns=4)
             for utt_id, utt_info in utterances.items():
                 start = 0
-                end = -1
+                end = float('inf')
 
                 if len(utt_info) > 1:
                     start = float(utt_info[1])
 
                 if len(utt_info) > 2:
                     end = float(utt_info[2])
+
+                    if end == -1:
+                        end = float('inf')
 
                 speaker_idx = None
 
@@ -193,7 +196,18 @@ class KaldiWriter(base.CorpusWriter):
     @staticmethod
     def write_segments(utterance_path, corpus):
         utterances = corpus.utterances.values()
-        utterance_records = {u.idx: [u.track.idx, u.start, u.end_abs] for u in utterances}
+        utterance_records = {}
+
+        for u in utterances:
+            track_idx = u.track.idx
+            start = u.start
+            end = u.end_abs
+
+            if end == float('inf'):
+                end = -1
+
+            utterance_records[u.idx] = [track_idx, start, end]
+
         textfile.write_separated_lines(
             utterance_path,
             utterance_records,

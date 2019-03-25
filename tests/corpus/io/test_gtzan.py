@@ -75,25 +75,25 @@ class TestGtzanReader:
         assert ds.utterances['bagpipe'].track.idx == 'bagpipe'
         assert ds.utterances['bagpipe'].issuer is None
         assert ds.utterances['bagpipe'].start == 0
-        assert ds.utterances['bagpipe'].end == -1
+        assert ds.utterances['bagpipe'].end == float('inf')
 
         assert ds.utterances['ballad'].idx == 'ballad'
         assert ds.utterances['ballad'].track.idx == 'ballad'
         assert ds.utterances['ballad'].issuer is None
         assert ds.utterances['ballad'].start == 0
-        assert ds.utterances['ballad'].end == -1
+        assert ds.utterances['ballad'].end == float('inf')
 
         assert ds.utterances['acomic'].idx == 'acomic'
         assert ds.utterances['acomic'].track.idx == 'acomic'
         assert ds.utterances['acomic'].issuer is None
         assert ds.utterances['acomic'].start == 0
-        assert ds.utterances['acomic'].end == -1
+        assert ds.utterances['acomic'].end == float('inf')
 
         assert ds.utterances['acomic2'].idx == 'acomic2'
         assert ds.utterances['acomic2'].track.idx == 'acomic2'
         assert ds.utterances['acomic2'].issuer is None
         assert ds.utterances['acomic2'].start == 0
-        assert ds.utterances['acomic2'].end == -1
+        assert ds.utterances['acomic2'].end == float('inf')
 
     def test_load_label_lists(self, reader, data_path):
         ds = reader.load(data_path)

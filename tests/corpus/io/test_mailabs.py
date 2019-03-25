@@ -122,7 +122,7 @@ class TestMailabsReader:
         assert ds.utterances[idx].track.idx == idx
         assert ds.utterances[idx].issuer.idx == 'elizabeth_klett'
         assert ds.utterances[idx].start == 0
-        assert ds.utterances[idx].end == -1
+        assert ds.utterances[idx].end == float('inf')
 
         idx = 'sara-abc_01_f000001'
 
@@ -130,7 +130,7 @@ class TestMailabsReader:
         assert ds.utterances[idx].track.idx == idx
         assert ds.utterances[idx].issuer.idx == 'sara'
         assert ds.utterances[idx].start == 0
-        assert ds.utterances[idx].end == -1
+        assert ds.utterances[idx].end == float('inf')
 
         idx = 'abc_01_f000001'
 
@@ -138,7 +138,7 @@ class TestMailabsReader:
         assert ds.utterances[idx].track.idx == idx
         assert ds.utterances[idx].issuer.idx == idx
         assert ds.utterances[idx].start == 0
-        assert ds.utterances[idx].end == -1
+        assert ds.utterances[idx].end == float('inf')
 
     def test_load_transcription_raw(self, reader, data_path):
         ds = reader.load(data_path)
@@ -148,17 +148,17 @@ class TestMailabsReader:
         ll = utt.label_lists[ll_idx]
 
         assert len(ll) == 1
-        assert ll[0].value == 'Chapter 1.'
-        assert ll[0].start == 0
-        assert ll[0].end == -1
+        assert sorted(ll)[0].value == 'Chapter 1.'
+        assert sorted(ll)[0].start == 0
+        assert sorted(ll)[0].end == float('inf')
 
         utt = ds.utterances['abc_01_f000002']
         ll = utt.label_lists[ll_idx]
 
         assert len(ll) == 1
-        assert ll[0].value == 'das 1.'
-        assert ll[0].start == 0
-        assert ll[0].end == -1
+        assert sorted(ll)[0].value == 'das 1.'
+        assert sorted(ll)[0].start == 0
+        assert sorted(ll)[0].end == float('inf')
 
     def test_load_transcription_clean(self, reader, data_path):
         ds = reader.load(data_path)
@@ -168,17 +168,17 @@ class TestMailabsReader:
         ll = utt.label_lists[ll_idx]
 
         assert len(ll) == 1
-        assert ll[0].value == 'Chapter one.'
-        assert ll[0].start == 0
-        assert ll[0].end == -1
+        assert sorted(ll)[0].value == 'Chapter one.'
+        assert sorted(ll)[0].start == 0
+        assert sorted(ll)[0].end == float('inf')
 
         utt = ds.utterances['abc_01_f000002']
         ll = utt.label_lists[ll_idx]
 
         assert len(ll) == 1
-        assert ll[0].value == 'das eins.'
-        assert ll[0].start == 0
-        assert ll[0].end == -1
+        assert sorted(ll)[0].value == 'das eins.'
+        assert sorted(ll)[0].start == 0
+        assert sorted(ll)[0].end == float('inf')
 
     def test_load_correct_number_of_subviews(self, reader, data_path):
         ds = reader.load(data_path)
