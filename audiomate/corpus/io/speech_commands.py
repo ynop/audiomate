@@ -3,6 +3,7 @@ import os
 
 import audiomate
 from audiomate import annotations
+from audiomate import issuers
 from audiomate.corpus.subset import subview
 from audiomate.utils import textfile
 from . import base
@@ -50,7 +51,9 @@ class SpeechCommandsReader(base.CorpusReader):
             corpus.new_file(wav_path, file_idx)
 
             if issuer_idx not in corpus.issuers.keys():
-                corpus.new_issuer(issuer_idx)
+                corpus.import_issuers(issuers.Speaker(
+                    issuer_idx
+                ))
 
             utt = corpus.new_utterance(file_idx, file_idx, issuer_idx)
 

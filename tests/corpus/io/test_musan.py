@@ -9,22 +9,13 @@ import pytest
 import requests_mock
 
 from tests import resources
+from . import reader_test as rt
 
 
 @pytest.fixture()
 def tar_data():
     with open(resources.get_resource_path(['sample_files', 'cv_corpus_v1.tar.gz']), 'rb') as f:
         return f.read()
-
-
-@pytest.fixture()
-def reader():
-    return io.MusanReader()
-
-
-@pytest.fixture()
-def sample_path():
-    return resources.sample_corpus_path('musan')
 
 
 class TestMusanDownloader:
@@ -44,100 +35,61 @@ class TestMusanDownloader:
         assert os.path.isdir(os.path.join(target_folder, 'cv-valid-train'))
 
 
-class TestMusanReader:
+class TestMusanReader(rt.CorpusReaderTest):
 
-    def test_load_tracks(self, reader, sample_path):
-        ds = reader.load(sample_path)
+    SAMPLE_PATH = resources.sample_corpus_path('musan')
+    FILE_TRACK_BASE_PATH = SAMPLE_PATH
 
-        fma = os.path.join(sample_path, 'music', 'fma')
-        free_sound = os.path.join(sample_path, 'noise', 'free-sound')
-        librivox = os.path.join(sample_path, 'speech', 'librivox')
+    EXPECTED_NUMBER_OF_TRACKS = 5
+    EXPECTED_TRACKS = [
+        rt.ExpFileTrack('music-fma-0000', os.path.join('music', 'fma', 'music-fma-0000.wav')),
+        rt.ExpFileTrack('noise-free-sound-0000', os.path.join('noise', 'free-sound', 'noise-free-sound-0000.wav')),
+        rt.ExpFileTrack('noise-free-sound-0001', os.path.join('noise', 'free-sound', 'noise-free-sound-0001.wav')),
+        rt.ExpFileTrack('speech-librivox-0000', os.path.join('speech', 'librivox', 'speech-librivox-0000.wav')),
+        rt.ExpFileTrack('speech-librivox-0001', os.path.join('speech', 'librivox', 'speech-librivox-0001.wav')),
+    ]
 
-        assert ds.num_tracks == 5
+    EXPECTED_NUMBER_OF_ISSUERS = 3
+    EXPECTED_ISSUERS = [
+        rt.ExpSpeaker('speech-librivox-0000', 1, issuers.Gender.MALE, issuers.AgeGroup.UNKNOWN, None),
+        rt.ExpSpeaker('speech-librivox-0001', 1, issuers.Gender.FEMALE, issuers.AgeGroup.UNKNOWN, None),
+        rt.ExpArtist('Quiet_Music_for_Tiny_Robots', 1, 'Quiet_Music_for_Tiny_Robots'),
+    ]
 
-        assert ds.tracks['music-fma-0000'].idx == 'music-fma-0000'
-        assert ds.tracks['music-fma-0000'].path == os.path.join(fma, 'music-fma-0000.wav')
+    EXPECTED_NUMBER_OF_UTTERANCES = 5
+    EXPECTED_UTTERANCES = [
+        rt.ExpUtterance('music-fma-0000', 'music-fma-0000', 'Quiet_Music_for_Tiny_Robots', 0, float('inf')),
+        rt.ExpUtterance('noise-free-sound-0000', 'noise-free-sound-0000', None, 0, float('inf')),
+        rt.ExpUtterance('noise-free-sound-0001', 'noise-free-sound-0001', None, 0, float('inf')),
+        rt.ExpUtterance('speech-librivox-0000', 'speech-librivox-0000', 'speech-librivox-0000', 0, float('inf')),
+        rt.ExpUtterance('speech-librivox-0001', 'speech-librivox-0001', 'speech-librivox-0001', 0, float('inf')),
+    ]
 
-        assert ds.tracks['noise-free-sound-0000'].idx == 'noise-free-sound-0000'
-        assert ds.tracks['noise-free-sound-0000'].path == os.path.join(free_sound, 'noise-free-sound-0000.wav')
-        assert ds.tracks['noise-free-sound-0001'].idx == 'noise-free-sound-0001'
-        assert ds.tracks['noise-free-sound-0001'].path == os.path.join(free_sound, 'noise-free-sound-0001.wav')
+    EXPECTED_LABEL_LISTS = {
+        'music-fma-0000': [
+            rt.ExpLabelList(corpus.LL_DOMAIN, 1),
+        ],
+        'noise-free-sound-0000': [
+            rt.ExpLabelList(corpus.LL_DOMAIN, 1),
+        ],
+        'noise-free-sound-0001': [
+            rt.ExpLabelList(corpus.LL_DOMAIN, 1),
+        ],
+    }
 
-        assert ds.tracks['speech-librivox-0000'].idx == 'speech-librivox-0000'
-        assert ds.tracks['speech-librivox-0000'].path == os.path.join(librivox, 'speech-librivox-0000.wav')
-        assert ds.tracks['speech-librivox-0001'].idx == 'speech-librivox-0001'
-        assert ds.tracks['speech-librivox-0001'].path == os.path.join(librivox, 'speech-librivox-0001.wav')
+    EXPECTED_LABELS = {
+        'music-fma-0000': [
+            rt.ExpLabel(corpus.LL_DOMAIN, 'music', 0, float('inf')),
+        ],
+        'noise-free-sound-0000': [
+            rt.ExpLabel(corpus.LL_DOMAIN, 'noise', 0, float('inf')),
+        ],
+        'noise-free-sound-0001': [
+            rt.ExpLabel(corpus.LL_DOMAIN, 'noise', 0, float('inf')),
+        ],
+    }
 
-    def test_load_issuers(self, reader, sample_path):
-        ds = reader.load(sample_path)
+    EXPECTED_NUMBER_OF_SUBVIEWS = 0
 
-        assert ds.num_issuers == 3
-
-        assert 'speech-librivox-0000' in ds.issuers.keys()
-        assert type(ds.issuers['speech-librivox-0000']) == issuers.Speaker
-        assert ds.issuers['speech-librivox-0000'].idx == 'speech-librivox-0000'
-        assert ds.issuers['speech-librivox-0000'].gender == issuers.Gender.MALE
-
-        assert 'speech-librivox-0001' in ds.issuers.keys()
-        assert type(ds.issuers['speech-librivox-0001']) == issuers.Speaker
-        assert ds.issuers['speech-librivox-0001'].idx == 'speech-librivox-0001'
-        assert ds.issuers['speech-librivox-0001'].gender == issuers.Gender.FEMALE
-
-        assert 'Quiet_Music_for_Tiny_Robots' in ds.issuers.keys()
-        assert type(ds.issuers['Quiet_Music_for_Tiny_Robots']) == issuers.Artist
-        assert ds.issuers['Quiet_Music_for_Tiny_Robots'].idx == 'Quiet_Music_for_Tiny_Robots'
-        assert ds.issuers['Quiet_Music_for_Tiny_Robots'].name == 'Quiet_Music_for_Tiny_Robots'
-
-    def test_load_utterances(self, reader, sample_path):
-        ds = reader.load(sample_path)
-
-        assert ds.num_utterances == 5
-
-        assert ds.utterances['music-fma-0000'].idx == 'music-fma-0000'
-        assert ds.utterances['music-fma-0000'].track.idx == 'music-fma-0000'
-        assert ds.utterances['music-fma-0000'].issuer.idx == 'Quiet_Music_for_Tiny_Robots'
-        assert ds.utterances['music-fma-0000'].start == 0
-        assert ds.utterances['music-fma-0000'].end == float('inf')
-
-        assert ds.utterances['noise-free-sound-0000'].idx == 'noise-free-sound-0000'
-        assert ds.utterances['noise-free-sound-0000'].track.idx == 'noise-free-sound-0000'
-        assert ds.utterances['noise-free-sound-0000'].issuer is None
-        assert ds.utterances['noise-free-sound-0000'].start == 0
-        assert ds.utterances['noise-free-sound-0000'].end == float('inf')
-
-        assert ds.utterances['noise-free-sound-0001'].idx == 'noise-free-sound-0001'
-        assert ds.utterances['noise-free-sound-0001'].track.idx == 'noise-free-sound-0001'
-        assert ds.utterances['noise-free-sound-0001'].issuer is None
-        assert ds.utterances['noise-free-sound-0001'].start == 0
-        assert ds.utterances['noise-free-sound-0001'].end == float('inf')
-
-        assert ds.utterances['speech-librivox-0000'].idx == 'speech-librivox-0000'
-        assert ds.utterances['speech-librivox-0000'].track.idx == 'speech-librivox-0000'
-        assert ds.utterances['speech-librivox-0000'].issuer.idx == 'speech-librivox-0000'
-        assert ds.utterances['speech-librivox-0000'].start == 0
-        assert ds.utterances['speech-librivox-0000'].end == float('inf')
-
-        assert ds.utterances['speech-librivox-0001'].idx == 'speech-librivox-0001'
-        assert ds.utterances['speech-librivox-0001'].track.idx == 'speech-librivox-0001'
-        assert ds.utterances['speech-librivox-0001'].issuer.idx == 'speech-librivox-0001'
-        assert ds.utterances['speech-librivox-0001'].start == 0
-        assert ds.utterances['speech-librivox-0001'].end == float('inf')
-
-    def test_load_label_lists(self, reader, sample_path):
-        ds = reader.load(sample_path)
-
-        utt_1 = ds.utterances['music-fma-0000']
-        utt_2 = ds.utterances['noise-free-sound-0000']
-        utt_3 = ds.utterances['noise-free-sound-0001']
-
-        assert corpus.LL_DOMAIN in utt_1.label_lists.keys()
-        assert corpus.LL_DOMAIN in utt_2.label_lists.keys()
-        assert corpus.LL_DOMAIN in utt_3.label_lists.keys()
-
-        assert len(utt_1.label_lists[corpus.LL_DOMAIN].labels) == 1
-        assert len(utt_2.label_lists[corpus.LL_DOMAIN].labels) == 1
-        assert len(utt_3.label_lists[corpus.LL_DOMAIN].labels) == 1
-
-        assert utt_1.label_lists[corpus.LL_DOMAIN].labels[0].value == 'music'
-        assert utt_2.label_lists[corpus.LL_DOMAIN].labels[0].value == 'noise'
-        assert utt_3.label_lists[corpus.LL_DOMAIN].labels[0].value == 'noise'
+    def load(self):
+        return io.MusanReader().load(self.SAMPLE_PATH)

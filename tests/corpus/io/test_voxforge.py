@@ -2,12 +2,14 @@ import os
 
 from audiomate import corpus
 from audiomate import issuers
+from audiomate.corpus import io
 from audiomate.corpus.io import voxforge
 
 import pytest
 import requests_mock
 
 from tests import resources
+from . import reader_test as rt
 
 
 @pytest.fixture()
@@ -20,16 +22,6 @@ def sample_response():
 def sample_tgz_content():
     with open(resources.get_resource_path(['sample_files', 'voxforge_sample.tgz']), 'rb') as f:
         return f.read()
-
-
-@pytest.fixture()
-def reader():
-    return voxforge.VoxforgeReader()
-
-
-@pytest.fixture()
-def sample_corpus_path():
-    return resources.sample_corpus_path('voxforge')
 
 
 class TestVoxforgeDownloader:
@@ -154,100 +146,85 @@ class TestVoxforgeDownloader:
         assert os.path.join(tmpdir.strpath, 'voxforge_sample') in extracted
 
 
-class TestVoxforgeReader:
+class TestVoxforgeReader(rt.CorpusReaderTest):
 
-    def test_load_tracks(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
+    SAMPLE_PATH = resources.sample_corpus_path('voxforge')
+    FILE_TRACK_BASE_PATH = SAMPLE_PATH
 
-        assert ds.num_tracks == 13
+    EXPECTED_NUMBER_OF_TRACKS = 13
+    EXPECTED_TRACKS = [
+        rt.ExpFileTrack('1337ad-20170321-czb-de11-095', os.path.join('1337ad-20170321-czb',
+                                                                     'wav',
+                                                                     'de11-095.wav')),
+        rt.ExpFileTrack('1337ad-20170321-czb-de11-096', os.path.join('1337ad-20170321-czb',
+                                                                     'wav',
+                                                                     'de11-096.wav')),
+        rt.ExpFileTrack('anonymous-20081027-njq-a0479', os.path.join('anonymous-20081027-njq',
+                                                                     'wav',
+                                                                     'a0479.wav')),
+    ]
 
-        assert ds.tracks['1337ad-20170321-czb-de11-095'].idx == '1337ad-20170321-czb-de11-095'
-        assert ds.tracks['1337ad-20170321-czb-de11-095'].path == os.path.join(sample_corpus_path,
-                                                                              '1337ad-20170321-czb',
-                                                                              'wav',
-                                                                              'de11-095.wav')
+    EXPECTED_NUMBER_OF_ISSUERS = 4
+    EXPECTED_ISSUERS = [
+        rt.ExpSpeaker('1337ad', 5, issuers.Gender.FEMALE, issuers.AgeGroup.ADULT, 'deu'),
+        rt.ExpSpeaker('anonymous-20081027-njq', 1, issuers.Gender.MALE, issuers.AgeGroup.ADULT, 'eng'),
+        rt.ExpSpeaker('Katzer', 4, issuers.Gender.MALE, issuers.AgeGroup.YOUTH, 'eng'),
+        rt.ExpSpeaker('knotyouraveragejo', 3, issuers.Gender.FEMALE, issuers.AgeGroup.ADULT, 'eng'),
+    ]
 
-        assert ds.tracks['1337ad-20170321-czb-de11-096'].idx == '1337ad-20170321-czb-de11-096'
-        assert ds.tracks['1337ad-20170321-czb-de11-096'].path == os.path.join(sample_corpus_path,
-                                                                              '1337ad-20170321-czb',
-                                                                              'wav',
-                                                                              'de11-096.wav')
+    EXPECTED_NUMBER_OF_UTTERANCES = 13
+    EXPECTED_UTTERANCES = [
+        rt.ExpUtterance('1337ad-20170321-czb-de11-095', '1337ad-20170321-czb-de11-095',
+                        '1337ad', 0, float('inf')),
+        rt.ExpUtterance('1337ad-20170321-czb-de11-096', '1337ad-20170321-czb-de11-096',
+                        '1337ad', 0, float('inf')),
+        rt.ExpUtterance('anonymous-20081027-njq-a0479', 'anonymous-20081027-njq-a0479',
+                        'anonymous-20081027-njq', 0, float('inf')),
+    ]
 
-        assert ds.tracks['anonymous-20081027-njq-a0479'].idx == 'anonymous-20081027-njq-a0479'
-        assert ds.tracks['anonymous-20081027-njq-a0479'].path == os.path.join(sample_corpus_path,
-                                                                              'anonymous-20081027-njq',
-                                                                              'wav',
-                                                                              'a0479.wav')
+    EXPECTED_LABEL_LISTS = {
+        '1337ad-20170321-czb-de11-096': [
+            rt.ExpLabelList(corpus.LL_WORD_TRANSCRIPT, 1),
+            rt.ExpLabelList(corpus.LL_WORD_TRANSCRIPT_RAW, 1),
+        ],
+        'Katzer-20140410-lyk-b0167': [
+            rt.ExpLabelList(corpus.LL_WORD_TRANSCRIPT, 1),
+            rt.ExpLabelList(corpus.LL_WORD_TRANSCRIPT_RAW, 1),
+        ],
+        'anonymous-20081027-njq-a0479': [
+            rt.ExpLabelList(corpus.LL_WORD_TRANSCRIPT, 1),
+            rt.ExpLabelList(corpus.LL_WORD_TRANSCRIPT_RAW, 1),
+        ],
+    }
 
-    def test_load_issuers(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
+    EXPECTED_LABELS = {
+        '1337ad-20170321-czb-de11-096': [
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT,
+                        'ES HANDELT SICH UM GETRENNTE RECHTSSYSTEME UND NUR EINES IST ANWENDBAR',
+                        0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW,
+                        'Es handelt sich um getrennte Rechtssysteme und nur eines ist anwendbar.',
+                        0, float('inf')),
+        ],
+        'Katzer-20140410-lyk-b0167': [
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT,
+                        'A LITTLE BEFORE DAWN OF THE DAY FOLLOWING THE FIRE RELIEF CAME',
+                        0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW,
+                        'A little before dawn of the day following, the fire relief came.',
+                        0, float('inf')),
+        ],
+        'anonymous-20081027-njq-a0479': [
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT,
+                        'I TRIED TO READ GEORGE MOORE LAST NIGHT AND WAS DREADFULLY BORED',
+                        0, float('inf')),
+            rt.ExpLabel(corpus.LL_WORD_TRANSCRIPT_RAW,
+                        'I tried to read George Moore last night, and was dreadfully bored.',
+                        0, float('inf')),
+        ],
+    }
 
-        assert ds.num_issuers == 4
+    EXPECTED_NUMBER_OF_SUBVIEWS = 0
 
-        assert ds.issuers['1337ad'].idx == '1337ad'
-        assert type(ds.issuers['1337ad']) == issuers.Speaker
-        assert ds.issuers['1337ad'].gender == issuers.Gender.FEMALE
-        assert ds.issuers['1337ad'].age_group == issuers.AgeGroup.ADULT
-        assert ds.issuers['1337ad'].native_language == 'deu'
-
-        assert ds.issuers['anonymous-20081027-njq'].idx == 'anonymous-20081027-njq'
-        assert type(ds.issuers['anonymous-20081027-njq']) == issuers.Speaker
-        assert ds.issuers['anonymous-20081027-njq'].gender == issuers.Gender.MALE
-        assert ds.issuers['anonymous-20081027-njq'].age_group == issuers.AgeGroup.ADULT
-        assert ds.issuers['anonymous-20081027-njq'].native_language == 'eng'
-
-        assert ds.issuers['Katzer'].idx == 'Katzer'
-        assert type(ds.issuers['Katzer']) == issuers.Speaker
-        assert ds.issuers['Katzer'].gender == issuers.Gender.MALE
-        assert ds.issuers['Katzer'].age_group == issuers.AgeGroup.YOUTH
-        assert ds.issuers['Katzer'].native_language == 'eng'
-
-        assert ds.issuers['knotyouraveragejo'].idx == 'knotyouraveragejo'
-        assert type(ds.issuers['knotyouraveragejo']) == issuers.Speaker
-        assert ds.issuers['knotyouraveragejo'].gender == issuers.Gender.FEMALE
-        assert ds.issuers['knotyouraveragejo'].age_group == issuers.AgeGroup.ADULT
-        assert ds.issuers['knotyouraveragejo'].native_language == 'eng'
-
-    def test_load_utterances(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
-
-        assert ds.num_utterances == 13
-
-        assert ds.utterances['1337ad-20170321-czb-de11-095'].idx == '1337ad-20170321-czb-de11-095'
-        assert ds.utterances['1337ad-20170321-czb-de11-095'].track.idx == '1337ad-20170321-czb-de11-095'
-        assert ds.utterances['1337ad-20170321-czb-de11-095'].start == 0
-        assert ds.utterances['1337ad-20170321-czb-de11-095'].end == float('inf')
-        assert ds.utterances['1337ad-20170321-czb-de11-095'].issuer.idx == '1337ad'
-
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].idx == '1337ad-20170321-czb-de11-096'
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].track.idx == '1337ad-20170321-czb-de11-096'
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].start == 0
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].end == float('inf')
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].issuer.idx == '1337ad'
-
-        assert ds.utterances['anonymous-20081027-njq-a0479'].idx == 'anonymous-20081027-njq-a0479'
-        assert ds.utterances['anonymous-20081027-njq-a0479'].track.idx == 'anonymous-20081027-njq-a0479'
-        assert ds.utterances['anonymous-20081027-njq-a0479'].start == 0
-        assert ds.utterances['anonymous-20081027-njq-a0479'].end == float('inf')
-        assert ds.utterances['anonymous-20081027-njq-a0479'].issuer.idx == 'anonymous-20081027-njq'
-
-    def test_load_transcriptions(self, reader, sample_corpus_path):
-        ds = reader.load(sample_corpus_path)
-
-        ll_idx = corpus.LL_WORD_TRANSCRIPT
-        raw_idx = corpus.LL_WORD_TRANSCRIPT_RAW
-
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].label_lists[ll_idx].labels[0].value == \
-            'ES HANDELT SICH UM GETRENNTE RECHTSSYSTEME UND NUR EINES IST ANWENDBAR'
-        assert ds.utterances['1337ad-20170321-czb-de11-096'].label_lists[raw_idx].labels[0].value == \
-            'Es handelt sich um getrennte Rechtssysteme und nur eines ist anwendbar.'
-
-        assert ds.utterances['Katzer-20140410-lyk-b0167'].label_lists[ll_idx].labels[0].value == \
-            'A LITTLE BEFORE DAWN OF THE DAY FOLLOWING THE FIRE RELIEF CAME'
-        assert ds.utterances['Katzer-20140410-lyk-b0167'].label_lists[raw_idx].labels[0].value == \
-            'A little before dawn of the day following, the fire relief came.'
-
-        assert ds.utterances['anonymous-20081027-njq-a0479'].label_lists[ll_idx].labels[0].value == \
-            'I TRIED TO READ GEORGE MOORE LAST NIGHT AND WAS DREADFULLY BORED'
-        assert ds.utterances['anonymous-20081027-njq-a0479'].label_lists[raw_idx].labels[0].value == \
-            'I tried to read George Moore last night, and was dreadfully bored.'
+    def load(self):
+        return io.VoxforgeReader().load(self.SAMPLE_PATH)
