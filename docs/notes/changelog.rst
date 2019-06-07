@@ -4,6 +4,10 @@ Changelog
 Next Version
 ------------
 
+
+v4.0.0
+------
+
 **Breaking Changes**
 
 * For utterances and labels ``-1`` was used for representing that the end is the same as the end of the parent utterance/track.
