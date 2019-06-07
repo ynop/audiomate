@@ -15,15 +15,15 @@ class TestCommonVoiceReader(rt.CorpusReaderTest):
 
     EXPECTED_NUMBER_OF_TRACKS = 9
     EXPECTED_TRACKS = [
-        rt.ExpFileTrack('c4b', 'c4b.wav'),
-        rt.ExpFileTrack('8ea', '8ea.wav'),
-        rt.ExpFileTrack('67c', '67c.wav'),
-        rt.ExpFileTrack('f08', 'f08.wav'),
-        rt.ExpFileTrack('b5c', 'b5c.wav'),
-        rt.ExpFileTrack('8f4', '8f4.wav'),
-        rt.ExpFileTrack('7f4', '7f4.wav'),
-        rt.ExpFileTrack('059', '059.wav'),
-        rt.ExpFileTrack('d08', 'd08.wav'),
+        rt.ExpFileTrack('c4b', 'c4b.mp3'),
+        rt.ExpFileTrack('8ea', '8ea.mp3'),
+        rt.ExpFileTrack('67c', '67c.mp3'),
+        rt.ExpFileTrack('f08', 'f08.mp3'),
+        rt.ExpFileTrack('b5c', 'b5c.mp3'),
+        rt.ExpFileTrack('8f4', '8f4.mp3'),
+        rt.ExpFileTrack('7f4', '7f4.mp3'),
+        rt.ExpFileTrack('059', '059.mp3'),
+        rt.ExpFileTrack('d08', 'd08.mp3'),
     ]
 
     EXPECTED_NUMBER_OF_ISSUERS = 7
