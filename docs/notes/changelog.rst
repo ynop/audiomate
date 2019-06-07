@@ -4,6 +4,12 @@ Changelog
 Next Version
 ------------
 
+v4.0.1
+------
+
+**Fixes**
+
+* Fix :class:`audiomate.corpus.io.CommonVoiceReader` to use correct file-extension of the audio files.
 
 v4.0.0
 ------
