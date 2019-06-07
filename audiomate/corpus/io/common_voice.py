@@ -86,7 +86,7 @@ class CommonVoiceReader(base.CorpusReader):
             age = CommonVoiceReader.map_age(entry[5])
             gender = CommonVoiceReader.map_gender(entry[6])
 
-            file_path = os.path.join(path, 'clips', '{}.wav'.format(file_idx))
+            file_path = os.path.join(path, 'clips', '{}.mp3'.format(file_idx))
 
             corpus.new_file(file_path, file_idx)
 
