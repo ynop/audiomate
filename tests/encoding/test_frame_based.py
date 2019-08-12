@@ -37,6 +37,73 @@ class TestFrameHotEncoder:
 
         assert np.array_equal(expected, actual)
 
+    def test_encode_label_ends_at_utterance_end(self):
+        track = tracks.FileTrack('file1', resources.sample_wav_file('med_len.wav'))
+        utt = tracks.Utterance('utt1', track, start=3, end=14)
+        ll = annotations.LabelList(labels=[
+            annotations.Label('speech', 0, 4),
+            annotations.Label('music', 4, 9),
+            annotations.Label('speech', 9, float('inf')),
+        ])
+        utt.set_label_list(ll)
+
+        enc = encoding.FrameHotEncoder(['music', 'speech', 'noise'],
+                                       'default',
+                                       frame_settings=units.FrameSettings(32000, 16000),
+                                       sr=16000)
+
+        actual = enc.encode_utterance(utt)
+        expected = np.array([
+            [0, 1, 0],
+            [0, 1, 0],
+            [0, 1, 0],
+            [1, 1, 0],
+            [1, 0, 0],
+            [1, 0, 0],
+            [1, 0, 0],
+            [1, 0, 0],
+            [1, 1, 0],
+            [0, 1, 0],
+        ]).astype(np.float32)
+
+        assert np.array_equal(expected, actual)
+
+    def test_encode_label_ends_at_track_end(self):
+        track = tracks.FileTrack('file1', resources.sample_wav_file('med_len.wav'))
+        utt = tracks.Utterance('utt1', track, start=3, end=float('inf'))
+        ll = annotations.LabelList(labels=[
+            annotations.Label('speech', 0, 4),
+            annotations.Label('music', 4, 9),
+            annotations.Label('speech', 9, float('inf')),
+        ])
+        utt.set_label_list(ll)
+
+        enc = encoding.FrameHotEncoder(['music', 'speech', 'noise'],
+                                       'default',
+                                       frame_settings=units.FrameSettings(32000, 16000),
+                                       sr=16000)
+
+        actual = enc.encode_utterance(utt)
+        expected = np.array([
+            [0, 1, 0],
+            [0, 1, 0],
+            [0, 1, 0],
+            [1, 1, 0],
+            [1, 0, 0],
+            [1, 0, 0],
+            [1, 0, 0],
+            [1, 0, 0],
+            [1, 1, 0],
+            [0, 1, 0],
+            [0, 1, 0],
+            [0, 1, 0],
+        ]).astype(np.float32)
+
+        for r in actual:
+            print(r)
+
+        assert np.array_equal(expected, actual)
+
 
 class TestFrameOrdinalEncoder:
 
