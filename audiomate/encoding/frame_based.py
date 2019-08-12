@@ -67,10 +67,10 @@ class FrameHotEncoder(base.Encoder):
 
         for label in label_list:
             if label.value in self.labels:
-                start, end = self.frame_settings.time_range_to_frame_range(label.start, label.end, sr)
+                start, end = self.frame_settings.time_range_to_frame_range(label.start, label.end_abs, sr)
 
                 # If label ends at the end of the utterance
-                if label.end < 0:
+                if label.end == float('inf'):
                     end = num_frames
 
                 mat[start:end, self.labels.index(label.value)] = 1
@@ -133,10 +133,10 @@ class FrameOrdinalEncoder(base.Encoder):
 
         for label in label_list:
             if label.value in self.labels:
-                start, end = self.frame_settings.time_range_to_frame_range(label.start, label.end, sr)
+                start, end = self.frame_settings.time_range_to_frame_range(label.start, label.end_abs, sr)
 
                 # If label ends at the end of the utterance
-                if label.end < 0:
+                if label.end == float('inf'):
                     end = num_frames
 
                 label_index = self.labels.index(label.value)
