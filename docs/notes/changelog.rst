@@ -4,6 +4,14 @@ Changelog
 Next Version
 ------------
 
+**Breaking Changes**
+
+* Changed :class:`audiomate.corpus.validation.InvalidItemsResult` to use it not only for Utterances, but also for Tracks for example.
+
+**New Features**
+
+* Added :class:`audiomate.corpus.validation.TrackReadValidator` to check for corrupt audio tracks/files.
+
 v4.0.1
 ------
 

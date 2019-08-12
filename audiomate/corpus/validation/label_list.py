@@ -28,7 +28,7 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
             corpus (Corpus): The corpus to test/validate.
 
         Returns:
-            InvalidUtterancesResult: Validation result.
+            InvalidItemsResult: Validation result.
         """
         invalid_utterances = {}
 
@@ -51,7 +51,7 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
             'Label-List ID': self.label_list_idx
         }
 
-        return base.InvalidUtterancesResult(passed, invalid_utterances, name=self.name(), info=info)
+        return base.InvalidItemsResult(passed, invalid_utterances, name=self.name(), info=info)
 
 
 class LabelCountValidator(base.Validator):
@@ -78,7 +78,7 @@ class LabelCountValidator(base.Validator):
             corpus (Corpus): The corpus to test/validate.
 
         Returns:
-            InvalidUtterancesResult: Validation result.
+            InvalidItemsResult: Validation result.
         """
         invalid_utterances = {}
 
@@ -97,7 +97,7 @@ class LabelCountValidator(base.Validator):
             'Label-List ID': self.label_list_idx
         }
 
-        return base.InvalidUtterancesResult(passed, invalid_utterances, name=self.name(), info=info)
+        return base.InvalidItemsResult(passed, invalid_utterances, name=self.name(), info=info)
 
 
 class LabelCoverageValidationResult(base.ValidationResult):
@@ -166,7 +166,7 @@ class LabelCoverageValidator(base.Validator):
             corpus (Corpus): The corpus to test/validate.
 
         Returns:
-            InvalidUtterancesResult: Validation result.
+            LabelCoverageValidationResult: Validation result.
         """
 
         uncovered_segments = {}
@@ -281,7 +281,7 @@ class LabelOverflowValidator(base.Validator):
             corpus (Corpus): The corpus to test/validate.
 
         Returns:
-            InvalidUtterancesResult: Validation result.
+            LabelOverflowValidationResult: Validation result.
         """
 
         overflow_segments = {}

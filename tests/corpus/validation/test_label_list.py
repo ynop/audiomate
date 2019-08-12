@@ -29,8 +29,8 @@ class TestUtteranceTranscriptionRatioValidator:
         result = val.validate(ds)
 
         assert not result.passed
-        assert len(result.invalid_utterances) == 1
-        assert 'utt-4' in result.invalid_utterances.keys()
+        assert len(result.invalid_items) == 1
+        assert 'utt-4' in result.invalid_items.keys()
 
 
 class TestLabelCountValidator:
@@ -49,9 +49,9 @@ class TestLabelCountValidator:
         result = val.validate(ds)
 
         assert not result.passed
-        assert len(result.invalid_utterances) == 2
-        assert result.invalid_utterances['utt-3'] == 'Only {} labels'.format(0)
-        assert result.invalid_utterances['utt-4'] == 'No label-list {}'.format(corpus.LL_WORD_TRANSCRIPT)
+        assert len(result.invalid_items) == 2
+        assert result.invalid_items['utt-3'] == 'Only {} labels'.format(0)
+        assert result.invalid_items['utt-4'] == 'No label-list {}'.format(corpus.LL_WORD_TRANSCRIPT)
 
 
 class TestLabelCoverageValidator:

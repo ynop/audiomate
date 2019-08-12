@@ -45,24 +45,25 @@ class ValidationResult:
         return '\n'.join(lines)
 
 
-class InvalidUtterancesResult(ValidationResult):
+class InvalidItemsResult(ValidationResult):
     """
-    A generic result class for validators that return a list of utterances that were classified invalid.
-    Besides the utterance-id, a reason may be appended.
+    A generic result class for validators that return a list of items (utterances, tracks) that were classified invalid.
+    Besides the id of the item, a reason may be appended.
 
     Args:
         passed (bool): A boolean indicating, if the validation has passed (True) or failed (False).
-        invalid_utterances (dict): A dictionary containing utterance-ids, that are invalid.
+        invalid_items (dict): A dictionary containing item-ids, that are invalid.
                                    The values are reasons why they are invalid.
         name (str): The name of the validator, that produced the result.
         info (dict): Dictionary containing key/value string-pairs with detailed information of the validation.
                      For example id of the label-list that was validated.
     """
 
-    def __init__(self, passed, invalid_utterances, name='Validation', info=None):
-        super(InvalidUtterancesResult, self).__init__(passed, name=name, info=info)
+    def __init__(self, passed, invalid_items, name='Validation', item_name='Utterances', info=None):
+        super(InvalidItemsResult, self).__init__(passed, name=name, info=info)
 
-        self.invalid_utterances = invalid_utterances
+        self.invalid_items = invalid_items
+        self.item_name = item_name
 
     def get_report(self):
         """
@@ -73,12 +74,12 @@ class InvalidUtterancesResult(ValidationResult):
             str: String containing infos about the result
         """
 
-        lines = [super(InvalidUtterancesResult, self).get_report()]
+        lines = [super(InvalidItemsResult, self).get_report()]
 
-        if len(self.invalid_utterances) > 0:
-            lines.append('\nInvalid utterances:')
+        if len(self.invalid_items) > 0:
+            lines.append('\nInvalid {}:'.format(self.item_name))
 
-            sorted_items = sorted(self.invalid_utterances.items(), key=lambda x: x[0])
+            sorted_items = sorted(self.invalid_items.items(), key=lambda x: x[0])
             lines.extend(['    * {} ({})'.format(x, y) for x, y in sorted_items])
 
         return '\n'.join(lines)
