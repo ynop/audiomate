@@ -12,6 +12,9 @@ Next Version
 
 * Added :class:`audiomate.corpus.validation.TrackReadValidator` to check for corrupt audio tracks/files.
 
+* Added reader (:class:`audiomate.corpus.io.FluentSpeechReader`) for the
+  `Fluent Speech Commands Dataset <http://www.fluent.ai/research/fluent-speech-commands/>`_.
+
 v4.0.1
 ------
 

@@ -49,6 +49,7 @@ Implementations
   ESC-50                            x         x
   Free-Spoken-Digit-Dataset         x         x
   Folder                                      x
+  Fluent Speech Commands Dataset              x
   Google Speech Commands                      x
   GTZAN                             x         x
   Kaldi                                       x      x
@@ -116,6 +117,11 @@ Free-Spoken-Digit-Dataset
    :members:
 
 .. autoclass:: FreeSpokenDigitReader
+   :members:
+
+Fluent Speech Commands Dataset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: FluentSpeechReader
    :members:
 
 Google Speech Commands
