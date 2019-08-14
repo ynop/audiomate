@@ -27,6 +27,7 @@ from .common_voice import CommonVoiceReader  # noqa: F401
 from .mailabs import MailabsDownloader, MailabsReader  # noqa: F401
 from .rouen import RouenDownloader, RouenReader  # noqa: F401
 from .audio_mnist import AudioMNISTDownloader, AudioMNISTReader  # noqa: F401
+from .fluent_speech import FluentSpeechReader  # noqa: F401
 
 __downloaders = {}
 for cls in CorpusDownloader.__subclasses__():

@@ -1,0 +1,3 @@
+,path,speakerId,transcription,action,object,location
+0,wavs/speakers/g/p.wav,g,lights,change,heat,bedroom
+1,wavs/speakers/g/m.wav,g,lamp,activate,music,none

@@ -1,0 +1,4 @@
+,path,speakerId,transcription,action,object,location
+0,wavs/speakers/e/i.wav,e,Change,change,none,kitchen
+1,wavs/speakers/f/o.wav,f,Resume,activate,music,kitchen
+2,wavs/speakers/f/k.wav,f,Turn off the lights,activate,lights,none

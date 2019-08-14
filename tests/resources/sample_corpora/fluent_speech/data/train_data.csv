@@ -1,0 +1,4 @@
+,path,speakerId,transcription,action,object,location
+0,wavs/speakers/a/x.wav,a,Change language,change language,none,none
+1,wavs/speakers/a/y.wav,a,Resume,activate,music,none
+2,wavs/speakers/b/z.wav,b,Turn the lights on,activate,lights,none
