@@ -14,7 +14,7 @@ def corpus():
 @pytest.fixture
 def splitter():
     corpus = resources.create_multi_label_corpus()
-    return splitting.Splitter(corpus)
+    return splitting.Splitter(corpus, random_seed=99)
 
 
 class TestSplitter:

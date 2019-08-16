@@ -70,9 +70,12 @@ target/
 # venv
 venv/
 .venv/
+.35venv/
 
 playground
 
 pages-clone/
 
 .benchmarks/
+
+test.ipynb

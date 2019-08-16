@@ -1,10 +1,10 @@
 import copy
 
 import librosa
-import audioread
 
 from . import track
 from audiomate.utils import audio
+from audiomate.utils import audioread
 
 
 class FileTrack(track.Track):
