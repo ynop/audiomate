@@ -1,9 +1,20 @@
 import random
+import os
 
 import audiomate
 from audiomate import issuers
 from audiomate import tracks
 from audiomate import annotations
+
+
+def get_resource_path(sub_path_components):
+    """ Get the absolute path of a file in the resources folder with its relative path components. """
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), *sub_path_components))
+
+
+def sample_corpus_path(name):
+    """ Return the path to a sample corpus path with its name. """
+    return get_resource_path(['sample_corpora', name])
 
 
 def generate_corpus(n_issuers,

@@ -15,6 +15,10 @@ Next Version
 * Added reader (:class:`audiomate.corpus.io.FluentSpeechReader`) for the
   `Fluent Speech Commands Dataset <http://www.fluent.ai/research/fluent-speech-commands/>`_.
 
+**Fixes**
+
+* Improved performance of Tuda-Reader (:class:`audiomate.corpus.io.TudaReader`).
+
 v4.0.1
 ------
 
