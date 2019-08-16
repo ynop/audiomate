@@ -194,7 +194,7 @@ class TudaReader(base.CorpusReader):
         if len(wav_paths) == 0:
             return []
 
-        with open(xml_path, 'r') as f:
+        with open(xml_path, 'r', encoding='utf-8') as f:
             text = f.read()
 
         transcription = TudaReader.extract_value(text, TRANSCRIPTION_PATTERN, 'transcription', xml_path)
