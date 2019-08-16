@@ -18,8 +18,6 @@ REQUIRED = [
     'librosa == 0.6.3',
     'h5py == 2.9.0',
     'networkx == 2.2',
-    'beautifulsoup4 == 4.7.1',
-    'lxml == 4.3.2',
     'requests == 2.21.0',
     'intervaltree == 3.0.2',
 ]

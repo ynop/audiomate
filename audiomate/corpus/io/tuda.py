@@ -1,8 +1,7 @@
 import collections
 import os
 import glob
-
-from bs4 import BeautifulSoup
+import re
 
 import audiomate
 from audiomate import annotations
@@ -10,7 +9,23 @@ from audiomate import issuers
 from audiomate.corpus.subset import subview
 from . import base
 
+SPEAKER_IDX_PATTERN = re.compile(r'<speaker_id>(.*?)</speaker_id>')
+GENDER_PATTERN = re.compile(r'<gender>(.*?)</gender>')
+TRANSCRIPTION_PATTERN = re.compile(r'<cleaned_sentence>(.*?)</cleaned_sentence>')
+RAW_TRANSCRIPTION_PATTERN = re.compile(r'<sentence>(.*?)</sentence>')
+AGE_PATTERN = re.compile(r'<ageclass>(.*?)</ageclass>')
+NATIVE_PATTERN = re.compile(r'<muttersprachler>(.*?)</muttersprachler>')
+
 SUBSETS = ['train', 'dev', 'test']
+
+WAV_FILE_SUFFIXES = [
+    'Kinect-Beam',
+    'Kinect-RAW',
+    'Realtek',
+    'Samson',
+    'Yamaha',
+    'Microsoft-Kinect-Raw'
+]
 
 # Wrong transcripts, empty or to short
 BAD_FILES = {
@@ -169,20 +184,25 @@ class TudaReader(base.CorpusReader):
         Load speaker, file, utterance, labels for the file with the given id.
         """
         xml_path = os.path.join(folder_path, '{}.xml'.format(idx))
-        wav_paths = glob.glob(os.path.join(folder_path, '{}_*.wav'.format(idx)))
+        wav_paths = []
+
+        for wav_suffix in WAV_FILE_SUFFIXES:
+            wav_path = os.path.join(folder_path, '{}_{}.wav'.format(idx, wav_suffix))
+            if os.path.isfile(wav_path):
+                wav_paths.append(wav_path)
 
         if len(wav_paths) == 0:
             return []
 
-        xml_file = open(xml_path, 'r', encoding='utf-8')
-        soup = BeautifulSoup(xml_file, 'lxml')
+        with open(xml_path, 'r') as f:
+            text = f.read()
 
-        transcription = soup.recording.cleaned_sentence.string
-        transcription_raw = soup.recording.sentence.string
-        gender = soup.recording.gender.string
-        is_native = soup.recording.muttersprachler.string
-        age_class = soup.recording.ageclass.string
-        speaker_idx = soup.recording.speaker_id.string
+        transcription = TudaReader.extract_value(text, TRANSCRIPTION_PATTERN, 'transcription', xml_path)
+        transcription_raw = TudaReader.extract_value(text, RAW_TRANSCRIPTION_PATTERN, 'raw_transcription', xml_path)
+        gender = TudaReader.extract_value(text, GENDER_PATTERN, 'gender', xml_path)
+        is_native = TudaReader.extract_value(text, NATIVE_PATTERN, 'native', xml_path)
+        age_class = TudaReader.extract_value(text, AGE_PATTERN, 'age', xml_path)
+        speaker_idx = TudaReader.extract_value(text, SPEAKER_IDX_PATTERN, 'speaker_idx', xml_path)
 
         if speaker_idx not in corpus.issuers.keys():
             start_age_class = int(age_class.split('-')[0])
@@ -225,3 +245,12 @@ class TudaReader(base.CorpusReader):
             utt_ids.append(wav_idx)
 
         return utt_ids
+
+    @staticmethod
+    def extract_value(text, pattern, value, path):
+        m = pattern.search(text)
+
+        if m:
+            return m.group(1)
+        else:
+            raise ValueError('Value {} not found in {}'.format(value, path))
