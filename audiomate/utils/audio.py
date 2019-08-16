@@ -1,5 +1,5 @@
 import librosa
-import audioread
+from audiomate.utils import audioread
 import numpy as np
 import scipy
 

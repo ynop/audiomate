@@ -19,6 +19,9 @@ Next Version
 
 * Improved performance of Tuda-Reader (:class:`audiomate.corpus.io.TudaReader`).
 
+* Added wrapper for the ```audioread.audio_open``` function (:mod:`audiomate.utils.audioread`) to cache available
+  backends. This speeds up audioopen operations a lot.
+
 v4.0.1
 ------
 
