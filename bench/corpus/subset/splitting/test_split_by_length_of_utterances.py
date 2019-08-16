@@ -19,15 +19,15 @@ def run(splitter):
 
 
 def test_split_by_length_of_utterances(benchmark):
-        corpus = resources.generate_corpus(
-            179,
-            (250, 500),
-            (1, 9),
-            (0, 6),
-            (1, 20),
-            random.Random(x=234)
-        )
+    corpus = resources.generate_corpus(
+        179,
+        (250, 500),
+        (1, 9),
+        (0, 6),
+        (1, 20),
+        random.Random(x=234)
+    )
 
-        splitter = subset.Splitter(corpus, random_seed=324)
+    splitter = subset.Splitter(corpus, random_seed=324)
 
-        benchmark(run, splitter)
+    benchmark(run, splitter)

@@ -70,8 +70,11 @@ class Splitter(object):
             issuer_utts_total_duration = {k: {'duration': int(v)} for k, v in issuer_utts_total_duration.items()}
 
             # Split with total utt duration per issuer as weight
-            issuer_splits = utils.get_identifiers_splitted_by_weights(issuer_utts_total_duration,
-                                                                      proportions=proportions)
+            issuer_splits = utils.get_identifiers_splitted_by_weights(
+                issuer_utts_total_duration,
+                proportions=proportions,
+                seed=self.rand.randint(10, 2000)
+            )
 
             # Collect utterances of all issuers per split
             splits = collections.defaultdict(list)
@@ -83,7 +86,11 @@ class Splitter(object):
             for utterance in self.corpus.utterances.values():
                 utterance_to_duration[utterance.idx] = {'length': int(utterance.duration * 100)}
 
-            splits = utils.get_identifiers_splitted_by_weights(utterance_to_duration, proportions=proportions)
+            splits = utils.get_identifiers_splitted_by_weights(
+                utterance_to_duration,
+                proportions=proportions,
+                seed=self.rand.randint(10, 2000)
+            )
 
         return self._subviews_from_utterance_splits(splits)
 
@@ -133,8 +140,11 @@ class Splitter(object):
             issuer_utt_count = {k: {'count': int(v)} for k, v in issuer_utt_count.items()}
 
             # Split with total utt duration per issuer as weight
-            issuer_splits = utils.get_identifiers_splitted_by_weights(issuer_utt_count,
-                                                                      proportions=proportions)
+            issuer_splits = utils.get_identifiers_splitted_by_weights(
+                issuer_utt_count,
+                proportions=proportions,
+                seed=self.rand.randint(10, 2000)
+            )
 
             # Collect utterances of all issuers per split
             splits = collections.defaultdict(list)
@@ -143,10 +153,12 @@ class Splitter(object):
                 for issuer_idx in issuer_ids:
                     splits[split_idx].extend(issuer_utts[issuer_idx])
         else:
-            utterance_idxs = sorted(list(self.corpus.utterances.keys()))
-            self.rand.shuffle(utterance_idxs)
-            splits = utils.split_identifiers(identifiers=utterance_idxs,
-                                             proportions=proportions)
+            utterance_idxs = list(self.corpus.utterances.keys())
+            splits = utils.split_identifiers(
+                identifiers=utterance_idxs,
+                proportions=proportions,
+                seed=self.rand.randint(100, 20000)
+            )
 
         return self._subviews_from_utterance_splits(splits)
 
@@ -173,7 +185,11 @@ class Splitter(object):
             else:
                 identifiers[utterance.idx] = utterance.label_count()
 
-        splits = utils.get_identifiers_splitted_by_weights(identifiers, proportions)
+        splits = utils.get_identifiers_splitted_by_weights(
+            identifiers,
+            proportions,
+            seed=self.rand.randint(10, 2000)
+        )
 
         return self._subviews_from_utterance_splits(splits)
 

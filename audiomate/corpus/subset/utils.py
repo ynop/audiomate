@@ -38,14 +38,17 @@ def absolute_proportions(proportions, count):
     return absolute_proportions
 
 
-def split_identifiers(identifiers=[], proportions={}):
+def split_identifiers(identifiers=[], proportions={}, seed=None):
     """
     Split the given identifiers by the given proportions.
+    This function is deterministic, given the same seed.
+    First the identifiers are sorted before shuffled using the given seed.
 
     Args:
         identifiers (list): List of identifiers (str).
         proportions (dict): A dictionary containing the proportions with the identifier from the
         input as key.
+        seed (int): Seed to use for random operations.
 
     Returns:
         dict: Dictionary containing a list of identifiers per part with the same key as the
@@ -60,19 +63,27 @@ def split_identifiers(identifiers=[], proportions={}):
         {'melvin' : ['a', 'c'], 'timmy' : ['b', 'd']}
     """
 
+    identifiers = sorted(identifiers)
+
+    # Shuffle to get random order
+    rand = random.Random()
+    rand.seed(a=seed)
+    rand.shuffle(identifiers)
+
     abs_proportions = absolute_proportions(proportions, len(identifiers))
 
     parts = {}
     start_index = 0
 
-    for idx, proportion in abs_proportions.items():
+    for idx in sorted(abs_proportions.keys()):
+        proportion = abs_proportions[idx]
         parts[idx] = identifiers[start_index:start_index + proportion]
         start_index += proportion
 
     return parts
 
 
-def get_identifiers_splitted_by_weights(identifiers={}, proportions={}):
+def get_identifiers_splitted_by_weights(identifiers={}, proportions={}, seed=None):
     """
     Divide the given identifiers based on the given proportions. But instead of randomly split
     the identifiers it is based on category weights. Every identifier has a weight for any
@@ -81,11 +92,14 @@ def get_identifiers_splitted_by_weights(identifiers={}, proportions={}):
     according to the given proportions. This is done by greedily insert the identifiers step by
     step in a part which has free space (weight). If there are no fitting parts anymore, the one
     with the least weight exceed is used.
+    This function is deterministic, given the same seed.
+    First the identifiers are sorted before shuffled using the given seed.
 
     Args:
         identifiers (dict): A dictionary containing the weights for each identifier (key). Per
                             item a dictionary of weights per category is given.
         proportions (dict): Dict of proportions, with a identifier as key.
+        seed (int): Seed to use for random operations.
 
     Returns:
         dict: Dictionary containing a list of identifiers per part with the same key as the proportions dict.
@@ -112,6 +126,13 @@ def get_identifiers_splitted_by_weights(identifiers={}, proportions={}):
         }
     """
 
+    identifier_keys = sorted(identifiers.keys())
+
+    # Shuffle to get random order
+    rand = random.Random()
+    rand.seed(a=seed)
+    rand.shuffle(identifier_keys)
+
     # Get total weight per category
     sum_per_category = collections.defaultdict(int)
 
@@ -133,7 +154,7 @@ def get_identifiers_splitted_by_weights(identifiers={}, proportions={}):
     current_weights_per_part = {idx: collections.defaultdict(int) for idx in part_ids}
     result = collections.defaultdict(list)
 
-    for identifier in sorted(identifiers.keys()):
+    for identifier in identifier_keys:
         cat_weights = identifiers[identifier]
 
         target_part = None
