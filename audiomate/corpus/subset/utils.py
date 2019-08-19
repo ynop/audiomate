@@ -149,9 +149,14 @@ def get_identifiers_splitted_by_weights(identifiers={}, proportions={}, seed=Non
         for idx, proportion in abs_proportions.items():
             target_weights_per_part[idx][category] = proportion
 
+    print(target_weights_per_part)
+
     # Distribute items greedily
     part_ids = sorted(list(proportions.keys()))
-    current_weights_per_part = {idx: collections.defaultdict(int) for idx in part_ids}
+    current_weights_per_part = {
+        idx: collections.defaultdict(int)
+        for idx in part_ids
+    }
     result = collections.defaultdict(list)
 
     for identifier in identifier_keys:
@@ -170,10 +175,10 @@ def get_identifiers_splitted_by_weights(identifiers={}, proportions={}, seed=Non
             for category, weight in cat_weights.items():
                 target_weight = target_weights_per_part[part_id][category]
                 current_weight = part_weights[category]
-                weight_diff = current_weight + weight - target_weight
+                weight_diff = target_weight - current_weight - weight
                 weight_over_target[part_id] += weight_diff
 
-                if weight_diff > 0:
+                if weight_diff < 0:
                     free_space = False
 
             # If weight doesn't exceed target, place identifier in part
@@ -184,7 +189,11 @@ def get_identifiers_splitted_by_weights(identifiers={}, proportions={}, seed=Non
 
         # If not found fitting part, select the part with the least overweight
         if target_part is None:
-            target_part = sorted(weight_over_target.items(), key=lambda x: x[1])[0][0]
+            target_part = sorted(
+                weight_over_target.items(),
+                key=lambda x: x[1],
+                reverse=True
+            )[0][0]
 
         result[target_part].append(identifier)
 
