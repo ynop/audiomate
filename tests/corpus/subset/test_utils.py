@@ -127,6 +127,37 @@ def test_get_identifiers_splitted_by_weights_randomly():
     assert res['dev'] == ['a', 'e']
 
 
+def test_get_identifiers_splitted_by_weights_assumes_zero_if_no_cat_weight():
+    identifiers = {
+        'a': {'mi': 6, 'ma': 2, 'mu': 1},
+        'b': {'mi': 4, 'ma': 5, 'mu': 4},
+        'c': {'ma': 4, 'mu': 3},
+        'd': {'mi': 1, 'ma': 3},
+        'e': {'mi': 4, 'ma': 1, 'mu': 5},
+        'f': {'mi': 5, 'ma': 4, 'mu': 3},
+        'g': {'mi': 3, 'ma': 4, 'mu': 5}
+    }
+
+    proportions = {
+        'train': 0.5,
+        'test': 0.25,
+        'dev': 0.25
+    }
+
+    res = utils.get_identifiers_splitted_by_weights(
+        identifiers=identifiers,
+        proportions=proportions,
+        seed=220
+    )
+
+    assert len(res['train']) == 3
+    assert res['train'] == ['g', 'b', 'f']
+    assert len(res['test']) == 2
+    assert res['test'] == ['e', 'd']
+    assert len(res['dev']) == 2
+    assert res['dev'] == ['a', 'c']
+
+
 def test_select_balanced_subset():
     categories = ['a', 'b', 'c']
     items = {

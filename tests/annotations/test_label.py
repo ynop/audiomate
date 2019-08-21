@@ -168,6 +168,11 @@ class TestLabel:
 
         assert label.duration == 3
 
+    def test_length(self):
+        label = annotations.Label('abcd', 2, 3)
+
+        assert label.length == 4
+
     def test_tokenized(self):
         label = annotations.Label('wo wie was warum  weshalb')
 

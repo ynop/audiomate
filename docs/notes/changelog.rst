@@ -8,6 +8,8 @@ Next Version
 
 * Changed :class:`audiomate.corpus.validation.InvalidItemsResult` to use it not only for Utterances, but also for Tracks for example.
 
+* Refactoring and addition of splitting functions in the :class:`audiomate.corpus.subset.Splitter`.
+
 **New Features**
 
 * Added :class:`audiomate.corpus.validation.TrackReadValidator` to check for corrupt audio tracks/files.
