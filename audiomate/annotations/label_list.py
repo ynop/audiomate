@@ -83,6 +83,13 @@ class LabelList(object):
         """ Return end of the lastly ending label (upper bound). """
         return self.label_tree.end()
 
+    @property
+    def total_length(self):
+        """
+        Return the cumulative length of all labels. (Number of characters)
+        """
+        return sum([label.length for label in self.labels])
+
     #
     #   Alteration
     #

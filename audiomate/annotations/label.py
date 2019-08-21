@@ -93,6 +93,13 @@ class Label(object):
         """
         return self.end_abs - self.start_abs
 
+    @property
+    def length(self):
+        """
+        Return the length of the label (Number of characters).
+        """
+        return len(self.value)
+
     def read_samples(self, sr=None):
         """
         Read the samples of the utterance.

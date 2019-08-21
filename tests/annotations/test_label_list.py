@@ -107,6 +107,17 @@ class TestLabelList:
 
         assert ll.end == float('inf')
 
+    def test_total_length(self):
+        ll = LabelList(labels=[
+            Label('abc', 3.2, 4.5),
+            Label('bg', 5.1, 8.9),
+            Label('caaf', 7.2, 10.5),
+            Label('yxva', 10.5, 14),
+            Label('cy', 13, 14)
+        ])
+
+        assert ll.total_length == 15
+
     def test_add(self):
         ll = LabelList()
 
