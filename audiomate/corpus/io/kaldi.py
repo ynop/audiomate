@@ -201,7 +201,7 @@ class KaldiWriter(base.CorpusWriter):
         for u in utterances:
             track_idx = u.track.idx
             start = u.start
-            end = u.end_abs
+            end = u.end
 
             if end == float('inf'):
                 end = -1

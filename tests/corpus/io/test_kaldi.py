@@ -127,13 +127,13 @@ class TestKaldiWriter:
 
         assert content[0][0] == 'utt-1'
         assert content[0][1] == 'wav-1'
-        assert float(content[0][2]) == pytest.approx(0)
-        assert float(content[0][3]) == pytest.approx(2.5951875)
+        assert float(content[0][2]) == 0
+        assert float(content[0][3]) == -1
 
         assert content[1][0] == 'utt-2'
         assert content[1][1] == 'wav_2'
-        assert float(content[1][2]) == pytest.approx(0)
-        assert float(content[1][3]) == pytest.approx(2.5951875)
+        assert float(content[1][2]) == 0
+        assert float(content[1][3]) == -1
 
         assert content[2][0] == 'utt-3'
         assert content[2][1] == 'wav_3'
@@ -147,8 +147,8 @@ class TestKaldiWriter:
 
         assert content[4][0] == 'utt-5'
         assert content[4][1] == 'wav_4'
-        assert float(content[4][2]) == pytest.approx(0)
-        assert float(content[4][3]) == pytest.approx(2.5951875)
+        assert float(content[4][2]) == 0
+        assert float(content[4][3]) == -1
 
     def test_exports_wavs_from_container_tracks(self, writer, tmpdir):
         path = tmpdir.strpath
