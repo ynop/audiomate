@@ -92,7 +92,11 @@ class TestKaldiWriter:
         assert 'wav.scp' in os.listdir(path)
 
     def test_write_wav_scp(self, writer, tmpdir):
+        wav_base = resources.get_resource_path(['wav_files'])
+        wav_base = os.path.abspath(wav_base)
+
         ds = resources.create_dataset()
+        ds.tracks['wav-1'].path = os.path.join(wav_base, 'wav_1.mp3')
         path = tmpdir.strpath
         writer.save(ds, path)
 
@@ -102,11 +106,8 @@ class TestKaldiWriter:
             max_columns=2
         )
 
-        wav_base = resources.get_resource_path(['wav_files'])
-        wav_base = os.path.abspath(wav_base)
-
         assert content[0][0] == 'wav-1'
-        assert content[0][1] == os.path.join(wav_base, 'wav_1.wav')
+        assert content[0][1] == 'sox {} -t wav - |'.format(os.path.join(wav_base, 'wav_1.mp3'))
         assert content[1][0] == 'wav_2'
         assert content[1][1] == os.path.join(wav_base, 'wav_2.wav')
         assert content[2][0] == 'wav_3'
@@ -127,13 +128,13 @@ class TestKaldiWriter:
 
         assert content[0][0] == 'utt-1'
         assert content[0][1] == 'wav-1'
-        assert float(content[0][2]) == pytest.approx(0)
-        assert float(content[0][3]) == pytest.approx(2.5951875)
+        assert float(content[0][2]) == 0
+        assert float(content[0][3]) == -1
 
         assert content[1][0] == 'utt-2'
         assert content[1][1] == 'wav_2'
-        assert float(content[1][2]) == pytest.approx(0)
-        assert float(content[1][3]) == pytest.approx(2.5951875)
+        assert float(content[1][2]) == 0
+        assert float(content[1][3]) == -1
 
         assert content[2][0] == 'utt-3'
         assert content[2][1] == 'wav_3'
@@ -147,8 +148,8 @@ class TestKaldiWriter:
 
         assert content[4][0] == 'utt-5'
         assert content[4][1] == 'wav_4'
-        assert float(content[4][2]) == pytest.approx(0)
-        assert float(content[4][3]) == pytest.approx(2.5951875)
+        assert float(content[4][2]) == 0
+        assert float(content[4][3]) == -1
 
     def test_exports_wavs_from_container_tracks(self, writer, tmpdir):
         path = tmpdir.strpath

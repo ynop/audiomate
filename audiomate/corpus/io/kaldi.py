@@ -169,7 +169,7 @@ class KaldiWriter(base.CorpusWriter):
             if isinstance(track, tracks.FileTrack):
                 file_records.append([
                     track.idx,
-                    os.path.abspath(track.path)
+                    KaldiWriter.extended_filename(track)
                 ])
 
             elif isinstance(track, tracks.ContainerTrack):
@@ -194,6 +194,21 @@ class KaldiWriter(base.CorpusWriter):
         textfile.write_separated_lines(file_path, file_records, separator=' ', sort_by_column=0)
 
     @staticmethod
+    def extended_filename(file_track):
+        """
+        Create extended filename.
+        Kaldi only supports wav.
+        Therefore other files have to be converted using sox.
+        """
+        ext = os.path.splitext(file_track.path)[1]
+        abs_path = os.path.abspath(file_track.path)
+
+        if ext == '.wav':
+            return abs_path
+        else:
+            return 'sox {} -t wav - |'.format(abs_path)
+
+    @staticmethod
     def write_segments(utterance_path, corpus):
         utterances = corpus.utterances.values()
         utterance_records = {}
@@ -201,7 +216,7 @@ class KaldiWriter(base.CorpusWriter):
         for u in utterances:
             track_idx = u.track.idx
             start = u.start
-            end = u.end_abs
+            end = u.end
 
             if end == float('inf'):
                 end = -1
