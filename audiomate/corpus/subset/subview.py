@@ -71,8 +71,8 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
         self.inverse = inverse
 
     def match(self, utterance, corpus):
-        return (utterance.idx in self.utterance_idxs and not self.inverse) \
-            or (utterance.idx not in self.utterance_idxs and self.inverse)
+        return (not self.inverse and utterance.idx in self.utterance_idxs) \
+            or (self.inverse and utterance.idx not in self.utterance_idxs)
 
     def serialize(self):
         inverse_indication = 'exclude' if self.inverse else 'include'
@@ -192,6 +192,9 @@ class Subview(base.CorpusView):
         else:
             self.filter_criteria = [filter_criteria]
 
+        self._cached_utterances = None
+        self._all_utterance_ids = None
+
     @property
     def name(self):
         return 'subview of {}'.format(self.corpus.name)
@@ -202,9 +205,16 @@ class Subview(base.CorpusView):
 
     @property
     def utterances(self):
-        filtered_utterances = {}
+        # Check if filtered utterances are cached
+        # and return them if utterances in parent corpus haven't changed
+        if self._cached_utterances is not None:
+            if not set(self.corpus.utterances.keys()).isdisjoint(self._all_utterance_ids):
+                return self._cached_utterances
 
-        for utt_idx, utterance in self.corpus.utterances.items():
+        filtered_utterances = {}
+        idx_utterances = self.corpus.utterances.items()
+
+        for utt_idx, utterance in idx_utterances:
             matches = True
 
             for criterion in self.filter_criteria:
@@ -213,6 +223,10 @@ class Subview(base.CorpusView):
 
             if matches:
                 filtered_utterances[utt_idx] = utterance
+
+        # Cache filtered utterances
+        self._cached_utterances = filtered_utterances
+        self._all_utterance_ids = {u[0] for u in idx_utterances}
 
         return filtered_utterances
 
