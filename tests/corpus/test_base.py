@@ -2,6 +2,8 @@ import pytest
 
 import audiomate
 from audiomate import annotations
+from audiomate import tracks
+from audiomate import issuers
 
 from tests import resources
 
@@ -12,6 +14,24 @@ def ds():
 
 
 class TestCorpusView:
+
+    def test_contains_track_returns_true(self, ds):
+        res = ds.contains_track(ds.tracks['wav-1'])
+        assert res
+
+    def test_contains_track_returns_false(self, ds):
+        track = tracks.FileTrack('wav-1', '/some/other/path/here')
+        res = ds.contains_track(track)
+        assert not res
+
+    def test_contains_issuer_returns_true(self, ds):
+        res = ds.contains_issuer(ds.issuers['spk-1'])
+        assert res
+
+    def test_contains_issuer_returns_false(self, ds):
+        issuer = issuers.Issuer('spk-1')
+        res = ds.contains_issuer(issuer)
+        assert not res
 
     def test_all_label_values(self, ds):
         assert ds.all_label_values() == {'music', 'speech'}

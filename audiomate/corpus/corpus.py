@@ -268,11 +268,11 @@ class Corpus(base.CorpusView):
             idx_mapping[utterance.idx] = utterance
 
             # Check if there is a track with the given idx
-            if utterance.track not in self._tracks.values():
+            if not self.contains_track(utterance.track):
                 raise ValueError('Track with id {} is not in the corpus.'.format(utterance.track.idx, utterance.idx))
 
             # Check if there is a issuer with the given idx
-            if utterance.issuer is not None and utterance.issuer not in self._issuers.values():
+            if utterance.issuer is not None and not self.contains_issuer(utterance.issuer):
                 raise ValueError('No issuer in corpus with id {} to add utterance {}.'.format(
                     utterance.issuer.idx, utterance.idx))
 
