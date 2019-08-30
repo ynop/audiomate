@@ -117,8 +117,13 @@ class LabelList(object):
         Args:
             labels (list): Labels to add.
         """
+        ivs = []
+
         for label in labels:
-            self.add(label)
+            label.label_list = self
+            ivs.append(intervaltree.Interval(label.start, label.end, label))
+
+        self.label_tree.update(ivs)
 
     def apply(self, fn):
         """

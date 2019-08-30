@@ -29,9 +29,11 @@ class Label(object):
         self.label_list = None
 
     def __eq__(self, other):
-        data_this = (self.start, self.end, self.value.lower())
-        data_other = (other.start, other.end, other.value.lower())
-        return data_this == data_other
+        return (
+            self.start == other.start and
+            self.end == other.end and
+            self.value.lower() == other.value.lower()
+        )
 
     def __lt__(self, other):
         data_this = (self.start, self.end, self.value.lower())
