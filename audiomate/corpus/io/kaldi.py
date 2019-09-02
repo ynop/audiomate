@@ -129,6 +129,12 @@ class KaldiWriter(base.CorpusWriter):
     """
     Supports writing data sets in Kaldi format.
 
+    Args:
+        main_label_list_idx (str): The idx of the label-list to use for writing to transcriptions file.
+        main_feature_idx (str): The idx of the feature-container to export.
+        use_utt_idx_if_no_speaker_available (bool): If ``True``, the utterance-idx is used as speaker-idx
+                                                    in the utt2spk file, if no speaker exists for an utterance.
+
     .. seealso::
 
        `Kaldi: Data preparation <http://kaldi-asr.org/doc/data_prep.html>`_
@@ -136,9 +142,11 @@ class KaldiWriter(base.CorpusWriter):
           understood by Kaldi and the format of the individual files.
     """
 
-    def __init__(self, main_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT, main_feature_idx='default'):
+    def __init__(self, main_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT, main_feature_idx='default',
+                 use_utt_idx_if_no_speaker_available=True):
         self.main_label_list_idx = main_label_list_idx
         self.main_feature_idx = main_feature_idx
+        self.use_utt_idx_if_no_speaker_available = use_utt_idx_if_no_speaker_available
 
     @classmethod
     def type(cls):
@@ -153,8 +161,8 @@ class KaldiWriter(base.CorpusWriter):
 
         KaldiWriter.write_tracks(wav_file_path, corpus, path)
         KaldiWriter.write_segments(segments_path, corpus)
-        default.DefaultWriter.write_utt_to_issuer_mapping(utt2spk_path, corpus)
 
+        self._write_utt_to_issuer_mapping(utt2spk_path, corpus)
         self._write_genders(spk2gender_path, corpus)
         self._write_transcriptions(text_path, corpus)
         self._write_features(path, corpus)
@@ -252,6 +260,17 @@ class KaldiWriter(base.CorpusWriter):
                 transcriptions[utterance.idx] = ' '.join([l.value for l in label_list])
 
         textfile.write_separated_lines(text_path, transcriptions, separator=' ', sort_by_column=0)
+
+    def _write_utt_to_issuer_mapping(self, utt_issuer_path, corpus):
+        utt_issuer_records = {}
+
+        for utterance in corpus.utterances.values():
+            if utterance.issuer is not None:
+                utt_issuer_records[utterance.idx] = utterance.issuer.idx
+            elif self.use_utt_idx_if_no_speaker_available:
+                utt_issuer_records[utterance.idx] = utterance.idx
+
+        textfile.write_separated_lines(utt_issuer_path, utt_issuer_records, separator=' ', sort_by_column=0)
 
     def _write_features(self, path, corpus):
         if self.main_feature_idx in corpus.feature_containers.keys():

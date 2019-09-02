@@ -151,6 +151,43 @@ class TestKaldiWriter:
         assert float(content[4][2]) == 0
         assert float(content[4][3]) == -1
 
+    def test_write_utt2spk(self, writer, tmpdir):
+        ds = resources.create_dataset()
+
+        # Add utt without issuer
+        # so in utt2spk it ends up with "utt-idx utt-idx"
+        ds.new_file('/random/path', 'wav-33')
+        ds.new_utterance('utt-23', 'wav-33')
+
+        print(ds.num_utterances)
+
+        path = tmpdir.strpath
+        writer.save(ds, path)
+
+        content = textfile.read_separated_lines(
+            os.path.join(path, 'utt2spk'),
+            separator=' ',
+            max_columns=2
+        )
+
+        assert content[0][0] == 'utt-1'
+        assert content[0][1] == 'spk-1'
+
+        assert content[1][0] == 'utt-2'
+        assert content[1][1] == 'spk-1'
+
+        assert content[2][0] == 'utt-23'
+        assert content[2][1] == 'utt-23'
+
+        assert content[3][0] == 'utt-3'
+        assert content[3][1] == 'spk-2'
+
+        assert content[4][0] == 'utt-4'
+        assert content[4][1] == 'spk-2'
+
+        assert content[5][0] == 'utt-5'
+        assert content[5][1] == 'spk-3'
+
     def test_exports_wavs_from_container_tracks(self, writer, tmpdir):
         path = tmpdir.strpath
         container_ds_path = os.path.join(path, 'container_ds')
