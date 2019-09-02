@@ -67,7 +67,7 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
     """
 
     def __init__(self, utterance_idxs=set(), inverse=False):
-        self.utterance_idxs = utterance_idxs
+        self.utterance_idxs = set(utterance_idxs)
         self.inverse = inverse
 
     def match(self, utterance, corpus):

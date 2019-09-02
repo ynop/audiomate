@@ -44,6 +44,19 @@ class CorpusView(metaclass=abc.ABCMeta):
         """ Return number of tracks. """
         return len(self.tracks)
 
+    def contains_track(self, track):
+        """
+        Return ``True`` if the given track is in the corpus already,
+        ``False`` otherwise.
+        """
+        if track.idx not in self.tracks.keys():
+            return False
+
+        if track != self.tracks[track.idx]:
+            return False
+
+        return True
+
     #
     #   Utterances
     #
@@ -86,9 +99,22 @@ class CorpusView(metaclass=abc.ABCMeta):
         """ Return the number of issuers in the corpus. """
         return len(self.issuers)
 
-    #
-    #   Feature Container
-    #
+    def contains_issuer(self, issuer):
+        """
+        Return ``True`` if the given issuer is in the corpus already,
+        ``False`` otherwise.
+        """
+        if issuer.idx not in self.issuers.keys():
+            return False
+
+        if issuer != self.issuers[issuer.idx]:
+            return False
+
+        return True
+
+        #
+        #   Feature Container
+        #
 
     @property
     @abc.abstractmethod
