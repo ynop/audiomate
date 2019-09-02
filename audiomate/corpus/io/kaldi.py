@@ -134,6 +134,10 @@ class KaldiWriter(base.CorpusWriter):
         main_feature_idx (str): The idx of the feature-container to export.
         use_utt_idx_if_no_speaker_available (bool): If ``True``, the utterance-idx is used as speaker-idx
                                                     in the utt2spk file, if no speaker exists for an utterance.
+        create_spk2gender (bool): If ``True`` creates the file spk2gender.
+        default_gender (str): If ``create_spk2gender==True`` and the gender of an issuer is not known,
+                              this default value will be used (default 'm').
+        prefix_utterances_with_speaker (bool): If ``True``, add a prefix in form of the issuer-idx to every utterance.
 
     .. seealso::
 
@@ -143,10 +147,14 @@ class KaldiWriter(base.CorpusWriter):
     """
 
     def __init__(self, main_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT, main_feature_idx='default',
-                 use_utt_idx_if_no_speaker_available=True):
+                 use_utt_idx_if_no_speaker_available=True, create_spk2gender=False,
+                 default_gender='m', prefix_utterances_with_speaker=True):
         self.main_label_list_idx = main_label_list_idx
         self.main_feature_idx = main_feature_idx
         self.use_utt_idx_if_no_speaker_available = use_utt_idx_if_no_speaker_available
+        self.create_spk2gender = create_spk2gender
+        self.default_gender = default_gender
+        self.prefix_utterances_with_speaker = prefix_utterances_with_speaker
 
     @classmethod
     def type(cls):
@@ -160,12 +168,13 @@ class KaldiWriter(base.CorpusWriter):
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
 
         KaldiWriter.write_tracks(wav_file_path, corpus, path)
-        KaldiWriter.write_segments(segments_path, corpus)
-
+        self._write_segments(segments_path, corpus)
         self._write_utt_to_issuer_mapping(utt2spk_path, corpus)
-        self._write_genders(spk2gender_path, corpus)
         self._write_transcriptions(text_path, corpus)
         self._write_features(path, corpus)
+
+        if self.create_spk2gender:
+            self._write_genders(spk2gender_path, corpus)
 
     @staticmethod
     def write_tracks(file_path, corpus, path):
@@ -216,12 +225,12 @@ class KaldiWriter(base.CorpusWriter):
         else:
             return 'sox {} -t wav - |'.format(abs_path)
 
-    @staticmethod
-    def write_segments(utterance_path, corpus):
+    def _write_segments(self, utterance_path, corpus):
         utterances = corpus.utterances.values()
         utterance_records = {}
 
         for u in utterances:
+            utt_idx = self._get_utt_idx(u)
             track_idx = u.track.idx
             start = u.start
             end = u.end
@@ -229,7 +238,7 @@ class KaldiWriter(base.CorpusWriter):
             if end == float('inf'):
                 end = -1
 
-            utterance_records[u.idx] = [track_idx, start, end]
+            utterance_records[utt_idx] = [track_idx, start, end]
 
         textfile.write_separated_lines(
             utterance_path,
@@ -242,11 +251,15 @@ class KaldiWriter(base.CorpusWriter):
         genders = {}
 
         for issuer in corpus.issuers.values():
+            gender = self.default_gender
+
             if type(issuer) == issuers.Speaker:
                 if issuer.gender == issuers.Gender.MALE:
-                    genders[issuer.idx] = 'm'
+                    gender = 'm'
                 elif issuer.gender == issuers.Gender.FEMALE:
-                    genders[issuer.idx] = 'f'
+                    gender = 'f'
+
+            genders[issuer.idx] = gender
 
         if len(genders) > 0:
             textfile.write_separated_lines(gender_path, genders, separator=' ', sort_by_column=0)
@@ -255,9 +268,11 @@ class KaldiWriter(base.CorpusWriter):
         transcriptions = {}
 
         for utterance in corpus.utterances.values():
+            utt_idx = self._get_utt_idx(utterance)
+
             if self.main_label_list_idx in utterance.label_lists.keys():
                 label_list = utterance.label_lists[self.main_label_list_idx]
-                transcriptions[utterance.idx] = ' '.join([l.value for l in label_list])
+                transcriptions[utt_idx] = ' '.join([l.value for l in label_list])
 
         textfile.write_separated_lines(text_path, transcriptions, separator=' ', sort_by_column=0)
 
@@ -265,10 +280,11 @@ class KaldiWriter(base.CorpusWriter):
         utt_issuer_records = {}
 
         for utterance in corpus.utterances.values():
+            utt_idx = self._get_utt_idx(utterance)
             if utterance.issuer is not None:
-                utt_issuer_records[utterance.idx] = utterance.issuer.idx
+                utt_issuer_records[utt_idx] = utterance.issuer.idx
             elif self.use_utt_idx_if_no_speaker_available:
-                utt_issuer_records[utterance.idx] = utterance.idx
+                utt_issuer_records[utt_idx] = utt_idx
 
         textfile.write_separated_lines(utt_issuer_path, utt_issuer_records, separator=' ', sort_by_column=0)
 
@@ -335,6 +351,14 @@ class KaldiWriter(base.CorpusWriter):
             feature_matrix = np.reshape(feature_vector, (num_frames, feature_size))
 
             return feature_matrix
+
+    def _get_utt_idx(self, utt):
+        if (self.prefix_utterances_with_speaker and
+                utt.issuer is not None and
+                not utt.idx.startswith(utt.issuer.idx)):
+            return '{}-{}'.format(utt.issuer.idx, utt.idx)
+        else:
+            return utt.idx
 
     @staticmethod
     def write_float_matrices(scp_path, ark_path, matrices):

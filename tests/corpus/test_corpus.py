@@ -363,10 +363,9 @@ class TestCorpus:
         assert corpus.path == tmpdir.strpath
 
         tempdir_contents = os.listdir(tmpdir.strpath)
-        assert len(tempdir_contents) == 5
+        assert len(tempdir_contents) == 4
 
         assert 'segments' in tempdir_contents
-        assert 'spk2gender' in tempdir_contents
         assert 'text' in tempdir_contents
         assert 'utt2spk' in tempdir_contents
         assert 'wav.scp' in tempdir_contents
@@ -389,10 +388,9 @@ class TestCorpus:
         assert corpus.path == tmpdir.strpath
 
         tempdir_contents = os.listdir(tmpdir.strpath)
-        assert len(tempdir_contents) == 5
+        assert len(tempdir_contents) == 4
 
         assert 'segments' in tempdir_contents
-        assert 'spk2gender' in tempdir_contents
         assert 'text' in tempdir_contents
         assert 'utt2spk' in tempdir_contents
         assert 'wav.scp' in tempdir_contents
@@ -453,10 +451,9 @@ class TestCorpus:
         assert corpus.path == tmpdir.strpath
 
         tempdir_contents = os.listdir(tmpdir.strpath)
-        assert len(tempdir_contents) == 5
+        assert len(tempdir_contents) == 4
 
         assert 'segments' in tempdir_contents
-        assert 'spk2gender' in tempdir_contents
         assert 'text' in tempdir_contents
         assert 'utt2spk' in tempdir_contents
         assert 'wav.scp' in tempdir_contents
@@ -478,10 +475,9 @@ class TestCorpus:
         assert corpus.path == tmpdir.strpath
 
         tempdir_contents = os.listdir(tmpdir.strpath)
-        assert len(tempdir_contents) == 5
+        assert len(tempdir_contents) == 4
 
         assert 'segments' in tempdir_contents
-        assert 'spk2gender' in tempdir_contents
         assert 'text' in tempdir_contents
         assert 'utt2spk' in tempdir_contents
         assert 'wav.scp' in tempdir_contents
