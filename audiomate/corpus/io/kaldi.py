@@ -138,6 +138,8 @@ class KaldiWriter(base.CorpusWriter):
         default_gender (str): If ``create_spk2gender==True`` and the gender of an issuer is not known,
                               this default value will be used (default 'm').
         prefix_utterances_with_speaker (bool): If ``True``, add a prefix in form of the issuer-idx to every utterance.
+        use_absolute_times (bool): If ``True``, doesn't use -1 for segment ends, but reads the audio to get absolute
+                                   duration.
 
     .. seealso::
 
@@ -148,13 +150,15 @@ class KaldiWriter(base.CorpusWriter):
 
     def __init__(self, main_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT, main_feature_idx='default',
                  use_utt_idx_if_no_speaker_available=True, create_spk2gender=False,
-                 default_gender='m', prefix_utterances_with_speaker=True):
+                 default_gender='m', prefix_utterances_with_speaker=True,
+                 use_absolute_times=False):
         self.main_label_list_idx = main_label_list_idx
         self.main_feature_idx = main_feature_idx
         self.use_utt_idx_if_no_speaker_available = use_utt_idx_if_no_speaker_available
         self.create_spk2gender = create_spk2gender
         self.default_gender = default_gender
         self.prefix_utterances_with_speaker = prefix_utterances_with_speaker
+        self.use_absolute_times = use_absolute_times
 
     @classmethod
     def type(cls):
@@ -236,7 +240,10 @@ class KaldiWriter(base.CorpusWriter):
             end = u.end
 
             if end == float('inf'):
-                end = -1
+                if self.use_absolute_times:
+                    end = u.end_abs
+                else:
+                    end = -1
 
             utterance_records[utt_idx] = [track_idx, start, end]
 

@@ -196,6 +196,43 @@ class TestKaldiWriter:
         assert float(content[4][2]) == 0
         assert float(content[4][3]) == -1
 
+    def test_write_segments_absolute_times(self, writer, tmpdir):
+        writer = io.KaldiWriter(use_absolute_times=True)
+        ds = resources.create_dataset()
+        path = tmpdir.strpath
+        writer.save(ds, path)
+
+        content = textfile.read_separated_lines(
+            os.path.join(path, 'segments'),
+            separator=' ',
+            max_columns=4
+        )
+
+        assert content[0][0] == 'spk-1-utt-1'
+        assert content[0][1] == 'wav-1'
+        assert float(content[0][2]) == 0
+        assert float(content[0][3]) == pytest.approx(2.5951875)
+
+        assert content[1][0] == 'spk-1-utt-2'
+        assert content[1][1] == 'wav_2'
+        assert float(content[1][2]) == 0
+        assert float(content[1][3]) == pytest.approx(2.5951875)
+
+        assert content[2][0] == 'spk-2-utt-3'
+        assert content[2][1] == 'wav_3'
+        assert float(content[2][2]) == pytest.approx(0)
+        assert float(content[2][3]) == pytest.approx(1.5)
+
+        assert content[3][0] == 'spk-2-utt-4'
+        assert content[3][1] == 'wav_3'
+        assert float(content[3][2]) == pytest.approx(1.5)
+        assert float(content[3][3]) == pytest.approx(2.5)
+
+        assert content[4][0] == 'spk-3-utt-5'
+        assert content[4][1] == 'wav_4'
+        assert float(content[4][2]) == 0
+        assert float(content[4][3]) == pytest.approx(2.5951875)
+
     def test_write_segments_no_speaker_prefix(self, tmpdir):
         writer = io.KaldiWriter(prefix_utterances_with_speaker=False)
         ds = resources.create_dataset()
