@@ -27,11 +27,12 @@ class KaldiReader(base.CorpusReader):
     .. seealso::
 
        `Kaldi: Data preparation <http://kaldi-asr.org/doc/data_prep.html>`_
-          Describes how a data set has to be structured to be understood by Kaldi and the format of the individual
-          files.
+          Describes how a data set has to be structured to be understood
+          by Kaldi and the format of the individual files.
     """
 
-    def __init__(self, main_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT, main_feature_idx='default'):
+    def __init__(self, main_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT,
+                 main_feature_idx='default'):
         self.main_label_list_idx = main_label_list_idx
         self.main_feature_idx = main_feature_idx
 
@@ -86,8 +87,12 @@ class KaldiReader(base.CorpusReader):
     def read_utterances(segments_path, corpus, utt2spk):
         # load utterances
         if os.path.isfile(segments_path):
-            utterances = textfile.read_separated_lines_with_first_key(segments_path, separator=' ',
-                                                                      max_columns=4)
+            utterances = textfile.read_separated_lines_with_first_key(
+                segments_path,
+                separator=' ',
+                max_columns=4
+            )
+
             for utt_id, utt_info in utterances.items():
                 start = 0
                 end = float('inf')
@@ -106,8 +111,12 @@ class KaldiReader(base.CorpusReader):
                 if utt_id in utt2spk.keys():
                     speaker_idx = utt2spk[utt_id].idx
 
-                corpus.new_utterance(utt_id, utt_info[0], issuer_idx=speaker_idx, start=start,
-                                     end=end)
+                corpus.new_utterance(
+                    utt_id, utt_info[0],
+                    issuer_idx=speaker_idx,
+                    start=start,
+                    end=end
+                )
         else:
             for file_idx in corpus.files.keys():
                 speaker_idx = None
@@ -121,13 +130,35 @@ class KaldiReader(base.CorpusReader):
     def read_transcriptions(text_path, corpus):
         transcriptions = textfile.read_key_value_lines(text_path, separator=' ')
         for utt_id, transcription in transcriptions.items():
-            ll = annotations.LabelList.create_single(transcription, idx=audiomate.corpus.LL_WORD_TRANSCRIPT)
+            ll = annotations.LabelList.create_single(
+                transcription,
+                idx=audiomate.corpus.LL_WORD_TRANSCRIPT
+            )
             corpus.utterances[utt_id].set_label_list(ll)
 
 
 class KaldiWriter(base.CorpusWriter):
     """
     Supports writing data sets in Kaldi format.
+
+    Args:
+        main_label_list_idx (str): The idx of the label-list to use
+                                   for writing to transcriptions file.
+        main_feature_idx (str): The idx of the feature-container to export.
+        use_utt_idx_if_no_speaker_available (bool): If ``True``, the
+                                                    utterance-idx is used as
+                                                    speaker-idx in the utt2spk
+                                                    file, if no speaker exists
+                                                    for an utterance.
+        create_spk2gender (bool): If ``True`` creates the file spk2gender.
+        default_gender (str): If ``create_spk2gender==True`` and the gender of
+                              an issuer is not known,
+                              this default value will be used (default 'm').
+        prefix_utterances_with_speaker (bool): If ``True``, add a prefix in
+                                               form of the issuer-idx to
+                                               every utterance.
+        use_absolute_times (bool): If ``True``, doesn't use -1 for segment ends,
+                                   but reads the audio to get absolute duration.
 
     .. seealso::
 
@@ -136,9 +167,17 @@ class KaldiWriter(base.CorpusWriter):
           understood by Kaldi and the format of the individual files.
     """
 
-    def __init__(self, main_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT, main_feature_idx='default'):
+    def __init__(self, main_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT,
+                 main_feature_idx='default', use_utt_idx_if_no_speaker_available=True,
+                 create_spk2gender=False, default_gender='m',
+                 prefix_utterances_with_speaker=True, use_absolute_times=False):
         self.main_label_list_idx = main_label_list_idx
         self.main_feature_idx = main_feature_idx
+        self.use_utt_idx_if_no_speaker_available = use_utt_idx_if_no_speaker_available
+        self.create_spk2gender = create_spk2gender
+        self.default_gender = default_gender
+        self.prefix_utterances_with_speaker = prefix_utterances_with_speaker
+        self.use_absolute_times = use_absolute_times
 
     @classmethod
     def type(cls):
@@ -152,12 +191,13 @@ class KaldiWriter(base.CorpusWriter):
         text_path = os.path.join(path, TRANSCRIPTION_FILE_NAME)
 
         KaldiWriter.write_tracks(wav_file_path, corpus, path)
-        KaldiWriter.write_segments(segments_path, corpus)
-        default.DefaultWriter.write_utt_to_issuer_mapping(utt2spk_path, corpus)
-
-        self._write_genders(spk2gender_path, corpus)
+        self._write_segments(segments_path, corpus)
+        self._write_utt_to_issuer_mapping(utt2spk_path, corpus)
         self._write_transcriptions(text_path, corpus)
         self._write_features(path, corpus)
+
+        if self.create_spk2gender:
+            self._write_genders(spk2gender_path, corpus)
 
     @staticmethod
     def write_tracks(file_path, corpus, path):
@@ -191,7 +231,12 @@ class KaldiWriter(base.CorpusWriter):
                     target_path
                 ])
 
-        textfile.write_separated_lines(file_path, file_records, separator=' ', sort_by_column=0)
+        textfile.write_separated_lines(
+            file_path,
+            file_records,
+            separator=' ',
+            sort_by_column=0
+        )
 
     @staticmethod
     def extended_filename(file_track):
@@ -208,20 +253,23 @@ class KaldiWriter(base.CorpusWriter):
         else:
             return 'sox {} -t wav - |'.format(abs_path)
 
-    @staticmethod
-    def write_segments(utterance_path, corpus):
+    def _write_segments(self, utterance_path, corpus):
         utterances = corpus.utterances.values()
         utterance_records = {}
 
         for u in utterances:
+            utt_idx = self._get_utt_idx(u)
             track_idx = u.track.idx
             start = u.start
             end = u.end
 
             if end == float('inf'):
-                end = -1
+                if self.use_absolute_times:
+                    end = u.end_abs
+                else:
+                    end = -1
 
-            utterance_records[u.idx] = [track_idx, start, end]
+            utterance_records[utt_idx] = [track_idx, start, end]
 
         textfile.write_separated_lines(
             utterance_path,
@@ -234,24 +282,57 @@ class KaldiWriter(base.CorpusWriter):
         genders = {}
 
         for issuer in corpus.issuers.values():
+            gender = self.default_gender
+
             if type(issuer) == issuers.Speaker:
                 if issuer.gender == issuers.Gender.MALE:
-                    genders[issuer.idx] = 'm'
+                    gender = 'm'
                 elif issuer.gender == issuers.Gender.FEMALE:
-                    genders[issuer.idx] = 'f'
+                    gender = 'f'
+
+            genders[issuer.idx] = gender
 
         if len(genders) > 0:
-            textfile.write_separated_lines(gender_path, genders, separator=' ', sort_by_column=0)
+            textfile.write_separated_lines(
+                gender_path,
+                genders,
+                separator=' ',
+                sort_by_column=0
+            )
 
     def _write_transcriptions(self, text_path, corpus):
         transcriptions = {}
 
         for utterance in corpus.utterances.values():
+            utt_idx = self._get_utt_idx(utterance)
+
             if self.main_label_list_idx in utterance.label_lists.keys():
                 label_list = utterance.label_lists[self.main_label_list_idx]
-                transcriptions[utterance.idx] = ' '.join([l.value for l in label_list])
+                transcriptions[utt_idx] = ' '.join([l.value for l in label_list])
 
-        textfile.write_separated_lines(text_path, transcriptions, separator=' ', sort_by_column=0)
+        textfile.write_separated_lines(
+            text_path,
+            transcriptions,
+            separator=' ',
+            sort_by_column=0
+        )
+
+    def _write_utt_to_issuer_mapping(self, utt_issuer_path, corpus):
+        utt_issuer_records = {}
+
+        for utterance in corpus.utterances.values():
+            utt_idx = self._get_utt_idx(utterance)
+            if utterance.issuer is not None:
+                utt_issuer_records[utt_idx] = utterance.issuer.idx
+            elif self.use_utt_idx_if_no_speaker_available:
+                utt_issuer_records[utt_idx] = utt_idx
+
+        textfile.write_separated_lines(
+            utt_issuer_path,
+            utt_issuer_records,
+            separator=' ',
+            sort_by_column=0
+        )
 
     def _write_features(self, path, corpus):
         if self.main_feature_idx in corpus.feature_containers.keys():
@@ -267,7 +348,8 @@ class KaldiWriter(base.CorpusWriter):
 
             fc.close()
 
-            ark_path = os.path.abspath(os.path.join(path, '{}.ark'.format(FEATS_FILE_NAME)))
+            ark_path = os.path.join(path, '{}.ark'.format(FEATS_FILE_NAME))
+            ark_path = os.path.abspath(ark_path)
             scp_path = os.path.join(path, '{}.scp'.format(FEATS_FILE_NAME))
 
             self.write_float_matrices(scp_path, ark_path, matrices)
@@ -313,13 +395,27 @@ class KaldiWriter(base.CorpusWriter):
             data = f.read(num_frames * feature_size * sample_format)
 
             feature_vector = np.frombuffer(data, dtype='float32')
-            feature_matrix = np.reshape(feature_vector, (num_frames, feature_size))
+            feature_matrix = np.reshape(
+                feature_vector,
+                (num_frames, feature_size)
+            )
 
             return feature_matrix
 
+    def _get_utt_idx(self, utt):
+        if (self.prefix_utterances_with_speaker and
+                utt.issuer is not None and
+                not utt.idx.startswith(utt.issuer.idx)):
+            return '{}-{}'.format(utt.issuer.idx, utt.idx)
+        else:
+            return utt.idx
+
     @staticmethod
     def write_float_matrices(scp_path, ark_path, matrices):
-        """ Write the given dict matrices (utt-id/float ndarray) to the given scp and ark files. """
+        """
+        Write the given dict matrices (utt-id/float ndarray)
+        to the given scp and ark files.
+        """
 
         scp_entries = []
 
@@ -340,10 +436,16 @@ class KaldiWriter(base.CorpusWriter):
                 f.write(b'\x04')
                 f.write(struct.pack('<i', np.size(matrix, 1)))
 
-                flattened = matrix.reshape(np.size(matrix, 0) * np.size(matrix, 1))
+                flattened = matrix.reshape(
+                    np.size(matrix, 0) * np.size(matrix, 1)
+                )
                 flattened.tofile(f, sep='')
 
-                scp_entries.append('{} {}:{}'.format(utterance_id, ark_path, offset))
+                scp_entries.append('{} {}:{}'.format(
+                    utterance_id,
+                    ark_path,
+                    offset
+                ))
 
         with open(scp_path, 'w') as f:
             f.write('\n'.join(scp_entries))

@@ -88,8 +88,53 @@ class TestKaldiWriter:
         assert 'segments' in os.listdir(path)
         assert 'text' in os.listdir(path)
         assert 'utt2spk' in os.listdir(path)
-        assert 'spk2gender' in os.listdir(path)
         assert 'wav.scp' in os.listdir(path)
+
+    def test_save_spk2gender(self, writer, tmpdir):
+        writer = io.KaldiWriter(create_spk2gender=True)
+        ds = resources.create_dataset()
+        path = tmpdir.strpath
+        writer.save(ds, path)
+
+        assert 'spk2gender' in os.listdir(path)
+
+        content = textfile.read_separated_lines(
+            os.path.join(path, 'spk2gender'),
+            separator=' ',
+            max_columns=2
+        )
+
+        assert content[0][0] == 'spk-1'
+        assert content[0][1] == 'm'
+
+        assert content[1][0] == 'spk-2'
+        assert content[1][1] == 'f'
+
+        assert content[2][0] == 'spk-3'
+        assert content[2][1] == 'm'
+
+    def test_save_spk2gender_with_custom_default_gender(self, tmpdir):
+        writer = io.KaldiWriter(create_spk2gender=True, default_gender='ui')
+        ds = resources.create_dataset()
+        path = tmpdir.strpath
+        writer.save(ds, path)
+
+        assert 'spk2gender' in os.listdir(path)
+
+        content = textfile.read_separated_lines(
+            os.path.join(path, 'spk2gender'),
+            separator=' ',
+            max_columns=2
+        )
+
+        assert content[0][0] == 'spk-1'
+        assert content[0][1] == 'm'
+
+        assert content[1][0] == 'spk-2'
+        assert content[1][1] == 'f'
+
+        assert content[2][0] == 'spk-3'
+        assert content[2][1] == 'ui'
 
     def test_write_wav_scp(self, writer, tmpdir):
         wav_base = resources.get_resource_path(['wav_files'])
@@ -126,6 +171,80 @@ class TestKaldiWriter:
             max_columns=4
         )
 
+        assert content[0][0] == 'spk-1-utt-1'
+        assert content[0][1] == 'wav-1'
+        assert float(content[0][2]) == 0
+        assert float(content[0][3]) == -1
+
+        assert content[1][0] == 'spk-1-utt-2'
+        assert content[1][1] == 'wav_2'
+        assert float(content[1][2]) == 0
+        assert float(content[1][3]) == -1
+
+        assert content[2][0] == 'spk-2-utt-3'
+        assert content[2][1] == 'wav_3'
+        assert float(content[2][2]) == pytest.approx(0)
+        assert float(content[2][3]) == pytest.approx(1.5)
+
+        assert content[3][0] == 'spk-2-utt-4'
+        assert content[3][1] == 'wav_3'
+        assert float(content[3][2]) == pytest.approx(1.5)
+        assert float(content[3][3]) == pytest.approx(2.5)
+
+        assert content[4][0] == 'spk-3-utt-5'
+        assert content[4][1] == 'wav_4'
+        assert float(content[4][2]) == 0
+        assert float(content[4][3]) == -1
+
+    def test_write_segments_absolute_times(self, writer, tmpdir):
+        writer = io.KaldiWriter(use_absolute_times=True)
+        ds = resources.create_dataset()
+        path = tmpdir.strpath
+        writer.save(ds, path)
+
+        content = textfile.read_separated_lines(
+            os.path.join(path, 'segments'),
+            separator=' ',
+            max_columns=4
+        )
+
+        assert content[0][0] == 'spk-1-utt-1'
+        assert content[0][1] == 'wav-1'
+        assert float(content[0][2]) == 0
+        assert float(content[0][3]) == pytest.approx(2.5951875)
+
+        assert content[1][0] == 'spk-1-utt-2'
+        assert content[1][1] == 'wav_2'
+        assert float(content[1][2]) == 0
+        assert float(content[1][3]) == pytest.approx(2.5951875)
+
+        assert content[2][0] == 'spk-2-utt-3'
+        assert content[2][1] == 'wav_3'
+        assert float(content[2][2]) == pytest.approx(0)
+        assert float(content[2][3]) == pytest.approx(1.5)
+
+        assert content[3][0] == 'spk-2-utt-4'
+        assert content[3][1] == 'wav_3'
+        assert float(content[3][2]) == pytest.approx(1.5)
+        assert float(content[3][3]) == pytest.approx(2.5)
+
+        assert content[4][0] == 'spk-3-utt-5'
+        assert content[4][1] == 'wav_4'
+        assert float(content[4][2]) == 0
+        assert float(content[4][3]) == pytest.approx(2.5951875)
+
+    def test_write_segments_no_speaker_prefix(self, tmpdir):
+        writer = io.KaldiWriter(prefix_utterances_with_speaker=False)
+        ds = resources.create_dataset()
+        path = tmpdir.strpath
+        writer.save(ds, path)
+
+        content = textfile.read_separated_lines(
+            os.path.join(path, 'segments'),
+            separator=' ',
+            max_columns=4
+        )
+
         assert content[0][0] == 'utt-1'
         assert content[0][1] == 'wav-1'
         assert float(content[0][2]) == 0
@@ -150,6 +269,41 @@ class TestKaldiWriter:
         assert content[4][1] == 'wav_4'
         assert float(content[4][2]) == 0
         assert float(content[4][3]) == -1
+
+    def test_write_utt2spk(self, writer, tmpdir):
+        ds = resources.create_dataset()
+
+        # Add utt without issuer
+        # so in utt2spk it ends up with "utt-idx utt-idx"
+        ds.new_file('/random/path', 'wav-33')
+        ds.new_utterance('utt-23', 'wav-33')
+
+        path = tmpdir.strpath
+        writer.save(ds, path)
+
+        content = textfile.read_separated_lines(
+            os.path.join(path, 'utt2spk'),
+            separator=' ',
+            max_columns=2
+        )
+
+        assert content[0][0] == 'spk-1-utt-1'
+        assert content[0][1] == 'spk-1'
+
+        assert content[1][0] == 'spk-1-utt-2'
+        assert content[1][1] == 'spk-1'
+
+        assert content[2][0] == 'spk-2-utt-3'
+        assert content[2][1] == 'spk-2'
+
+        assert content[3][0] == 'spk-2-utt-4'
+        assert content[3][1] == 'spk-2'
+
+        assert content[4][0] == 'spk-3-utt-5'
+        assert content[4][1] == 'spk-3'
+
+        assert content[5][0] == 'utt-23'
+        assert content[5][1] == 'utt-23'
 
     def test_exports_wavs_from_container_tracks(self, writer, tmpdir):
         path = tmpdir.strpath

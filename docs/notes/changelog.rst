@@ -19,6 +19,8 @@ Next Version
 
 * Added functions to check for contained tracks and issuers (:meth:`audiomate.corpus.CorpusView.contains_track`, :meth:`audiomate.corpus.CorpusView.contains_issuer`).
 
+* Multiple options for controlling the behavior of the :class:`audiomate.corpus.io.KaldiWriter`.
+
 **Fixes**
 
 * Improved performance of Tuda-Reader (:class:`audiomate.corpus.io.TudaReader`).
