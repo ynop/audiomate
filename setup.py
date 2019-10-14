@@ -11,7 +11,6 @@ PYTEST_VERSION_ = '4.0.0'
 
 # Packages required in 'production'
 REQUIRED = [
-    'llvmlite == 0.29.0',
     'audioread == 2.1.8',
     'numpy == 1.16.2',
     'scipy == 1.2.1',
