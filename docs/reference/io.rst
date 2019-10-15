@@ -62,6 +62,7 @@ Implementations
   TUDA German Distant Speech                  x
   Urbansound8k                                x
   VoxForge                          x         x
+  Wav2Letter                                         x
   ================================  ========  =====  =======
 
 Acoustic Event Dataset
@@ -204,4 +205,9 @@ VoxForge
    :members:
 
 .. autoclass:: VoxforgeReader
+   :members:
+
+Wav2Letter
+^^^^^^^^^^
+.. autoclass:: Wav2LetterWriter
    :members:
