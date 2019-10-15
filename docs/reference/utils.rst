@@ -7,6 +7,12 @@ Audio
 .. automodule:: audiomate.utils.audio
     :members:
 
+Audioread
+---------
+
+.. automodule:: audiomate.utils.audioread
+    :members:
+
 JSON File
 ---------
 

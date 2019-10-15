@@ -39,6 +39,7 @@ Currently supported datasets:
 * [AudioMNIST](https://github.com/soerenab/AudioMNIST)
 * [Mozilla Common Voice](https://voice.mozilla.org/)
 * [ESC-50](https://github.com/karoldvl/ESC-50)
+* [Fluent Speech Commands](http://www.fluent.ai/research/fluent-speech-commands/)
 * [Free Spoken Digit Dataset](https://github.com/Jakobovski/free-spoken-digit-dataset)
 * [German Distant Speech Corpus](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/acoustic-models.html)
 * [Google Speech Commands](https://research.googleblog.com/2017/08/launching-speech-commands-dataset.html)
@@ -54,6 +55,7 @@ Currently supported datasets:
 Currently supported formats:
 * [Kaldi](http://kaldi-asr.org/)
 * [Mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech)
+* [Wav2Letter](https://github.com/facebookresearch/wav2letter)
 * [Custom Formats](https://ynop.github.io/audiomate/documentation/formats.html)
 
 Indirectly supported datasets ([Details](https://audiomate.readthedocs.io/en/latest/documentation/indirect_support.html)):

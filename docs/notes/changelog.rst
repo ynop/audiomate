@@ -21,6 +21,11 @@ Next Version
 
 * Multiple options for controlling the behavior of the :class:`audiomate.corpus.io.KaldiWriter`.
 
+* Added writer (:class:`audiomate.corpus.io.Wav2LetterWriter`) for the
+  `wav2letter engine <https://github.com/facebookresearch/wav2letter/>`_.
+
+* Added module with functions to read/write sclite trn files (:mod:`audiomate.formats.trn`).
+
 **Fixes**
 
 * Improved performance of Tuda-Reader (:class:`audiomate.corpus.io.TudaReader`).

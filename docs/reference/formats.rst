@@ -16,3 +16,8 @@ CTM Files
 .. automodule:: audiomate.formats.ctm
    :members:
 
+TRN Files
+---------
+
+.. automodule:: audiomate.formats.trn
+   :members:
