@@ -35,7 +35,7 @@ feeding samples for training ML models and more.
 * [Changelog](https://audiomate.readthedocs.io/en/latest/notes/changelog.html)
 
 Currently supported datasets:
-* [Acoustic Event Dataset](https://data.vision.ee.ethz.ch/cvl/ae_dataset/)
+* [Acoustic Event Dataset](https://arxiv.org/pdf/1604.07160.pdf)
 * [AudioMNIST](https://github.com/soerenab/AudioMNIST)
 * [Mozilla Common Voice](https://voice.mozilla.org/)
 * [ESC-50](https://github.com/karoldvl/ESC-50)
