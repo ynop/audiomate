@@ -35,7 +35,7 @@ feeding samples for training ML models and more.
 * [Changelog](https://audiomate.readthedocs.io/en/latest/notes/changelog.html)
 
 Currently supported datasets:
-* [Acoustic Event Dataset](https://data.vision.ee.ethz.ch/cvl/ae_dataset/)
+* [Acoustic Event Dataset](https://arxiv.org/pdf/1604.07160.pdf)
 * [AudioMNIST](https://github.com/soerenab/AudioMNIST)
 * [Mozilla Common Voice](https://voice.mozilla.org/)
 * [ESC-50](https://github.com/karoldvl/ESC-50)
@@ -43,8 +43,8 @@ Currently supported datasets:
 * [Free Spoken Digit Dataset](https://github.com/Jakobovski/free-spoken-digit-dataset)
 * [German Distant Speech Corpus](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/acoustic-models.html)
 * [Google Speech Commands](https://research.googleblog.com/2017/08/launching-speech-commands-dataset.html)
-* [GTZAN](https://marsyasweb.appspot.com/download/data_sets/)
-* [M-AILABS Speech Dataset](http://www.m-ailabs.bayern/en/the-mailabs-speech-dataset/)
+* [GTZAN](http://marsyas.info/downloads/datasets.html)
+* [M-AILABS Speech Dataset](https://www.caito.de/2019/01/the-m-ailabs-speech-dataset/)
 * [MUSAN](http://www.openslr.org/17/)
 * [LITIS Rouen Audio scene dataset](https://sites.google.com/site/alainrakotomamonjy/home/audio-scene)
 * [Tatoeba](https://tatoeba.org/)
@@ -56,7 +56,7 @@ Currently supported formats:
 * [Kaldi](http://kaldi-asr.org/)
 * [Mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech)
 * [Wav2Letter](https://github.com/facebookresearch/wav2letter)
-* [Custom Formats](https://ynop.github.io/audiomate/documentation/formats.html)
+* [Custom Formats](https://audiomate.readthedocs.io/en/latest/documentation/formats.html)
 
 Indirectly supported datasets ([Details](https://audiomate.readthedocs.io/en/latest/documentation/indirect_support.html)):
 * [Spoken Wikipedia Corpora](https://nats.gitlab.io/swc/)
