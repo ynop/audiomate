@@ -6,6 +6,15 @@ Next Version
 
 **Breaking Changes**
 
+**New Features**
+
+**Fixes**
+
+v5.0.0
+------
+
+**Breaking Changes**
+
 * Changed :class:`audiomate.corpus.validation.InvalidItemsResult` to use it not only for Utterances, but also for Tracks for example.
 
 * Refactoring and addition of splitting functions in the :class:`audiomate.corpus.subset.Splitter`.
