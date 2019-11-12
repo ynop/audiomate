@@ -145,3 +145,22 @@ Versions is handled using [bump2version](https://github.com/c4urself/bump2versio
 ```
 bump2version [major,minor,patch,release,num]
 ```
+
+In order to directly go to a final relase version (skip .dev/.rc/...):
+
+```
+bump2version [major,minor,patch] --new-version x.x.x
+```
+
+### Release
+
+Commands to create a new release on pypi.
+
+```
+rm -rf build
+rm -rf dist
+
+python setup.py sdist
+python setup.py bdist_wheel
+twine upload dist/*
+```
