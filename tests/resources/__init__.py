@@ -43,6 +43,7 @@ def create_dataset():
 
     ds.import_issuers([issuer_1, issuer_2, issuer_3])
 
+    # duration 2.5951875
     utt_1 = ds.new_utterance('utt-1', file_1.idx, issuer_idx=issuer_1.idx)
     utt_2 = ds.new_utterance('utt-2', file_2.idx, issuer_idx=issuer_1.idx)
     utt_3 = ds.new_utterance('utt-3', file_3.idx, issuer_idx=issuer_2.idx, start=0, end=1.5)

@@ -19,6 +19,7 @@ REQUIRED = [
     'networkx == 2.2',
     'requests == 2.21.0',
     'intervaltree == 3.0.2',
+    'tqdm == 4.38.0',
 ]
 
 # Packages required for dev/ci enrionment

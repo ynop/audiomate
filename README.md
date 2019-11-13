@@ -56,6 +56,7 @@ Currently supported formats:
 * [Kaldi](http://kaldi-asr.org/)
 * [Mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech)
 * [Wav2Letter](https://github.com/facebookresearch/wav2letter)
+* [NVIDIA Jasper](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/SpeechRecognition/Jasper)
 * [Custom Formats](https://audiomate.readthedocs.io/en/latest/documentation/formats.html)
 
 Indirectly supported datasets ([Details](https://audiomate.readthedocs.io/en/latest/documentation/indirect_support.html)):
