@@ -8,6 +8,9 @@ Next Version
 
 **New Features**
 
+* Added writer (:class:`audiomate.corpus.io.NvidiaJasperWriter`) for
+  `NVIDIA Jasper <https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/SpeechRecognition/Jasper>`_.
+
 **Fixes**
 
 v5.0.0

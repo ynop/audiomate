@@ -167,6 +167,11 @@ M-AILABS Speech Dataset
 .. autoclass:: MailabsReader
    :members:
 
+NVIDIA Jasper
+^^^^^^^^^^^^^
+.. autoclass:: NvidiaJasperWriter
+   :members:
+
 LITIS Rouen Audio scene dataset
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. autoclass:: RouenDownloader
