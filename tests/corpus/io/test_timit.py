@@ -99,7 +99,7 @@ class TestTimitReader(rt.CorpusReaderTest):
             rt.ExpLabel(PHONE_LL, 'h#', 0.0, 0.210625),
         ],
         'dr1-mkls0-sa2': [
-            rt.ExpLabel(RAW_LL, 'Don\'t ask me to carry an oily rag like that.', 0, float('inf')),
+            rt.ExpLabel(RAW_LL, "Don't ask me to carry an oily rag like that.", 0, float('inf')),
             rt.ExpLabel(WORD_LL, 'ask', 0.3625, 0.645),
             rt.ExpLabel(PHONE_LL, 'd', 0.209375, 0.244375),
         ],
@@ -117,7 +117,7 @@ class TestTimitReader(rt.CorpusReaderTest):
             rt.ExpLabel(RAW_LL, 'Buying a thoroughbred horse requires intuition and expertise.', 0, float('inf'))
         ],
         'dr1-fdac1-sa2': [
-            rt.ExpLabel(RAW_LL, 'Don\'t ask me to carry an oily rag like that.', 0, float('inf')),
+            rt.ExpLabel(RAW_LL, "Don't ask me to carry an oily rag like that.", 0, float('inf')),
         ],
         'dr1-mjsw0-sa1': [
             rt.ExpLabel(RAW_LL, 'She had your dark suit in greasy wash water all year.', 0, float('inf')),

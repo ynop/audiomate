@@ -196,7 +196,7 @@ class VoxforgeReader(base.CorpusReader):
             for raw_line in f:
                 line = raw_line.strip()
 
-                if line is not None and line is not '':
+                if line is not None and line != '':
                     line = line.rstrip(';.')
                     parts = line.split(':', maxsplit=1)
 

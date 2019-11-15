@@ -25,7 +25,7 @@ class Container(object):
 
     def __init__(self, path, mode='a'):
         if mode not in ['r', 'w', 'a']:
-            raise ValueError('Invalid mode! Modes: [\'a\', \'r\', \'w\']')
+            raise ValueError("Invalid mode! Modes: ['a', 'r', 'w']")
 
         self.path = path
         self.mode = mode
@@ -45,7 +45,7 @@ class Container(object):
         if mode is None:
             mode = self.mode
         elif mode not in ['r', 'w', 'a']:
-            raise ValueError('Invalid mode! Modes: [\'a\', \'r\', \'w\']')
+            raise ValueError("Invalid mode! Modes: ['a', 'r', 'w']")
 
         if self._file is None:
             self._file = h5py.File(self.path, mode=mode)

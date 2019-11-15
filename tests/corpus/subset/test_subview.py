@@ -128,9 +128,9 @@ class TestMatchingLabelFilter:
 
 @pytest.fixture
 def sample_subview():
-        filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-1', 'utt-3'})
-        corpus = resources.create_dataset()
-        return subview.Subview(corpus, filter_criteria=[filter])
+    filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-1', 'utt-3'})
+    corpus = resources.create_dataset()
+    return subview.Subview(corpus, filter_criteria=[filter])
 
 
 class TestSubview:

@@ -15,7 +15,7 @@ class TestMelSpectrogram:
         mel = pipeline.MelSpectrogram(n_mels=128)
         res = mel.process_frames(frames, sampling_rate=16000)
 
-        assert np.array_equal(expected, res)
+        assert np.allclose(expected[1], res[1])
 
 
 class TestMFCC:
