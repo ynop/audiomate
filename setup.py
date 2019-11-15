@@ -7,17 +7,17 @@ from setuptools import setup
 # Dependencies
 ##################################################
 
-PYTEST_VERSION_ = '4.0.0'
+PYTEST_VERSION_ = '5.2.3'
 
 # Packages required in 'production'
 REQUIRED = [
     'audioread == 2.1.8',
-    'numpy == 1.16.2',
-    'scipy == 1.2.1',
-    'librosa == 0.6.3',
-    'h5py == 2.9.0',
-    'networkx == 2.2',
-    'requests == 2.21.0',
+    'numpy == 1.17.4',
+    'scipy == 1.3.2',
+    'librosa == 0.7.1',
+    'h5py == 2.10.0',
+    'networkx == 2.4',
+    'requests == 2.22.0',
     'intervaltree == 3.0.2',
     'tqdm == 4.38.0',
 ]
@@ -25,25 +25,25 @@ REQUIRED = [
 # Packages required for dev/ci enrionment
 EXTRAS = {
     'dev': [
-        'click==6.7',
+        'click==7.0',
         'pytest==%s' % (PYTEST_VERSION_,),
-        'pytest-runner==3.0',
-        'pytest-cov==2.5.1',
-        'requests_mock==1.4.0',
-        'Sphinx==1.8.5',
+        'pytest-runner==5.2',
+        'pytest-cov==2.8.1',
+        'requests_mock==1.7.0',
+        'Sphinx==2.2.1',
         'sphinx-rtd-theme==0.4.3',
-        'pytest-benchmark==3.1.1',
+        'pytest-benchmark==3.2.2',
     ],
     'ci': [
-        'flake8==3.6.0',
-        'flake8-quotes==0.12.1'
+        'flake8==3.7.9',
+        'flake8-quotes==2.1.1'
     ],
 }
 
 # Packages required for testing
 TESTS = [
     'pytest==%s' % (PYTEST_VERSION_,),
-    'requests_mock==1.4.0'
+    'requests_mock==1.7.0'
 ]
 
 ##################################################

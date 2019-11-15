@@ -112,8 +112,11 @@ class TestLabel:
             path,
             sr=None,
             offset=1.5,
-            duration=0.23
+            duration=1.73 - 1.5
         )
+
+        print(expected.shape)
+        print(l2.read_samples().shape)
         assert np.array_equal(l2.read_samples(), expected)
 
     def test_read_samples_no_utterance_and_label_end(self):
