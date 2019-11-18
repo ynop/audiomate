@@ -121,21 +121,18 @@ class Utterance(object):
                         as a floating point (numpy.float32) time series.
         """
 
-        read_duration = self.duration
+        offset = self.start + offset
 
-        if offset > 0 and read_duration is not None:
-            read_duration -= offset
-
-        if duration is not None:
-            if read_duration is None:
-                read_duration = duration
+        if self.end != float('inf'):
+            if duration is not None:
+                duration = min(duration, self.end - offset)
             else:
-                read_duration = min(duration, read_duration)
+                duration = self.end - offset
 
         return self.track.read_samples(
             sr=sr,
-            offset=self.start + offset,
-            duration=read_duration
+            offset=offset,
+            duration=duration
         )
 
     @property

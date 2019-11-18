@@ -116,23 +116,185 @@ class TestUtterance:
         assert duration['d'] == pytest.approx(6.5)
         assert duration['g'] == pytest.approx(3.7)
 
-    def test_read_samples(self):
-        expected, __ = librosa.core.load(self.track.path, sr=None, offset=1.25, duration=0.05)
-        assert np.array_equal(self.utt.read_samples(), expected)
-
-    def test_read_samples_with_offset(self):
-        expected, __ = librosa.core.load(self.track.path, sr=None, offset=1.27, duration=0.03)
-        assert np.array_equal(self.utt.read_samples(offset=0.02), expected)
-
-    def test_read_samples_with_duration(self):
-        expected, __ = librosa.core.load(self.track.path, sr=None, offset=1.26, duration=0.03)
-        assert np.array_equal(self.utt.read_samples(offset=0.01, duration=0.03), expected)
-
-    def test_read_samples_with_duration_no_end_set(self):
+    def test_read_samples_start_0_end_inf(self):
+        self.utt.start = 0
         self.utt.end = float('inf')
 
-        expected, __ = librosa.core.load(self.track.path, sr=None, offset=1.26, duration=0.03)
-        assert np.array_equal(self.utt.read_samples(offset=0.01, duration=0.03), expected)
+        actual = self.utt.read_samples()
+        expected, __ = librosa.core.load(self.track.path, sr=None)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_x_end_inf(self):
+        self.utt.start = 0.34
+        self.utt.end = float('inf')
+
+        actual = self.utt.read_samples()
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.34)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_0_end_x(self):
+        self.utt.start = 0
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples()
+        expected, __ = librosa.core.load(self.track.path, sr=None, duration=1.5)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_x_end_x(self):
+        self.utt.start = 0.34
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples()
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.34, duration=1.5-0.34)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_0_end_inf_offset_x(self):
+        self.utt.start = 0
+        self.utt.end = float('inf')
+
+        actual = self.utt.read_samples(offset=0.28)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.28)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_x_end_inf_offset_x(self):
+        self.utt.start = 0.34
+        self.utt.end = float('inf')
+
+        actual = self.utt.read_samples(offset=0.28)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.34+0.28)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_0_end_x_offset_x(self):
+        self.utt.start = 0
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples(offset=0.28)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.28, duration=1.5-0.28)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_x_end_x_offset_x(self):
+        self.utt.start = 0.34
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples(offset=0.28)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.34+0.28, duration=1.5-0.34-0.28)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_0_end_inf_duration_x(self):
+        self.utt.start = 0
+        self.utt.end = float('inf')
+
+        actual = self.utt.read_samples(duration=0.72)
+        expected, __ = librosa.core.load(self.track.path, sr=None, duration=0.72)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_x_end_inf_duration_x(self):
+        self.utt.start = 0.34
+        self.utt.end = float('inf')
+
+        actual = self.utt.read_samples(duration=0.72)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.34, duration=0.72)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_0_end_x_duration_x(self):
+        self.utt.start = 0
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples(duration=0.72)
+        expected, __ = librosa.core.load(self.track.path, sr=None, duration=0.72)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_x_end_x_duration_x(self):
+        self.utt.start = 0.34
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples(duration=0.72)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.34, duration=0.72)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_0_end_inf_offset_x_duration_x(self):
+        self.utt.start = 0
+        self.utt.end = float('inf')
+
+        actual = self.utt.read_samples(offset=0.28, duration=0.72)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.28, duration=0.72)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_x_end_inf_offset_x_duration_x(self):
+        self.utt.start = 0.34
+        self.utt.end = float('inf')
+
+        actual = self.utt.read_samples(offset=0.28, duration=0.72)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.34+0.28, duration=0.72)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_0_end_x_offset_x_duration_x(self):
+        self.utt.start = 0
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples(offset=0.28, duration=0.72)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.28, duration=0.72)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_x_end_x_offset_x_duration_x(self):
+        self.utt.start = 0.34
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples(offset=0.28, duration=0.72)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.34+0.28, duration=0.72)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_0_end_x_duration_over_end(self):
+        self.utt.start = 0
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples(duration=1.9)
+        expected, __ = librosa.core.load(self.track.path, sr=None, duration=1.5)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_x_end_x_duration_over_end(self):
+        self.utt.start = 0.34
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples(duration=1.9)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.34, duration=1.5-0.34)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_0_end_x_offset_x_duration_over_end(self):
+        self.utt.start = 0
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples(offset=0.28, duration=1.9)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.28, duration=1.5-0.28)
+
+        assert np.array_equal(actual, expected)
+
+    def test_read_samples_start_x_end_x_offset_x_duration_over_end(self):
+        self.utt.start = 0.34
+        self.utt.end = 1.5
+
+        actual = self.utt.read_samples(offset=0.28, duration=1.9)
+        expected, __ = librosa.core.load(self.track.path, sr=None, offset=0.34+0.28, duration=1.5-0.34-0.28)
+
+        assert np.array_equal(actual, expected)
 
     def test_num_samples(self):
         assert self.utt.num_samples() == 800
