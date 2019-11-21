@@ -1,12 +1,10 @@
 import collections
 import os
 
-import scipy
-import numpy as np
-
 import audiomate
 from audiomate.utils import textfile
 from . import base
+from audiomate.corpus import conversion
 
 
 class Wav2LetterWriter(base.CorpusWriter):
@@ -20,45 +18,48 @@ class Wav2LetterWriter(base.CorpusWriter):
     subfolder `audio` of the target path.
 
     Args:
+        export_all_audio (bool): If ``True``, all utterances are exported,
+                                 whether they are in a separate file
+                                 already or not.
         transcription_label_list_idx (str): The transcriptions are used from the label-list with this id.
+        num_workers (int): Number of processes to use to process utterances.
     """
 
-    def __init__(self, transcription_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT):
+    def __init__(self, export_all_audio=False,
+                 transcription_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT,
+                 num_workers=1):
+        self.export_all_audio = export_all_audio
         self.transcription_label_list_idx = transcription_label_list_idx
+        self.sampling_rate = 16000
+        self.num_workers = num_workers
+
+        self.converter = conversion.WavAudioFileConverter(
+            self.num_workers,
+            self.sampling_rate,
+            separate_file_per_utterance=True,
+            force_conversion=self.export_all_audio
+        )
 
     @classmethod
     def type(cls):
         return 'wav2letter'
 
     def _save(self, corpus, path):
+        target_audio_path = os.path.join(path, 'audio')
+        os.makedirs(target_audio_path, exist_ok=True)
+
+        # Convert all files
+        corpus = self.converter.convert(corpus, target_audio_path)
         records = []
+
         subset_utterance_ids = {idx: list(subset.utterances.keys()) for idx, subset in corpus.subviews.items()}
         subset_records = collections.defaultdict(list)
 
-        audio_folder = os.path.join(path, 'audio')
-        os.makedirs(audio_folder, exist_ok=True)
-
         for utterance_idx in sorted(corpus.utterances.keys()):
             utterance = corpus.utterances[utterance_idx]
-            export_audio = False
-
-            if utterance.start != 0 or utterance.end != float('inf'):
-                export_audio = True
-            elif utterance.sampling_rate != 16000:
-                # We force sr=16000, since this is expected from wav2letter
-                export_audio = True
-
-            if export_audio:
-                audio_path = os.path.join(audio_folder, '{}.wav'.format(utterance.idx))
-                data = utterance.read_samples(sr=16000)
-                data = (data * 32768).astype(np.int16)
-                num_samples = data.size
-                scipy.io.wavfile.write(audio_path, 16000, data)
-            else:
-                audio_path = utterance.track.path
-                num_samples = utterance.num_samples()
-
             transcript = utterance.label_lists[self.transcription_label_list_idx].join()
+            audio_path = utterance.track.path
+            num_samples = int(utterance.duration * self.sampling_rate)
 
             # Add to the full list
             record = [utterance_idx, audio_path, num_samples, transcript]
