@@ -1,14 +1,10 @@
 import os
 import json
-import functools
-import multiprocessing
-
-from tqdm import tqdm
 
 import audiomate
 from . import base
-from audiomate import tracks
-from audiomate.utils import audio
+
+from audiomate.corpus import conversion
 
 
 class NvidiaJasperWriter(base.CorpusWriter):
@@ -34,34 +30,49 @@ class NvidiaJasperWriter(base.CorpusWriter):
                                  already or not.
         transcription_label_list_idx (str): The transcriptions are used from
                                             the label-list with this id.
+        sampling_rate (int): Target sampling rate to use.
         num_workers (int): Number of processes to use to process utterances.
     """
 
     def __init__(self, export_all_audio=False,
                  transcription_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT,
+                 sampling_rate=16000,
                  num_workers=1):
+
         self.export_all_audio = export_all_audio
         self.transcription_label_list_idx = transcription_label_list_idx
+        self.sampling_rate = sampling_rate
         self.num_workers = num_workers
+
+        self.converter = conversion.WavAudioFileConverter(
+            self.num_workers,
+            self.sampling_rate,
+            separate_file_per_utterance=True,
+            force_conversion=self.export_all_audio
+        )
 
     @classmethod
     def type(cls):
         return 'nvidia-jasper'
 
     def _save(self, corpus, path):
-        if self.num_workers > 1:
-            utts = self.process_utterances_parallel(corpus, path)
-        else:
-            utts = self.process_utterances(corpus, path)
+        target_audio_path = os.path.join(path, 'audio')
+        os.makedirs(target_audio_path, exist_ok=True)
 
-        print('sort')
+        out_corpus = self.converter.convert(corpus, target_audio_path)
+
+        utts = []
+
+        for utterance in out_corpus.utterances.values():
+            utt_info = self.process_utterance(utterance, path)
+            utts.append((utterance.idx, utt_info))
+
         utts = sorted(utts, key=lambda x: x[1]['original_duration'])
 
+        print('subviews')
         subviews = {}
-
         subviews['all'] = [u[1] for u in utts]
 
-        print('subviews')
         for subview_name, subview in corpus.subviews.items():
             utt_filter = subview.utterances.keys()
             subview_utts = [u[1] for u in utts if u[0] in utt_filter]
@@ -73,67 +84,12 @@ class NvidiaJasperWriter(base.CorpusWriter):
             with open(target_path, 'w') as f:
                 json.dump(data, f)
 
-    def process_utterances(self, corpus, base_path):
-        os.makedirs(os.path.join(base_path, 'audio'), exist_ok=True)
-
-        utts = []
-
-        for utterance in tqdm(corpus.utterances.values()):
-            utts.append(self.process_utterance(utterance, base_path))
-
-        return utts
-
-    def process_utterances_parallel(self, corpus, base_path):
-        with multiprocessing.Pool(self.num_workers) as p:
-            func = functools.partial(
-                self.process_utterance,
-                base_path=base_path
-            )
-
-            in_utts = list(corpus.utterances.values())
-            utts = list(tqdm(p.imap(func, in_utts), total=len(in_utts)))
-
-        utts = [u for u in utts if u[1] is not None]
-        return utts
-
     def process_utterance(self, utt, base_path):
-        export_utt = False
+        rel_path = os.path.relpath(utt.track.path, base_path)
+        duration = utt.duration
+        num_samples = utt.duration * self.sampling_rate
 
-        if self.export_all_audio:
-            export_utt = True
-
-        elif utt.start != 0 or utt.end != float('inf'):
-            export_utt = True
-
-        elif type(utt.track) != tracks.FileTrack:
-            export_utt = True
-
-        elif not utt.track.path.endswith('wav'):
-            export_utt = True
-
-        elif utt.sampling_rate != 16000:
-            export_utt = True
-
-        if export_utt:
-            file_path = os.path.join(
-                base_path,
-                'audio',
-                '{}.wav'.format(utt.idx)
-            )
-
-            samples = utt.read_samples(16000)
-            audio.write_wav(file_path, samples, 16000)
-
-            num_samples = len(samples)
-            duration = num_samples / 16000
-        else:
-            file_path = utt.track.path
-            num_samples = utt.num_samples()
-            duration = utt.duration
-
-        rel_path = os.path.relpath(file_path, base_path)
-
-        out_dict = {
+        return {
             'transcript': utt.label_lists[self.transcription_label_list_idx].join(),
             'files': [{
                 'fname': rel_path,
@@ -146,5 +102,3 @@ class NvidiaJasperWriter(base.CorpusWriter):
             'original_duration': duration,
             'original_num_samples': num_samples
         }
-
-        return (utt.idx, out_dict)
