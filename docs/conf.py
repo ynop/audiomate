@@ -19,8 +19,12 @@
 #
 import os
 import sys
+from unittest import mock
 
 sys.path.insert(0, os.path.abspath('..'))
+
+# Ignore modules that can't be imported due to missing low-level libraries
+sys.modules['soundfile'] = mock.MagicMock()
 
 import audiomate
 
