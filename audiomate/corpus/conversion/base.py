@@ -10,7 +10,8 @@ from audiomate import tracks
 
 class AudioFileConverter(metaclass=abc.ABCMeta):
     """
-    Class that creates a new instance of a corpus,
+    Base class for converters that convert all audio to a specific format.
+    A converter creates a new instance of a corpus,
     so that all audio files meet given requirements.
 
     Args:

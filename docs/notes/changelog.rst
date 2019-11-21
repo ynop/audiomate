@@ -8,6 +8,9 @@ Next Version
 
 **New Features**
 
+* Added conversion class (:class:`audiomate.corpus.conversion.WavAudioFileConverter`) to convert
+  all files (or files that do not meet the requirements) of a corpus.
+
 * Added writer (:class:`audiomate.corpus.io.NvidiaJasperWriter`) for
   `NVIDIA Jasper <https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/SpeechRecognition/Jasper>`_.
 
