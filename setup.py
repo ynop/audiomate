@@ -20,6 +20,7 @@ REQUIRED = [
     'requests == 2.22.0',
     'intervaltree == 3.0.2',
     'tqdm == 4.38.0',
+    'sox == 1.3.7',
 ]
 
 # Packages required for dev/ci enrionment
