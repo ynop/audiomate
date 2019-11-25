@@ -1,5 +1,9 @@
 import os
 import json
+import multiprocessing
+
+from tqdm import tqdm
+import librosa
 
 import audiomate
 from . import base
@@ -78,13 +82,19 @@ class NvidiaJasperWriter(base.CorpusWriter):
 
         utts = []
 
+        print('Get utterance durations')
+        utt_idx_to_path = {utt.idx: utt.track.path for utt in out_corpus.utterances.values()}
+        utt_to_duration = self._get_file_durations(utt_idx_to_path)
+
+        print('Prepare utterance infos')
         for utterance in out_corpus.utterances.values():
-            utt_info = self.process_utterance(utterance, rel_base_path)
+            utt_dur = utt_to_duration[utterance.idx]
+            utt_info = self.process_utterance(utterance, utt_dur, rel_base_path)
             utts.append((utterance.idx, utt_info))
 
         utts = sorted(utts, key=lambda x: x[1]['original_duration'])
 
-        print('subviews')
+        print('Prepare subviews')
         subviews = {}
         subviews['all'] = [u[1] for u in utts]
 
@@ -93,16 +103,15 @@ class NvidiaJasperWriter(base.CorpusWriter):
             subview_utts = [u[1] for u in utts if u[0] in utt_filter]
             subviews[subview_name] = subview_utts
 
-        print('write')
+        print('Write files')
         for name, data in subviews.items():
             target_path = os.path.join(path, '{}.json'.format(name))
             with open(target_path, 'w') as f:
                 json.dump(data, f)
 
-    def process_utterance(self, utt, rel_base_path):
+    def process_utterance(self, utt, utt_dur, rel_base_path):
         rel_path = os.path.relpath(utt.track.path, rel_base_path)
-        duration = utt.duration
-        num_samples = utt.duration * self.sampling_rate
+        num_samples = utt_dur * self.sampling_rate
 
         return {
             'transcript': utt.label_lists[self.transcription_label_list_idx].join(),
@@ -110,10 +119,23 @@ class NvidiaJasperWriter(base.CorpusWriter):
                 'fname': rel_path,
                 'channels': 1,
                 'sample_rate': 16000,
-                'duration': duration,
+                'duration': utt_dur,
                 'num_samples': num_samples,
                 'speed': 1
             }],
-            'original_duration': duration,
+            'original_duration': utt_dur,
             'original_num_samples': num_samples
         }
+
+    def _get_file_durations(self, files):
+        file_items = files.items()
+        num_files = len(file_items)
+
+        with multiprocessing.Pool(self.num_workers) as p:
+            res = list(tqdm(p.imap(self._get_file_duration, file_items), total=num_files))
+
+        return {k: v for (k, v) in res}
+
+    def _get_file_duration(self, file_item):
+        dur = librosa.core.get_duration(filename=file_item[1])
+        return (file_item[0], dur)
