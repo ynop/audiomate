@@ -128,7 +128,7 @@ def create_downloader_of_type(type_name):
     return downloaders[type_name]()
 
 
-def create_reader_of_type(type_name):
+def create_reader_of_type(type_name, **kwargs):
     """
         Create an instance of the reader with the given name.
 
@@ -143,7 +143,7 @@ def create_reader_of_type(type_name):
     if type_name not in readers.keys():
         raise UnknownReaderException('Unknown reader: %s' % (type_name,))
 
-    return readers[type_name]()
+    return readers[type_name](**kwargs)
 
 
 def create_writer_of_type(type_name):

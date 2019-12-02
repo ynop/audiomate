@@ -155,7 +155,8 @@ class VoxforgeReader(base.CorpusReader):
                 basename, ext = os.path.splitext(file_name)
                 idx = '{}-{}'.format(item, basename)
 
-                is_valid_wav = os.path.isfile(wav_path) and ext == '.wav' and idx not in BAD_UTTERANCES
+                is_valid_wav = os.path.isfile(wav_path) and ext == '.wav' \
+                    and (self.include_invalid_items or idx not in BAD_UTTERANCES)
                 has_transcription = basename in prompts.keys()
 
                 if is_valid_wav and has_transcription:

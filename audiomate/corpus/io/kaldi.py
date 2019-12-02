@@ -32,7 +32,8 @@ class KaldiReader(base.CorpusReader):
     """
 
     def __init__(self, main_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT,
-                 main_feature_idx='default'):
+                 main_feature_idx='default', include_invalid_items=False):
+        super(KaldiReader, self).__init__(include_invalid_items=include_invalid_items)
         self.main_label_list_idx = main_label_list_idx
         self.main_feature_idx = main_feature_idx
 

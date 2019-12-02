@@ -133,7 +133,7 @@ class TudaReader(base.CorpusReader):
 
         for part in SUBSETS:
             sub_path = os.path.join(path, part)
-            ids = TudaReader.get_ids_from_folder(sub_path, part)
+            ids = self.get_ids_from_folder(sub_path, part)
             utt_ids = []
 
             for idx in ids:
@@ -163,8 +163,7 @@ class TudaReader(base.CorpusReader):
             subview_corpus = subview.Subview(corpus, filter_criteria=[subview_filter])
             corpus.import_subview('{}{}'.format(prefix, sub_name), subview_corpus)
 
-    @staticmethod
-    def get_ids_from_folder(path, part_name):
+    def get_ids_from_folder(self, path, part_name):
         """
         Return all ids from the given folder, which have a corresponding beamformedSignal file.
         """
@@ -173,7 +172,7 @@ class TudaReader(base.CorpusReader):
         for xml_file in glob.glob(os.path.join(path, '*.xml')):
             idx = os.path.splitext(os.path.basename(xml_file))[0]
 
-            if idx not in BAD_FILES[part_name]:
+            if self.include_invalid_items or idx not in BAD_FILES[part_name]:
                 valid_ids.add(idx)
 
         return valid_ids

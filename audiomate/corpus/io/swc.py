@@ -273,7 +273,8 @@ class SWCReader(kaldi.KaldiReader, base.CorpusReader):
     def _load(self, path):
         corpus = super(SWCReader, self)._load(path)
 
-        utt_filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(INVALID_UTT_IDS), inverse=True)
-        filtered = subset.Subview(corpus, filter_criteria=utt_filter)
+        if not self.include_invalid_items:
+            utt_filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(INVALID_UTT_IDS), inverse=True)
+            corpus = subset.Subview(corpus, filter_criteria=utt_filter)
 
-        return audiomate.Corpus.from_corpus(filtered)
+        return audiomate.Corpus.from_corpus(corpus)

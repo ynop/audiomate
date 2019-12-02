@@ -59,7 +59,7 @@ class CommonVoiceReader(base.CorpusReader):
         subset_ids = CommonVoiceReader.get_subset_ids(path)
 
         for subset_idx in subset_ids:
-            CommonVoiceReader.load_subset(corpus, path, subset_idx)
+            self.load_subset(corpus, path, subset_idx)
 
         return corpus
 
@@ -79,8 +79,7 @@ class CommonVoiceReader(base.CorpusReader):
 
         return all
 
-    @staticmethod
-    def load_subset(corpus, path, subset_idx):
+    def load_subset(self, corpus, path, subset_idx):
         """ Load subset into corpus. """
         csv_file = os.path.join(path, '{}.tsv'.format(subset_idx))
         subset_utt_ids = []
@@ -94,7 +93,7 @@ class CommonVoiceReader(base.CorpusReader):
         )
 
         for entry in entries:
-            file_idx = CommonVoiceReader.create_assets_if_needed(
+            file_idx = self.create_assets_if_needed(
                 corpus,
                 path,
                 entry
@@ -107,13 +106,12 @@ class CommonVoiceReader(base.CorpusReader):
         subview = subset.Subview(corpus, filter_criteria=[filter])
         corpus.import_subview(subset_idx, subview)
 
-    @staticmethod
-    def create_assets_if_needed(corpus, path, entry):
+    def create_assets_if_needed(self, corpus, path, entry):
         """ Create File/Utterance/Issuer, if they not already exist and return utt-idx. """
         file_name = entry[1]
         file_idx, _ = os.path.splitext(file_name)
 
-        if file_idx in INVALID_UTTS:
+        if not self.include_invalid_items and file_idx in INVALID_UTTS:
             return None
 
         if file_idx not in corpus.utterances.keys():

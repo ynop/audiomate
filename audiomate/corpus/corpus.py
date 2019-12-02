@@ -99,7 +99,7 @@ class Corpus(base.CorpusView):
         self.path = path
 
     @classmethod
-    def load(cls, path, reader=None):
+    def load(cls, path, reader=None, **kwargs):
         """
         Loads the corpus from the given path, using the given reader. If no reader is given the
         :py:class:`audiomate.corpus.io.DefaultReader` is used.
@@ -114,11 +114,11 @@ class Corpus(base.CorpusView):
 
         if reader is None:
             from . import io
-            reader = io.DefaultReader()
+            reader = io.DefaultReader(**kwargs)
 
         elif type(reader) == str:
             from . import io
-            reader = io.create_reader_of_type(reader)
+            reader = io.create_reader_of_type(reader, **kwargs)
 
         return reader.load(path)
 
