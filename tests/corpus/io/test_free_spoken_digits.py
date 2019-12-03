@@ -29,6 +29,8 @@ class TestFreeSpokenDigitDownloader:
         downloader = free_spoken_digits.FreeSpokenDigitDownloader()
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(free_spoken_digits.MASTER_DOWNLOAD_URL, headers={'Content-Length': '100'})
             mock.get(free_spoken_digits.MASTER_DOWNLOAD_URL, content=zip_data)
 
             downloader.download(target_folder)

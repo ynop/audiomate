@@ -49,6 +49,8 @@ class TestArchiveDownloader:
         )
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(MOCK_URL, headers={'Content-Length': '100'})
             mock.get(MOCK_URL, content=tar_data)
             corpus_dl.download(target_folder)
 
@@ -68,6 +70,8 @@ class TestArchiveDownloader:
         )
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(MOCK_URL, headers={'Content-Length': '100'})
             mock.get(MOCK_URL, content=zip_data)
             corpus_dl.download(target_folder)
 
@@ -86,6 +90,8 @@ class TestArchiveDownloader:
         )
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(MOCK_URL, headers={'Content-Length': '100'})
             mock.get(MOCK_URL, content=zip_data)
             corpus_dl.download(target_folder)
 
@@ -105,6 +111,8 @@ class TestArchiveDownloader:
         )
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(MOCK_URL, headers={'Content-Length': '100'})
             mock.get(MOCK_URL, content=zip_data)
             corpus_dl.download(target_folder)
 

@@ -30,18 +30,20 @@ class ArchiveDownloader(base.CorpusDownloader, abc.ABC):
                             automatically.
         move_files_up (bool): If ``True`` moves all files/folders
                               from subfolders to the root-folder.
+        num_threads (int): Number of threads to use for download files.
     """
 
-    def __init__(self, url, ark_type=ArkType.AUTO, move_files_up=False):
+    def __init__(self, url, ark_type=ArkType.AUTO, move_files_up=False, num_threads=1):
         self.url = url
         self.ark_type = ark_type
         self.move_files_up = move_files_up
+        self.num_threads = num_threads
 
     def _download(self, target_path):
         os.makedirs(target_path, exist_ok=True)
         tmp_file = os.path.join(target_path, 'tmp_ark')
 
-        download.download_file(self.url, tmp_file, show_progress=True, num_threads=8)
+        download.download_file(self.url, tmp_file, show_progress=True, num_threads=self.num_threads)
         self._extract_file(tmp_file, target_path)
 
         if self.move_files_up:

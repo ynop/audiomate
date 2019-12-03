@@ -30,10 +30,12 @@ class MailabsDownloader(base.CorpusDownloader):
                      Corresponds to the tags in the
                      `Statistics & Download Links` on the webpage.
                      If ``None``, all parts are downloaded.
+        num_threads (int): Number of threads to use for download files.
     """
 
-    def __init__(self, tags=None):
+    def __init__(self, tags=None, num_threads=1):
         self.tags = tags
+        self.num_threads = num_threads
 
     @classmethod
     def type(cls):
@@ -50,7 +52,7 @@ class MailabsDownloader(base.CorpusDownloader):
                     download_url,
                     tmp_file,
                     show_progress=True,
-                    num_threads=8
+                    num_threads=self.num_threads
                 )
                 download.extract_tar(tmp_file, target_path)
 

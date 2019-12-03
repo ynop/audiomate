@@ -4,9 +4,9 @@ This module contains any functionality for downloading and extracting data from 
 
 import zipfile
 import tarfile
-import requests
 import multiprocessing
 
+import requests
 from pget.down import Downloader
 from tqdm import tqdm
 
@@ -38,6 +38,49 @@ def _download_file(item):
 
 
 def download_file(url, target_path, show_progress=False, num_threads=1):
+    """
+    Download the file from the given `url` and store it at `target_path`.
+    Return a tuple x (url, bool, str).
+    x[0] contains the url.
+    If download failed x[1] is ``False`` and x[2] contains some error message.
+    If download was fine x[1] is ``True`` and x[2] contains the target-path.
+    """
+
+    if num_threads > 1:
+        return download_file_parallel(
+            url,
+            target_path,
+            show_progress=show_progress,
+            num_threads=num_threads
+        )
+
+    r = requests.get(url, stream=True)
+
+    if r.status_code != 200:
+        return (url, False, 'Failed to download file {} (status {})!'.format(
+            r.status_code,
+            url
+        ))
+
+    if show_progress:
+        file_size = int(requests.head(url).headers['Content-Length'])
+        pbar = tqdm(total=file_size, desc='Download File', unit_scale=True)
+
+    with open(target_path, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+
+                if show_progress:
+                    pbar.update(1024)
+
+    if show_progress:
+        pbar.close()
+
+    return (url, True, target_path)
+
+
+def download_file_parallel(url, target_path, show_progress=False, num_threads=1):
     """
     Download the file from the given `url` and store it at `target_path`.
     Return a tuple x (url, bool, str).
