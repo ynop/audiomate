@@ -7,6 +7,7 @@ import tarfile
 import requests
 import multiprocessing
 
+from pget.down import Downloader
 from tqdm import tqdm
 
 
@@ -36,7 +37,7 @@ def _download_file(item):
     return download_file(item[0], item[1])
 
 
-def download_file(url, target_path):
+def download_file(url, target_path, show_progress=False, num_threads=1):
     """
     Download the file from the given `url` and store it at `target_path`.
     Return a tuple x (url, bool, str).
@@ -45,18 +46,27 @@ def download_file(url, target_path):
     If download was fine x[1] is ``True`` and x[2] contains the target-path.
     """
 
-    r = requests.get(url, stream=True)
+    downloader = Downloader(url, target_path, num_threads)
+    downloader.start()
 
-    if r.status_code != 200:
-        return (url, False, 'Failed to download file {} (status {})!'.format(
-            r.status_code,
-            url
-        ))
+    if show_progress:
+        #
+        # Wait until we know file size
+        #
+        while downloader.total_length == 0:
+            pass
 
-    with open(target_path, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024):
-            if chunk:
-                f.write(chunk)
+        pbar = tqdm(total=downloader.total_length, desc='Download File', unit_scale=True)
+
+        def update_pbar(x):
+            pbar.update(x.total_downloaded - pbar.n)
+
+        downloader.subscribe(update_pbar, 10)
+
+    downloader.wait_for_finish()
+
+    if show_progress:
+        pbar.close()
 
     return (url, True, target_path)
 

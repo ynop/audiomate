@@ -8,6 +8,10 @@ from audiomate import annotations
 from audiomate import issuers
 from audiomate.corpus.subset import subview
 from . import base
+from . import downloader
+
+DOWNLOAD_URL = 'http://ltdata1.informatik.uni-hamburg.de/kaldi_tuda_de/german-speechdata-package-v3.tar.gz'
+
 
 SPEAKER_IDX_PATTERN = re.compile(r'<speaker_id>(.*?)</speaker_id>')
 GENDER_PATTERN = re.compile(r'<gender>(.*?)</gender>')
@@ -106,6 +110,29 @@ BAD_FILES = {
         '2015-02-10-14-18-26', '2015-02-09-15-07-19',
     ]
 }
+
+
+class TudaDownloader(downloader.ArchiveDownloader):
+    """
+    Downloader for the TUDA Corpus.
+
+    Args:
+        url (str): The url to download the dataset from. If not given the default URL is used.
+                   It is expected to be a tar.gz file.
+    """
+
+    def __init__(self, url=None):
+        if url is None:
+            url = DOWNLOAD_URL
+
+        super(TudaDownloader, self).__init__(
+            url,
+            move_files_up=True
+        )
+
+    @classmethod
+    def type(cls):
+        return 'tuda'
 
 
 class TudaReader(base.CorpusReader):

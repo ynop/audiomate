@@ -41,7 +41,7 @@ class ArchiveDownloader(base.CorpusDownloader, abc.ABC):
         os.makedirs(target_path, exist_ok=True)
         tmp_file = os.path.join(target_path, 'tmp_ark')
 
-        download.download_file(self.url, tmp_file)
+        download.download_file(self.url, tmp_file, show_progress=True, num_threads=8)
         self._extract_file(tmp_file, target_path)
 
         if self.move_files_up:

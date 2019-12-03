@@ -59,7 +59,7 @@ Implementations
   LITIS Rouen Audio scene dataset   x         x
   Tatoeba                           x         x
   TIMIT                                       x
-  TUDA German Distant Speech                  x
+  TUDA German Distant Speech        x         x
   Urbansound8k                                x
   VoxForge                          x         x
   Wav2Letter                                         x
@@ -195,6 +195,9 @@ TIMIT DARPA Acoustic-Phonetic Continuous Speech Corpus
 
 TUDA German Distant Speech
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: TudaDownloader
+   :members:
+
 .. autoclass:: TudaReader
    :members:
 

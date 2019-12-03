@@ -3,6 +3,7 @@ from . import kaldi
 
 import audiomate
 from audiomate.corpus import subset
+from . import downloader
 
 INVALID_UTT_IDS = [
     '0000003_0000004_398960-399041',
@@ -256,6 +257,34 @@ INVALID_UTT_IDS = [
     '0000104_0000897_28840-28927',
     '0000107_0000203_41054-41137'
 ]
+
+
+URLS = {
+    'de': 'https://www2.informatik.uni-hamburg.de/nats/pub/SWC/SWC_German.tar',
+    'en': 'https://www2.informatik.uni-hamburg.de/nats/pub/SWC/SWC_English.tar',
+    'nl': 'https://www2.informatik.uni-hamburg.de/nats/pub/SWC/SWC_Dutch.tar'
+}
+
+
+class SWCDownloader(downloader.ArchiveDownloader):
+    """
+    Downloader for the MUSAN Corpus.
+
+    Args:
+        lang (str): The language to download.
+    """
+
+    def __init__(self, lang='de'):
+        url = URLS[lang]
+
+        super(SWCDownloader, self).__init__(
+            url,
+            move_files_up=True
+        )
+
+    @classmethod
+    def type(cls):
+        return 'swc'
 
 
 class SWCReader(kaldi.KaldiReader, base.CorpusReader):
