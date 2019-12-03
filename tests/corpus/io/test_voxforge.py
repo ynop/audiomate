@@ -105,7 +105,8 @@ class TestVoxforgeDownloader:
             for file in files:
                 mock.get(file, content='some content'.encode())
 
-            file_paths = voxforge.VoxforgeDownloader.download_files(files, tmpdir.strpath)
+            downloader = voxforge.VoxforgeDownloader()
+            file_paths = downloader.download_files(files, tmpdir.strpath)
 
         expected_file_paths = [
             os.path.join(tmpdir.strpath, '1337ad-20170321-amr.tgz'),
