@@ -57,6 +57,7 @@ Implementations
   MUSAN                             x         x
   M-AILABS Speech Dataset           x         x
   LITIS Rouen Audio scene dataset   x         x
+  Spoken Wikipedia Corpora          x         x
   Tatoeba                           x         x
   TIMIT                                       x
   TUDA German Distant Speech        x         x
@@ -178,6 +179,14 @@ LITIS Rouen Audio scene dataset
    :members:
 
 .. autoclass:: RouenReader
+   :members:
+
+SWC - Spoken Wikipedia Corpora
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: SWCDownloader
+   :members:
+
+.. autoclass:: SWCReader
    :members:
 
 Tatoeba
