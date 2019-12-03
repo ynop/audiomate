@@ -21,6 +21,7 @@ REQUIRED = [
     'intervaltree == 3.0.2',
     'tqdm == 4.38.0',
     'sox == 1.3.7',
+    'PGet == 0.5.0',
 ]
 
 # Packages required for dev/ci enrionment
