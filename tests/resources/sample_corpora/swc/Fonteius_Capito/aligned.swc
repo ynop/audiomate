@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article>
+  <meta>
+    <link key="DC.conformsto" value="http://nats.gitlab.io/swc/schema/swc-1.0.rnc"/>
+    <prop key="DC.creator" value="Spoken Wikipedia Corpus Collection Software"/>
+    <prop key="DC.publisher" value="Universität Hamburg"/>
+    <link key="DC.reference" value="http://nbn-resolving.de/urn:nbn:de:gbv:18-228-7-2209"/>
+    <prop key="DC.type" value="dataset"/>
+    <prop key="DC.license" value="CC-BY-SA"/>
+    <prop key="DC.title" value="Fonteius Capito"/>
+    <prop key="DC.language" value="de"/>
+    <prop key="DC.identifier" value="Fonteius_Capito"/>
+    <prop key="DC.date.read" value="null"/>
+    <link key="DC.source" value="https://de.wikipedia.org/wiki/Fonteius_Capito"/>
+    <prop key="DC.source.wikiID" value="4483433"/>
+    <prop key="DC.source.revision" value="166201629"/>
+    <link key="DC.source.text" value="https://de.wikipedia.org/w/index.php?title=Fonteius Capito&amp;oldid=60785113"/>
+    <link key="DC.source.audio" value="https://upload.wikimedia.org/wikipedia/commons/9/91/De-fonteius_capito-article.ogg" group="audio1"/>
+    <prop key="DC.source.audio.offset" value="0.0" group="audio1"/>
+    <link key="DC.source.audio.page" value="https://de.wikipedia.org/w/index.php?title=Datei%3aDe-fonteius_capito-article.ogg" group="audio1"/>
+    <link key="DC.source.audio.date" value="2011-04-04 15:07:01" group="audio1"/>
+    <prop key="reader.name" value="Souffleuse"/>
+    <prop key="processing.step" value="tokenize" group="tokenize"/>
+    <prop key="processing.step.date" value="2017-08-08T15:37:03.827+02:00[Europe/Berlin]" group="tokenize"/>
+    <prop key="processing.step.options" value="Namespace(output=articles/Fonteius_Capito/tokenized.swc, all_sections=false, null_normalize=false, raw_output=null, subparser_name=tokenize, lang=de, no_introduction=false, article_dir=articles/Fonteius_Capito)" group="tokenize"/>
+    <prop key="processing.step.git.commit.id" value="755095262af3f3072521f23f4802cdcd52c543b4" group="tokenize"/>
+    <prop key="processing.step.git.commit.time" value="08.08.2017 @ 14:10:36 CEST" group="tokenize"/>
+    <prop key="processing.step" value="align" group="align"/>
+    <prop key="processing.step.date" value="2017-08-10T20:56:51.027+02:00[Europe/Berlin]" group="align"/>
+    <prop key="processing.step.options" value="Namespace(output=articles/Fonteius_Capito/aligned.swc, transcript=articles/Fonteius_Capito/tokenized.swc, g2p=../model_de/ser, phone=false, subparser_name=align, dict=../model_de/dic, acoustic_model=../model_de, audio=articles/Fonteius_Capito/audio.wav)" group="align"/>
+    <prop key="processing.step.git.commit.id" value="cead3ca5006ebe6e87c9160a7e1cd9a5c8e1fa7c" group="align"/>
+    <prop key="processing.step.git.commit.time" value="10.08.2017 @ 16:15:05 CEST" group="align"/>
+  </meta>
+  <d>
+    <extra text="Sie hören den Artikel Fonteius Capito, aus Wikipedia, der freien Enzyklopädie.  Mit dem Stand vom  Der Inhalt steht unter der Lizenz Creative Commons Attribution Share Alike 3 Punkt 0 Unported und unter der GNU Lizenz für freie Dokumentation.">
+      <s text="Sie hören den Artikel Fonteius Capito, aus Wikipedia, der freien Enzyklopädie.">
+        <t text="Sie">
+          <n pronunciation="Sie" start="1010" end="1220">
+            <ph start="1060" end="1110" type="z"/>
+            <ph start="1110" end="1330" type="i:"/>
+          </n>
+        </t>
+        <t text="hören">
+          <n pronunciation="hören" start="1220" end="1540">
+            <ph start="1330" end="1370" type="2:"/>
+            <ph start="1370" end="1400" type="r"/>
+            <ph start="1400" end="1450" type="@"/>
+            <ph start="1450" end="1530" type="n"/>
+          </n>
+        </t>
+        <t text="den">
+          <n pronunciation="den" start="1540" end="1710">
+            <ph start="1530" end="1580" type="d"/>
+            <ph start="1580" end="1650" type="e:"/>
+            <ph start="1650" end="1700" type="n"/>
+          </n>
+        </t>
+        <t text="Artikel">
+          <n pronunciation="Artikel" start="1710" end="2340">
+            <ph start="1700" end="1830" type="a:"/>
+            <ph start="1830" end="1870" type="r"/>
+            <ph start="1870" end="1940" type="t"/>
+            <ph start="1940" end="2040" type="I"/>
+            <ph start="2040" end="2120" type="k"/>
+            <ph start="2120" end="2340" type="@"/>
+            <ph start="2340" end="2390" type="l"/>
+          </n>
+        </t>
+        <t text="Fonteius">
+          <n pronunciation="Fonteius" start="2370" end="2980">
+            <ph start="2390" end="2450" type="f"/>
+            <ph start="2450" end="2520" type="O"/>
+            <ph start="2520" end="2610" type="n"/>
+            <ph start="2610" end="2660" type="t"/>
+            <ph start="2660" end="2810" type="aI"/>
+            <ph start="2810" end="2890" type="U"/>
+            <ph start="2890" end="2990" type="s"/>
+          </n>
+        </t>
+        <t text="Capito">
+          <n pronunciation="Capito" start="2980" end="3620">
+            <ph start="2990" end="3040" type="k"/>
+            <ph start="3040" end="3230" type="a"/>
+            <ph start="3230" end="3260" type="p"/>
+            <ph start="3260" end="3370" type="i"/>
+            <ph start="3370" end="3450" type="t"/>
+            <ph start="3450" end="3640" type="o"/>
+          </n>
+        </t>
+      </s>
+      <s text="Mit dem ">
+        <t text="Mit">
+          <n pronunciation="Mit"/>
+        </t>
+        <t text="dem">
+          <n pronunciation="dem"/>
+        </t>
+      </s>
+    </extra>
+    <ignored>
+      <s>
+        <t>Dieser<n pronunciation="Dieser"/></t>
+        <t>Artikel<n pronunciation="Artikel"/></t>
+        <t>behandelt<n pronunciation="behandelt"/></t>
+        <t>den<n pronunciation="den"/></t>
+        <t>Konsul<n pronunciation="Konsul"/></t>
+        <t>67<n pronunciation="siebenundsechzig"/></t>
+        <t>n. Chr.<n pronunciation="nach"/><n pronunciation="Christus"/></t>
+        <t>Für<n pronunciation="Für"/></t>
+        <t>weitere<n pronunciation="weitere"/></t>
+        <t>Träger<n pronunciation="Träger"/></t>
+        <t>des<n pronunciation="des"/></t>
+        <t>Namens<n pronunciation="Namens"/></t>
+        <t>siehe<n pronunciation="siehe"/></t>
+        <t>Fonteius<n pronunciation="Fonteius"/></t>
+        <t>Capito<n pronunciation="Capito"/></t>
+        <t>(</t>
+        <t>Begriffsklärung<n pronunciation="Begriffsklärung"/></t>
+        <t>)</t>
+        <t>.</t>
+      </s>
+    </ignored>
+    <p>
+      <s>
+        <t>Fonteius<n pronunciation="Fonteius"/></t>
+        <t>Capito<n pronunciation="Capito"/></t>
+      </s>
+      <ignored>
+        <s>
+          <t>[</t>
+          <t>1<n pronunciation="eins"/></t>
+          <t>]</t>
+        </s>
+      </ignored>
+    </p>
+    <p>
+      <s>
+        <t>Im<n pronunciation="Im" start="27780" end="28560"><ph start="27990" end="28020" type="I"/><ph start="28020" end="28050" type="m"/></n></t>
+        <t>Jahr<n pronunciation="Jahr" start="28560" end="28760"><ph start="28330" end="28640" type="j"/><ph start="28640" end="28740" type="a:"/><ph start="28740" end="28790" type="r"/></n></t>
+        <t>67<n pronunciation="siebenundsechzig" start="28760" end="29600"><ph start="28790" end="28850" type="z"/><ph start="28850" end="28950" type="i:"/><ph start="28950" end="28980" type="b"/><ph start="28980" end="29030" type="@"/><ph start="29030" end="29060" type="n"/><ph start="29060" end="29130" type="U"/><ph start="29130" end="29160" type="n"/><ph start="29160" end="29190" type="t"/><ph start="29190" end="29240" type="z"/><ph start="29240" end="29320" type="E"/><ph start="29320" end="29430" type="C"/><ph start="29430" end="29460" type="t"/><ph start="29460" end="29500" type="s"/><ph start="29500" end="29560" type="I"/><ph start="29560" end="29590" type="C"/></n></t>
+        <t>n. Chr.<n pronunciation="nach" start="29600" end="29870"><ph start="29590" end="29680" type="n"/><ph start="29680" end="29770" type="a:"/><ph start="29770" end="29810" type="x"/></n><n pronunciation="Christus" start="29870" end="30680"><ph start="29890" end="29950" type="k"/><ph start="29950" end="30000" type="r"/><ph start="30000" end="30060" type="I"/><ph start="30060" end="30180" type="s"/><ph start="30180" end="30210" type="t"/><ph start="30210" end="30380" type="U"/><ph start="30380" end="30540" type="s"/></n></t>
+        <t>,</t>
+        <t>unter<n pronunciation="unter" start="30760" end="31050"><ph start="30780" end="30850" type="U"/><ph start="30850" end="30890" type="n"/><ph start="30890" end="30970" type="t"/><ph start="30970" end="31050" type="6"/></n></t>
+        <t>Nero<n pronunciation="Nero" start="31050" end="31510"><ph start="31050" end="31130" type="n"/><ph start="31130" end="31280" type="e:"/><ph start="31280" end="31340" type="r"/><ph start="31340" end="31570" type="o"/></n></t>
+      </s>
+    </p>
+    <p>
+      <s>
+        <t>Nach<n pronunciation="Nach"/></t>
+        <t>dem<n pronunciation="dem" start="73530" end="73730"/></t>
+        <t>Tod<n pronunciation="Tod" start="73730" end="73980"/></t>
+        <t>Neros<n pronunciation="Neros" start="73980" end="74700"/></t>
+        <t>wurde<n pronunciation="wurde" start="74740" end="74970"/></t>
+        <t>Fonteius<n pronunciation="Fonteius" start="74970" end="75700"/></t>
+        <t>Capito<n pronunciation="Capito" start="75700" end="76130"/></t>
+        <t>wegen<n pronunciation="wegen" start="76130" end="76430"/></t>
+        <t>angeblicher<n pronunciation="angeblicher" start="76430" end="77320"/></t>
+        <t>Umsturzpläne<n pronunciation="Umsturzpläne" start="77320" end="78340"/></t>
+      </s>
+    </p>
+    <ignored>
+      <section level="2">
+        <sectiontitle>
+          <t>Anmerkungen<n pronunciation="Anmerkungen"/></t>
+          <t>[</t>
+          <t>Bearbeiten<n pronunciation="Bearbeiten"/></t>
+          <t>|<n pronunciation="|"/></t>
+          <t>Quelltext<n pronunciation="Quelltext"/></t>
+          <t>bearbeiten<n pronunciation="bearbeiten"/></t>
+          <t>]</t>
+        </sectiontitle>
+        <sectioncontent>
+          <s>
+            <t>↑</t>
+            <t>Das<n pronunciation="Das"/></t>
+            <t>praenomen<n pronunciation="praenomen"/></t>
+            <t>ist<n pronunciation="ist"/></t>
+            <t>nicht<n pronunciation="nicht"/></t>
+            <t>überliefert<n pronunciation="überliefert"/></t>
+            <t>.</t>
+          </s>
+          <s>
+            <t>Dass<n pronunciation="Dass"/></t>
+            <t>es<n pronunciation="es"/></t>
+            <t>(</t>
+            <t>wie<n pronunciation="wie"/></t>
+            <t>bei<n pronunciation="bei"/></t>
+            <t>mehreren<n pronunciation="mehreren"/></t>
+            <t>Angehörigen<n pronunciation="Angehörigen"/></t>
+            <t>der<n pronunciation="der"/></t>
+            <t>Familie<n pronunciation="Familie"/></t>
+            <t>)</t>
+            <t>Gaius<n pronunciation="Gaius"/></t>
+            <t>gelautet<n pronunciation="gelautet"/></t>
+            <t>hat<n pronunciation="hat"/></t>
+            <t>,</t>
+            <t>wie<n pronunciation="wie"/></t>
+            <t>David<n pronunciation="David"/></t>
+            <t>Shotter<n pronunciation="Shotter"/></t>
+            <t>,</t>
+            <t>Nero<n pronunciation="Nero"/></t>
+            <t>Caesar<n pronunciation="Caesar"/></t>
+            <t>Augustus<n pronunciation="Augustus"/></t>
+            <t>:</t>
+            <t>Emperor<n pronunciation="Emperor"/></t>
+            <t>of<n pronunciation="of"/></t>
+            <t>Rome<n pronunciation="Rome"/></t>
+            <t>,</t>
+            <t>Pearson<n pronunciation="Pearson"/></t>
+            <t>Longman<n pronunciation="Longman"/></t>
+            <t>,</t>
+            <t>Harlow<n pronunciation="Harlow"/></t>
+            <t>2008<n pronunciation="zwei"/><n pronunciation="Tausend"/><n pronunciation="acht"/></t>
+            <t>,</t>
+            <t>ISBN<n pronunciation="I"/><n pronunciation="S"/><n pronunciation="B"/><n pronunciation="N"/></t>
+            <t>978-1-405-82457-6<n pronunciation="neun"/><n pronunciation="Hundert"/><n pronunciation="achtundsiebzig"/><n pronunciation="eins"/><n pronunciation="vier"/><n pronunciation="Hundert"/><n pronunciation="fünf"/><n pronunciation="zweiundachtzig"/><n pronunciation="Tausend"/><n pronunciation="vier"/><n pronunciation="Hundert"/><n pronunciation="siebenundfünfzig"/><n pronunciation="sechs"/></t>
+            <t>,</t>
+            <t>S.<n pronunciation="S"/></t>
+            <t>69<n pronunciation="neunundsechzig"/></t>
+            <t>und<n pronunciation="und"/></t>
+            <t>156<n pronunciation="ein"/><n pronunciation="Hundert"/><n pronunciation="sechsundfünfzig"/></t>
+            <t>,</t>
+            <t>angibt<n pronunciation="angibt"/></t>
+            <t>,</t>
+            <t>beruht<n pronunciation="beruht"/></t>
+            <t>offenbar<n pronunciation="offenbar"/></t>
+            <t>auf<n pronunciation="auf"/></t>
+            <t>Vermutung<n pronunciation="Vermutung"/></t>
+            <t>.</t>
+          </s>
+          <s>
+            <t>↑</t>
+            <t>Tacitus<n pronunciation="Tacitus"/></t>
+            <t>,</t>
+            <t>Historien<n pronunciation="Historien"/></t>
+            <t>4<n pronunciation="vier"/></t>
+            <t>,</t>
+            <t>13.<n pronunciation="dreizehnte"/></t>
+            <t>↑</t>
+            <t>a<n pronunciation="a"/></t>
+            <t>b<n pronunciation="b"/></t>
+            <t>Tacitus<n pronunciation="Tacitus"/></t>
+            <t>,</t>
+            <t>Historien<n pronunciation="Historien"/></t>
+            <t>1<n pronunciation="eins"/></t>
+            <t>,</t>
+            <t>7.<n pronunciation="siebte"/></t>
+            <t>↑</t>
+            <t>a<n pronunciation="a"/></t>
+            <t>b<n pronunciation="b"/></t>
+            <t>Tacitus<n pronunciation="Tacitus"/></t>
+            <t>,</t>
+            <t>Historien<n pronunciation="Historien"/></t>
+            <t>1<n pronunciation="eins"/></t>
+            <t>,</t>
+            <t>52.<n pronunciation="zweiundfünfzigste"/></t>
+            <t>↑</t>
+            <t>a<n pronunciation="a"/></t>
+            <t>b<n pronunciation="b"/></t>
+            <t>c<n pronunciation="c"/></t>
+            <t>Tacitus<n pronunciation="Tacitus"/></t>
+            <t>,</t>
+            <t>Historien<n pronunciation="Historien"/></t>
+            <t>1<n pronunciation="eins"/></t>
+            <t>,</t>
+            <t>58.<n pronunciation="achtundfünfzigste"/></t>
+            <t>↑</t>
+            <t>Tacitus<n pronunciation="Tacitus"/></t>
+            <t>(</t>
+            <t>Historien<n pronunciation="Historien"/></t>
+            <t>1<n pronunciation="eins"/></t>
+            <t>,</t>
+            <t>7<n pronunciation="sieben"/></t>
+            <t>)</t>
+            <t>zweifelt<n pronunciation="zweifelt"/></t>
+            <t>,</t>
+            <t>ob<n pronunciation="ob"/></t>
+            <t>Capito<n pronunciation="Capito"/></t>
+            <t>tatsächlich<n pronunciation="tatsächlich"/></t>
+            <t>nach<n pronunciation="nach"/></t>
+            <t>der<n pronunciation="der"/></t>
+            <t>Kaiserwürde<n pronunciation="Kaiserwürde"/></t>
+            <t>strebte<n pronunciation="strebte"/></t>
+            <t>;</t>
+            <t>auf<n pronunciation="auf"/></t>
+            <t>größeren<n pronunciation="größeren"/></t>
+            <t>Ehrgeiz<n pronunciation="Ehrgeiz"/></t>
+            <t>könnte<n pronunciation="könnte"/></t>
+            <t>die<n pronunciation="die"/></t>
+            <t>Anekdote<n pronunciation="Anekdote"/></t>
+            <t>bei<n pronunciation="bei"/></t>
+            <t>Cassius<n pronunciation="Cassius"/></t>
+            <t>Dio<n pronunciation="Dio"/></t>
+            <t>54<n pronunciation="vierundfünfzig"/></t>
+            <t>,</t>
+            <t>2<n pronunciation="zwei"/></t>
+            <t>deuten<n pronunciation="deuten"/></t>
+            <t>,</t>
+            <t>nach<n pronunciation="nach"/></t>
+            <t>der<n pronunciation="der"/></t>
+            <t>Capito<n pronunciation="Capito"/></t>
+            <t>sich<n pronunciation="sich"/></t>
+            <t>die<n pronunciation="die"/></t>
+            <t>kaiserliche<n pronunciation="kaiserliche"/></t>
+            <t>Appellationsgewalt<n pronunciation="Appellationsgewalt"/></t>
+            <t>angemaßt<n pronunciation="angemaßt"/></t>
+            <t>habe<n pronunciation="habe"/></t>
+            <t>.</t>
+          </s>
+          <s>
+            <t>↑</t>
+            <t>Tacitus<n pronunciation="Tacitus"/></t>
+            <t>,</t>
+            <t>Historien<n pronunciation="Historien"/></t>
+            <t>3<n pronunciation="drei"/></t>
+            <t>,</t>
+            <t>62.<n pronunciation="zweiundsechzigste"/></t>
+            <t>↑</t>
+            <t>Tacitus<n pronunciation="Tacitus"/></t>
+            <t>,</t>
+            <t>Historien<n pronunciation="Historien"/></t>
+            <t>1<n pronunciation="eins"/></t>
+            <t>,</t>
+            <t>9.<n pronunciation="neunte"/></t>
+          </s>
+          <s>
+            <t>Personendaten<n pronunciation="Personendaten"/></t>
+          </s>
+          <s>
+            <t>NAME<n pronunciation="N"/><n pronunciation="A"/><n pronunciation="M"/><n pronunciation="E"/></t>
+            <t>Fonteius<n pronunciation="Fonteius"/></t>
+            <t>Capito<n pronunciation="Capito"/></t>
+          </s>
+          <s>
+            <t>ALTERNATIVNAMEN<n pronunciation="ALTERNATIVNAMEN"/></t>
+            <t>Capito<n pronunciation="Capito"/></t>
+            <t>,</t>
+            <t>Fonteius<n pronunciation="Fonteius"/></t>
+          </s>
+          <s>
+            <t>KURZBESCHREIBUNG<n pronunciation="KURZBESCHREIBUNG"/></t>
+            <t>römischer<n pronunciation="römischer"/></t>
+            <t>Senator<n pronunciation="Senator"/></t>
+          </s>
+          <s>
+            <t>GEBURTSDATUM<n pronunciation="GEBURTSDATUM"/></t>
+            <t>1.<n pronunciation="erste"/></t>
+            <t>Jahrhundert<n pronunciation="Jahrhundert"/></t>
+          </s>
+          <s>
+            <t>STERBEDATUM<n pronunciation="STERBEDATUM"/></t>
+            <t>68<n pronunciation="achtundsechzig"/></t>
+          </s>
+          <s>
+            <t>STERBEORT<n pronunciation="STERBEORT"/></t>
+            <t>[</t>
+            <t>Germania<n pronunciation="Germania"/></t>
+            <t>Inferior<n pronunciation="Inferior"/></t>
+          </s>
+        </sectioncontent>
+      </section>
+    </ignored>
+  </d>
+</article>

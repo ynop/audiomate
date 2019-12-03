@@ -1,0 +1,18 @@
+== {{int:filedesc}} ==
+{{Spoken article
+ |wiki_lang = de
+ |project   = wikipedia
+ |title     = Kritischer Rationalismus
+ |user_name = Jan Krüger
+ |user_name_link = [[:de:Benutzer:Jan Krüger|Jan Krüger]]
+ |date      = 2011-06-30
+ |duration  = 20:24
+ |accent    = Hochdeutsch
+ |gender    = male
+ |oldid     = 86919649
+ |first_part= 
+ |next_part = 
+}}
+
+== {{int:license-header}} ==
+{{self|cc-by-sa-3.0|migration=redundant}}

@@ -1,0 +1,35 @@
+{{Dieser Artikel|behandelt den Konsul 67 n. Chr. Für weitere Träger des Namens siehe [[Fonteius Capito (Begriffsklärung)]].}}
+'''Fonteius Capito'''<ref>Das [[Römischer Name|''praenomen'']] ist nicht überliefert. Dass es (wie bei mehreren Angehörigen der Familie) ''Gaius'' gelautet hat, wie David Shotter, ''Nero Caesar Augustus: Emperor of Rome'', Pearson Longman, Harlow 2008, ISBN 978-1-405-82457-6, S. 69 und 156, angibt, beruht offenbar auf Vermutung.</ref> (* unbekannt; † Herbst [[68]] in [[Germania Inferior|Niedergermanien]]) war ein [[Römisches Reich|römischer]] [[Römischer Senat|Senator]].
+
+Im Jahr 67 n. Chr., unter [[Nero]], hatte er das Amt des [[Consulat|Konsuls]] gemeinsam mit [[Lucius Iulius Rufus]] inne. Nach Beendigung des Konsulats wurde er Befehlshaber ''([[Legatus|legatus]] Augusti pro praetore)'' des niedergermanischen Heeres und damit zugleich Statthalter des Heeresbezirks, aus dem später die Provinz [[Germania Inferior]] (Niedergermanien) wurde.
+
+Bedeutung erlangte Capito, als er den [[Bataver]]führer [[Claudius Paulus]] wegen angeblicher Rebellion hinrichten und dessen Bruder [[Julius Civilis|Gaius Iulius Civilis]] in Ketten legen und nach Rom deportieren ließ.<ref>[[Publius Cornelius Tacitus|Tacitus]], ''Historien'' [http://www.thelatinlibrary.com/tacitus/tac.hist4.shtml#13 4, 13].</ref> Capito galt als korrupt<ref name="tachist17">Tacitus, ''Historien'' [http://www.thelatinlibrary.com/tacitus/tac.hist1.shtml#7 1, 7].</ref><ref name="tachist152">Tacitus, ''Historien'' [http://www.thelatinlibrary.com/tacitus/tac.hist1.shtml#52 1, 52].</ref>, war aber bei seinen Soldaten beliebt.<ref name="tachist158"/>
+
+Nach dem Tod Neros wurde Fonteius Capito wegen angeblicher Umsturzpläne<ref>Tacitus (''Historien'' 1, 7) zweifelt, ob Capito tatsächlich nach der Kaiserwürde strebte; auf größeren Ehrgeiz könnte die Anekdote bei [[Cassius Dio]] [http://penelope.uchicago.edu/Thayer/E/Roman/Texts/Cassius_Dio/63*.html#2 54, 2] deuten, nach der Capito sich die kaiserliche Appellationsgewalt angemaßt habe.</ref> im Herbst 68 von den Legionslegaten [[Fabius Valens]]<ref>Tacitus, ''Historien'' [http://www.thelatinlibrary.com/tacitus/tac.hist3.shtml#62 3, 62].</ref> und [[Cornelius Aquinus]] sowie dem Kommandanten der [[Classis Germanica|germanischen Flotte]], [[Iulius Burdo]],<ref name="tachist158">Tacitus, ''Historien'' [http://www.thelatinlibrary.com/tacitus/tac.hist1.shtml#58 1, 58].</ref> ermordet; der neue Kaiser [[Galba]] billigte die Tat.<ref name="tachist17"/> Die Ermordung selbst wurde vom Centurio Crispinus ausgeführt, der dafür im folgenden Jahr auf Drängen der Soldaten hingerichtet wurde.<ref name="tachist158"/>
+
+Die Nachfolge Capitos als Statthalter in Niedergermanien trat Anfang Dezember 68 der spätere Kaiser [[Vitellius|Aulus Vitellius]] an. Bis dahin blieb der Posten vakant.<ref>Tacitus, ''Historien'' [http://www.thelatinlibrary.com/tacitus/tac.hist1.shtml#9 1, 9].</ref><ref name="tachist152"/>
+
+== Literatur ==
+
+* [[Werner Eck]]: ''Die Stadthalter der germanischen Provinzen vom 1.–3. Jahrhundert''. Köln 1985, S. 129–131.
+* [[Emil Ritterling]]: ''Fasti des römischen Deutschland unter dem Prinzipat''. Wien 1932, S. 53f.
+
+== Anmerkungen ==
+
+<references />
+
+[[Kategorie:Konsul (Römische Kaiserzeit)]]
+[[Kategorie:Militärperson (Römische Kaiserzeit)]]
+[[Kategorie:Geboren im 1. Jahrhundert]]
+[[Kategorie:Gestorben im 1. Jahrhundert]]
+[[Kategorie:Mann]]
+
+{{Personendaten
+|NAME=Fonteius Capito
+|ALTERNATIVNAMEN=Capito, Fonteius
+|KURZBESCHREIBUNG=römischer Senator
+|GEBURTSDATUM=1. Jahrhundert
+|GEBURTSORT=
+|STERBEDATUM=68
+|STERBEORT=[Germania Inferior|Niedergermanien]]
+}}

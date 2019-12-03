@@ -1,0 +1,17 @@
+{{Spoken article
+ |wiki_lang = de
+ |project   = wikipedia
+ |title     = Philosophie
+ |user_name = cartaphilus
+ |user_name_link = [[:de:Benutzer:cartaphilus|cartaphilus]]
+ |date      = 2006-02-21
+ |duration  = 17:18 min
+ |accent    = Mainz
+ |gender    = male
+ |oldid     = 13916563
+ |first_part= 
+ |next_part = De-Philosophie 02-article.ogg
+}}
+{{GFDL|migration=relicense}}
+
+[[Category:Spoken Wikipedia - German]]

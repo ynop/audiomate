@@ -1,262 +1,15 @@
+import os
+import re
+import xml.etree.ElementTree as ET
+
 from . import base
-from . import kaldi
 
 import audiomate
-from audiomate.corpus import subset
+from audiomate.utils import jsonfile
+from audiomate import issuers
+from audiomate import annotations
+from audiomate import tracks
 from . import downloader
-
-INVALID_UTT_IDS = [
-    '0000003_0000004_398960-399041',
-    '0000005_0000010_7066-7289',
-    '0000014_0000017_10427-10799',
-    '0000014_0000017_11111-11446',
-    '0000014_0000017_11693-11989',
-    '0000019_0000026_68796-69125',
-    '0000005_0000033_5238-5608',
-    '0000040_0000058_1695-2220',
-    '0000005_0000069_214688-215688',
-    '0000005_0000069_471939-472552',
-    '0000005_0000069_730614-730863',
-    '0000005_0000069_789725-790457',
-    '0000005_0000069_1159776-1160507',
-    '0000025_0000077_132174-132653',
-    '0000025_0000077_133469-133719',
-    '0000054_0000088_5941-6316',
-    '0000005_0000091_61341-61852',
-    '0000063_0000102_69259-70351',
-    '0000063_0000102_240716-241365',
-    '0000063_0000102_313238-314392',
-    '0000016_0000108_2272-3348',
-    '0000005_0000126_46970-48249',
-    '0000005_0000129_80627-81171',
-    '0000005_0000129_81724-82810',
-    '0000077_0000141_152817-153186',
-    '0000082_0000151_5895-6555',
-    '0000005_0000181_472283-472538',
-    '0000005_0000181_699070-699424',
-    '0000005_0000194_125355-125888',
-    '0000113_0000216_16123-16399',
-    '0000005_0000221_21890-22410',
-    '0000123_0000234_188918-189013',
-    '0000123_0000234_592161-592399',
-    '0000123_0000234_598771-598980',
-    '0000123_0000234_599377-599578',
-    '0000123_0000234_786888-787433',
-    '0000123_0000234_866234-866604',
-    '0000123_0000234_1110145-1110562',
-    '0000025_0000235_3082-3294',
-    '0000133_0000257_122179-122461',
-    '0000133_0000257_145155-145543',
-    '0000138_0000268_125871-126704',
-    '0000138_0000268_137896-138798',
-    '0000085_0000273_2092-2315',
-    '0000085_0000273_111868-112169',
-    '0000016_0000278_269420-272036',
-    '0000039_0000285_373633-374583',
-    '0000146_0000287_348496-349250',
-    '0000005_0000315_29850-30090',
-    '0000067_0000324_15390-15998',
-    '0000163_0000333_84777-85050',
-    '0000163_0000333_120480-122623',
-    '0000024_0000356_253651-254328',
-    '0000024_0000356_335841-336503',
-    '0000024_0000356_337024-337439',
-    '0000057_0000360_48230-48436',
-    '0000140_0000364_27890-28587',
-    '0000171_0000366_136518-136910',
-    '0000017_0000390_373457-373815',
-    '0000025_0000419_27489-27759',
-    '0000191_0000421_140110-141177',
-    '0000005_0000427_40327-40430',
-    '0000005_0000430_288467-288832',
-    '0000005_0000430_562938-563353',
-    '0000131_0000433_19372-20106',
-    '0000005_0000436_463709-464010',
-    '0000197_0000451_2138-3148',
-    '0000019_0000454_9242-9562',
-    '0000019_0000454_55532-56925',
-    '0000073_0000457_123633-124019',
-    '0000102_0000465_46772-46950',
-    '0000005_0000467_127792-128565',
-    '0000151_0000489_54022-54677',
-    '0000151_0000489_56267-56611',
-    '0000211_0000490_20256-20553',
-    '0000169_0000504_46406-47865',
-    '0000071_0000578_21350-22056',
-    '0000071_0000578_73981-74653',
-    '0000014_0000586_63573-63749',
-    '0000063_0000600_239616-241070',
-    '0000185_0000607_183327-183996',
-    '0000256_0000610_33678-34067',
-    '0000005_0000626_107148-107408',
-    '0000171_0000641_328171-328392',
-    '0000005_0000686_35582-36118',
-    '0000275_0000688_10054-12247',
-    '0000014_0000700_54235-55125',
-    '0000005_0000710_26464-26766',
-    '0000005_0000711_25996-26865',
-    '0000286_0000725_6728-7069',
-    '0000286_0000725_10943-11343',
-    '0000291_0000735_7903-8158',
-    '0000058_0000739_41347-43146',
-    '0000123_0000742_60188-61145',
-    '0000093_0000747_189461-191592',
-    '0000049_0000761_89822-90161',
-    '0000024_0000783_533092-533532',
-    '0000005_0000784_120496-121705',
-    '0000185_0000785_40963-41351',
-    '0000309_0000813_113483-114080',
-    '0000140_0000815_104394-104776',
-    '0000207_0000826_202006-202344',
-    '0000019_0000827_66154-66460',
-    '0000019_0000827_159631-159822',
-    '0000024_0000836_32337-32640',
-    '0000005_0000844_230130-231426',
-    '0000253_0000850_326296-327281',
-    '0000140_0000858_1556-2247',
-    '0000323_0000870_10242-10461',
-    '0000014_0000909_30398-30739',
-    '0000039_0000918_279402-280108',
-    '0000005_0000922_242697-243695',
-    '0000336_0000926_50505-50920',
-    '0000072_0000931_79893-80379',
-    '0000072_0000931_105039-105220',
-    '0000039_0000936_458104-458518',
-    '0000024_0000937_179042-179855',
-    '0000028_0000947_106268-106686',
-    '0000005_0000949_58852-59367',
-    '0000131_0000958_53838-54696',
-    '0000024_0000970_514827-515332',
-    '0000360_0000987_59496-59916',
-    '0000019_0000990_103431-103564',
-    '0000005_0001005_1690084-1690343',
-    '0000005_0001005_1693017-1693282',
-    '0000005_0001005_1698569-1699304',
-    '0000327_0001007_882-1340',
-    '0000005_0000006_190-347',
-    '0000012_0000015_215564-215670',
-    '0000035_0000050_5981-6097',
-    '0000040_0000058_79433-79539',
-    '0000005_0000069_1422154-1422432',
-    '0000005_0000085_285954-286078',
-    '0000052_0000086_26450-26514',
-    '0000065_0000106_99986-100202',
-    '0000005_0000123_195163-195236',
-    '0000005_0000135_97485-97604',
-    '0000005_0000135_97873-97967',
-    '0000005_0000135_98256-98353',
-    '0000005_0000135_98746-98830',
-    '0000005_0000135_99181-99254',
-    '0000005_0000135_99719-99809',
-    '0000005_0000135_100105-100196',
-    '0000005_0000135_100626-100716',
-    '0000005_0000135_101338-101423',
-    '0000005_0000135_101790-101869',
-    '0000005_0000135_103035-103114',
-    '0000005_0000135_103552-103632',
-    '0000077_0000141_138401-138480',
-    '0000081_0000148_32593-32699',
-    '0000081_0000148_33162-33250',
-    '0000093_0000184_140770-140868',
-    '0000005_0000233_30488-30599',
-    '0000129_0000245_128858-128949',
-    '0000129_0000245_131192-131266',
-    '0000005_0000259_38794-38914',
-    '0000039_0000285_102717-102810',
-    '0000035_0000300_8918-9030',
-    '0000153_0000303_74312-74456',
-    '0000077_0000313_36426-36529',
-    '0000005_0000336_36127-36238',
-    '0000005_0000355_127169-127366',
-    '0000005_0000355_345128-345196',
-    '0000005_0000435_208576-208682',
-    '0000024_0000551_292889-292957',
-    '0000152_0000577_59858-59933',
-    '0000005_0000580_126489-126589',
-    '0000014_0000586_43233-43311',
-    '0000039_0000593_118699-118789',
-    '0000024_0000664_153312-153451',
-    '0000024_0000664_250672-250793',
-    '0000024_0000664_294406-294509',
-    '0000024_0000664_304527-304635',
-    '0000024_0000664_368297-368391',
-    '0000024_0000664_403319-403432',
-    '0000024_0000664_411090-411209',
-    '0000024_0000664_477923-478020',
-    '0000024_0000664_478692-478806',
-    '0000024_0000664_653780-654021',
-    '0000024_0000664_667619-667699',
-    '0000024_0000664_710364-710433',
-    '0000040_0000679_94655-94777',
-    '0000040_0000679_135286-135394',
-    '0000040_0000679_197082-197197',
-    '0000005_0000705_142974-143065',
-    '0000274_0000720_112053-112130',
-    '0000005_0000784_17760-17825',
-    '0000005_0000819_204778-204911',
-    '0000311_0000822_59432-59522',
-    '0000005_0000868_509164-509369',
-    '0000323_0000870_18009-18118',
-    '0000323_0000870_18179-18266',
-    '0000008_0000881_19833-20050',
-    '0000005_0000884_54279-54383',
-    '0000005_0000889_86378-86496',
-    '0000104_0000897_28840-28927',
-    '0000039_0000918_97047-97133',
-    '0000039_0000918_101952-102046',
-    '0000046_0000928_77611-77714',
-    '0000072_0000931_115971-116078',
-    '0000005_0000949_46788-46884',
-    '0000005_0000951_88229-88341',
-    '0000024_0000970_861066-861138',
-    '0000005_0001009_98043-98170',
-    '0000005_0000475_4295-4362',
-    '0000005_0000475_4295-4362',
-    '0000005_0000580_38885-38949',
-    '0000230_0000528_134444-134553',
-    '0000230_0000528_37232-37404',
-    '0000107_0000203_41054-41137',
-    '0000008_0000881_19833-20050',
-    '0000012_0000015_215564-215670',
-    '0000014_0000586_43233-43311',
-    '0000024_0000551_292889-292957',
-    '0000024_0000551_390106-390179',
-    '0000024_0000664_153312-153451',
-    '0000024_0000664_250672-250793',
-    '0000024_0000664_294406-294509',
-    '0000024_0000664_304527-304635',
-    '0000024_0000664_368297-368391',
-    '0000024_0000664_403319-403432',
-    '0000024_0000664_411090-411209',
-    '0000024_0000664_477923-478020',
-    '0000024_0000664_478692-478806',
-    '0000024_0000664_635563-635639',
-    '0000024_0000664_653780-654021',
-    '0000024_0000664_667619-667699',
-    '0000024_0000664_710364-710433',
-    '0000024_0000970_861066-861138',
-    '0000035_0000050_5981-6097',
-    '0000035_0000300_8918-9030',
-    '0000040_0000058_79433-79539',
-    '0000040_0000679_135286-135394',
-    '0000040_0000679_197082-197197',
-    '0000040_0000679_94655-94777',
-    '0000046_0000928_77611-77714',
-    '0000039_0000285_102717-102810',
-    '0000039_0000593_118699-118789',
-    '0000039_0000918_101952-102046',
-    '0000039_0000918_97047-97133',
-    '0000052_0000086_26450-26514',
-    '0000065_0000106_99986-100202',
-    '0000072_0000931_115971-116078',
-    '0000077_0000141_138401-138480',
-    '0000077_0000313_36426-36529',
-    '0000081_0000148_32593-32699',
-    '0000081_0000148_33162-33250',
-    '0000093_0000184_140770-140868',
-    '0000104_0000897_28840-28927',
-    '0000107_0000203_41054-41137'
-]
 
 
 URLS = {
@@ -264,6 +17,9 @@ URLS = {
     'en': 'https://www2.informatik.uni-hamburg.de/nats/pub/SWC/SWC_English.tar',
     'nl': 'https://www2.informatik.uni-hamburg.de/nats/pub/SWC/SWC_Dutch.tar'
 }
+
+READER_NAME_PATTERN = re.compile(r'user_name\s+=\s+(.*?)\n')
+READER_GENDER_PATTERN = re.compile(r'(gender|geschlecht)\s+=\s+(.*?)\n')
 
 
 class SWCDownloader(downloader.ArchiveDownloader):
@@ -287,23 +43,304 @@ class SWCDownloader(downloader.ArchiveDownloader):
         return 'swc'
 
 
-class SWCReader(kaldi.KaldiReader, base.CorpusReader):
+class SWCReader(base.CorpusReader):
     """
-    Reader for the Spoken Wikipedia Corpus. It is basically in Kaldi format but removes some invalid utterances.
-
-    To prepare the corpus for loading checkout
-    https://audiomate.readthedocs.io/en/latest/documentation/indirect_support.html.
+    Reader for the Spoken Wikipedia Corpus.
     """
 
     @classmethod
     def type(cls):
         return 'swc'
 
-    def _load(self, path):
-        corpus = super(SWCReader, self)._load(path)
+    def _check_for_missing_files(self, path):
+        return []
 
-        if not self.include_invalid_items:
-            utt_filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(INVALID_UTT_IDS), inverse=True)
-            corpus = subset.Subview(corpus, filter_criteria=utt_filter)
+    def _load(self, path):
+        corpus = audiomate.Corpus()
+
+        article_paths = sorted(self.get_articles(path))
+        reader_map = {}
+        file_map = {}
+
+        for article_idx, article_path in enumerate(article_paths):
+            audio_files = self.get_audio_file_info(article_path)
+            reader_name, reader_gender = self.get_reader_info(article_path)
+            segments = self.get_segments(article_path)
+
+            if reader_name not in reader_map.keys():
+                speaker = issuers.Speaker(
+                    '{:0>8}'.format(len(reader_map)),
+                    gender=reader_gender
+                )
+                reader_map[reader_name] = speaker
+                corpus.import_issuers(speaker)
+            else:
+                speaker = reader_map[reader_name]
+
+            for start, end, text in segments:
+                file_path = self.find_audio_file_for_segment(start, end, audio_files)
+
+                if file_path is not None:
+
+                    if file_path not in file_map.keys():
+                        track = tracks.FileTrack(
+                            '{:0>10}'.format(len(file_map)),
+                            file_path
+                        )
+                        file_map[file_path] = track
+                        corpus.import_tracks(track)
+                    else:
+                        track = file_map[file_path]
+
+                    track_offset = audio_files[file_path]
+                    utt_start = start - track_offset
+                    utt_end = end - track_offset
+
+                    utt_idx = '{}_{}_{}_{}'.format(
+                        speaker.idx,
+                        track.idx,
+                        int(start * 1000),
+                        int(end * 1000)
+                    )
+
+                    utt = corpus.new_utterance(
+                        utt_idx,
+                        track.idx,
+                        issuer_idx=speaker.idx,
+                        start=utt_start,
+                        end=utt_end
+                    )
+
+                    ll = annotations.LabelList.create_single(
+                        text,
+                        audiomate.corpus.LL_WORD_TRANSCRIPT
+                    )
+
+                    utt.set_label_list(ll)
 
         return audiomate.Corpus.from_corpus(corpus)
+
+    def get_articles(self, path):
+        """ Return the list of article-paths """
+        article_paths = []
+
+        for dirname in os.listdir(path):
+            dirpath = os.path.join(path, dirname)
+
+            audio_meta_file = os.path.join(dirpath, 'audiometa.txt')
+            info_file = os.path.join(dirpath, 'info.json')
+            align_file = os.path.join(dirpath, 'aligned.swc')
+
+            if os.path.isfile(audio_meta_file) and \
+                    os.path.isfile(info_file) and \
+                    os.path.isfile(align_file):
+                article_paths.append(dirpath)
+
+        return article_paths
+
+    def get_audio_file_info(self, article_path):
+        """
+        Return info about the audio files.
+        List of tuples with (path, offset).
+        """
+
+        info_path = os.path.join(article_path, 'info.json')
+        info = jsonfile.read_json_file(info_path)
+        audio_files = {}
+
+        if len(info['audio_files']) == 1:
+            path = os.path.join(article_path, 'audio.ogg')
+
+            if 'offset' not in info['audio_files'][0].keys():
+                return {}
+
+            offset = info['audio_files'][0]['offset']
+            audio_files[path] = offset
+
+        else:
+            for i, af in enumerate(info['audio_files']):
+                path = os.path.join(article_path, 'audio{}.ogg'.format(i+1))
+                offset = af['offset']
+                audio_files[path] = offset
+
+        return audio_files
+
+    def get_reader_info(self, article_path):
+        """
+        Return info about the reader of the article.
+        """
+
+        meta_path = os.path.join(article_path, 'audiometa.txt')
+        with open(meta_path, 'r') as f:
+            content = f.read()
+
+        name_match = READER_NAME_PATTERN.search(content)
+
+        if name_match is not None:
+            name = name_match.group(1).strip()
+        else:
+            name = os.path.basename(article_path)
+
+        gender_match = READER_GENDER_PATTERN.search(content)
+        gender_str = ''
+
+        if gender_match is not None:
+            gender_str = gender_match.group(2).strip()
+
+        if gender_str.lower() in ['male', 'männlich', 'mänlich', 'mann', 'm', 'malee', 'männ', 'maennlich']:
+            gender = issuers.Gender.MALE
+        elif gender_str.lower() in ['female', 'weiblich']:
+            gender = issuers.Gender.FEMALE
+        else:
+            gender = issuers.Gender.UNKNOWN
+
+        return name, gender
+
+    def find_audio_file_for_segment(self, start, end, audio_files):
+        """
+        Find the correct audio file for the segment.
+        Return index of matching audio file.
+        """
+
+        items = sorted(audio_files.items(), key=lambda x: x[1])
+
+        for i in range(len(items) - 1):
+            if end <= items[i+1][1]:
+                # Segment belongs to audiofile i
+                if start >= items[i][1]:
+                    return items[i][0]
+
+                # Segment crosses audiofile boundaries, ignore
+                else:
+                    return None
+
+        if start >= items[-1][1]:
+            return items[-1][0]
+        else:
+            return None
+
+    def get_segments(self, article_path):
+        """
+        Parse segments from alignment file.
+        Return list with tuples (start, end, text).
+        """
+        aligned_path = os.path.join(article_path, 'aligned.swc')
+        tree = ET.parse(aligned_path)
+        root = tree.getroot()
+
+        segments = []
+
+        for p in root:
+            if p.tag == 'd':
+                q = self.parse_element(p)
+                segments.extend(q)
+
+        return segments
+
+    def parse_element(self, parent):
+        segments = []
+
+        for c in parent:
+            if c.tag in ['extra', 'section', 'sectioncontent', 'p']:
+                q = self.parse_element(c)
+                segments.extend(q)
+            elif c.tag in ['sectiontitle', 's']:
+                q = self.parse_sentence(c)
+                segments.extend(q)
+
+        return segments
+
+    def parse_sentence(self, element):
+        tokens = []
+
+        for index, token in enumerate(element):
+            if token.tag == 't':
+                tokens.append((index, token))
+
+        return self.parse_tokens(tokens)
+
+    def parse_tokens(self, tokens):
+        """
+        Get segments from sequence of tokens.
+        """
+        valid_tokens = self.get_valid_tokens(tokens)
+
+        if len(valid_tokens) <= 0:
+            return []
+
+        segmented_tokens = []
+        current_tokens = [valid_tokens[0]]
+
+        for t in valid_tokens[1:]:
+            # Tokens have consecutive indices
+            # so same segment
+            if current_tokens[-1][0] + 1 == t[0]:
+                current_tokens.append(t)
+
+            # start new segment
+            else:
+                segmented_tokens.append(current_tokens)
+                current_tokens = [t]
+
+        segmented_tokens.append(current_tokens)
+
+        segments = []
+
+        for tokens in segmented_tokens:
+            text = ' '.join([t[3].strip() for t in tokens])
+            start = tokens[0][1]
+            end = tokens[-1][2]
+            segments.append((start, end, text))
+
+        return segments
+
+    def get_valid_tokens(self, tokens):
+        """
+        Return only valid tokens (have a normalization with start and end time)
+        """
+        valid_tokens = []
+
+        for index, token in tokens:
+            normalizations = self.parse_normalizations(token)
+
+            if len(normalizations) > 0:
+                normalized_text = ' '.join([n[0] for n in normalizations])
+                start = normalizations[0][1]
+                end = normalizations[-1][2]
+
+                if start != -1 and end != -1:
+                    valid_tokens.append((
+                        index,
+                        start,
+                        end,
+                        normalized_text
+                    ))
+
+        return valid_tokens
+
+    def parse_normalizations(self, token):
+        """
+        Parse normalizations of a token.
+        Return list of tuples (text, start, end).
+        """
+        norms = []
+
+        for c in token:
+            if c.tag == 'n':
+                pronunciation = c.attrib['pronunciation']
+                start = -1
+                end = -1
+
+                if 'start' in c.attrib.keys():
+                    start = int(c.attrib['start']) / 1000.0
+
+                if 'end' in c.attrib.keys():
+                    end = int(c.attrib['end']) / 1000.0
+
+                norms.append((
+                    pronunciation,
+                    start,
+                    end
+                ))
+
+        return norms
