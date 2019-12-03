@@ -9,15 +9,15 @@ from audiomate.utils import textfile
 from . import base
 
 DOWNLOAD_URLS = {
-    'de_DE': 'http://www.m-ailabs.bayern/?ddownload=410',
-    'en_UK': 'http://www.m-ailabs.bayern/?ddownload=412',
-    'en_US': 'http://www.m-ailabs.bayern/?ddownload=411',
-    'es_ES': 'http://www.m-ailabs.bayern/?ddownload=413',
-    'it_IT': 'http://www.m-ailabs.bayern/?ddownload=409',
-    'uk_UK': 'http://www.m-ailabs.bayern/?ddownload=414',
-    'ru_RU': 'http://www.m-ailabs.bayern/?ddownload=415',
-    'fr_FR': 'http://www.m-ailabs.bayern/?ddownload=681',
-    'pl_PL': 'http://www.m-ailabs.bayern/?ddownload=673',
+    'de_DE': 'http://www.caito.de/data/Training/stt_tts/de_DE.tgz',
+    'en_UK': 'http://www.caito.de/data/Training/stt_tts/en_UK.tgz',
+    'en_US': 'http://www.caito.de/data/Training/stt_tts/en_US.tgz',
+    'es_ES': 'http://www.caito.de/data/Training/stt_tts/es_ES.tgz',
+    'it_IT': 'http://www.caito.de/data/Training/stt_tts/it_IT.tgz',
+    'uk_UK': 'http://www.caito.de/data/Training/stt_tts/uk_UK.tgz',
+    'ru_RU': 'http://www.caito.de/data/Training/stt_tts/ru_RU.tgz',
+    'fr_FR': 'http://www.caito.de/data/Training/stt_tts/fr_FR.tgz',
+    'pl_PL': 'http://www.caito.de/data/Training/stt_tts/pl_PL.tgz',
 }
 
 
@@ -46,7 +46,12 @@ class MailabsDownloader(base.CorpusDownloader):
             if self.tags is None or tag in self.tags:
                 tmp_file = os.path.join(target_path, 'tmp_{}.tgz'.format(tag))
 
-                download.download_file(download_url, tmp_file)
+                download.download_file(
+                    download_url,
+                    tmp_file,
+                    show_progress=True,
+                    num_threads=8
+                )
                 download.extract_tar(tmp_file, target_path)
 
                 os.remove(tmp_file)
