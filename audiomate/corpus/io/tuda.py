@@ -119,15 +119,17 @@ class TudaDownloader(downloader.ArchiveDownloader):
     Args:
         url (str): The url to download the dataset from. If not given the default URL is used.
                    It is expected to be a tar.gz file.
+        num_threads (int): Number of threads to use for download files.
     """
 
-    def __init__(self, url=None):
+    def __init__(self, url=None, num_threads=1):
         if url is None:
             url = DOWNLOAD_URL
 
         super(TudaDownloader, self).__init__(
             url,
-            move_files_up=True
+            move_files_up=True,
+            num_threads=num_threads
         )
 
     @classmethod
