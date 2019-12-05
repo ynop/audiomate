@@ -149,8 +149,6 @@ def get_identifiers_splitted_by_weights(identifiers={}, proportions={}, seed=Non
         for idx, proportion in abs_proportions.items():
             target_weights_per_part[idx][category] = proportion
 
-    print(target_weights_per_part)
-
     # Distribute items greedily
     part_ids = sorted(list(proportions.keys()))
     current_weights_per_part = {
