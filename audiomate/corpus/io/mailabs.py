@@ -9,15 +9,15 @@ from audiomate.utils import textfile
 from . import base
 
 DOWNLOAD_URLS = {
-    'de_DE': 'http://www.caito.de/data/Training/stt_tts/de_DE.tgz',
-    'en_UK': 'http://www.caito.de/data/Training/stt_tts/en_UK.tgz',
-    'en_US': 'http://www.caito.de/data/Training/stt_tts/en_US.tgz',
-    'es_ES': 'http://www.caito.de/data/Training/stt_tts/es_ES.tgz',
-    'it_IT': 'http://www.caito.de/data/Training/stt_tts/it_IT.tgz',
-    'uk_UK': 'http://www.caito.de/data/Training/stt_tts/uk_UK.tgz',
-    'ru_RU': 'http://www.caito.de/data/Training/stt_tts/ru_RU.tgz',
-    'fr_FR': 'http://www.caito.de/data/Training/stt_tts/fr_FR.tgz',
-    'pl_PL': 'http://www.caito.de/data/Training/stt_tts/pl_PL.tgz',
+    'de_DE': 'https://www.caito.de/data/Training/stt_tts/de_DE.tgz',
+    'en_UK': 'https://www.caito.de/data/Training/stt_tts/en_UK.tgz',
+    'en_US': 'https://www.caito.de/data/Training/stt_tts/en_US.tgz',
+    'es_ES': 'https://www.caito.de/data/Training/stt_tts/es_ES.tgz',
+    'it_IT': 'https://www.caito.de/data/Training/stt_tts/it_IT.tgz',
+    'uk_UK': 'https://www.caito.de/data/Training/stt_tts/uk_UK.tgz',
+    'ru_RU': 'https://www.caito.de/data/Training/stt_tts/ru_RU.tgz',
+    'fr_FR': 'https://www.caito.de/data/Training/stt_tts/fr_FR.tgz',
+    'pl_PL': 'https://www.caito.de/data/Training/stt_tts/pl_PL.tgz',
 }
 
 
