@@ -117,7 +117,7 @@ class TestTudaReader(rt.CorpusReaderTest):
         # NOT ALL LISTED
     }
 
-    EXPECTED_NUMBER_OF_SUBVIEWS = 3 + 6 + 5 + 5 + 6
+    EXPECTED_NUMBER_OF_SUBVIEWS = 3 + 5 + 5 + 5 + 5
     EXPECTED_SUBVIEWS = [
         rt.ExpSubview('test', [
             '2015-01-27-12-34-36_Kinect-Beam',
@@ -136,11 +136,20 @@ class TestTudaReader(rt.CorpusReaderTest):
             '2015-02-10-14-31-52_Samson',
             '2015-02-10-14-31-52_Yamaha',
         ]),
-        rt.ExpSubview('Microsoft-Kinect-Raw', [
+        rt.ExpSubview('kinect-raw', [
             '2014-03-17-10-26-07_Microsoft-Kinect-Raw',
             '2014-03-17-13-03-33_Microsoft-Kinect-Raw',
+            '2014-03-19-15-01-56_Kinect-RAW',
+            '2014-08-07-13-22-38_Kinect-RAW',
+            '2014-08-14-14-52-00_Kinect-RAW',
+            '2015-01-27-11-31-32_Kinect-RAW',
+            '2015-01-27-12-34-36_Kinect-RAW',
+            '2015-01-28-11-35-47_Kinect-RAW',
+            '2015-01-28-12-36-24_Kinect-RAW',
+            '2015-02-03-12-08-13_Kinect-RAW',
+            '2015-02-10-14-31-52_Kinect-RAW',
         ]),
-        rt.ExpSubview('train_Samson', [
+        rt.ExpSubview('train_samson', [
             '2014-08-07-13-22-38_Samson',
             '2014-08-14-14-52-00_Samson',
         ]),
@@ -149,7 +158,9 @@ class TestTudaReader(rt.CorpusReaderTest):
 
     def load(self):
         reader = io.TudaReader()
-        return reader.load(self.SAMPLE_PATH)
+        ds = reader.load(self.SAMPLE_PATH)
+        print(sorted(ds.subviews['kinect-raw'].utterances.keys()))
+        return ds
 
     def test_get_ids_from_folder(self):
         reader = io.TudaReader()

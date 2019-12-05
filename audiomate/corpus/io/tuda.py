@@ -31,6 +31,15 @@ WAV_FILE_SUFFIXES = [
     'Microsoft-Kinect-Raw'
 ]
 
+WAV_SUFFIX_TO_SUBVIEW = {
+    'Kinect-Beam': 'kinect-beam',
+    'Kinect-RAW': 'kinect-raw',
+    'Realtek': 'realtek',
+    'Samson': 'samson',
+    'Yamaha': 'yamaha',
+    'Microsoft-Kinect-Raw': 'kinect-raw',
+}
+
 # Wrong transcripts, empty or to short
 BAD_FILES = {
     'train': [
@@ -185,7 +194,8 @@ class TudaReader(base.CorpusReader):
 
         for utt_id in utt_ids:
             wavtype = utt_id.split('_')[-1]
-            splits[wavtype].append(utt_id)
+            subview_type = WAV_SUFFIX_TO_SUBVIEW[wavtype]
+            splits[subview_type].append(utt_id)
 
         for sub_name, sub_utts in splits.items():
             subview_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=sub_utts)
