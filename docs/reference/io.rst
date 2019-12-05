@@ -57,9 +57,10 @@ Implementations
   MUSAN                             x         x
   M-AILABS Speech Dataset           x         x
   LITIS Rouen Audio scene dataset   x         x
+  Spoken Wikipedia Corpora          x         x
   Tatoeba                           x         x
   TIMIT                                       x
-  TUDA German Distant Speech                  x
+  TUDA German Distant Speech        x         x
   Urbansound8k                                x
   VoxForge                          x         x
   Wav2Letter                                         x
@@ -180,6 +181,14 @@ LITIS Rouen Audio scene dataset
 .. autoclass:: RouenReader
    :members:
 
+SWC - Spoken Wikipedia Corpora
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: SWCDownloader
+   :members:
+
+.. autoclass:: SWCReader
+   :members:
+
 Tatoeba
 ^^^^^^^
 .. autoclass:: TatoebaDownloader
@@ -195,6 +204,9 @@ TIMIT DARPA Acoustic-Phonetic Continuous Speech Corpus
 
 TUDA German Distant Speech
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: TudaDownloader
+   :members:
+
 .. autoclass:: TudaReader
    :members:
 

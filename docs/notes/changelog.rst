@@ -8,6 +8,11 @@ Next Version
 
 **New Features**
 
+* Added Downloader for SWC Corpus ((:class:`audiomate.corpus.io.SWCDownloader`).
+
+* Updated SWC-Reader (:class:`audiomate.corpus.io.SWCReader`) with an own implementation,
+  so no manual preprocessing is needed anymore.
+
 * Added conversion class (:class:`audiomate.corpus.conversion.WavAudioFileConverter`) to convert
   all files (or files that do not meet the requirements) of a corpus.
 

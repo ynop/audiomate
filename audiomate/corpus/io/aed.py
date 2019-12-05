@@ -15,12 +15,16 @@ LABEL_PATTERN = re.compile(r'(.*)_\d')
 class AEDDownloader(downloader.ArchiveDownloader):
     """
     Downloader for the Acoustic Event Dataset.
+
+    Args:
+        num_threads (int): Number of threads to use for download files.
     """
 
-    def __init__(self):
+    def __init__(self, num_threads=1):
         super(AEDDownloader, self).__init__(
             DATA_URL,
-            move_files_up=True
+            move_files_up=True,
+            num_threads=num_threads
         )
 
     @classmethod

@@ -10,6 +10,7 @@ from . import base
 from audiomate import annotations
 from audiomate import issuers
 from audiomate.utils import textfile
+from audiomate.utils import download
 
 DOWNLOAD_URL = {
     'de': 'http://www.repository.voxforge1.org/downloads/de/Trunk/Audio/Main/16kHz_16bit/',
@@ -31,10 +32,12 @@ class VoxforgeDownloader(base.CorpusDownloader):
     Args:
         lang (str): If no URL is given the predefined URL's for the given language is used, if one is defined.
         url (str): The url to check for available .tgz files.
+        num_workers (int): Number of processes/threads to use for download.
     """
 
-    def __init__(self, lang='de', url=None):
+    def __init__(self, lang='de', url=None, num_workers=4):
         self.url = url
+        self.num_workers = num_workers
 
         if url is None:
             if lang in DOWNLOAD_URL.keys():
@@ -51,7 +54,11 @@ class VoxforgeDownloader(base.CorpusDownloader):
         os.makedirs(temp_folder, exist_ok=True)
 
         available = VoxforgeDownloader.available_files(self.url)
-        downloaded = VoxforgeDownloader.download_files(available, temp_folder)
+        print('Found {} available archives to download'.format(len(available)))
+
+        downloaded = self.download_files(available, temp_folder)
+
+        print('Extract {} files'.format(len(downloaded)))
         VoxforgeDownloader.extract_files(downloaded, target_path)
 
         shutil.rmtree(temp_folder)
@@ -75,26 +82,25 @@ class VoxforgeDownloader(base.CorpusDownloader):
 
         return available_files
 
-    @staticmethod
-    def download_files(file_urls, target_path):
+    def download_files(self, file_urls, target_path):
         """ Download all files and store to the given path. """
         os.makedirs(target_path, exist_ok=True)
-        downloaded_files = []
+
+        url_to_target = {}
 
         for file_url in file_urls:
-            req = requests.get(file_url)
-
-            if req.status_code != 200:
-                raise base.FailedDownloadException('Failed to download file {} (status {})!'.format(req.status_code,
-                                                                                                    file_url))
-
             file_name = os.path.basename(file_url)
             target_file_path = os.path.join(target_path, file_name)
+            url_to_target[file_url] = target_file_path
 
-            with open(target_file_path, 'wb') as f:
-                f.write(req.content)
+        dl_result = download.download_files(url_to_target, num_threads=self.num_workers)
 
-            downloaded_files.append(target_file_path)
+        downloaded_files = []
+        for url, status, path_or_msg in dl_result:
+            if status:
+                downloaded_files.append(path_or_msg)
+            else:
+                print('Download failed for url {}'.format(url))
 
         return downloaded_files
 
@@ -155,7 +161,8 @@ class VoxforgeReader(base.CorpusReader):
                 basename, ext = os.path.splitext(file_name)
                 idx = '{}-{}'.format(item, basename)
 
-                is_valid_wav = os.path.isfile(wav_path) and ext == '.wav' and idx not in BAD_UTTERANCES
+                is_valid_wav = os.path.isfile(wav_path) and ext == '.wav' \
+                    and (self.include_invalid_items or idx not in BAD_UTTERANCES)
                 has_transcription = basename in prompts.keys()
 
                 if is_valid_wav and has_transcription:

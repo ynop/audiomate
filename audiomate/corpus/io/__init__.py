@@ -12,7 +12,7 @@ from .gtzan import GtzanDownloader, GtzanReader  # noqa: F401
 from .kaldi import KaldiReader, KaldiWriter  # noqa: F401
 from .musan import MusanDownloader, MusanReader  # noqa: F401
 from .speech_commands import SpeechCommandsReader  # noqa: F401
-from .tuda import TudaReader  # noqa: F401
+from .tuda import TudaDownloader, TudaReader  # noqa: F401
 from .folder import FolderReader  # noqa: F401
 from .esc import ESC50Downloader, ESC50Reader  # noqa: F401
 from .mozilla_deepspeech import MozillaDeepSpeechWriter  # noqa: F401
@@ -20,7 +20,7 @@ from .voxforge import VoxforgeDownloader, VoxforgeReader  # noqa: F401
 from .aed import AEDReader, AEDDownloader  # noqa: F401
 from .urbansound import Urbansound8kReader  # noqa: F401
 from .timit import TimitReader  # noqa: F401
-from .swc import SWCReader  # noqa: F401
+from .swc import SWCDownloader, SWCReader  # noqa: F401
 from .free_spoken_digits import FreeSpokenDigitDownloader, FreeSpokenDigitReader  # noqa: F401
 from .tatoeba import TatoebaDownloader, TatoebaReader  # noqa: F401
 from .common_voice import CommonVoiceReader  # noqa: F401
@@ -128,7 +128,7 @@ def create_downloader_of_type(type_name):
     return downloaders[type_name]()
 
 
-def create_reader_of_type(type_name):
+def create_reader_of_type(type_name, **kwargs):
     """
         Create an instance of the reader with the given name.
 
@@ -143,7 +143,7 @@ def create_reader_of_type(type_name):
     if type_name not in readers.keys():
         raise UnknownReaderException('Unknown reader: %s' % (type_name,))
 
-    return readers[type_name]()
+    return readers[type_name](**kwargs)
 
 
 def create_writer_of_type(type_name):

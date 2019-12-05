@@ -47,6 +47,7 @@ Currently supported datasets:
 * [M-AILABS Speech Dataset](https://www.caito.de/2019/01/the-m-ailabs-speech-dataset/)
 * [MUSAN](http://www.openslr.org/17/)
 * [LITIS Rouen Audio scene dataset](https://sites.google.com/site/alainrakotomamonjy/home/audio-scene)
+* [Spoken Wikipedia Corpora](https://nats.gitlab.io/swc/)
 * [Tatoeba](https://tatoeba.org/)
 * [TIMIT](https://github.com/philipperemy/timit)
 * [Urbansound8k](http://urbansounddataset.weebly.com/urbansound8k.html)
@@ -58,9 +59,6 @@ Currently supported formats:
 * [Wav2Letter](https://github.com/facebookresearch/wav2letter)
 * [NVIDIA Jasper](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/SpeechRecognition/Jasper)
 * [Custom Formats](https://audiomate.readthedocs.io/en/latest/documentation/formats.html)
-
-Indirectly supported datasets ([Details](https://audiomate.readthedocs.io/en/latest/documentation/indirect_support.html)):
-* [Spoken Wikipedia Corpora](https://nats.gitlab.io/swc/)
 
 ## Installation
 

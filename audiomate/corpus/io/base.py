@@ -56,7 +56,16 @@ class CorpusReader(metaclass=abc.ABCMeta):
     To implement a reader for a custom format, programmers are expected to subclass this class and to implement all
     abstract methods. The documentation of each abstract methods details the requirements that have to be met by an
     implementation.
+
+    Args:
+        inclue_invalid_items (bool): Some readers define a list of invalid utterances/files.
+                                     (e.g. bad transcription, invalid audio, ...)
+                                     If ``False``, those utterances are loaded anyway.
+                                     If ``True``, those utterances are ignored.
     """
+
+    def __init__(self, include_invalid_items=False):
+        self.include_invalid_items = include_invalid_items
 
     def load(self, path):
         """

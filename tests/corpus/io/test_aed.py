@@ -28,6 +28,8 @@ class TestAEDDownloader:
         target_folder = tmpdir.strpath
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(aed.DATA_URL, headers={'Content-Length': '100'})
             mock.get(aed.DATA_URL, content=zip_data)
 
             downloader.download(target_folder)

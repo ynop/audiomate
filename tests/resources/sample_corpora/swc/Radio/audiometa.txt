@@ -1,0 +1,18 @@
+== {{int:filedesc}} ==
+{{Spoken article
+ |wiki_lang = de
+ |project   = wikipedia
+ |title     = Radio
+ |user_name = Ahoek
+ |user_name_link = [[:de:Benutzer:Ahoek|Ahoek]]
+ |date      = 2013-08-08
+ |duration  = 17:15
+ |accent    = Hochdeutsch
+ |gender    = Männlich
+ |oldid     = 121115583
+ |first_part= 
+ |next_part = 
+}}
+
+== {{int:license-header}} ==
+{{self|GFDL|cc-by-sa-3.0,2.5,2.0,1.0}}

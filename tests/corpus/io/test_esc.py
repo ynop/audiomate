@@ -31,6 +31,8 @@ class TestESC50Downloader:
         target_folder = tmpdir.strpath
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(esc.DOWNLOAD_URL, headers={'Content-Length': '100'})
             mock.get(esc.DOWNLOAD_URL, content=zip_data)
 
             downloader.download(target_folder)

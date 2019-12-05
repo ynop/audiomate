@@ -1,3 +1,8 @@
+import functools
+import multiprocessing
+
+from tqdm import tqdm
+
 from audiomate import corpus
 from . import base
 
@@ -11,11 +16,14 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
     Args:
         max_characters_per_second (int): If char/sec of an utterance is higher than this it is returned.
         label_list_idx (str): The label-list to use for validation.
+        num_threads (int): Number of threads to use.
     """
 
-    def __init__(self, max_characters_per_second=10, label_list_idx=corpus.LL_WORD_TRANSCRIPT):
+    def __init__(self, max_characters_per_second=10, label_list_idx=corpus.LL_WORD_TRANSCRIPT,
+                 num_threads=1):
         self.max_characters_per_second = max_characters_per_second
         self.label_list_idx = label_list_idx
+        self.num_threads = num_threads
 
     def name(self):
         return 'Utterance-Transcription-Ratio ({})'.format(self.label_list_idx)
@@ -30,20 +38,30 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
         Returns:
             InvalidItemsResult: Validation result.
         """
+
+        with multiprocessing.pool.ThreadPool(self.num_threads) as p:
+            func = functools.partial(
+                self.ratio_of_utterance,
+                ll_idx=self.label_list_idx
+            )
+
+            result = list(tqdm(
+                p.imap(
+                    func,
+                    list(corpus.utterances.values())
+                ),
+                total=corpus.num_utterances,
+                desc='Validate character ratio'
+            ))
+
         invalid_utterances = {}
 
-        for utterance in corpus.utterances.values():
-            duration = utterance.duration
-            ll = utterance.label_lists[self.label_list_idx]
-
-            # We count the characters of all labels
-            transcription = ' '.join([l.value for l in ll])
-            num_chars = len(transcription.replace(' ', ''))
-
-            char_per_sec = num_chars / duration
-
-            if char_per_sec > self.max_characters_per_second:
-                invalid_utterances[utterance.idx] = char_per_sec
+        for utt_idx, char_per_sec in result:
+            if type(char_per_sec) == float:
+                if char_per_sec > self.max_characters_per_second:
+                    invalid_utterances[utt_idx] = char_per_sec
+            else:
+                invalid_utterances[utt_idx] = char_per_sec
 
         passed = len(invalid_utterances) <= 0
         info = {
@@ -52,6 +70,21 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
         }
 
         return base.InvalidItemsResult(passed, invalid_utterances, name=self.name(), info=info)
+
+    def ratio_of_utterance(self, utterance,  ll_idx):
+        try:
+            duration = utterance.duration
+            ll = utterance.label_lists[ll_idx]
+
+            # We count the characters of all labels
+            transcription = ' '.join([l.value for l in ll])
+            num_chars = len(transcription.replace(' ', ''))
+
+            char_per_sec = num_chars / duration
+
+            return utterance.idx, char_per_sec
+        except Exception as e:
+            return utterance.idx, str(e)
 
 
 class LabelCountValidator(base.Validator):

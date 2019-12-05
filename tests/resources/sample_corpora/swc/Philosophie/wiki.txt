@@ -1,0 +1,293 @@
+[[Bild:Sanzio_01_Plato_Aristotle.jpg|thumb|250px|Platon und Aristoteles. Ausschnitt aus „[[Die Schule von Athen]]“ von [[Raffael]] (um 1510).]]
+{{Portal|Philosophie}}
+Die '''Philosophie''' ([[griechische Sprache|griech.]] φιλοσοφία, ''philosophia'' wörtlich „Liebe zur Weisheit“) hat im Gegensatz zu den einzelnen [[Wissenschaft]]en keinen klar bestimmbaren, begrenzten Gegenstandsbereich. Allgemein könnte man sie als den Versuch der kritisch-[[Rationalität|rational]]en Selbstüberprüfung des [[Denken]]s bezeichnen, als eine methodische [[Reflexion (Philosophie)|Reflexion]]. Der Versuch, Philosophie zu [[Definition|definieren]], ist bereits Gegenstand der Philosophie selbst.
+
+Der Beginn des philosophischen Denkens im 6. vorchristlichen Jahrhundert markiert den eigentlichen Beginn der europäischen Geistesgeschichte. Erst im Laufe der Jahrhunderte differenzierten sich die Methoden und Disziplinen der Welterschließung, indem sich die einzelnen Wissenschaften nach und nach aus der Philosophie ausgliederten. Die bis heute gültigen Kerngebiete der Philosophie sind die [[Logik]] als die Wissenschaft vom folgerichtigen Denken, die [[Ethik]] als die Wissenschaft vom rechten Handeln und die [[Metaphysik]] als die Wissenschaft von den ersten Gründen des Seins und der Wirklichkeit; weitere Grunddisziplinen sind die [[Erkenntnistheorie|Erkenntnis-]] und [[Wissenschaftstheorie]], die sich mit den Möglichkeiten des Erkenntnisgewinns im allgemeinen bzw. speziell in den unterschiedlichen Einzelwissenschaften beschäftigen.
+
+== Begriffsgeschichte ==
+
+Der Begriff '''Philosophie''', zusammengesetzt aus griech. φίλος „Freund“ und σοφία  „Weisheit“, bedeutet wörtlich „[[Platonische Liebe|Liebe]] zur [[Weisheit]]“ bzw. einfach „zum [[Wissen]]“ – denn ''sophía'' bezeichnete ursprünglich jede Fertigkeit oder Sachkunde, auch handwerkliche und technische. Das Verb ''philosophieren'' taucht erstmals bei [[Herodot]] (I,30,2) auf, wo es zur Beschreibung des Wissensdurstes [[Solon]]s dient. Dass [[Heraklit]] schon den Begriff ''philosophos'' verwendete (Fragment 35 DK), ist nicht anzunehmen. In der Antike pflegte man die Einführung des Begriffs ''Philosophie'' [[Pythagoras von Samos]] zuzuschreiben, denn der Platoniker [[Herakleides Pontikos]] überlieferte eine Erzählung, wonach Pythagoras gesagt hat, nur ein Gott besitze wahre ''sophía'', der Mensch könne nur nach ihr streben. Hier ist mit ''sophía'' bereits [[Metaphysik|metaphysisches]] Wissen gemeint. Die Glaubwürdigkeit dieses (nur indirekt und fragmentarisch überlieferten) Berichts des Herakleides ist in der Forschung umstritten. Erst bei Platon tauchen die Begriffe ''Philosoph'' und ''philosophieren'' eindeutig in diesem von Herakleides gemeinten Sinne auf, insbesondere in Platons Dialog [[Phaidros]] (278d), wo festgestellt wird, daß Philosophieren und Besitz der Weisheit sich ausschließen und letzterer nur Gott zukomme.
+
+Ursprünglich bezog sich der Begriff „Philosophie“ auf eine Denktradition, die vom [[Antikes Griechenland|antiken Griechenland]] ausging. Er wird heute aber auch für asiatische Denktraditionen ([[Östliche Philosophie|östliche Philosophie]]) und eher religiöse [[Weltanschauung]]en verwendet. Daneben taucht der Begriff in jüngerer Zeit im [[Wirtschaft]]s-[[Jargon]] und in der [[Technik]] als [[Synonym]] für [[Strategie]] oder [[Konzept|Gesamtkonzept]] auf ([[Unternehmensphilosophie]], [[Design]]philosophie).
+
+== Was ist Philosophie? ==
+
+Die Frage, was Philosophie eigentlich ist, ist bereits eine philosophische Frage. Philosophie ist nicht in eine [[Allgemeingültigkeit|allgemeingültige]] feste Definition zu bringen. Es ließe sich auch keine finden, der alle [[Philosophen]] zustimmen könnten, weil jeder, der [[Philosophieren|philosophiert]], eine eigene Sicht der Dinge entwickelt. Daher gibt es beinahe so viele Antworten auf diese Frage, wie es [[Philosoph]]en gibt. Die Verwendung des Begriffs „Philosophie“ in der [[Geschichte der Philosophie|Geschichte]] füllt im ''[[Historisches Wörterbuch der Philosophie|Historischen Wörterbuch der Philosophie]]'' so viele Spalten, dass dieser Artikel als eigenständiges Buch publiziert wurde. [[Carl Friedrich von Weizsäcker]] hat es einmal so formuliert: ''„Philosophie ist die Wissenschaft, über die man nicht reden kann, ohne sie selbst zu betreiben.“''
+
+=== Selbstverständnis ===
+[[Bild:SeptemArtes-Philosophia-Detail.jpg|thumb|Philosophie als „Königin der Wissenschaften“ –  Darstellung aus dem [[Hortus deliciarum]] der [[Herrad von Landsberg]] (12. Jh.), Detail]]
+Die ersten Philosophen, die sich selbst so bezeichneten – [[Platon]] und [[Sokrates]] – verstanden Philosophie als Alternative zur [[Mythos|mythischen Religion]] und ihrer Ordnung. Indem sich der Mensch durch Philosophieren die Welt selbst erklärt, emanzipiert er sich von der Welt des [[Aberglauben]]s, der [[Klerikalismus|Priesterherrschaft]] und der [[Polytheismus|Götter]]. Sokrates wurde deshalb als „Verderber der Jugend“ [[Phaidon|hingerichtet]]. Auch seit den Zeiten des [[Humanismus#Humanismus_als_Epochenbegriff|Humanismus]] (und noch verstärkt seit der [[Zeitalter der Aufklärung|Aufklärung]]) bis in die Gegenwart hinein setzt sich die Philosophie meist kritisch mit der [[Religion]] auseinander, grenzt sich von ihr ab und betrachtet sich dieser in der Regel als überlegen.
+
+Das Selbstverständnis der Philosophie hat sich im Laufe ihrer Geschichte immer wieder gewandelt. Vor allem in bestimmten Phasen der [[Neuzeit]] wurde sie als allen [[Einzelwissenschaft]]en übergeordnete [[Universalwissenschaft]] begriffen, die – um die [[Wirklichkeit]] als Ganzes zu erfassen – zu den letzten [[Ursache]]n und [[Prinzip]]ien vordringt und dabei ewiggültige, allgemeine [[Wahrheit]]en entdeckt und zugänglich macht ([[Philosophia perennis]]). Im [[Mittelalter]] wurde der Kern der Philosophie durch die so genannten [[artes liberales]] bestimmt, zu denen Grammatik, Dialektik, Rhetorik sowie Geometrie, Arithmetik, Astronomie und Musik gehörten. Dabei dominierte zeitweise das Bild der Philosophie als einer „Dienerin der [[Theologie]]“ (''ancilla theologiae''), d.h. als Hilfswissenschaft. Noch bis ins 18. Jahrhundert war die Philosophie eine der klassischen Fakultäten neben Theologie, Medizin und Recht. Erst nach einer grundlegenden Ausbildung in Philosophie, die mit dem Magister abschloss, konnten sich die Studenten naturwissenschaftlichen Fragen und Forschungen zuwenden. Im 19. Jahrhundert begann dann immer mehr die Verselbständigung zunächst der [[Naturwissenschaften]] und dann auch der [[Philologie|philologischen]] und der [[Sozialwissenschaften|gesellschaftswissenschaftlichen]] Fächer. Die moderne Fachwissenschaft Philosophie zieht ihre Rechtfertigung aus dem Anspruch, philosophische Methoden könnten auch für andere Wissens- und Praxisgebiete hilfreich sein. Darüber hinaus betrachten die Philosophen die Erörterung ethischer Themen und Grundsatzfragen als ihr ureigenes Gebiet.
+
+=== Charakteristika ===
+[[bild:Prospekt_Ecyclopédie_1750.jpg|thumb|right|Philosophie als Wurzel der Wissenschaften. Ausschnitt aus dem [[Stammbaum des Wissens|Stammbaum des menschlichen Wissens]], Prospekt der ''[[Encyclopédie]]'' (1750)]]
+
+Der Beginn aller Philosophie ist das Sich-Wundern, das [[Staunen]]. Platon schrieb: ''„Das Staunen ist die Einstellung eines Mannes, der die Weisheit wahrhaft liebt, ja es gibt keinen anderen Anfang der Philosophie als diesen“'', und auch [[Aristoteles]] stellte fest: ''„Staunen veranlasste zuerst – wie noch heute – die Menschen zum Philosophieren.“'' Menschen, denen alles [[Gleichgültigkeit|selbstverständlich]] erscheint, finden nicht zur Philosophie. Durch ihr Staunen ist die Philosophie die [[Europäische Wissenschaftsgeschichte|Mutter aller Wissenschaften]]. Dies gilt sowohl [[Wissenschaftsgeschichte|historisch]], da aus ihr alle anderen Wissenschaften entstanden sind, als auch [[Wissenschaft|systematisch]], da sie als [[Metawissenschaft|Meta-Wissenschaft]] über die [[Wissenschaftstheorie|Aufgaben und Möglichkeiten]] der Wissenschaften reflektiert.
+
+Ein ähnlicher Grundzug der Philosophie ist das ''Fragen'', besonders auch das Infragestellen des scheinbar Zweifelsfreien und Selbstverständlichen. Das Fragen ist damit eine weitere Quelle der Philosophie. Aus sich selbst heraus kann die Philosophie dem Fragen keine Grenzen setzen: Sie stellt radikal alles in Frage – sogar sich selbst. Dadurch beginnt die Philosophie gleichsam immer wieder bei Null, da jede einzelne Aussage immer wieder hinterfragt werden darf. Es ist erlaubt, alles zu bezweifeln, außer dem [[Zweifel]]n selbst. Der philosophische [[Diskurs]] ist daher eine niemals endende, kontroverse [[Diskussion]].
+
+Die Philosophie umfasst verschiedene geistige Bemühungen. Dabei handelt es sich um [[Reflexion (Philosophie)|Nachdenken]], [[Analyse|Analysieren]] und Überprüfen mit Hilfe der Mittel des [[Vernunft|vernünftig]]-[[Rationalität|rational]]en, kritischen Denkens. Philosophie stellt die Fragen, die die [[Wissenschaften]] (bisher) nicht beantwortet haben oder grundsätzlich nicht beantworten können. Diese Fragen richten sich auf den [[Menschen]] selbst und die ihn umgebende Welt. Philosophie wird also nicht um ihrer selbst willen betrieben, sondern um des Menschen willen. Dabei findet sie nie allgemein anerkannte Antworten, sondern stellt einen endlosen, dynamischen [[Prozess]] dar.
+
+Philosophisch gebildete Menschen unterscheiden sich darum von den übrigen nicht darin, dass sie mehr ([[Utilitarismus|nützliches]]) Wissen zur Verfügung hätten. Sie besitzen allerdings in der Regel einen besseren Überblick über die [[Argument]]e, die in einer [[Disput|philosophischen Debatte]] über einen bestimmten Diskussionsgegenstand bereits vorgebracht wurden. So kann es etwa hilfreich sein, bei einem aktuell diskutierten Problem (z.B. [[Euthanasie]]) danach zu fragen, welche Antwortmöglichkeiten die Philosophie bisher dazu angeboten hat und welche Auseinandersetzungen es um diese Vorschläge bereits gab.
+
+== Formen des Philosophierens ==
+
+Grundsätzlich lassen sich drei verschiedene Arten des Philosophierens unterscheiden: die Philosophie als Weltweisheit (Streben nach Wissen), die Philosophie als Lebensweise und die akademische Philosophie.
+
+=== Philosophie als Weltweisheit ===
+[[Bild:Gerome_-_Diogenes.jpg|thumb|250px|Philosophie als radikale Lebensform: [[Diogenes]] in der Tonne – Darstellung von J.L. Gerome (1860)]]
+Philosophie als Weltweisheit ist diejenige Philosophie, die sich mit den philosophischen [[Sachverhalt]]en beschäftigt, die jedermann interessieren. Im [[Alltag]] können das verschiedene, für den [[Individuum|Einzelnen]] bedeutsame Gegenstände sein, z.B. "Was ist (für mich) das gute Leben?". Meist handelt es sich um allgemein diskutierte oder gesellschaftlich relevante Fragen. Die Probleme stammen dabei in der Regel nicht aus dem philosophischen, sondern aus dem [[Öffentliche Meinung|öffentlichen Diskurs]].
+Von anderen Herangehensweisen – wie etwa dem Beantworten dieser Fragen mit gesellschaftlichen oder religiösen [[Tradition]]en – unterscheidet sich die Philosophie insofern, als dass sie sich bei der Klärung dabei im weitesten Sinne ''rationaler'', d.h. (allein) auf vernunftgemäßes Denken gestützter [[Methode]]n bedient.
+
+=== Philosophie als Lebensweise ===
+In der Antike wurde die Philosophie häufig nicht nur [[Theorie|theoretisch]] betrieben, sondern als eigene, praktische [[Lebensweise]] kultiviert. Weisheit und die Verwirklichung des „[[Lebenskunst|rechten Lebens]]“ waren die praktische Ausrichtung etwa der [[Stoa]] oder des [[Epikureismus]].
+
+Bei der Philosophie als Lebensform geht es darum, sich selber als Mensch auszubilden und ein durch philosophische Erkenntnisse geprägtes Leben zu führen. Bestimmt wird dieses Ideal in der Philosophie traditionell durch das große [[Vorbild]] Sokrates, der nicht etwa [[Buch|Bücher]] schrieb, sondern seine Zeit vornehmlich mit [[Sokratische Methode|philosophischen Gesprächen]] zugebracht haben soll. 
+<!--Folgender Satz ist unsinnig, der zweite Satz ist in seiner Allgemeinheit falsch.-->
+<!--Das Ziel der philosophischen Praxis ist dabei aber nicht das „harmonische Leben“ oder das [[Glück]], denn ein „[[Das Gute|guter]]“ oder „[[Authentizität#Authentizität von Personen|wahrer]]“ Mensch zu sein, muss keineswegs glücklich machen. Der Philosoph will nicht aus dem Leben [[Eskapismus|flüchten]] oder die Widersprüche in der Welt [[Ignoranz|zudecken]].-->
+
+=== Philosophie als Wissenschaft ===
+[[Bild:Spangenberg_-_Schule_des_Aristoteles_Detail.jpg|thumb|G.A. Spangenberg, „Die Schule des Aristoteles“ (1883-1888), Detail]]
+In der philosophischen [[Philosophie und Universität|Ausbildung an der Universität]] ist die Philosophie als Wissenschaft heute die einzige der drei Formen, die noch gelehrt wird. Natürlich bietet der akademische Betrieb mit seiner Verwissenschaftlichung auch nicht den Rahmen, um eine umfassende „Erziehung des Menschen zum Menschen“ zu leisten.
+
+Das ''akademische'' Philosophieren unterscheidet sich vom ''alltäglichen'' Philosophieren nicht prinzipiell durch die Fragen, sondern eher durch den Rahmen – in der Regel die [[Universität]] – und durch bestimmte Formen der Aus- und Abgrenzung philosophischer [[Tätigkeit]]. Es gelten verschiedene Übereinkünfte über die Formen des Argumentierens und der wissenschaftlichen [[Publikation]] sowie die zugelassene [[Fachterminologie]]. Die Tätigkeiten des akademisch Philosophierenden umfassen dabei die Prüfung der [[Voraussetzung]]en einer Position, das [[Rekonstruieren]] und [[Widerlegung|Widerlegen]] von Argumenten, die genaue Analyse und [[Unterscheidung]] von [[Begriffen]], die eigene [[Position|Positionierung]] und die Argumentation für oder gegen [[These]]n.
+
+Grundsätzlich lassen sich zwei Ansätze bzw. Bereiche des akademischen Philosophierens unterscheiden: die historische und die systematische Vorgehensweise.
+*''Historisch'' arbeitet die Philosophie dann, wenn sie versucht, die Positionen und Thesen von Denkern wie [[Platon]], [[Thomas von Aquin]] oder [[Immanuel Kant|Kant]] zu rekonstruieren, zu verstehen und zu interpretieren. Auch die Herausarbeitung bestimmter philosophischer Strömungen oder Auseinandersetzungen in der [[Geschichte]] gehört hierzu.
+*''Systematisch'' geht die Philosophie vor, wenn sie versucht, zu einem bestimmten Problemfeld [[Standpunkt]]e zu vertreten, Fragen innerhalb der verschiedenen philosophischen Disziplinen zu beantworten, die Voraussetzungen oder [[Implikation]]en einer bestimmten Frage oder These zu verstehen oder überhaupt erst die verwendeten Begriffe in bestimmten Fragen, Thesen oder Positionen zu klären. Lautet die Frage innerhalb der theoretischen Philosophie „Hat der Mensch einen [[Freier Wille|freien Willen]]?“, so müssen für eine Antwort zunächst die Begriffe des „[[Wille]]ns“, der „Freiheit“ und des „Menschseins“ einer genaueren Analyse unterzogen werden.
+
+Die historischen und die systematischen Herangehensweisen bzw. Bereiche sind dabei prinzipiell durch das jeweilige Ziel der philosophischen Untersuchungen voneinander abgrenzbar. Viele Philosophen und Philosophinnen forschen allerdings auf beiden Gebieten, was sich insofern auch ergänzt, als die Schriften herausragender [[Liste der Philosophen|philosophischer Autor]]en auch für das systematische Philosophieren hilfreiche Überlegungen enthalten. Außerdem können in vielen Fällen die heutigen Fragen nur dann wirklich präzise gestellt und beantwortet werden, wenn der historische Hintergrund für ihr Aufkommen und die relevante [[Begrifflichkeit]] verstanden sind.
+
+== Gegenstände der Philosophie ==
+
+=== Systematische Gegenstände ===
+[[Image:Systematik-Philosophie.png|thumb|250px|Übersicht über die Disziplinen der Philosophie]]
+Man kann die Philosophie in einen theoretischen Bereich und in einen praktischen Bereich unterteilen. Die ''theoretische Philosophie'' untersucht die Möglichkeiten und Grenzen des menschlichen Erkenntnisvermögens und die allgemeinen Strukturen des menschlichen Bewusstseins. Außerdem wird versucht, grundsätzliche Aussagen über das Sein zu treffen. Disziplinen sind u.a. [[Ontologie]], Metaphysik, Logik, Erkenntnistheorie und Wissenschaftstheorie. Die ''praktische Philosophie'' beschäftigt sich hingegen mit Bereichen, die direkte Auswirkungen auf das praktische Leben haben können. Disziplinen sind u.a. Ethik, [[Rechtsphilosophie]], [[politische Philosophie]] und [[Sozialphilosophie]].
+
+Auch wenn sich der Bereich, den die Philosophie insgesamt umfasst, in gewissem Sinne nicht eingrenzen lässt (da sie „alles“ behandelt), gibt es doch bestimmte [[Domäne]]n, in denen sie hauptsächlich tätig ist. Der Philosoph [[Immanuel Kant]] hat diese einmal in den folgenden Fragen zusammengefasst:
+
+# ''Was kann ich wissen?''
+# ''Was soll ich tun?''
+# ''Was darf ich hoffen?''
+# ''Was ist der Mensch?''
+
+Diese Fragen könnte man auch in etwa so formulieren:
+
+# Wie können wir zu Erkenntnis gelangen und wie sind diese Erkenntnisse einzuschätzen? (Erkenntnistheorie, Wissenschaftstheorie, Logik)
+# Wie sollen wir handeln? (Ethik, gesellschaftliche Disziplin)
+# Was ist die Welt? Warum gibt es überhaupt etwas und nicht viel mehr nichts? (Metaphysik, Ontologie). Gibt es Gott? Steuert die Geschichte auf ein Ziel zu und wenn ja auf welches? ([[Religionsphilosophie]], [[Geschichtsphilosophie]])
+# Was sind wir für Wesen? In welchem Verhältnis stehen wir zu der Welt, die wir vorfinden? ([[Philosophische Anthropologie]], [[Kulturphilosophie]], [[Ästhetik]])
+
+Im Folgenden wird vorgestellt, welche Themenbereiche diese Fragen – und damit auch die Philosophie – berühren.
+
+;'''Was ist der Mensch?'''
+Die [[philosophische Anthropologie]] stellt zunächst die Frage nach dem Unterschied zwischen [[Mensch]] und [[Tier]]. Was ist [[Bewusstsein]] und [[Selbstbewusstsein]], was ist das „[[Ego|Ich]]“ und wie wird es geschaffen, wie sind [[Selbstbewusstsein|Selbsterkenntnis]] und [[Identität#Philosophische Probleme der Identität|Selbstidentität]] möglich? Gibt es einen [[Philosophie des Geistes|Geist]] der vom [[Körper]] bzw. [[Leib]] verschieden ist? Besitzen wir eine ([[Unsterblichkeit|unsterbliche]]) [[Seele]] bzw. [[Geist]]? Wann [[Bioethik#Bioethik in Bezug auf den Menschen|beginnt und endet]] das menschliche Leben? Haben wir einen freien Willen oder ist alles bereits [[Determinismus|vorherbestimmt]]? Welchen Einfluss haben wir auf die Geschichte und welchen Einfluss hat sie auf uns? Hat alles [[Sein (Philosophie)|Sein]] nur einen [[Sinn (Metaphysik)|Sinn]] durch den Menschen? Oder ist das menschliche Sein als Ganzes [[Sinn des Lebens|sinnlos]]? Welche Bedeutung hat die [[Kunst]] für den Menschen? Gibt es allgemeine Prinzipien für die [[Ästhetik]]?
+[[Bild:FlammarionWoodcut.jpg|250px|thumb|Wo sind die Grenzen der menschlichen Erkenntnis? – Holzschnitt aus Camille Flammarions „L'Atmosphere“ (1888)]]
+
+;'''Was können wir wissen?'''
+Die Erkenntnistheorie fragt nach den Möglichkeiten, Erkenntnisse zu erlangen. So befasst sie sich mit der Frage, wie sich die [[Wahrheit]] oder [[Falsifikation|Falschheit]] von [[Theorie]]n überprüfen lassen. Die [[Wahrnehmung]] der [[Realität|Wirklichkeit]] stellt sie ebenso auf den Prüfstand wie den Einfluss von [[Sprache]] und Denken auf den [[Erkenntnisprozess]]. Außerdem versucht sie, die [[Epistemologie|Grenzen der Erkenntnis]] abzustecken und zu definieren, was als „[[Wissenschaftsphilosophie|wissenschaftlich]]“ bezeichnet werden kann.
+
+;'''Was soll ich tun?'''
+Die Ethik beschäftigt sich mit dem menschlichen [[Handeln]]. Ist der Mensch in seinen [[Handlung]]en frei? Gibt es absolute, verbindliche [[Werte]] oder ist alles relativ? Gibt es einen Unterschied zwischen subjektiv und objektiv richtigem Handeln? Was ist gut, was ist böse? Kann man richtiges Verhalten mit Hilfe der Vernunft [[Metaethik|begründen]]? Gibt es allgemein gültige [[Tugend]]en? Was sind [[Tatsache]]n, was sind [[Meinung|Werturteile]]? Soll dasjenige zur Regel werden, was die [[naturalistischer Fehlschluss|Mehrheit]] macht? Worauf stützt sich das [[Rechtsphilosophie|Recht]]? Gibt es einen Unterschied zwischen [[Naturrecht|natürlichen]] Rechten und den [[Gesetz]]en, zwischen [[positives Recht|Recht]] und [[Gerechtigkeit]]? Wie gehen wir mit [[Schuld]], [[Sühne]] und [[Strafe]] um? Wie soll man sich im [[Staatsphilosophie|Staat]] verhalten? Was darf man [[Widerstand (Politik)|gegen einen Unrechtsstaat unternehmen]]? Was soll in einer [[Gemeinschaft]] an Idealen verwirklicht werden, z.B. mehr [[Freiheit]] oder mehr [[Sicherheit]]? Was ist der [[Sinn des Lebens]]? Wie sollen wir unsere Kinder erziehen? 
+
+;'''Was ist die Welt?'''
+Hiermit sind grundsätzliche Fragen der [[Kosmologie]] angesprochen, die z.B. die [[Physik]] nicht beantworten kann; etwa: warum überhaupt irgendetwas existiert, welchen Sinn und welches Ziel die Welt hat ([[Teleologie]]), ob es einen Unterschied zwischen [[Geist]] und [[Materie]] gibt und ob dem [[Diesseits]] ein [[Jenseits]] gegenübersteht. Auch geht es um die Unterschiede zwischen der vom Menschen vorgefundenen [[Natur]] und der durch den Menschen geschaffenen [[Kultur]].
+
+;'''Was darf ich hoffen?'''
+Die Religionsphilosophie untersucht religiöse Fragestellungen, um Hinweise auf die Existenz göttlichen, überirdischen Seins oder, anders ausgedrückt, das Bestehen einer „Weltvernunft“ (''[[Logos]]'') zu ergründen. Dazu gehört auch, religiöse Auffassungen zu hinterfragen ([[Religionskritik]]) und [[Aufklärung|aufklärerisch]] zu wirken.
+
+=== Historische Gegenstände ===
+<small>''Siehe auch:'' [[Geschichte der Philosophie]]</small>
+
+Natürlich setzt sich die Philosophie auch mit ihrer eigenen Geschichte auseinander. Wer die philosophischen Einsichten und Begrifflichkeiten der Vergangenheit kennt, kann alte [[Fehler]] vermeiden und vielleicht einen neuen Gedanken zu den alten Lehren hinzufügen. Der Philosoph [[Alfred North Whitehead]] charakterisierte die Geschichte der europäischen Philosophie seit Aristoteles einmal als bloße „[[Fußnote]]n zu Platon“.
+[[Bild:Platon-2.jpg|thumb|right|Platon war der erste Philosoph, der seine Ausführungen in Schriftform hinterließ.]]
+
+Im [[6. Jahrhundert v. Chr.]] wird in [[Ionien]] mit den naturphilosophischen Fragen der [[Vorsokratiker]] nach dem Urgrund oder Anfang der Welt ([[arché]]) die '''[[Philosophie der Antike]]''' eingeleitet. Mit [[Sokrates]] beginnt die Blütezeit der attischen Philosophie. Seine Lebensweise und Kunst der Gesprächsführung – die er „Hebammenkunst“ ([[Mäeutik]]) nannte – wirken bis heute fort; das [[Ironie|ironische]] Eingeständnis seines Nichtwissens (gr. ''oída eídos oudèn'' „Ich weiß, dass ich nichts weiß“) ist sprichwörtlich geblieben. Da Sokrates nichts Schriftliches hinterließ, schuf sein Schüler Platon eine Reihe von [[Platonischer Dialog|Dialogen]], in denen er diesen als literarische Figur auftreten lässt. Platon verfasste ein umfangreiches, für die westliche Philosophie bis heute zentrales Werk, erdachte die [[Ideenlehre]], gründete außerhalb Athens die [[Akademie (Platon)|Akademie]], die erst 529 nach über 900 Jahren aufgelöst wurde und war der Lehrer von Aristoteles. Dieser wiederum stützte sich auch auf [[Empirie|empirische]] Forschung. Er führte den Begriff der [[Substanz]] und die [[Metaphysik (Aristoteles)|Metaphysik]] als „[[Erste Philosophie (Aristoteles)|Erste Philosophie]]“ ein - eine den übrigen Wissenschaften übergeordnete Disziplin - und begründete eine Lehre vom Zusammenhang zwischen „[[Form (Philosophie)|Form]]“ und „[[Stoff]]“ ([[Hylemorphismus]]). In der Zeit des [[Hellenismus]] folgten die weniger theoretisch, sondern auf das „rechte Leben“, d.h. die Lebenspraxis ausgerichteten Schulen: die [[Stoa]], für die die [[Tugend]] (''virtus'') das höchste Gut darstellte, und der Epikureismus, der eine [[Philosophie des Glücks|Glückslehre]] beinhaltete und eine aufgeklärte Zuwendung zum Diesseits vertrat. In der [[Spätantike]] wird die Platonische Lehre im [[Neuplatonismus]] wieder aufgegriffen und umgeformt. Die wichtige Rolle, die die „Abstufungen“ des Seins hier spielen, weisen bereits ebenso auf das Mittelalter voraus wie die christlichen Lehren des Kirchenvaters [[Augustinus von Hippo|Augustinus]], die die kommenden Jahrhunderte entscheidend mitprägen sollten.
+
+Die '''[[Philosophie des Mittelalters]]''' beginnt etwa um 500, nachdem zuvor schon die [[Patristik]] die [[Grundlage]]n der christlichen Lehre und Kirche gelegt hatte. In der [[Frühscholastik]] begründet [[Abaelard]], der die Vernunft in Glaubensfragen höher schätzte als die Autorität, die [[scholastische Methode]] der Gegenüberstellung und Auflösung gegensätzlicher Argumente. Der auch naturwissenschaftlich forschende [[Albertus Magnus]] und der große Kirchenlehrer [[Thomas von Aquin]] führten in der [[Hochscholastik]] mit einer Renaissance und Überformung der aristotelischen Lehre die mittelalterliche Philosophie zu einem Höhepunkt.  Die philosophische [[Mystik]] erlebt mit [[Meister Eckhart]] ihren Höhepunkt. Mit [[Wilhelm von Ockham]] und [[Nikolaus von Kues]] als Vorbereitern zukünftiger Vorstellungen und der modernen Wissenschaft  beginnt sich in der [[Spätscholastik]] bereits langsam die Neuzeit anzukündigen.
+[[Bild:Philosophie-Epochen.png|thumb|350px|Übersicht über die Epochen der Philosophie]]
+In der '''[[Philosophie der Renaissance und des Humanismus]]''' bildeten sich ab 1450 die Eigenheiten der Neuzeit aus. Die [[Naturwissenschaft]]en und die [[Mathematik]] lösen sich von der Philosophie und gewinnen zunehmend an Bedeutung. Die '''[[Philosophie der Neuzeit]]''' setzt mit dem Streit zwischen dem [[Rationalismus]] ([[René Descartes]], [[Leibniz]]), der die überragende Bedeutung der Vernunft für den Erkenntnisprozess hervorhebt, und dem [[Empirismus]] ([[John Locke]], [[David Hume]], [[Thomas Hobbes]]), der letztlich alle Erkenntnis aus Sinneserfahrungen ableiten will, ein. Dieser Konflikt gipfelt in der [[Zeitalter der Aufklärung|Zeit der Aufklärung]] in der [[Kritizismus|Kritischen Philosophie]] von Immanuel Kant. Dessen Denken, das insbesondere eine grundsätzliche Untersuchung der Möglichkeiten und Grenzen des menschlichen Erkenntnisvermögens zum Inhalt hatte, stellt einen [[Kopernikanische Wende|Wendepunkt]] in der Geschichte der neuzeitlichen Philosophie dar.
+
+Die '''[[Philosophie des 19. Jahrhunderts]]''' ist einerseits durch die vermeintliche Weiterentwicklung und Interpretation der Philosophie Kants in den großen metaphysischen Systementwürfen des [[Deutscher Idealismus|Deutschen Idealismus]] mit [[Johann Gottlieb Fichte|Fichte]], [[Friedrich Wilhelm Joseph von Schelling|Schelling]], [[Georg Wilhelm Friedrich Hegel|Hegel]] geprägt, andererseits durch das Erstarken des [[Positivismus]] im Zuge der Erfolge der Naturwissenschaften. Darüber hinaus finden sich zunehmend eigenständige Denker, wie etwa der Vorläufer der existenzialistischen Philosophie [[Søren Kierkegaard]], der Vermittler [[Buddhismus|buddhistischer]] Philosophie [[Arthur Schopenhauer]] und der „Prophet“ des [[Nihilismus]] [[Friedrich Nietzsche]]. Von großer historischer Tragweite ist die Philosophie von [[Karl Marx]]. Weitere wichtige Phänomene sind der [[Neukantianismus]], der [[Pragmatismus]] und die [[Lebensphilosophie]].
+
+Mit der [[Phänomenologie]] [[Edmund Husserl]]s, die sich den Dingen über eine Wesensschau zuwenden möchte, begann spätestens die '''[[Philosophie des 20. Jahrhunderts]]''', die sich durch eine große Vielfalt der Denkansätze auszeichnete. Besonders bedeutend sind die [[Existenzphilosophie]] von [[Martin Heidegger]], der der Philosophie mit dem Rückgang auf das Seinsproblem wieder eine neue Basis zu geben versuchte, der [[Existenzialismus]] nach [[Jean Paul Sartre]], der die Frage nach dem Sinn des Daseins stellte und  der [[Logischer Empirismus|Logische Empirismus]], der die Philosophie auf eine Wissenschaftstheorie verengen wollte. Für die modernen Naturwissenschaften prägend war der von [[Karl Popper]] entwickelte [[Kritischer Rationalismus|Kritische Rationalismus]]. In der zweiten Hälfte des Jahrhunderts gewannen einige die Sprach- und Literaturwissenschaft dominierende Konzepte wie der [[Strukturalismus]], [[Dekonstruktion|Dekonstruktivismus]] und [[Poststrukturalismus]] an Bedeutung.
+
+In der '''[[Philosophie der Gegenwart]]''' beherrscht die von [[Ludwig Wittgenstein]] begründete [[Analytische Philosophie]] bzw. [[Sprachphilosophie]], die als Ausgangspunkt die Entlarvung philosophischer Probleme als Scheinprobleme zum Ziel hatte, als Methode das akademische Denken. Gegengewichte hierzu bilden u.a. die umstrittene Philosophie der [[Postmoderne]] und die [[Neuscholastik]] in der Nachfolge des Thomas von Aquin.
+
+== Sinn und Nutzen der Philosophie ==
+
+Zunächst ist hier festzuhalten, dass die Philosophie auf keinen Zweck abzielt außer die Erkenntnis des Seins, die Weisheit. Alle hier aufgeführten Nutzen sind lediglich Beiwerk. Die eigentliche Philosophie ergibt sich aus dem Philosophieren, also dem Nachdenken über und Streben nach Weisheit jedes Einzelnen, das aus Neugierde und nicht aus primitiven Aufwand-Nutzen-Denken geschieht.
+Zunächst einmal besteht der Nutzen des Philosophierens in der Schulung des Denkens und des Argumentierens, denn sowohl in methodischer Hinsicht als auch im sprachlichen Ausdruck werden strenge Anforderungen an die Philosophierenden gestellt. Desweiteren lernt man durch die Beschäftigung mit der Philosophie die gegenwärtigen und vergangenen philosophischen Probleme und Debatten kennen. In der akademischen Ausbildung wird zudem Wert darauf gelegt, dass die Philosophierenden den Regeln der wissenschaftlich betriebenen Philosophie entsprechend an den unterschiedlichen philosophischen Diskursen teilnehmen können.
+
+Der ''Sinn der systematischen Philosophie'' besteht vor allem in der Beschäftigung mit zwei Gegenständen:
+*Sie thematisiert einerseits die expliziten Begriffe, Fragen, Thesen und Positionen der einzelnen Wissenschaften. So fragt die Philosophie etwa, was den Begriff „''[[Würde]]''“ ausmacht, den die [[Rechtswissenschaft]]en oder die [[Soziologie]] voraussetzen.
+*Zum anderen arbeitet sie die impliziten Begriffe, Fragen, Thesen und Positionen heraus, die den anderen Wissenschaften zugrunde liegen. So fragt etwa die Erkenntnistheorie „Was können wir wissen?“ und untersucht dabei auch den Begriff und die Grundlagen und Bedingungen von Wissen überhaupt.
+
+So verstanden ist Philosophie also eine Grundlagenwissenschaft. Alle anderen Wissenschaften haben sich mit der Zeit aus der Konkretisierung philosophischer Problematiken heraus entwickelt. Keine Wissenschaft ist ohne eine ihr zu Grunde liegende philosophische Perspektive, sei es die Theorie, dass alle Erscheinungen allgemein gültigen Gesetzen unterliegen in allen Naturwissenschaften oder die Theorie der Bedeutsamkeit historischer Ereignisse für die Gegenwart in den Geschichtswissenschaften, auch nur denkbar. 
+
+Man kann die Philosophie auch als „Prinzipienwissenschaft“ bezeichnen, d.h. sie behandelt nicht nur die konkreten Gegenstände, sondern auch, wie alles zustande kommt. Am offensichtlichsten kommt dies in der Wissenschaftstheorie zum Tragen, die die Grundlagen aller wissenschaftlichen Erkenntnis behandelt und somit auf alle anderen wissenschaftlichen Disziplinen Einfluss nimmt.
+
+Der ''Sinn der historischen Philosophie'' lässt sich etwa so fassen:
+*Wenn es von Interesse ist, [[Artefakt (Archäologie)|alte Dinge]] und [[Quelle (Geschichtswissenschaft)|Quellen]] zu sammeln, zu untersuchen und ins [[Museum]] zu stellen, um die Fragen beantworten zu können: „Wie haben die Menschen gelebt, die vor langer Zeit in diesen Häusern gewohnt, aus diesen Tellern gegessen, diese Dokumente verfasst haben?“, dann muss es noch vielmehr von Interesse sein, ihre philosophischen Schriften zu lesen, um zu verstehen, wie sie gedacht haben.
+*Zweitens ist es Aufgabe der historischen Philosophie, die ''kulturellen Grundlagen'' unserer heutigen Zeit zu verstehen. 
+*Drittens ist die Kenntnis historischer philosophische Fragen, Thesen, Argumente und Positionen sinnvoll und nützlich für das systematische Philosophieren.
+
+Ein sozial besonders relevantes Kerngebiet der Philosophie, welches nicht von anderen Wissenschaften übernommen werden kann, ist die Ethik. Die zeitgenössische Philosophie legt dabei einen Schwerpunkt auf die [[Metaethik]], d.h. sie schreibt in einem Bereich „jenseits von [[Moral|Gut und Böse]]“ nicht  [[Wertvorstellung|Werte]] vor, sondern ist das Instrument zu einem kritischen [[Verständnis]] der Art und Weise, wie sich Werte überhaupt erst bilden. In der Praxis gewinnt die [[medizinische Ethik]] immer mehr an Bedeutung. Als Lehrfach an Schulen ist die Philosophie Grundlage des Ethik- oder Werteunterrichts.
+
+== Siehe auch ==
+
+* '''[[Portal:Philosophie]]'''
+* [[Geschichte der Philosophie]]
+* [[Philosophie der Gegenwart]]
+* [[Philosophieren]]
+* [[Liste wichtiger philosophischer Werke]]
+* [[Philosophiebibliographie]]
+* [[Didaktik der Philosophie]]
+* [[Philosophie und Universität]]
+* [[Wikipedia:Die Wikipedianer/nach Wissensgebieten/Philosophie]]
+
+== Gesprochene Wikipedia ==
+Teil 1: Begriffsgeschichte, Was ist Philosophie?, Formen des Philosophierens
+{{Gesprochene Wikipedia|de-Philosophie_01-article.ogg|,die gesprochene Version finden sie [http://upload.wikimedia.org/wikipedia/commons/e/e4/De-Philosophie_01-article.ogg hier]}}
+
+
+Teil 2: Gegenstände der Philosophie, Sinn und Nutzen der Philosophie
+{{Gesprochene Wikipedia|de-Philosophie_02-article.ogg|,die gesprochene Version finden sie [http://upload.wikimedia.org/wikipedia/commons/2/2e/De-Philosophie_02-article.ogg hier]}}
+
+== Literatur ==
+
+=== Einführungen ===
+{{Philosophiebibliographie2|Einführungen|Einführungen in die Philosophie}}
+*Thomas Nagel: ''Was bedeutet das alles? Eine ganz kurze Einführung in die Philosophie.'' Nachdr. Reclam, Stuttgart 2002, ISBN   3-15-008637-X <small>(Kurze, dichte Einführung anhand philosophischer Alltagsprobleme: Sinn des Lebens, Gerechtigkeit usw.)</small>
+*Reinhard Brandt: ''Philosophie. Eine Einführung.'' Reclam, Stuttgart 2001, ISBN 3-15-018137-2 <small>(Philosophisches Selberdenken auf Grundlage historischer Texte)</small>
+*Arno Anzenbacher: ''Einführung in die Philosophie.'' 10. Aufl. Herder, Freiburg i.Br. u.a. 2004, ISBN 3-451-27851-0 <small>(Solide Einführung, die historische und systematische Aspekte verbindet)</small>
+*Rafael Ferber: ''Philosophische Grundbegriffe.'' 2 Bde. Beck, München 2003, ISBN 3-406-45654-5 <small>(Einführung in die zentralen Begriffe der Philosophie wie z.B. Wahrheit, Sein)</small>
+*Jay F. Rosenberg: ''Philosophieren. Ein Handbuch für Anfänger.''  Klostermann, Frankfurt am Main 2002, ISBN 3-465-01718-8 <small>(Eine "professionelle" Anleitung zum Philosophieren)</small>
+*Weischedel, Wilhelm: ''Die philosophische Hintertreppe. 34 große Philosophen im Alltag und Denken.'' 24. Aufl. Nymphenburger (u.a.), München 2003, ISBN 3-485-00863-X <small>(Leicht lesbare Hinführung zur Philosophie in Anekdoten)</small>
+
+=== Hilfsmittel/Nachschlagewerke ===
+{{Philosophiebibliographie2|Hilfsmittel|Hilfsmittel zur Philosophie}}
+
+*Anton Hügli, Poul Lübcke (Hrsg.): ''Philosophielexikon. Personen und Begriffe der abendländischen Philosophie von der Antike bis zur Gegenwart.'' 5. Aufl. Rowohlt, Reinbek bei Hamburg 2003, ISBN 3-499-55453-4 <small>(preiswert, zum schnellen Nachschlagen)</small>
+*Georgi Schischkoff: ''Philosophisches Wörterbuch.'' 22. Aufl. Kröner, Stuttgart 1991, ISBN 3-520-01322-3 <small>(handlich, zuverlässig, aber etwas in die Jahre gekommen)</small>
+*[[Jürgen Mittelstraß]] (Hrsg.): ''Enzyklopädie Philosophie und Wissenschaftstheorie. Grundwerk in acht Bänden.'' 2. Aufl. Metzler, Stuttgart 2005, ISBN 3-476-02108-4 <small>(umfangreich, wissenschaftsorientiert, stark im Bereich Logik und Mathematik; bisher 2 Bände erschienen)</small>
+*[[Hans Jörg Sandkühler]] (Hrsg.): ''Enzyklopädie Philosophie.'' 2 Bände, Meiner, Hamburg 1999, ISBN 3-7873-1452-0 <small>(umfangreich, nur umfassende Artikel)</small>
+* Edward Craig (Hrsg.): ''The Routledge Encyclopedia of Philosophy.'' 10 Bde. Routeledge, London 1998. <small>(Das vielleicht beste Nachschlagewerk; auch als einbändige, allerdings sehr knappe Kurzfassung erschienen; außerdem auf CD-ROM erhältlich)</small>
+*[[Joachim Ritter]], Karlfried Gründer (Hrsg.): ''[[Historisches Wörterbuch der Philosophie]].'' 12 Bde. Schwabe, Basel u.a. 1971-2004. <small>(Das umfassendste Werk seiner Art; 2005 abgeschlossen)</small>
+*Franco Volpi, [[Julian Nida-Rümelin]]: ''Lexikon der philosophischen Werke.'' Kröner, Stuttgart 1988, ISBN 3-520-48601-6 <small>(handlich und informativ)</small>
+*Franco Volpi: ''Großes Werklexikon der Philosophie.'' Kröner, Stuttgart 2004, ISBN 3-520-83901-6 <small>(umfangreich und fundiert)</small>
+*Norbert Retlich: ''Literatur für das Philosophiestudium.'' Metzler, Stuttgart u.a. 1998. ISBN 3-476-10308-0
+*Annemarie Pieper, Urs Thurnherr: ''Was sollen Philosophen lesen?'' Schmidt, Berlin 1994, ISBN 3-503-03079-4
+
+<small>''Siehe auch die Literaturangaben im Artikel [[Geschichte der Philosophie]]''.</small>
+
+== Weblinks ==
+{{Wiktionary|Philosophie}}
+{{Wikiquote|Philosophie}}
+{{Commons|Category:Philosophy|Philosophy}}
+{{Wikisource|Kategorie:Philosophie und Psychologie|Philosophie}}
+
+
+*'''Hilfsmittel'''
+** [http://plato.stanford.edu/ Hauptseite] der ''[[Stanford Encyclopedia of Philosophy]]'' 
+** [http://www.iep.utm.edu/ Hauptseite] der ''[[Internet Encyclopedia of Philosophy]]''
+** [http://www.phillex.de Phillex – Lexikon der Philosophie]
+** [http://www.philolex.de/philolex.htm Philolex – Ein Online-Lexikon zur Philosophie]
+** [http://www.textlog.de/6088.html Karl Vorländer – Geschichte der Philosophie (1902)]
+** [http://www.pyrrhon.de Pyrrhon.de – Philosophische Lexika und Suchmaschinen]
+** [http://www.uni-erfurt.de/philosophie/allgemein-literaturhinw.pdf Kommentierte Literaturliste der Universität Erfurt (PDF)]
+
+*'''Allgemeine Informationen'''
+** [http://www.philosophie.de Philosophieportal der Gesellschaft für Philosophie und Wissenschaft e.V]
+** [http://www.philo.de/Philosophie-Seiten/ ''Die Philosophie-Seiten'', Informationen von Dieter Köhlers]
+** [http://www.information-philosophie.de/ eZine ''Information Philosophie im Internet'' mit Nachrichten und Informationen]
+** [http://www.shef.ac.uk/~ptpdlp/newsletter/index.html ''Philosophy Pathways'' – Philosophiemagazin (engl.)]
+
+*'''Sonstiges'''
+** [http://www.philos.de Studienführer Philosophie – sortiertes Verweisverzeichnis philosophischer Institute (mit Karte)]
+** [http://www.philopage.de ''philoSOPHIA e.V.'' – Philosophische Seminare für junge Menschen]
+** [http://buecherei.philo.at/ Philosophische Bücherei – Kommentierte Internet-Ressourcen zur Philosophie]
+** [http://audiothek.philo.at Sammlung von Mitschnitten von Vorträgen u.ä. in der ''Philosophischen Audiothek'' (MP3)]
+
+
+{{Navigationsleiste Philosophiegeschichte}}
+{{Lesenswert}}
+
+[[Kategorie:Geisteswissenschaft]]
+[[Kategorie:Philosophie| ]]
+
+[[af:Filosofie]]
+[[an:Filosofía]]
+[[ang:Ūðwitegung]]
+[[ar:فلسفة]]
+[[ast:Filosofía]]
+[[bg:Философия]]
+[[br:Prederouriezh]]
+[[bs:Filozofija]]
+[[ca:Filosofia]]
+[[ceb:Pilosopiya]]
+[[cs:Filosofie]]
+[[csb:Filozofijô]]
+[[cv:Философи]]
+[[da:Filosofi]]
+[[el:Φιλοσοφία]]
+[[en:Philosophy]]
+[[eo:Filozofio]]
+[[es:Filosofía]]
+[[et:Filosoofia]]
+[[fa:فلسفه]]
+[[fi:Filosofia]]
+[[fr:Philosophie]]
+[[fy:Filosofy]]
+[[gd:Feallsanachd]]
+[[gl:Filosofía]]
+[[he:פילוסופיה]]
+[[hi:दर्शनशास्त्र]]
+[[hr:Filozofija]]
+[[hu:Filozófia]]
+[[ia:Philosophia]]
+[[id:Filsafat]]
+[[io:Filozofio]]
+[[is:Heimspeki]]
+[[it:Filosofia]]
+[[ja:哲学]]
+[[jv:Filsafat]]
+[[ka:ანსელმ კენტერბერიელი]]
+[[ka:ფილოსოფია]]
+[[ko:철학]]
+[[ku:Felsefe]]
+[[la:Philosophia]]
+[[lad:Filosofiya]]
+[[lb:Philosophie]]
+[[li:Filosofie]]
+[[lt:Filosofija]]
+[[lv:Filozofija]]
+[[mk:Филозофија]]
+[[mn:Философи]]
+[[ms:Falsafah]]
+[[nl:Filosofie]]
+[[nn:Filosofi]]
+[[no:Filosofi]]
+[[pl:Filozofia]]
+[[pt:Filosofia]]
+[[ro:Filozofie]]
+[[ru:Философия]]
+[[scn:Filusufìa]]
+[[sco:Philosophie]]
+[[simple:Philosophy]]
+[[sk:Filozofia]]
+[[sl:Filozofija]]
+[[sq:Filozofia]]
+[[sr:Филозофија]]
+[[su:Filsafat]]
+[[sv:Filosofi]]
+[[th:ปรัชญา]]
+[[tl:Pilosopiya]]
+[[tpi:Pilosopi]]
+[[tr:Felsefe]]
+[[tt:Fälsäfä]]
+[[uk:філософія]]
+[[vi:Triết học]]
+[[vo:Filosop]]
+[[zh:哲学]]

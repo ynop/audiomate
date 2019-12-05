@@ -8,6 +8,10 @@ from audiomate import annotations
 from audiomate import issuers
 from audiomate.corpus.subset import subview
 from . import base
+from . import downloader
+
+DOWNLOAD_URL = 'http://ltdata1.informatik.uni-hamburg.de/kaldi_tuda_de/german-speechdata-package-v3.tar.gz'
+
 
 SPEAKER_IDX_PATTERN = re.compile(r'<speaker_id>(.*?)</speaker_id>')
 GENDER_PATTERN = re.compile(r'<gender>(.*?)</gender>')
@@ -26,6 +30,15 @@ WAV_FILE_SUFFIXES = [
     'Yamaha',
     'Microsoft-Kinect-Raw'
 ]
+
+WAV_SUFFIX_TO_SUBVIEW = {
+    'Kinect-Beam': 'kinect-beam',
+    'Kinect-RAW': 'kinect-raw',
+    'Realtek': 'realtek',
+    'Samson': 'samson',
+    'Yamaha': 'yamaha',
+    'Microsoft-Kinect-Raw': 'kinect-raw',
+}
 
 # Wrong transcripts, empty or to short
 BAD_FILES = {
@@ -108,6 +121,31 @@ BAD_FILES = {
 }
 
 
+class TudaDownloader(downloader.ArchiveDownloader):
+    """
+    Downloader for the TUDA Corpus.
+
+    Args:
+        url (str): The url to download the dataset from. If not given the default URL is used.
+                   It is expected to be a tar.gz file.
+        num_threads (int): Number of threads to use for download files.
+    """
+
+    def __init__(self, url=None, num_threads=1):
+        if url is None:
+            url = DOWNLOAD_URL
+
+        super(TudaDownloader, self).__init__(
+            url,
+            move_files_up=True,
+            num_threads=num_threads
+        )
+
+    @classmethod
+    def type(cls):
+        return 'tuda'
+
+
 class TudaReader(base.CorpusReader):
     """
     Reader for the TUDA german distant speech corpus (german-speechdata-package-v2.tar.gz).
@@ -133,7 +171,7 @@ class TudaReader(base.CorpusReader):
 
         for part in SUBSETS:
             sub_path = os.path.join(path, part)
-            ids = TudaReader.get_ids_from_folder(sub_path, part)
+            ids = self.get_ids_from_folder(sub_path, part)
             utt_ids = []
 
             for idx in ids:
@@ -156,15 +194,15 @@ class TudaReader(base.CorpusReader):
 
         for utt_id in utt_ids:
             wavtype = utt_id.split('_')[-1]
-            splits[wavtype].append(utt_id)
+            subview_type = WAV_SUFFIX_TO_SUBVIEW[wavtype]
+            splits[subview_type].append(utt_id)
 
         for sub_name, sub_utts in splits.items():
             subview_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=sub_utts)
             subview_corpus = subview.Subview(corpus, filter_criteria=[subview_filter])
             corpus.import_subview('{}{}'.format(prefix, sub_name), subview_corpus)
 
-    @staticmethod
-    def get_ids_from_folder(path, part_name):
+    def get_ids_from_folder(self, path, part_name):
         """
         Return all ids from the given folder, which have a corresponding beamformedSignal file.
         """
@@ -173,7 +211,7 @@ class TudaReader(base.CorpusReader):
         for xml_file in glob.glob(os.path.join(path, '*.xml')):
             idx = os.path.splitext(os.path.basename(xml_file))[0]
 
-            if idx not in BAD_FILES[part_name]:
+            if self.include_invalid_items or idx not in BAD_FILES[part_name]:
                 valid_ids.add(idx)
 
         return valid_ids

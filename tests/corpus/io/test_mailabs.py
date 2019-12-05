@@ -25,6 +25,8 @@ class TestMailabsDownloader:
         downloader = mailabs.MailabsDownloader(tags='de_DE')
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(mailabs.DOWNLOAD_URLS['de_DE'], headers={'Content-Length': '100'})
             mock.get(mailabs.DOWNLOAD_URLS['de_DE'], content=tar_data)
             downloader.download(target_folder)
 

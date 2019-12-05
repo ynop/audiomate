@@ -9,15 +9,15 @@ from audiomate.utils import textfile
 from . import base
 
 DOWNLOAD_URLS = {
-    'de_DE': 'http://www.m-ailabs.bayern/?ddownload=410',
-    'en_UK': 'http://www.m-ailabs.bayern/?ddownload=412',
-    'en_US': 'http://www.m-ailabs.bayern/?ddownload=411',
-    'es_ES': 'http://www.m-ailabs.bayern/?ddownload=413',
-    'it_IT': 'http://www.m-ailabs.bayern/?ddownload=409',
-    'uk_UK': 'http://www.m-ailabs.bayern/?ddownload=414',
-    'ru_RU': 'http://www.m-ailabs.bayern/?ddownload=415',
-    'fr_FR': 'http://www.m-ailabs.bayern/?ddownload=681',
-    'pl_PL': 'http://www.m-ailabs.bayern/?ddownload=673',
+    'de_DE': 'http://www.caito.de/data/Training/stt_tts/de_DE.tgz',
+    'en_UK': 'http://www.caito.de/data/Training/stt_tts/en_UK.tgz',
+    'en_US': 'http://www.caito.de/data/Training/stt_tts/en_US.tgz',
+    'es_ES': 'http://www.caito.de/data/Training/stt_tts/es_ES.tgz',
+    'it_IT': 'http://www.caito.de/data/Training/stt_tts/it_IT.tgz',
+    'uk_UK': 'http://www.caito.de/data/Training/stt_tts/uk_UK.tgz',
+    'ru_RU': 'http://www.caito.de/data/Training/stt_tts/ru_RU.tgz',
+    'fr_FR': 'http://www.caito.de/data/Training/stt_tts/fr_FR.tgz',
+    'pl_PL': 'http://www.caito.de/data/Training/stt_tts/pl_PL.tgz',
 }
 
 
@@ -30,10 +30,12 @@ class MailabsDownloader(base.CorpusDownloader):
                      Corresponds to the tags in the
                      `Statistics & Download Links` on the webpage.
                      If ``None``, all parts are downloaded.
+        num_threads (int): Number of threads to use for download files.
     """
 
-    def __init__(self, tags=None):
+    def __init__(self, tags=None, num_threads=1):
         self.tags = tags
+        self.num_threads = num_threads
 
     @classmethod
     def type(cls):
@@ -46,7 +48,12 @@ class MailabsDownloader(base.CorpusDownloader):
             if self.tags is None or tag in self.tags:
                 tmp_file = os.path.join(target_path, 'tmp_{}.tgz'.format(tag))
 
-                download.download_file(download_url, tmp_file)
+                download.download_file(
+                    download_url,
+                    tmp_file,
+                    show_progress=True,
+                    num_threads=self.num_threads
+                )
                 download.extract_tar(tmp_file, target_path)
 
                 os.remove(tmp_file)
