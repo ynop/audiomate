@@ -1,1 +1,2 @@
+recursive-include audiomate/corpus/io/data *.json
 include LICENSE README.md

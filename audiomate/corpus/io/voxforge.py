@@ -17,12 +17,6 @@ DOWNLOAD_URL = {
     'en': 'http://www.repository.voxforge1.org/downloads/SpeechCorpus/Trunk/Audio/Main/16kHz_16bit/'
 }
 
-BAD_UTTERANCES = [
-    'anonymous-20081112-ssu-de10-024',
-    'rwunsch-20090706-any-de2-26',
-    'john_doe-20160503-gaj-de7-082'
-]
-
 
 class VoxforgeDownloader(base.CorpusDownloader):
     """
@@ -162,7 +156,7 @@ class VoxforgeReader(base.CorpusReader):
                 idx = '{}-{}'.format(item, basename)
 
                 is_valid_wav = os.path.isfile(wav_path) and ext == '.wav' \
-                    and (self.include_invalid_items or idx not in BAD_UTTERANCES)
+                    and idx not in self.invalid_utterance_ids
                 has_transcription = basename in prompts.keys()
 
                 if is_valid_wav and has_transcription:

@@ -83,17 +83,23 @@ Finally in the ``_load`` method the actual loading is done and the loaded corpus
 
             return corpus
 
+For some datasets there are files/utterances that are not valid.
+(This can be due to a corrupt file, invalid transcription, ...)
+For this case a json-file ``audiomate/corpus/io/data/[reader-type]/invalid_utterances.json`` can be created
+that contains a list with ids of invalid utterances.
+The ids correspond to id of the utterance, if it would be loaded anyway.
+
 Testing
 ^^^^^^^
 For testing a reader the :class:`tests.corpus.io.reader_test.CorpusReaderTest` can be used.
 It provides base test methods for checking the correctness/existence of the basic components (tracks, utterances, labels, ...).
 
 .. code-block:: python
-   
+
    from tests.corpus.io import reader_test as rt
 
    class TestMyReader(rt.CorpusReaderTest):
-      
+
       #
       # Define via EXPECTED_* variables, what components are expected to be loaded
       #
