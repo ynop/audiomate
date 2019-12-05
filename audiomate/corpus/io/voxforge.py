@@ -134,7 +134,7 @@ class VoxforgeReader(base.CorpusReader):
     def _load(self, path):
         corpus = audiomate.Corpus(path=path)
 
-        for dir_path in VoxforgeReader.data_folders(path):
+        for dir_path in sorted(VoxforgeReader.data_folders(path)):
             item = os.path.basename(dir_path)
             etc_folder = os.path.join(dir_path, 'etc')
             wav_folder = os.path.join(dir_path, 'wav')
