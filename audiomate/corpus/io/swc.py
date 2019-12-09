@@ -21,6 +21,8 @@ URLS = {
 READER_NAME_PATTERN = re.compile(r'user_name\s+=\s+(.*?)\n')
 READER_GENDER_PATTERN = re.compile(r'(gender|geschlecht)\s+=\s+(.*?)\n')
 
+MIN_SEGMENT_DURATION = 1.0
+
 
 class SWCDownloader(downloader.ArchiveDownloader):
     """
@@ -234,6 +236,9 @@ class SWCReader(base.CorpusReader):
             if p.tag == 'd':
                 q = self.parse_element(p)
                 segments.extend(q)
+
+        # Filter segments on minimal duration
+        segments = [s for s in segments if s[1] - s[0] > MIN_SEGMENT_DURATION]
 
         return segments
 

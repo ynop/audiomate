@@ -113,7 +113,6 @@ class TestSWCReader:
         exp = [
             (1.010, 3.620, 'Sie hören den Artikel Fonteius Capito'),
             (27.780, 30.680, 'Im Jahr siebenundsechzig nach Christus'),
-            (30.760, 31.510, 'unter Nero'),
             (73.530, 78.340, 'dem Tod Neros wurde Fonteius Capito wegen angeblicher Umsturzpläne'),
         ]
 
@@ -123,7 +122,7 @@ class TestSWCReader:
         ds = reader.load(sample_path)
 
         assert ds.num_issuers == 4
-        assert ds.num_utterances == 2976
+        assert ds.num_utterances == 2055
         assert ds.num_tracks == 7
 
         utt = None
