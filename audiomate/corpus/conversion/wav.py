@@ -58,7 +58,6 @@ class WavAudioFileConverter(base.AudioFileConverter):
         Store the given samples with the target format
         at ``path``.
         """
-        print(files)
         with multiprocessing.Pool(self.num_workers) as p:
             func = functools.partial(
                 _process_file,
