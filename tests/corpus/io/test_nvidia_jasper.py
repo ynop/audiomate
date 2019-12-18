@@ -85,7 +85,8 @@ class TestNvidiaJasperWriter:
                 'num_samples': 16000,
                 'speed': 1}],
             'original_duration': pytest.approx(1.0),
-            'original_num_samples': 16000
+            'original_num_samples': 16000,
+            'utt_idx': 'utt-3'
         }
         assert (tmp_path / all_content[0]['files'][0]['fname']).exists()
 
@@ -100,7 +101,8 @@ class TestNvidiaJasperWriter:
                 'speed': 1
             }],
             'original_duration': pytest.approx(1.5),
-            'original_num_samples': 24000
+            'original_num_samples': 24000,
+            'utt_idx': 'utt-2'
         }
         assert (tmp_path / all_content[1]['files'][0]['fname']).exists()
 
@@ -115,7 +117,8 @@ class TestNvidiaJasperWriter:
                 'speed': 1
             }],
             'original_duration': pytest.approx(2.5951875),
-            'original_num_samples': 41523
+            'original_num_samples': 41523,
+            'utt_idx': 'utt-1'
         }
         abspath = os.path.abspath(os.path.join(str(tmp_path), all_content[2]['files'][0]['fname']))
         assert os.path.isfile(abspath)
@@ -132,7 +135,8 @@ class TestNvidiaJasperWriter:
                 'speed': 1
             }],
             'original_duration': pytest.approx(6.464, abs=1e-1),
-            'original_num_samples': pytest.approx(103424, abs=1600)
+            'original_num_samples': pytest.approx(103424, abs=1600),
+            'utt_idx': 'utt-4'
         }
         assert (tmp_path / all_content[3]['files'][0]['fname']).exists()
 
@@ -170,7 +174,8 @@ class TestNvidiaJasperWriter:
                 'speed': 1
             }],
             'original_duration': pytest.approx(2.5951875),
-            'original_num_samples': 41523
+            'original_num_samples': 41523,
+            'utt_idx': 'utt-1'
         }
         assert (tmp_path / all_content[2]['files'][0]['fname']).exists()
 
