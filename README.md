@@ -1,6 +1,7 @@
 # AUDIOMATE
 
 [![PyPI](https://img.shields.io/pypi/v/audiomate.svg)](https://pypi.python.org/pypi/audiomate)
+[![Build Status](https://travis-ci.com/ynop/audiomate.svg?branch=master)](https://travis-ci.com/ynop/audiomate)
 [![Run Status](https://api.shippable.com/projects/5a1d31821e6eda0700091230/badge?branch=master)](https://app.shippable.com/github/ynop/audiomate)
 [![Coverage Badge](https://api.shippable.com/projects/5a1d31821e6eda0700091230/coverageBadge?branch=master)](https://app.shippable.com/github/ynop/audiomate)
 [![Documentation Status](https://readthedocs.org/projects/audiomate/badge/?version=latest)](https://audiomate.readthedocs.io/en/latest/?badge=latest)
