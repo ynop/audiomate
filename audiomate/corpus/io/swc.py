@@ -171,7 +171,7 @@ class SWCReader(base.CorpusReader):
         """
 
         meta_path = os.path.join(article_path, 'audiometa.txt')
-        with open(meta_path, 'r') as f:
+        with open(meta_path, 'r', encoding='utf-8') as f:
             content = f.read()
 
         name_match = READER_NAME_PATTERN.search(content)
