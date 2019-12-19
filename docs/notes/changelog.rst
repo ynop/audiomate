@@ -19,6 +19,10 @@ Next Version
 * Added writer (:class:`audiomate.corpus.io.NvidiaJasperWriter`) for
   `NVIDIA Jasper <https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/SpeechRecognition/Jasper>`_.
 
+* Create a consistent way to define invalid utterances of a dataset.
+  Invalid utterance ids are defined in a json-file (e.g. ``audiomate/corpus/io/data/tuda/invalid_utterances.json``).
+  Those are loaded automatically in the base-reader and can be accessed in the concrete implementation.
+
 **Fixes**
 
 v5.0.0

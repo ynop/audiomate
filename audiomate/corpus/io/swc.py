@@ -21,6 +21,8 @@ URLS = {
 READER_NAME_PATTERN = re.compile(r'user_name\s+=\s+(.*?)\n')
 READER_GENDER_PATTERN = re.compile(r'(gender|geschlecht)\s+=\s+(.*?)\n')
 
+MIN_SEGMENT_DURATION = 1.0
+
 
 class SWCDownloader(downloader.ArchiveDownloader):
     """
@@ -81,7 +83,6 @@ class SWCReader(base.CorpusReader):
                 file_path = self.find_audio_file_for_segment(start, end, audio_files)
 
                 if file_path is not None:
-
                     if file_path not in file_map.keys():
                         track = tracks.FileTrack(
                             '{:0>10}'.format(len(file_map)),
@@ -103,20 +104,21 @@ class SWCReader(base.CorpusReader):
                         int(end * 1000)
                     )
 
-                    utt = corpus.new_utterance(
-                        utt_idx,
-                        track.idx,
-                        issuer_idx=speaker.idx,
-                        start=utt_start,
-                        end=utt_end
-                    )
+                    if utt_idx not in self.invalid_utterance_ids:
+                        utt = corpus.new_utterance(
+                            utt_idx,
+                            track.idx,
+                            issuer_idx=speaker.idx,
+                            start=utt_start,
+                            end=utt_end
+                        )
 
-                    ll = annotations.LabelList.create_single(
-                        text,
-                        audiomate.corpus.LL_WORD_TRANSCRIPT
-                    )
+                        ll = annotations.LabelList.create_single(
+                            text,
+                            audiomate.corpus.LL_WORD_TRANSCRIPT
+                        )
 
-                    utt.set_label_list(ll)
+                        utt.set_label_list(ll)
 
         return audiomate.Corpus.from_corpus(corpus)
 
@@ -234,6 +236,9 @@ class SWCReader(base.CorpusReader):
             if p.tag == 'd':
                 q = self.parse_element(p)
                 segments.extend(q)
+
+        # Filter segments on minimal duration
+        segments = [s for s in segments if s[1] - s[0] > MIN_SEGMENT_DURATION]
 
         return segments
 

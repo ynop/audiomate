@@ -1,4 +1,7 @@
 import abc
+import os
+
+from audiomate.utils import jsonfile
 
 
 class FailedDownloadException(Exception):
@@ -66,6 +69,10 @@ class CorpusReader(metaclass=abc.ABCMeta):
 
     def __init__(self, include_invalid_items=False):
         self.include_invalid_items = include_invalid_items
+        if not self.include_invalid_items:
+            self.invalid_utterance_ids = self._load_list_of_invalid_utterances()
+        else:
+            self.invalid_utterance_ids = []
 
     def load(self, path):
         """
@@ -88,6 +95,15 @@ class CorpusReader(metaclass=abc.ABCMeta):
                 self.type(), ' '.join(missing_files), path))
 
         return self._load(path)
+
+    def _load_list_of_invalid_utterances(self):
+        io_folder = os.path.dirname(__file__)
+        invalid_utt_path = os.path.join(io_folder, 'data', self.type(), 'invalid_utterances.json')
+
+        if os.path.isfile(invalid_utt_path):
+            return jsonfile.read_json_file(invalid_utt_path)
+        else:
+            return []
 
     @classmethod
     @abc.abstractmethod

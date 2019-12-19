@@ -307,7 +307,8 @@ class DefaultWriter(base.CorpusWriter):
 
             data[issuer.idx] = issuer_data
 
-        jsonfile.write_json_to_file(file_path, data)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f)
 
     @staticmethod
     def write_utterances(utterance_path, corpus):

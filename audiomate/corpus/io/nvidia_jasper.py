@@ -124,7 +124,8 @@ class NvidiaJasperWriter(base.CorpusWriter):
                 'speed': 1
             }],
             'original_duration': utt_dur,
-            'original_num_samples': num_samples
+            'original_num_samples': num_samples,
+            'utt_idx': utt.idx
         }
 
     def _get_file_durations(self, files):

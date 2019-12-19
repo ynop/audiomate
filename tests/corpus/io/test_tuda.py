@@ -169,6 +169,7 @@ class TestTudaReader(rt.CorpusReaderTest):
             '2014-03-17-10-26-07',
             '2014-03-17-13-03-33',
             '2014-03-19-15-01-56',
+            '2014-08-05-11-08-34',
             '2014-08-07-13-22-38',
             '2014-08-14-14-52-00',
             '2015-04-17-11-26-07',
@@ -176,6 +177,7 @@ class TestTudaReader(rt.CorpusReaderTest):
         assert reader.get_ids_from_folder(os.path.join(self.SAMPLE_PATH, 'dev'), 'dev') == {
             '2015-01-27-11-31-32',
             '2015-01-28-11-35-47',
+            '2015-01-28-11-49-53',
             '2015-01-28-12-36-24',
         }
         assert reader.get_ids_from_folder(os.path.join(self.SAMPLE_PATH, 'test'), 'test') == {
@@ -183,12 +185,3 @@ class TestTudaReader(rt.CorpusReaderTest):
             '2015-02-03-12-08-13',
             '2015-02-10-14-31-52',
         }
-
-    def test_get_ids_from_folder_ignore_bad_files(self):
-        reader = io.TudaReader()
-
-        ids = reader.get_ids_from_folder(os.path.join(self.SAMPLE_PATH, 'train'), 'train')
-        assert '2014-08-05-11-08-34' not in ids
-
-        ids = reader.get_ids_from_folder(os.path.join(self.SAMPLE_PATH, 'dev'), 'dev')
-        assert '2015-01-28-11-49-53' not in ids
