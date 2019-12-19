@@ -13,5 +13,5 @@ script:
     - flake8
     - pytest --cov=./ --cov-report xml
     - curl https://deepsource.io/cli | sh
-    - export DEEPSOURCE_DSN=https://3d33688841cb4a6c9929988d8659e60c@deepsource.io
+    - export DEEPSOURCE_DSN=https://4548d0a091ca452ba4f84f0771f8a91a@deepsource.io
     - ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
