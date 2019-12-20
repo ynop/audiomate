@@ -8,10 +8,14 @@ install:
     - sudo apt-get update
     - sudo apt-get install -y libav-tools sox
     - "pip install -e .[dev,ci]"
+    - pip install python-coveralls
 
 script:
     - flake8
-    - pytest --cov=./ --cov-report xml
+    - pytest --cov=audiomate --cov-report xml --cov-report term-missing
+
+after_success:
     - curl https://deepsource.io/cli | sh
     - export DEEPSOURCE_DSN=https://4548d0a091ca452ba4f84f0771f8a91a@deepsource.io
     - ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
+    - coveralls

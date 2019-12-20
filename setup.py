@@ -38,7 +38,7 @@ EXTRAS = {
     ],
     'ci': [
         'flake8==3.7.9',
-        'flake8-quotes==2.1.1'
+        'flake8-quotes==2.1.1',
     ],
 }
 
