@@ -61,7 +61,7 @@ class CorpusReader(metaclass=abc.ABCMeta):
     implementation.
 
     Args:
-        inclue_invalid_items (bool): Some readers define a list of invalid utterances/files.
+        include_invalid_items (bool): Some readers define a list of invalid utterances/files.
                                      (e.g. bad transcription, invalid audio, ...)
                                      If ``False``, those utterances are loaded anyway.
                                      If ``True``, those utterances are ignored.
