@@ -6,6 +6,7 @@ from audiomate import issuers
 from audiomate.corpus import subset
 from audiomate.utils import download
 from audiomate.utils import textfile
+
 from . import base
 
 DOWNLOAD_URLS = {
@@ -81,7 +82,7 @@ class MailabsReader(base.CorpusReader):
         tag_folders = MailabsReader.get_folders(path)
 
         for tag_folder in tag_folders:
-            MailabsReader.load_tag(corpus, tag_folder)
+            self.load_tag(corpus, tag_folder)
 
         return corpus
 
@@ -100,8 +101,7 @@ class MailabsReader(base.CorpusReader):
 
         return folder_paths
 
-    @staticmethod
-    def load_tag(corpus, path):
+    def load_tag(self, corpus, path):
         """
         Iterate over all speakers on load them.
         Collect all utterance-idx and create a subset of them.
@@ -114,18 +114,17 @@ class MailabsReader(base.CorpusReader):
             # IN MIX FOLDERS THERE ARE NO SPEAKERS
             # HANDLE EVERY UTT AS DIFFERENT ISSUER
             if os.path.basename(gender_path) == 'mix':
-                utt_ids = MailabsReader.load_books_of_speaker(corpus,
-                                                              gender_path,
-                                                              None)
-
+                utt_ids = self.load_books_of_speaker(corpus,
+                                                     gender_path,
+                                                     None)
                 tag_utt_ids.extend(utt_ids)
 
             else:
                 for speaker_path in MailabsReader.get_folders(gender_path):
                     speaker = MailabsReader.load_speaker(corpus, speaker_path)
-                    utt_ids = MailabsReader.load_books_of_speaker(corpus,
-                                                                  speaker_path,
-                                                                  speaker)
+                    utt_ids = self.load_books_of_speaker(corpus,
+                                                         speaker_path,
+                                                         speaker)
 
                     tag_utt_ids.extend(utt_ids)
 
@@ -157,8 +156,7 @@ class MailabsReader(base.CorpusReader):
 
         return speaker
 
-    @staticmethod
-    def load_books_of_speaker(corpus, path, speaker):
+    def load_books_of_speaker(self, corpus, path, speaker):
         """
         Load all utterances for the speaker at the given path.
         """
@@ -189,7 +187,7 @@ class MailabsReader(base.CorpusReader):
                 wav_name = '{}.wav'.format(file_basename)
                 wav_path = os.path.join(wavs_path, wav_name)
 
-                if os.path.isfile(wav_path):
+                if os.path.isfile(wav_path) and idx not in self.invalid_utterance_ids:
                     corpus.new_file(wav_path, idx)
 
                     ll_raw = annotations.LabelList.create_single(
