@@ -8,6 +8,11 @@ Next Version
 
 **New Features**
 
+v5.1.0
+------
+
+**New Features**
+
 * Added Downloader for SWC Corpus ((:class:`audiomate.corpus.io.SWCDownloader`).
 
 * Updated SWC-Reader (:class:`audiomate.corpus.io.SWCReader`) with an own implementation,
@@ -22,8 +27,6 @@ Next Version
 * Create a consistent way to define invalid utterances of a dataset.
   Invalid utterance ids are defined in a json-file (e.g. ``audiomate/corpus/io/data/tuda/invalid_utterances.json``).
   Those are loaded automatically in the base-reader and can be accessed in the concrete implementation.
-
-**Fixes**
 
 v5.0.0
 ------
