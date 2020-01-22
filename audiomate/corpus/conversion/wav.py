@@ -1,8 +1,8 @@
 import functools
 import multiprocessing
 
-import sox
 import soundfile as sf
+import sox
 from tqdm import tqdm
 
 from . import base
@@ -80,4 +80,8 @@ def _process_file(file_item, target_sr):
         tfm.trim(start, end)
 
     tfm.convert(target_sr, 1, 16)
-    tfm.build(src, target)
+    try:
+        tfm.build(src, target)
+    except sox.core.SoxError:
+        print('The following file could not be converted:')
+        print(src)
