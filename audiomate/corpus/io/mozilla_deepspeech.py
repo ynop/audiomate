@@ -16,6 +16,7 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
     are extracted into a separate file in the subfolder `audio` of the target path.
 
     Args:
+        no_audio_check (bool): If ``True``, the audio is not checked for correct format.
         export_all_audio (bool): If ``True``, all utterances are exported,
                                  whether they are in a separate file
                                  already or not.
@@ -25,8 +26,10 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
     """
 
     def __init__(self, export_all_audio=False,
+                 no_audio_check=False,
                  transcription_label_list_idx=audiomate.corpus.LL_WORD_TRANSCRIPT,
                  sampling_rate=16000, num_workers=1):
+        self.no_audio_check = no_audio_check
         self.export_all_audio = export_all_audio
         self.transcription_label_list_idx = transcription_label_list_idx
         self.sampling_rate = sampling_rate
@@ -48,10 +51,12 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
         os.makedirs(target_audio_path, exist_ok=True)
 
         # Convert all files
-        corpus = self.converter.convert(corpus, target_audio_path)
+        if not self.no_audio_check:
+            corpus = self.converter.convert(corpus, target_audio_path)
+
         records = []
 
-        subset_utterance_ids = {idx: list(subset.utterances.keys()) for idx, subset in corpus.subviews.items()}
+        subset_utterance_ids = {idx: set(subset.utterances.keys()) for idx, subset in corpus.subviews.items()}
         subset_records = collections.defaultdict(list)
 
         for utterance_idx in sorted(corpus.utterances.keys()):
