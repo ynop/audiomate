@@ -1,8 +1,12 @@
 import os
 import shutil
 
+import audiomate
+from audiomate import annotations
+from audiomate import issuers
+from audiomate.corpus import subset
 from audiomate.utils import download
-from audiomate.utils import files
+from audiomate.utils import textfile
 
 from . import base
 
@@ -65,3 +69,127 @@ class LibriSpeechDownloader(base.CorpusDownloader):
                 shutil.rmtree('extract_sub_path', ignore_errors=True)
 
                 os.remove(tmp_file)
+
+
+class LibriSpeechReader(base.CorpusReader):
+    """
+    Reader for the LibriSpeech Corpus.
+
+    .. seealso::
+
+       `LibriSpeech <https://www.openslr.org/12/>`_
+          Project Page
+    """
+
+    @classmethod
+    def type(cls):
+        return 'librispeech'
+
+    def _check_for_missing_files(self, path):
+        files = []
+
+        for name in ['SPEAKERS.TXT']:
+            if not os.path.isfile(os.path.join(path, name)):
+                files.append(name)
+
+        return files
+
+    def _load(self, path):
+        corpus = audiomate.Corpus(path=path)
+
+        speaker_info_path = os.path.join(path, 'SPEAKERS.TXT')
+        speakers = LibriSpeechReader.load_speakers(speaker_info_path)
+
+        sf = LibriSpeechReader.available_subfolders
+
+        for subset_idx, subset_path in sf(path, SUBSETS.keys()).items():
+            subset_utt_ids = set()
+
+            for speaker_idx, speaker_path in sf(subset_path).items():
+                corpus.import_issuers(speakers[speaker_idx])
+
+                for chapter_idx, chapter_path in sf(speaker_path).items():
+                    transcript_path = os.path.join(
+                        chapter_path,
+                        '{}-{}.trans.txt'.format(speaker_idx, chapter_idx)
+                    )
+                    transcripts = LibriSpeechReader.load_transcripts(transcript_path)
+
+                    for utt_idx, transcript in transcripts.items():
+                        file_path = os.path.join(chapter_path, '{}.flac'.format(utt_idx))
+                        corpus.new_file(file_path, utt_idx)
+
+                        utterance = corpus.new_utterance(
+                            utt_idx,
+                            utt_idx,
+                            speaker_idx
+                        )
+
+                        utterance.set_label_list(
+                            annotations.LabelList.create_single(
+                                transcript,
+                                idx=audiomate.corpus.LL_WORD_TRANSCRIPT
+                            )
+                        )
+
+                        subset_utt_ids.add(utt_idx)
+
+            filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utt_ids))
+            subview = subset.Subview(corpus, filter_criteria=[filter])
+            corpus.import_subview(subset_idx, subview)
+
+        return corpus
+
+    @staticmethod
+    def available_subfolders(path, restrict=None):
+        subfolders = {}
+
+        for subfolder_name in os.listdir(path):
+            if restrict is None or subfolder_name in restrict:
+                subfolder_path = os.path.join(path, subfolder_name)
+
+                if os.path.isdir(subfolder_path):
+                    subfolders[subfolder_name] = subfolder_path
+
+        return subfolders
+
+    @staticmethod
+    def load_speakers(path):
+        entries = textfile.read_separated_lines_generator(
+            path,
+            separator='|',
+            max_columns=5,
+            ignore_lines_starting_with=[';']
+        )
+
+        speakers = {}
+
+        for item in entries:
+            idx = item[0].strip()
+            gender_str = item[1].strip()
+
+            if gender_str == 'M':
+                gender = issuers.Gender.MALE
+            elif gender_str == 'F':
+                gender = issuers.Gender.FEMALE
+            else:
+                gender = issuers.Gender.UNKNOWN
+
+            issuer = issuers.Speaker(
+                idx,
+                gender=gender
+            )
+
+            speakers[idx] = issuer
+
+        return speakers
+
+    @staticmethod
+    def load_transcripts(path):
+        entries = textfile.read_separated_lines_generator(
+            path,
+            separator=' ',
+            max_columns=2
+        )
+
+        return {x[0].strip(): x[1].strip() for x in entries}
