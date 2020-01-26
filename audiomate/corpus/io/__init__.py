@@ -30,6 +30,7 @@ from .audio_mnist import AudioMNISTDownloader, AudioMNISTReader  # noqa: F401
 from .fluent_speech import FluentSpeechReader  # noqa: F401
 from .wav2letter import Wav2LetterWriter  # noqa: F401
 from .nvidia_jasper import NvidiaJasperWriter  # noqa: F401
+from .librispeech import LibriSpeechDownloader  # noqa: F401
 
 __downloaders = {}
 for cls in CorpusDownloader.__subclasses__():
