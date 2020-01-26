@@ -43,6 +43,7 @@ Currently supported datasets:
 * [German Distant Speech Corpus](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/acoustic-models.html)
 * [Google Speech Commands](https://research.googleblog.com/2017/08/launching-speech-commands-dataset.html)
 * [GTZAN](http://marsyas.info/downloads/datasets.html)
+* [LibriSpeech](https://www.openslr.org/12/)
 * [M-AILABS Speech Dataset](https://www.caito.de/2019/01/the-m-ailabs-speech-dataset/)
 * [MUSAN](http://www.openslr.org/17/)
 * [LITIS Rouen Audio scene dataset](https://sites.google.com/site/alainrakotomamonjy/home/audio-scene)
