@@ -1,0 +1,16 @@
+; Some pipe(|) separated metadata about the audio chapters included in the corpus.
+;
+; The meaning of the fields in left-to-right order is as follows:
+;
+; chapter_id: the ID of the chapter in the LibriVox's database
+; reader_id: the ID of the reader in the LibriVox's database
+; duration: how many minutes of this chapter are used in the corpus
+; subset: the corpus subset to which this chapter is assigned
+; project_id: the LibriVox project ID
+; book_id: the Project Gutenberg's ID for the book on which the LibriVox project is based
+; chapter_title: the title of the chapter on LibriVox
+; project_title: the title of the LibriVox project
+;
+;ID    |READER|MINUTES| SUBSET           | PROJ.|BOOK ID| CH. TITLE | PROJECT TITLE
+1      | 110  | 19.77 | train-other-500  | 53   | 1023  | In Chancery | Bleak House
+2      | 110  | 10.30 | train-other-500  | 53   | 1023  | In Fashion | Bleak House

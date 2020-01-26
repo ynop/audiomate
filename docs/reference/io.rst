@@ -53,6 +53,7 @@ Implementations
   Google Speech Commands                      x
   GTZAN                             x         x
   Kaldi                                       x      x
+  LibriSpeech                       x         x
   Mozilla DeepSpeech                                 x
   MUSAN                             x         x
   M-AILABS Speech Dataset           x         x
@@ -145,6 +146,14 @@ Kaldi
    :members:
 
 .. autoclass:: KaldiWriter
+   :members:
+
+LibriSpeech
+^^^^^^^^^^^
+.. autoclass:: LibriSpeechDownloader
+   :members:
+
+.. autoclass:: LibriSpeechReader
    :members:
 
 Mozilla DeepSpeech

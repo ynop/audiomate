@@ -8,6 +8,10 @@ Next Version
 
 **New Features**
 
+* Added reader (:class:`audiomate.corpus.io.LibriSpeechReader`) and
+  downloader (:class:`audiomate.corpus.io.LibriSpeechDownloader`) for the
+  `LibriSpeech Dataset <https://www.openslr.org/12/>`_.
+
 v5.1.0
 ------
 
