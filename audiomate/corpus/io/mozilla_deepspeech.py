@@ -56,7 +56,7 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
 
         records = []
 
-        subset_utterance_ids = {idx: list(subset.utterances.keys()) for idx, subset in corpus.subviews.items()}
+        subset_utterance_ids = {idx: set(subset.utterances.keys()) for idx, subset in corpus.subviews.items()}
         subset_records = collections.defaultdict(list)
 
         for utterance_idx in sorted(corpus.utterances.keys()):
