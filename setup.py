@@ -7,7 +7,7 @@ from setuptools import setup
 # Dependencies
 ##################################################
 
-PYTEST_VERSION_ = '5.2.3'
+PYTEST_VERSION_ = '5.3.5'
 
 # Packages required in 'production'
 REQUIRED = [
