@@ -12,7 +12,7 @@ PYTEST_VERSION_ = '5.3.5'
 # Packages required in 'production'
 REQUIRED = [
     'audioread == 2.1.8',
-    'numpy == 1.17.4',
+    'numpy == 1.18.1',
     'scipy == 1.3.2',
     'librosa == 0.7.1',
     'h5py == 2.10.0',
