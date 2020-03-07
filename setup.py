@@ -34,7 +34,7 @@ EXTRAS = {
         'requests_mock==1.7.0',
         'Sphinx==2.2.1',
         'sphinx-rtd-theme==0.4.3',
-        'pytest-benchmark==3.2.2',
+        'pytest-benchmark==3.2.3',
     ],
     'ci': [
         'flake8==3.7.9',
