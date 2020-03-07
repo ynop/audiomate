@@ -111,7 +111,7 @@ pip install -e .
 
 ```
 pip install -e .[dev]
-python setup.py test
+pytest
 ```
 
 With PyCharm you might have to change the default test runner. Otherwise, it might only suggest to use nose. To do so, go to File > Settings > Tools > Python Integrated Tools (on the Mac it's PyCharm > Preferences > Settings > Tools > Python Integrated Tools) and change the test runner to py.test.
