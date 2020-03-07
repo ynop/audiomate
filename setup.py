@@ -32,7 +32,7 @@ EXTRAS = {
         'pytest-runner==5.2',
         'pytest-cov==2.8.1',
         'requests_mock==1.7.0',
-        'Sphinx==2.2.1',
+        'Sphinx==2.4.4',
         'sphinx-rtd-theme==0.4.3',
         'pytest-benchmark==3.2.3',
     ],
