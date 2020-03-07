@@ -13,7 +13,7 @@ PYTEST_VERSION_ = '5.3.5'
 REQUIRED = [
     'audioread == 2.1.8',
     'numpy == 1.18.1',
-    'scipy == 1.3.2',
+    'scipy == 1.4.1',
     'librosa == 0.7.1',
     'h5py == 2.10.0',
     'networkx == 2.4',
