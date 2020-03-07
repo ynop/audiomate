@@ -17,7 +17,7 @@ REQUIRED = [
     'librosa == 0.7.1',
     'h5py == 2.10.0',
     'networkx == 2.4',
-    'requests == 2.22.0',
+    'requests == 2.23.0',
     'intervaltree == 3.0.2',
     'tqdm == 4.38.0',
     'sox == 1.3.7',
