@@ -14,7 +14,7 @@ REQUIRED = [
     'audioread == 2.1.8',
     'numpy == 1.18.1',
     'scipy == 1.4.1',
-    'librosa == 0.7.1',
+    'librosa == 0.7.2',
     'h5py == 2.10.0',
     'networkx == 2.4',
     'requests == 2.23.0',
