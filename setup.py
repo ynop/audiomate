@@ -7,19 +7,19 @@ from setuptools import setup
 # Dependencies
 ##################################################
 
-PYTEST_VERSION_ = '5.2.3'
+PYTEST_VERSION_ = '5.3.5'
 
 # Packages required in 'production'
 REQUIRED = [
     'audioread == 2.1.8',
-    'numpy == 1.17.4',
-    'scipy == 1.3.2',
-    'librosa == 0.7.1',
+    'numpy == 1.18.1',
+    'scipy == 1.4.1',
+    'librosa == 0.7.2',
     'h5py == 2.10.0',
     'networkx == 2.4',
-    'requests == 2.22.0',
+    'requests == 2.23.0',
     'intervaltree == 3.0.2',
-    'tqdm == 4.38.0',
+    'tqdm == 4.43.0',
     'sox == 1.3.7',
     'PGet == 0.5.0',
 ]
@@ -32,9 +32,9 @@ EXTRAS = {
         'pytest-runner==5.2',
         'pytest-cov==2.8.1',
         'requests_mock==1.7.0',
-        'Sphinx==2.2.1',
+        'Sphinx==2.4.4',
         'sphinx-rtd-theme==0.4.3',
-        'pytest-benchmark==3.2.2',
+        'pytest-benchmark==3.2.3',
     ],
     'ci': [
         'flake8==3.7.9',
