@@ -6,7 +6,7 @@ from bench import resources
 
 
 def run(splitter):
-    out = splitter.split_by_length_of_utterances(
+    out = splitter.split(
         {
             'train': 0.7,
             'test': 0.15,
@@ -18,7 +18,7 @@ def run(splitter):
     assert len(out) == 3
 
 
-def test_split_by_length_of_utterances(benchmark):
+def test_split(benchmark):
     corpus = resources.generate_corpus(
         179,
         (250, 500),
