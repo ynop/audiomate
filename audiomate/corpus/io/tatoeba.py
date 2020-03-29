@@ -172,6 +172,6 @@ class TatoebaReader(base.CorpusReader):
 
             utterance = corpus.new_utterance(idx, idx, speaker_idx)
             utterance.set_label_list(annotations.LabelList.create_single(transcript,
-                                                                         idx=audiomate.corpus.LL_WORD_TRANSCRIPT_RAW))
+                                                                         idx=audiomate.corpus.LL_WORD_TRANSCRIPT))
 
         return corpus
