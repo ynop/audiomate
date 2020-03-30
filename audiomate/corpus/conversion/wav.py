@@ -1,11 +1,13 @@
 import functools
+import logging
 import multiprocessing
 
 import soundfile as sf
 import sox
-from tqdm import tqdm
 
 from . import base
+
+logger = logging.getLogger(__name__)
 
 
 class WavAudioFileConverter(base.AudioFileConverter):
@@ -63,7 +65,11 @@ class WavAudioFileConverter(base.AudioFileConverter):
                 _process_file,
                 target_sr=self.sampling_rate
             )
-            list(tqdm(p.imap(func, list(files)), total=len(files)))
+            list(logger.progress(
+                p.imap(func, list(files)),
+                total=len(files),
+                description='Convert audio files'
+            ))
 
 
 def _process_file(file_item, target_sr):
@@ -83,5 +89,4 @@ def _process_file(file_item, target_sr):
     try:
         tfm.build(src, target)
     except sox.core.SoxError:
-        print('The following file could not be converted:')
-        print(src)
+        logger.error('The following file could not be converted: %s', src)

@@ -1,10 +1,11 @@
 import functools
 import multiprocessing
 
-from tqdm import tqdm
-
 from audiomate import corpus
+from audiomate import logutil
 from . import base
+
+logger = logutil.getLogger()
 
 
 class UtteranceTranscriptionRatioValidator(base.Validator):
@@ -45,13 +46,13 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
                 ll_idx=self.label_list_idx
             )
 
-            result = list(tqdm(
+            result = list(logger.progress(
                 p.imap(
                     func,
                     list(corpus.utterances.values())
                 ),
                 total=corpus.num_utterances,
-                desc='Validate character ratio'
+                description='Validate character ratio'
             ))
 
         invalid_utterances = {}

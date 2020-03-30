@@ -11,6 +11,9 @@ from audiomate import annotations
 from audiomate import issuers
 from audiomate.utils import textfile
 from audiomate.utils import download
+from audiomate import logutil
+
+logger = logutil.getLogger()
 
 DOWNLOAD_URL = {
     'de': 'http://www.repository.voxforge1.org/downloads/de/Trunk/Audio/Main/16kHz_16bit/',
@@ -48,11 +51,11 @@ class VoxforgeDownloader(base.CorpusDownloader):
         os.makedirs(temp_folder, exist_ok=True)
 
         available = VoxforgeDownloader.available_files(self.url)
-        print('Found {} available archives to download'.format(len(available)))
+        logger.info('Found %d available archives to download', len(available))
 
         downloaded = self.download_files(available, temp_folder)
 
-        print('Extract {} files'.format(len(downloaded)))
+        logger.info('Extract %d files', len(downloaded))
         VoxforgeDownloader.extract_files(downloaded, target_path)
 
         shutil.rmtree(temp_folder)
@@ -94,7 +97,7 @@ class VoxforgeDownloader(base.CorpusDownloader):
             if status:
                 downloaded_files.append(path_or_msg)
             else:
-                print('Download failed for url {}'.format(url))
+                logger.info('Download failed for url %s', url)
 
         return downloaded_files
 

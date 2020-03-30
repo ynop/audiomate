@@ -1,11 +1,12 @@
-import os
 import abc
 import copy
-
-from tqdm import tqdm
+import os
 
 import audiomate
 from audiomate import tracks
+from audiomate import logutil
+
+logger = logutil.getLogger()
 
 
 class AudioFileConverter(metaclass=abc.ABCMeta):
@@ -49,9 +50,10 @@ class AudioFileConverter(metaclass=abc.ABCMeta):
         out_corpus = audiomate.Corpus()
         files_to_convert = []
 
-        print('Find utterances to convert ...')
-
-        for utterance in tqdm(corpus.utterances.values(), total=corpus.num_utterances):
+        for utterance in logger.progress(
+                corpus.utterances.values(),
+                total=corpus.num_utterances,
+                description='Find utterances to convert'):
 
             if utterance.issuer.idx not in out_corpus.issuers.keys():
                 out_corpus.import_issuers(utterance.issuer)
@@ -105,8 +107,6 @@ class AudioFileConverter(metaclass=abc.ABCMeta):
                 self._copy_utterance_to_corpus(utterance, out_corpus)
 
         self._copy_subviews_to_corpus(corpus, out_corpus)
-
-        print('Convert audio files ...')
         self._convert_files(files_to_convert)
 
         return out_corpus
@@ -130,7 +130,6 @@ class AudioFileConverter(metaclass=abc.ABCMeta):
         Store the given samples with the target format
         at ``path``.
         """
-
         pass
 
     def _does_utt_need_conversion(self, utterance):

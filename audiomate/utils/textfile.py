@@ -5,6 +5,9 @@ The textfile module contains functions for reading and writing textfiles.
 import os
 
 from audiomate.utils import text
+from audiomate import logutil
+
+logger = logutil.getLogger()
 
 
 def read_separated_lines(path, separator=' ', max_columns=-1, keep_empty=False):
@@ -129,7 +132,7 @@ def read_separated_lines_generator(path, separator=' ', max_columns=-1,
         keep_empty (bool): If True empty columns are returned as well.
     """
     if not os.path.isfile(path):
-        print('File doesnt exist or is no file: {}'.format(path))
+        logger.error('File doesnt exist or is no file: %s', path)
         return
 
     f = open(path, 'r', errors='ignore', encoding='utf-8')

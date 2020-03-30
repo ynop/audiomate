@@ -1,9 +1,11 @@
 import multiprocessing
 
 import audioread
-from tqdm import tqdm
 
 from . import base
+from audiomate import logutil
+
+logger = logutil.getLogger()
 
 
 class TrackReadValidator(base.Validator):
@@ -30,13 +32,13 @@ class TrackReadValidator(base.Validator):
         """
 
         with multiprocessing.pool.ThreadPool(self.num_workers) as p:
-            result = list(tqdm(
+            result = list(logger.progress(
                 p.imap(
                     self.validate_track,
                     list(corpus.tracks.values())
                 ),
                 total=corpus.num_tracks,
-                desc='Validate tracks'
+                description='Validate tracks'
             ))
 
         invalid_tracks = {x[0]: x[1] for x in result if x[1] is not None}

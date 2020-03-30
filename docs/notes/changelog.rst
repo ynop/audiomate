@@ -8,6 +8,8 @@ Next Version
 
 **New Features**
 
+* Setup consistent way for logging. (:ref:`logging`):
+
 v5.2.0
 ------
 

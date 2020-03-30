@@ -23,6 +23,7 @@ This should ease the use of audio datasets for example for machine learning task
     documentation/new_dataset_format
     documentation/data_mapping
     documentation/indirect_support
+    documentation/logging.rst
 
 .. toctree::
     :maxdepth: 2
