@@ -1,13 +1,13 @@
 import functools
-import logging
 import multiprocessing
 
 import soundfile as sf
 import sox
 
 from . import base
+from audiomate import logutil
 
-logger = logging.getLogger(__name__)
+logger = logutil.getLogger()
 
 
 class WavAudioFileConverter(base.AudioFileConverter):
