@@ -52,7 +52,6 @@ class MailabsDownloader(base.CorpusDownloader):
                 download.download_file(
                     download_url,
                     tmp_file,
-                    show_progress=True,
                     num_threads=self.num_threads
                 )
                 download.extract_tar(tmp_file, target_path)

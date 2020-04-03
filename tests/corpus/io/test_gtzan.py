@@ -24,6 +24,8 @@ class TestGtzanDownloader:
         downloader = io.GtzanDownloader()
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(gtzan.DOWNLOAD_URL, headers={'Content-Length': '100'})
             mock.get(gtzan.DOWNLOAD_URL, content=tar_data)
 
             downloader.download(target_folder)

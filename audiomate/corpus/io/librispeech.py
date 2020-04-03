@@ -55,7 +55,6 @@ class LibriSpeechDownloader(base.CorpusDownloader):
                 download.download_file(
                     SUBSETS[subset_name],
                     tmp_file,
-                    show_progress=True,
                     num_threads=self.num_threads
                 )
                 download.extract_tar(tmp_file, target_path)

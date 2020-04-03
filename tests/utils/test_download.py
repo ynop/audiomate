@@ -29,6 +29,9 @@ def test_download_file(sample_zip_data, tmpdir):
     target_path = os.path.join(tmpdir.strpath, 'target.zip')
 
     with requests_mock.Mocker() as mock:
+        # Return any size (doesn't matter, only for prints)
+        mock.head(requests_mock.ANY, headers={'Content-Length': '100'})
+
         mock.get(dl_path, content=sample_zip_data)
 
         download.download_file(dl_path, target_path)

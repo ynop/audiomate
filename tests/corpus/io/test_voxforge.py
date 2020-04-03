@@ -28,6 +28,9 @@ class TestVoxforgeDownloader:
 
     def test_download(self, tmpdir, sample_tgz_content):
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(requests_mock.ANY, headers={'Content-Length': '100'})
+
             mock.get(voxforge.DOWNLOAD_URL['de'],
                      text='hallo <a href="test.tgz">test.tgz</a> blub')
             mock.get(os.path.join(voxforge.DOWNLOAD_URL['de'], 'test.tgz'), content=sample_tgz_content)
@@ -54,6 +57,9 @@ class TestVoxforgeDownloader:
 
     def test_download_custom_url(self, tmpdir, sample_tgz_content):
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(requests_mock.ANY, headers={'Content-Length': '100'})
+
             mock.get('http://someurl.com/some/download/dir',
                      text='hallo <a href="test.tgz">test.tgz</a> blub')
             mock.get('http://someurl.com/some/download/dir/test.tgz', content=sample_tgz_content)
@@ -80,6 +86,9 @@ class TestVoxforgeDownloader:
 
     def test_available_files(self, sample_response):
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(requests_mock.ANY, headers={'Content-Length': '100'})
+
             url = 'http://someurl.com/some/download/dir'
             mock.get(url, text=sample_response)
             files = voxforge.VoxforgeDownloader.available_files(url)
@@ -102,6 +111,9 @@ class TestVoxforgeDownloader:
         ]
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(requests_mock.ANY, headers={'Content-Length': '100'})
+
             for file in files:
                 mock.get(file, content='some content'.encode())
 

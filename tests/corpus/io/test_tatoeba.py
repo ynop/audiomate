@@ -110,6 +110,9 @@ class TestTatoebaDownloader:
         downloader = io.TatoebaDownloader()
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(requests_mock.ANY, headers={'Content-Length': '100'})
+
             mock.get(tatoeba.AUDIO_LIST_URL, content=sample_audio_list_tar_bz)
             mock.get(tatoeba.SENTENCE_LIST_URL, content=sample_sentence_list_tar_bz)
 
@@ -134,6 +137,9 @@ class TestTatoebaDownloader:
         downloader = io.TatoebaDownloader(include_empty_licence=True)
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(requests_mock.ANY, headers={'Content-Length': '100'})
+
             mock.get(tatoeba.AUDIO_LIST_URL, content=sample_audio_list_tar_bz)
             mock.get(tatoeba.SENTENCE_LIST_URL, content=sample_sentence_list_tar_bz)
 
@@ -158,6 +164,9 @@ class TestTatoebaDownloader:
         downloader = io.TatoebaDownloader(include_languages=['deu', 'eng'])
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(requests_mock.ANY, headers={'Content-Length': '100'})
+
             mock.get(tatoeba.AUDIO_LIST_URL, content=sample_audio_list_tar_bz)
             mock.get(tatoeba.SENTENCE_LIST_URL, content=sample_sentence_list_tar_bz)
 
@@ -182,6 +191,9 @@ class TestTatoebaDownloader:
         downloader = io.TatoebaDownloader(include_licenses=['CC BY-NC-ND 3.0'])
 
         with requests_mock.Mocker() as mock:
+            # Return any size (doesn't matter, only for prints)
+            mock.head(requests_mock.ANY, headers={'Content-Length': '100'})
+
             mock.get(tatoeba.AUDIO_LIST_URL, content=sample_audio_list_tar_bz)
             mock.get(tatoeba.SENTENCE_LIST_URL, content=sample_sentence_list_tar_bz)
 
