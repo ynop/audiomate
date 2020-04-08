@@ -10,6 +10,8 @@ Next Version
 
 * Setup consistent way for logging. (:ref:`logging`):
 
+* Added downloader (:class:`audiomate.corpus.io.CommonVoiceDownloader`) for the `Common Voice Corpora <https://voice.mozilla.org/de/datasets>`
+
 v5.2.0
 ------
 
