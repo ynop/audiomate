@@ -3,6 +3,7 @@
 [![PyPI](https://img.shields.io/pypi/v/audiomate.svg)](https://pypi.python.org/pypi/audiomate)
 [![Build Status](https://travis-ci.com/ynop/audiomate.svg?branch=master)](https://travis-ci.com/ynop/audiomate)
 [![Documentation Status](https://readthedocs.org/projects/audiomate/badge/?version=latest)](https://audiomate.readthedocs.io/en/latest/?badge=latest)
+[![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/ynop/audiomate/?ref=repository-badge)
 
 Audiomate is a library for easy access to audio datasets.
 It provides the datastructures for accessing/loading different datasets in a generic way.
