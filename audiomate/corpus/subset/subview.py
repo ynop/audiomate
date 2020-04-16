@@ -5,10 +5,11 @@ from audiomate.corpus import base
 
 class FilterCriterion(metaclass=abc.ABCMeta):
     """
-    A filter criterion decides wheter a given utterance contained in a given corpus matches the
-    filter.
+    A filter criterion decides wheter a given utterance contained
+    in a given corpus matches the filter.
     """
 
+    @abc.abstractmethod
     def match(self, utterance, corpus):
         """
         Check if the utterance matches the filter.
@@ -20,7 +21,7 @@ class FilterCriterion(metaclass=abc.ABCMeta):
         Returns:
             bool: True if the filter matches the utterance, False otherwise.
         """
-        pass
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def serialize(self):
@@ -31,13 +32,14 @@ class FilterCriterion(metaclass=abc.ABCMeta):
         Returns:
             str: A string representing this filter criterion.
         """
-        pass
+        raise NotImplementedError()
 
     @classmethod
     @abc.abstractmethod
     def parse(cls, representation):
         """
-        Create a filter criterion based on a string representation (created with ``serialize``).
+        Create a filter criterion based on a string representation
+        (created with ``serialize``).
 
         Args:
             representation (str): The string representation.
@@ -45,14 +47,12 @@ class FilterCriterion(metaclass=abc.ABCMeta):
         Returns:
             FilterCriterion: The filter criterion from that representation.
         """
-        pass
+        raise NotImplementedError()
 
     @classmethod
     @abc.abstractmethod
     def name(cls):
-        """
-        Returns a name identifying this type of filter criterion.
-        """
+        """ Returns a name identifying this type of filter criterion. """
         return 'unknown'
 
 
@@ -61,12 +61,12 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
     A filter criterion that matches utterances based on utterance-ids.
 
     Args:
-        utterance_idxs (:class:`set`): A list of utterance-ids. Only utterances in the list will pass the
-                               filter
+        utterance_idxs (:class:`set`): A list of utterance-ids. Only utterances
+                                       in the list will pass the filter
         inverse (bool): If True only utterance not in the list pass the filter.
     """
 
-    def __init__(self, utterance_idxs=set(), inverse=False):
+    def __init__(self, utterance_idxs, inverse=False):
         self.utterance_idxs = set(utterance_idxs)
         self.inverse = inverse
 
@@ -94,16 +94,18 @@ class MatchingUtteranceIdxFilter(FilterCriterion):
 
 class MatchingLabelFilter(FilterCriterion):
     """
-    A filter criterion that only accepts utterances which only have the given labels.
+    A filter criterion that only accepts utterances
+    which only have the given labels.
 
     Args:
         labels (:class:`set`): A set of labels which are accepted.
-        label_list_ids (:class:`set`): Only check label-lists with these ids. If empty checks all label-lists.
+        label_list_ids (:class:`set`): Only check label-lists with these ids.
+                                       If ``None``, checks all label-lists.
     """
 
-    def __init__(self, labels=set(), label_list_ids=set()):
-        self.labels = labels
-        self.label_list_ids = label_list_ids
+    def __init__(self, labels, label_list_ids=None):
+        self.labels = labels or set()
+        self.label_list_ids = label_list_ids or set()
 
     def match(self, utterance, corpus):
         for label_list_idx, label_list in utterance.label_lists.items():
@@ -138,8 +140,8 @@ class MatchingLabelFilter(FilterCriterion):
 
 
 __filter_criteria = {}
-for cls in FilterCriterion.__subclasses__():
-    __filter_criteria[cls.name()] = cls
+for filter_class in FilterCriterion.__subclasses__():
+    __filter_criteria[filter_class.name()] = filter_class
 
 
 class UnknownFilterCriteriaException(Exception):
@@ -151,13 +153,14 @@ def available_filter_criteria():
     Get a mapping of all available filter criteria.
 
     Returns:
-        dict: A dictionary with filter-criterion classes with the name of these criteria as key.
+        dict: A dictionary with filter-criterion classes
+              with the name of these criteria as key.
 
     Example::
 
         >>> available_filter_criteria()
         {
-            "matching_utterance_ids" : audiomate.corpus.subview.MatchingUtteranceIdxFilter
+            "matching_utterance_ids" : subview.MatchingUtteranceIdxFilter
         }
     """
     return __filter_criteria
@@ -167,11 +170,13 @@ class Subview(base.CorpusView):
     """
     A subview is a readonly layer representing some subset of a corpus.
     The assets the subview contains are defined by filter criteria.
-    Only if an utterance passes all filter criteria it is contained in the subview.
+    Only if an utterance passes all filter criteria it is contained
+    in the subview.
 
     Args:
         corpus (CorpusView): The corpus this subview is based on.
-        filter_criteria (list, FilterCriterion): List of :py:class:`FilterCriterion`
+        filter_criteria (list, FilterCriterion): List of
+                                                 :py:class:`FilterCriterion`
 
     Example::
 
@@ -184,7 +189,7 @@ class Subview(base.CorpusView):
         2
     """
 
-    def __init__(self, corpus, filter_criteria=[]):
+    def __init__(self, corpus, filter_criteria):
         self.corpus = corpus
 
         if isinstance(filter_criteria, list):
@@ -246,7 +251,8 @@ class Subview(base.CorpusView):
 
     def serialize(self):
         """
-        Return a string representing the subview with all of its filter criteria.
+        Return a string representing the subview
+        with all of its filter criteria.
 
         Returns:
             str: String with subview definition.
@@ -262,7 +268,8 @@ class Subview(base.CorpusView):
     @classmethod
     def parse(cls, representation, corpus=None):
         """
-        Creates a subview from a string representation (created with ``self.serialize``).
+        Creates a subview from a string representation
+        (created with ``self.serialize``).
 
         Args:
             representation (str): The representation.

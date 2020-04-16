@@ -10,8 +10,9 @@ from audiomate.utils import stats
 
 class CorpusView(metaclass=abc.ABCMeta):
     """
-    This class defines the basic interface of a corpus. It is not meant to be instantiated directly.
-    It only describes the methods for accessing data of the corpus.
+    This class defines the basic interface of a corpus. It is not meant to be
+    instantiated directly. It only describes the methods for accessing data
+    of the corpus.
 
     Notes:
         All paths to files should be held as absolute paths in memory.
@@ -20,7 +21,10 @@ class CorpusView(metaclass=abc.ABCMeta):
     @property
     @abc.abstractmethod
     def name(self):
-        """ Return the name of the dataset (Equals basename of the path, if not None). """
+        """
+        Return the name of the dataset
+        (Equals basename of the path, if not None).
+        """
         return 'undefined'
 
     #
@@ -34,8 +38,8 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the tracks in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`audiomate.track.Track` objects with the
-            track-idx as key.
+            dict: A dictionary containing :py:class:`audiomate.track.Track`
+                  objects with the track-idx as key.
         """
         return {}
 
@@ -68,8 +72,9 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the utterances in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`audiomate.corpus.assets.Utterance` objects with the
-            utterance-idx as key.
+            dict: A dictionary containing
+                  :py:class:`audiomate.corpus.assets.Utterance` objects with the
+                  utterance-idx as key.
         """
         return {}
 
@@ -89,8 +94,8 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the issuers in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`audiomate.issuers.Issuer` objects with the
-            issuer-idx as key.
+            dict: A dictionary containing :py:class:`audiomate.issuers.Issuer`
+                  objects with the issuer-idx as key.
         """
         return {}
 
@@ -123,8 +128,9 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the feature-containers in the corpus.
 
         Returns:
-            dict: A dictionary containing :py:class:`audiomate.container.FeatureContainer` objects
-            with the feature-idx as key.
+            dict: A dictionary containing
+                  :py:class:`audiomate.container.FeatureContainer` objects
+                  with the feature-idx as key.
         """
         return {}
 
@@ -143,7 +149,8 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return the subviews of the corpus.
 
         Returns:
-             dict: A dictionary containing :py:class:`audiomate.corpus.Subview` objects with the subview-idx as key.
+             dict: A dictionary containing :py:class:`audiomate.corpus.Subview`
+                   objects with the subview-idx as key.
         """
         return {}
 
@@ -161,8 +168,9 @@ class CorpusView(metaclass=abc.ABCMeta):
         Return a set of all label-values occurring in this corpus.
 
         Args:
-            label_list_ids (list): If not None, only labels from label-lists with an id contained in this list
-                                   are considered.
+            label_list_ids (list): If not ``None``, only labels from label-lists
+                                   with an id contained in this list are
+                                   considered.
 
         Returns:
              :class:`set`: A set of distinct label-values.
@@ -176,14 +184,17 @@ class CorpusView(metaclass=abc.ABCMeta):
 
     def label_count(self, label_list_ids=None):
         """
-        Return a dictionary containing the number of times, every label-value in this corpus is occurring.
+        Return a dictionary containing the number of times,
+        every label-value in this corpus is occurring.
 
         Args:
-            label_list_ids (list): If not None, only labels from label-lists with an id contained in this list
-                                   are considered.
+            label_list_ids (list): If not ``None``, only labels from label-lists
+                                   with an id contained in this list are
+                                   considered.
 
         Returns:
-            dict: A dictionary containing the number of occurrences with the label-value as key.
+            dict: A dictionary containing the number of occurrences with the
+                  label-value as key.
         """
         count = collections.defaultdict(int)
 
@@ -195,14 +206,17 @@ class CorpusView(metaclass=abc.ABCMeta):
 
     def label_durations(self, label_list_ids=None):
         """
-        Return a dictionary containing the total duration, every label-value in this corpus is occurring.
+        Return a dictionary containing the total duration,
+        every label-value in this corpus is occurring.
 
         Args:
-            label_list_ids (list): If not None, only labels from label-lists with an id contained in this list
-                                   are considered.
+            label_list_ids (list): If not None, only labels from label-lists
+                                   with an id contained in this list are
+                                   considered.
 
         Returns:
-            dict: A dictionary containing the total duration with the label-value as key.
+            dict: A dictionary containing the total duration with
+                  the label-value as key.
         """
         duration = collections.defaultdict(int)
 
@@ -214,13 +228,15 @@ class CorpusView(metaclass=abc.ABCMeta):
 
     def all_tokens(self, delimiter=' ', label_list_ids=None):
         """
-        Return a list of all tokens occurring in one of the labels in the corpus.
+        Return a list of all tokens occurring in one of the labels
+        in the corpus.
 
         Args:
-            delimiter (str): The delimiter used to split labels into tokens
-                             (see :meth:`audiomate.annotations.Label.tokenized`).
-            label_list_ids (list): If not None, only labels from label-lists with an idx contained in this list
-                                   are considered.
+            delimiter (str): The delimiter used to split labels into tokens.
+                             (see :meth:`audiomate.annotations.Label.tokenized`)
+            label_list_ids (list): If not ``None``, only labels from label-lists
+                                   with an idx contained in this list are
+                                   considered.
 
         Returns:
              :class:`set`: A set of distinct tokens.
@@ -239,7 +255,8 @@ class CorpusView(metaclass=abc.ABCMeta):
     @property
     def total_duration(self):
         """
-        Return the total amount of audio summed over all utterances in the corpus in seconds.
+        Return the total amount of audio summed over all utterances
+        in the corpus in seconds.
         """
         duration = 0
 
@@ -250,10 +267,12 @@ class CorpusView(metaclass=abc.ABCMeta):
 
     def stats(self):
         """
-        Return statistics calculated overall samples of all utterances in the corpus.
+        Return statistics calculated overall samples of all utterances
+        in the corpus.
 
         Returns:
-            DataStats: A DataStats object containing statistics overall samples in the corpus.
+            DataStats: A DataStats object containing statistics overall
+                       samples in the corpus.
         """
 
         per_utt_stats = self.stats_per_utterance()
@@ -261,7 +280,8 @@ class CorpusView(metaclass=abc.ABCMeta):
 
     def stats_per_utterance(self):
         """
-        Return statistics calculated for all samples of each utterance in the corpus.
+        Return statistics calculated for all samples of each utterance
+        in the corpus.
 
         Returns:
             dict: A dictionary containing a DataStats object for each utt.
@@ -285,16 +305,18 @@ class CorpusView(metaclass=abc.ABCMeta):
 
     def split_utterances_to_max_time(self, max_time=60.0, overlap=0.0):
         """
-        Create a new corpus, where all the utterances are of given maximal duration.
-        Utterance longer than ``max_time`` are split up into multiple utterances.
+        Create a new corpus, where all the utterances are of given maximal
+        duration.  Utterance longer than ``max_time`` are split up into
+        multiple utterances.
 
         .. warning::
-            Subviews and FeatureContainers are not added to the newly create corpus.
+            Subviews and FeatureContainers are not added to the newly
+            create corpus.
 
         Arguments:
             max_time (float): Maximal duration for target utterances in seconds.
-            overlap (float): Amount of overlap in seconds.
-                             The overlap is measured from the center of the splitting.
+            overlap (float): Amount of overlap in seconds. The overlap is
+                             measured from the center of the splitting.
                              (The actual overlap of two segments is 2 * overlap)
 
         Returns:

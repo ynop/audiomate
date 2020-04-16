@@ -114,7 +114,7 @@ class AudioFileConverter(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def _file_extension(self):
         """ Return the file-extension that will be used. """
-        pass
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def _does_utt_match_target_format(self, utterance):
@@ -122,7 +122,7 @@ class AudioFileConverter(metaclass=abc.ABCMeta):
         Return ``True`` if the utterance already matches the target format,
         ``False`` otherwise.
         """
-        pass
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def _convert_files(self, files):
@@ -130,7 +130,7 @@ class AudioFileConverter(metaclass=abc.ABCMeta):
         Store the given samples with the target format
         at ``path``.
         """
-        pass
+        raise NotImplementedError()
 
     def _does_utt_need_conversion(self, utterance):
         """ Return True if an utterance needs to be converted. """

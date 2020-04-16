@@ -102,7 +102,7 @@ class TestMultiFramePartitionData:
         assert np.array_equal(frame_data[8][1], np.arange(8).reshape(2, 4) + 10)
 
 
-class TestMultiFrameIterator(object):
+class TestMultiFrameIterator:
 
     def test_next_emits_no_frames_if_file_is_empty(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')
@@ -305,7 +305,7 @@ class TestMultiFrameIterator(object):
         assert frames[3][1] == 2
 
 
-class TestFrameIterator(object):
+class TestFrameIterator:
 
     def test_next_emits_no_frames_if_file_is_empty(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')

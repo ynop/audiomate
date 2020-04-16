@@ -67,7 +67,7 @@ def test_get_identifiers_splitted_by_weights_single_category():
     assert len(res['train']) > 0
     assert len(res['test']) > 0
     assert len(res['dev']) > 0
-    assert len(identifiers) == sum([len(x) for x in res.values()])
+    assert len(identifiers) == sum(len(x) for x in res.values())
 
 
 def test_get_identifiers_splitted_by_weights():
@@ -93,7 +93,7 @@ def test_get_identifiers_splitted_by_weights():
     assert len(res['train']) > 0
     assert len(res['test']) > 0
     assert len(res['dev']) > 0
-    assert len(identifiers) == sum([len(x) for x in res.values()])
+    assert len(identifiers) == sum(len(x) for x in res.values())
 
 
 def test_get_identifiers_splitted_by_weights_randomly():

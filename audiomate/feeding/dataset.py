@@ -9,7 +9,7 @@ from audiomate import processing
 from . import iterator
 
 
-class Dataset(object):
+class Dataset:
     """
     An abstract class representing a dataset. A dataset provides indexable access to data.
     An implementation of a concrete dataset should override the methods ``__len__`` and ``__getitem``.
@@ -183,7 +183,7 @@ class UtteranceDataset(Dataset):
             if self.pad and size < required_padded_length:
                 pad_width = [(0, required_padded_length - size)]
 
-                for i in range(1, len(data.shape)):
+                for _ in range(1, len(data.shape)):
                     pad_width.append((0, 0))
 
                 data = np.pad(data, pad_width, mode='constant', constant_values=0)
@@ -202,7 +202,7 @@ class UtteranceDataset(Dataset):
         for cnt in self.containers:
             longest_in_container = 0
             for utt_idx in self.utt_ids:
-                utt_length = cnt._file[utt_idx].shape[0]
+                utt_length = cnt._file[utt_idx].shape[0]  # skipcq: PYL-W0212
                 longest_in_container = max(utt_length, longest_in_container)
 
             lengths.append(longest_in_container)
@@ -220,7 +220,7 @@ class MultiFrameDataset(Dataset):
     Args:
         corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
                                           This defines which utterances are considered for iterating.
-        containers (list, Container): A single container or a list of containers.
+        container (list, Container): A single container or a list of containers.
         frames_per_chunk (int): Number of subsequent frames in a single sample.
         return_length (bool): If True, the length of the chunk is returned as well. (default ``False``)
                               The length is appended to tuple as the last element.
@@ -273,8 +273,8 @@ class MultiFrameDataset(Dataset):
         )
     """
 
-    def __init__(self, corpus_or_utt_ids, containers, frames_per_chunk, return_length=False, pad=False):
-        super(MultiFrameDataset, self).__init__(corpus_or_utt_ids, containers)
+    def __init__(self, corpus_or_utt_ids, container, frames_per_chunk, return_length=False, pad=False):
+        super(MultiFrameDataset, self).__init__(corpus_or_utt_ids, container)
 
         if frames_per_chunk < 1:
             raise ValueError('Chunk-size has to be at least 1!')
@@ -386,7 +386,7 @@ class FrameDataset(MultiFrameDataset):
     Args:
         corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
                                           This defines which utterances are considered for iterating.
-        containers (list, Container): A single container or a list of containers.
+        container (list, Container): A single container or a list of containers.
 
     Note:
         For a frame dataset it is expected that every container contains exactly one value/vector for every frame.
@@ -407,8 +407,8 @@ class FrameDataset(MultiFrameDataset):
         )
     """
 
-    def __init__(self, corpus_or_utt_ids, containers):
-        super(FrameDataset, self).__init__(corpus_or_utt_ids, containers, 1, return_length=False)
+    def __init__(self, corpus_or_utt_ids, container):
+        super(FrameDataset, self).__init__(corpus_or_utt_ids, container, 1, return_length=False)
 
     def __getitem__(self, item):
         data = super(FrameDataset, self).__getitem__(item)

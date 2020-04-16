@@ -32,9 +32,9 @@ class FluentSpeechReader(base.CorpusReader):
 
         missing = []
 
-        for path in files:
-            if not os.path.isfile(path):
-                missing.append(path)
+        for file_path in files:
+            if not os.path.isfile(file_path):
+                missing.append(file_path)
 
         return missing
 
@@ -110,8 +110,8 @@ class FluentSpeechReader(base.CorpusReader):
                 )
                 utt.set_label_list(location)
 
-        filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(part_ids))
-        subview = subset.Subview(corpus, filter_criteria=[filter])
+        utt_filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(part_ids))
+        subview = subset.Subview(corpus, filter_criteria=[utt_filter])
         corpus.import_subview(part_name, subview)
 
     @staticmethod

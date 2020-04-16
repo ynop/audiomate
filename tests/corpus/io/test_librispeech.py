@@ -32,7 +32,7 @@ class TestLibriSpeechDownloader:
 
             downloader.download(target_folder)
 
-        for name in librispeech.SUBSETS.keys():
+        for name in librispeech.SUBSETS:
             assert os.path.isdir(os.path.join(target_folder, name))
 
         assert os.path.isfile(os.path.join(target_folder, 'BOOKS.TXT'))

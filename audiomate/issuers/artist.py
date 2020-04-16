@@ -19,7 +19,7 @@ class Artist(Issuer):
 
     __slots__ = ['name']
 
-    def __init__(self, idx, name, info={}):
+    def __init__(self, idx, name, info=None):
         super(Artist, self).__init__(idx, info=info)
 
         self.name = name

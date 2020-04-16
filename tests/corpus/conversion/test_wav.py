@@ -1,9 +1,9 @@
 import librosa
 import numpy as np
-from audiomate import tracks
 
 from tests import resources
 
+from audiomate import tracks
 from audiomate.corpus import conversion
 
 

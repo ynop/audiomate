@@ -20,7 +20,7 @@ def length_of_overlap(first_start, first_end, second_start, second_end):
         else:
             return abs(second_end - second_start)
 
-    if first_start > second_start:
+    else:
         if first_end > second_end:
             return abs(second_end - first_start)
         else:

@@ -1,6 +1,4 @@
-"""
-Logging functionaly to use within audiomate.
-"""
+""" Logging functionaly to use within audiomate. """
 
 import logging
 import time
@@ -41,11 +39,13 @@ class MateLogger(logging.getLoggerClass()):
                     total = None
 
             last_log = time.time()
+            item_count = 0
 
             if description is not None:
                 self.log(PROGRESS_LOGGER_LEVEL, '[Start] %s', description)
 
             for index, x in enumerate(iterable):
+                item_count += 1
                 current_time = time.time()
 
                 if current_time - last_log > PROGRESS_LOGGER_DELAY_SECONDS:
@@ -59,7 +59,7 @@ class MateLogger(logging.getLoggerClass()):
 
             self.log(
                 PROGRESS_LOGGER_LEVEL,
-                '[Done %d] %s', total or index + 1, description or ''
+                '[Done %d] %s', total or item_count, description or ''
             )
 
 
@@ -68,7 +68,5 @@ logging.setLoggerClass(MateLogger)
 
 
 def getLogger():
-    """
-    Returns the library based logger.
-    """
+    """ Returns the library based logger.  """
     return logging.getLogger('audiomate')

@@ -7,7 +7,7 @@ from audiomate import annotations
 from audiomate.utils import units
 
 
-class Utterance(object):
+class Utterance:
     """
     An utterance defines a sample of audio.
     It is part of a track or can span over the whole track.
@@ -66,9 +66,7 @@ class Utterance(object):
 
     @property
     def end_abs(self):
-        """
-        Return the absolute end of the utterance relative to the signal.
-        """
+        """ Return the absolute end of the utterance relative to the signal. """
         if self.end == float('inf'):
             return self.track.duration
         else:
@@ -76,9 +74,7 @@ class Utterance(object):
 
     @property
     def duration(self):
-        """
-        Return the absolute duration in seconds.
-        """
+        """ Return the absolute duration in seconds. """
         return self.end_abs - self.start
 
     def num_samples(self, sr=None):
@@ -137,9 +133,7 @@ class Utterance(object):
 
     @property
     def sampling_rate(self):
-        """
-        Return the sampling rate.
-        """
+        """ Return the sampling rate. """
         return self.track.sampling_rate
 
     #
@@ -312,7 +306,7 @@ class Utterance(object):
         filtered_cutting_points = []
 
         for cutting_point in cutting_points:
-            if cutting_point > self.start and cutting_point < self.end:
+            if self.start < cutting_point < self.end:
                 filtered_cutting_points.append(cutting_point)
 
         sub_utterances = []

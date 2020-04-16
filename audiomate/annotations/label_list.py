@@ -6,7 +6,7 @@ import intervaltree
 from .label import Label
 
 
-class LabelList(object):
+class LabelList:
     """
     Represents a list of labels which describe an utterance.
     An utterance can have multiple label-lists.
@@ -86,9 +86,10 @@ class LabelList(object):
     @property
     def total_length(self):
         """
-        Return the cumulative length of all labels. (Number of characters)
+        Return the cumulative length of all labels
+        (Number of characters).
         """
-        return sum([label.length for label in self.labels])
+        return sum(label.length for label in self.labels)
 
     #
     #   Alteration
@@ -105,9 +106,7 @@ class LabelList(object):
         self.label_tree.addi(label.start, label.end, label)
 
     def addl(self, value, start=0.0, end=float('inf')):
-        """
-        Shortcut for ``add(Label(value, start, end))``.
-        """
+        """ Shortcut for ``add(Label(value, start, end))``. """
         self.add(Label(value, start=start, end=end))
 
     def update(self, labels):
@@ -226,7 +225,8 @@ class LabelList(object):
 
     def label_total_duration(self):
         """
-        Return for each distinct label value the total duration of all occurrences.
+        Return for each distinct label value the total duration of
+        all occurrences.
 
         Returns:
             dict: A dictionary containing for every label-value (key)
@@ -270,7 +270,7 @@ class LabelList(object):
             ['a', 'b', 'c', 'd']
         """
 
-        all_labels = set([l.value for l in self])
+        all_labels = {l.value for l in self}
         return sorted(all_labels)
 
     def label_count(self):
@@ -305,8 +305,8 @@ class LabelList(object):
         Return a list of all tokens occurring in the label-list.
 
         Args:
-            delimiter (str): The delimiter used to split labels into tokens
-                             (see :meth:`audiomate.annotations.Label.tokenized`).
+            delimiter (str): The delimiter used to split labels into tokens.
+                             See :meth:`audiomate.annotations.Label.tokenized`
 
         Returns:
              :class:`set`: A set of distinct tokens.
@@ -326,12 +326,13 @@ class LabelList(object):
         """
         Return a string with all labels concatenated together.
         The order of the labels is defined by the start of the label.
-        If the overlapping between two labels is greater than ``overlap_threshold``,
-        an Exception is thrown.
+        If the overlapping between two labels is greater than
+        ``overlap_threshold``, an Exception is thrown.
 
         Args:
             delimiter (str): A string to join two consecutive labels.
-            overlap_threshold (float): Maximum overlap between two consecutive labels.
+            overlap_threshold (float): Maximum overlap between two
+                                       consecutive labels.
 
         Returns:
             str: A string with all labels concatenated together.
@@ -364,15 +365,18 @@ class LabelList(object):
         """
         Return a ordered list of tokens based on all labels.
         Joins all token from all labels (``label.tokenized()```).
-        If the overlapping between two labels is greater than ``overlap_threshold``,
-        an Exception is thrown.
+        If the overlapping between two labels is greater than
+        ``overlap_threshold``, an Exception is thrown.
 
         Args:
-            delimiter (str): The delimiter used to split labels into tokens. (default: space)
-            overlap_threshold (float): Maximum overlap between two consecutive labels.
+            delimiter (str): The delimiter used to split labels into tokens.
+                             (default: space)
+            overlap_threshold (float): Maximum overlap between two
+                                       consecutive labels.
 
         Returns:
-            str: A list containing tokens of all labels ordered according to the label order.
+            str: A list containing tokens of all labels ordered according
+                 to the label order.
 
         Example:
             >>> ll = LabelList(idx='some', labels=[
@@ -407,8 +411,8 @@ class LabelList(object):
         Create a separate Label-List for every distinct label-value.
 
         Returns:
-            dict: A dictionary with distinct label-values as keys.
-                  Every value is a LabelList containing only labels with the same value.
+            dict: A dictionary with distinct label-values as keys. Every value
+                  is a LabelList containing only labels with the same value.
 
         Example:
             >>> ll = LabelList(idx='some', labels=[
@@ -518,8 +522,7 @@ class LabelList(object):
         last_end = intervals[0].begin
 
         # yield range by range
-        for i in range(len(intervals)):
-            iv = intervals[i]
+        for iv in intervals:
 
             # yield an empty range if necessary
             if yield_ranges_without_labels and iv.begin > last_end:
@@ -532,21 +535,24 @@ class LabelList(object):
     def split(self, cutting_points, shift_times=False, overlap=0.0):
         """
         Split the label-list into x parts and return them as new label-lists.
-        x is defined by the number of cutting-points(``x == len(cutting_points) + 1``)
+        x is defined by the number of cutting-points
+        (``x == len(cutting_points) + 1``).
 
         The result is a list of label-lists corresponding to each part.
         Label-list 0 contains labels between ``0`` and ``cutting_points[0]``.
-        Label-list 1 contains labels between ``cutting_points[0]`` and ``cutting_points[1]``.
-        And so on.
+        Label-list 1 contains labels between ``cutting_points[0]`` and
+        ``cutting_points[1]``. And so on.
 
         Args:
             cutting_points(list): List of floats defining the points in seconds,
                                   where the label-list is splitted.
-            shift_times(bool): If True, start and end-time are shifted in splitted label-lists.
-                               So the start is relative to the cutting point and
-                               not to the beginning of the original label-list.
-            overlap(float): Amount of overlap in seconds. This amount is subtracted
-                            from a start-cutting-point, and added to a end-cutting-point.
+            shift_times(bool): If True, start and end-time are shifted in
+                               splitted label-lists. So the start is relative
+                               to the cutting point and not to the beginning
+                               of the original label-list.
+            overlap(float): Amount of overlap in seconds. This amount is
+                            subtracted from a start-cutting-point, and added
+                            to a end-cutting-point.
 
         Returns:
             list: A list of of: class: `audiomate.annotations.LabelList`.
@@ -644,7 +650,10 @@ class LabelList(object):
 
     @classmethod
     def create_single(cls, value, idx='default'):
-        """ Create a label-list with a single label containing the given value. """
+        """
+        Create a label-list with a single label
+        containing the given value.
+        """
 
         return LabelList(idx=idx, labels=[
             Label(value=value)
@@ -657,8 +666,8 @@ class LabelList(object):
         All labels will have default start/end values of 0 and ``inf``.
 
         Args:
-            values(list): List of values(str) that should be created and appended
-                           to the label-list.
+            values(list): List of values(str) that should be created and
+                          appended to the label-list.
             idx(str): The idx of the label-list.
 
         Returns:

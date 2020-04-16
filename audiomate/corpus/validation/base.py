@@ -9,10 +9,12 @@ class ValidationResult:
     (e.g. utterance-ids which triggered the task to fail).
 
     Args:
-        passed (bool): A boolean indicating, if the validation has passed (True) or failed (False).
+        passed (bool): A boolean indicating, if the validation has passed
+                       (``True``) or failed (``False``).
         name (str): The name of the validator, that produced the result.
-        info (dict): Dictionary containing key/value string-pairs with detailed information of the validation.
-                     For example id of the label-list that was validated.
+        info (dict): Dictionary containing key/value string-pairs with detailed
+                     information of the validation. For example id of the
+                     label-list that was validated.
     """
 
     def __init__(self, passed, name='Validation', info=None):
@@ -47,16 +49,20 @@ class ValidationResult:
 
 class InvalidItemsResult(ValidationResult):
     """
-    A generic result class for validators that return a list of items (utterances, tracks) that were classified invalid.
-    Besides the id of the item, a reason may be appended.
+    A generic result class for validators that return a list of items
+    (utterances, tracks) that were classified invalid.  Besides the id of the
+    item, a reason may be appended.
 
     Args:
-        passed (bool): A boolean indicating, if the validation has passed (True) or failed (False).
-        invalid_items (dict): A dictionary containing item-ids, that are invalid.
-                                   The values are reasons why they are invalid.
+        passed (bool): A boolean indicating, if the validation has passed
+                       (``True``) or failed (``False``).
+        invalid_items (dict): A dictionary containing item-ids, that are
+                              invalid. The values are reasons why they are
+                              invalid.
         name (str): The name of the validator, that produced the result.
-        info (dict): Dictionary containing key/value string-pairs with detailed information of the validation.
-                     For example id of the label-list that was validated.
+        info (dict): Dictionary containing key/value string-pairs with detailed
+                     information of the validation. For example id of the
+                     label-list that was validated.
     """
 
     def __init__(self, passed, invalid_items, name='Validation', item_name='Utterances', info=None):
@@ -87,16 +93,17 @@ class InvalidItemsResult(ValidationResult):
 
 class Validator(abc.ABC):
     """
-    A validator is a class that tests a specific behaviour/state of a corpus.
+    A validator is a class that tests a specific behaviour/state
+    of a corpus.
     """
 
     @abc.abstractmethod
     def name(self):
         """ Return a name, identifying the task. """
-        pass
+        raise NotImplementedError()
 
     @abc.abstractmethod
-    def validate(self, corpus):
+    def validate(self, corpus_to_validate):
         """
         Perform the validation on the given corpus.
 
@@ -104,6 +111,7 @@ class Validator(abc.ABC):
             corpus (Corpus): The corpus to test/validate.
 
         Returns:
-            ValidationResult: The result containing at least the pass/fail indication.
+            ValidationResult: The result containing at least the
+                              pass/fail indication.
         """
-        pass
+        raise NotImplementedError()

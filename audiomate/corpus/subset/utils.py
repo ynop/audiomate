@@ -23,22 +23,24 @@ def absolute_proportions(proportions, count):
 
     # first create absolute values by flooring non-integer portions
     relative_sum = sum(proportions.values())
-    absolute_proportions = {idx: int(count / relative_sum * prop_value) for idx, prop_value in
-                            proportions.items()}
+    abs_proportions = {
+        idx: int(count / relative_sum * prop_value)
+        for idx, prop_value in proportions.items()
+    }
 
     # Now distribute the rest value randomly over the different parts
-    absolute_sum = sum(absolute_proportions.values())
+    absolute_sum = sum(abs_proportions.values())
     rest_value = count - absolute_sum
     subset_keys = sorted(list(proportions.keys()))
 
     for i in range(rest_value):
         key = subset_keys[i % len(subset_keys)]
-        absolute_proportions[key] += 1
+        abs_proportions[key] += 1
 
-    return absolute_proportions
+    return abs_proportions
 
 
-def split_identifiers(identifiers=[], proportions={}, seed=None):
+def split_identifiers(identifiers, proportions, seed=None):
     """
     Split the given identifiers by the given proportions.
     This function is deterministic, given the same seed.
@@ -83,7 +85,7 @@ def split_identifiers(identifiers=[], proportions={}, seed=None):
     return parts
 
 
-def get_identifiers_splitted_by_weights(identifiers={}, proportions={}, seed=None):
+def get_identifiers_splitted_by_weights(identifiers, proportions, seed=None):
     """
     Divide the given identifiers based on the given proportions. But instead of randomly split
     the identifiers it is based on category weights. Every identifier has a weight for any

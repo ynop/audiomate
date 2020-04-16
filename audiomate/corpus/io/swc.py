@@ -46,9 +46,7 @@ class SWCDownloader(downloader.ArchiveDownloader):
 
 
 class SWCReader(base.CorpusReader):
-    """
-    Reader for the Spoken Wikipedia Corpus.
-    """
+    """ Reader for the Spoken Wikipedia Corpus. """
 
     @classmethod
     def type(cls):
@@ -64,7 +62,7 @@ class SWCReader(base.CorpusReader):
         reader_map = {}
         file_map = {}
 
-        for article_idx, article_path in enumerate(article_paths):
+        for article_path in article_paths:
             audio_files = self.get_audio_file_info(article_path)
             reader_name, reader_gender = self.get_reader_info(article_path)
             segments = self.get_segments(article_path)
@@ -168,9 +166,7 @@ class SWCReader(base.CorpusReader):
         return audio_files
 
     def get_reader_info(self, article_path):
-        """
-        Return info about the reader of the article.
-        """
+        """ Return info about the reader of the article. """
 
         meta_path = os.path.join(article_path, 'audiometa.txt')
         with open(meta_path, 'r', encoding='utf-8') as f:
@@ -265,9 +261,7 @@ class SWCReader(base.CorpusReader):
         return self.parse_tokens(tokens)
 
     def parse_tokens(self, tokens):
-        """
-        Get segments from sequence of tokens.
-        """
+        """ Get segments from sequence of tokens. """
         valid_tokens = self.get_valid_tokens(tokens)
 
         if len(valid_tokens) <= 0:
@@ -291,17 +285,18 @@ class SWCReader(base.CorpusReader):
 
         segments = []
 
-        for tokens in segmented_tokens:
-            text = ' '.join([t[3].strip() for t in tokens])
-            start = tokens[0][1]
-            end = tokens[-1][2]
+        for token_group in segmented_tokens:
+            text = ' '.join(t[3].strip() for t in token_group)
+            start = token_group[0][1]
+            end = token_group[-1][2]
             segments.append((start, end, text))
 
         return segments
 
     def get_valid_tokens(self, tokens):
         """
-        Return only valid tokens (have a normalization with start and end time)
+        Return only valid tokens
+        (have a normalization with start and end time).
         """
         valid_tokens = []
 
@@ -309,7 +304,7 @@ class SWCReader(base.CorpusReader):
             normalizations = self.parse_normalizations(token)
 
             if len(normalizations) > 0:
-                normalized_text = ' '.join([n[0] for n in normalizations])
+                normalized_text = ' '.join(n[0] for n in normalizations)
                 start = normalizations[0][1]
                 end = normalizations[-1][2]
 

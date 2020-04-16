@@ -39,7 +39,7 @@ class CorpusDownloader(metaclass=abc.ABCMeta):
         Returns:
             str: Name of the downloader
         """
-        return 'not_implemented'
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def _download(self, target_path):
@@ -49,7 +49,7 @@ class CorpusDownloader(metaclass=abc.ABCMeta):
         Args:
             target_path (str): Path to a directory where the data should be saved to.
         """
-        pass
+        raise NotImplementedError()
 
 
 class CorpusReader(metaclass=abc.ABCMeta):
@@ -133,7 +133,7 @@ class CorpusReader(metaclass=abc.ABCMeta):
         Returns:
             Corpus: The loaded corpus
         """
-        pass
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def _check_for_missing_files(self, path):
@@ -193,4 +193,4 @@ class CorpusWriter(metaclass=abc.ABCMeta):
             corpus (Corpus): Corpus to write to disk
             path (str): Path of the target directory
         """
-        pass
+        raise NotImplementedError()

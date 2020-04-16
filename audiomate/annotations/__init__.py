@@ -1,5 +1,6 @@
 """
-This module contains classes to describe the content of an audio-segment.
+This module contains classes to describe
+the content of an audio-segment.
 """
 
 from .label import Label  # noqa: F401

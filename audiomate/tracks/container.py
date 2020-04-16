@@ -45,32 +45,24 @@ class ContainerTrack(track.Track):
 
     @property
     def sampling_rate(self):
-        """
-        Return the sampling rate.
-        """
+        """ Return the sampling rate. """
         with self.container.open_if_needed(mode='r') as cnt:
             return cnt.get(self.key)[1]
 
     @property
     def num_channels(self):
-        """
-        Return the number of channels.
-        """
+        """ Return the number of channels. """
         return 1
 
     @property
     def num_samples(self):
-        """
-        Return the total number of samples.
-        """
+        """ Return the total number of samples. """
         with self.container.open_if_needed(mode='r') as cnt:
             return cnt.get(self.key)[0].shape[0]
 
     @property
     def duration(self):
-        """
-        Return the duration in seconds.
-        """
+        """ Return the duration in seconds. """
         with self.container.open_if_needed(mode='r') as cnt:
             samples, sr = cnt.get(self.key)
 
@@ -115,7 +107,7 @@ class ContainerTrack(track.Track):
             return samples
 
     def read_frames(self, frame_size, hop_size, offset=0,
-                    duration=None, block_size=None):
+                    duration=None, buffer_size=None):
         """
         Generator that reads and returns the samples of the track in frames.
 
@@ -133,7 +125,7 @@ class ContainerTrack(track.Track):
             the third a boolean indicating if it is the last frame.
         """
         with self.container.open_if_needed(mode='r') as cnt:
-            samples, sr = cnt.get(self.key)
+            samples, _ = cnt.get(self.key)
 
             current_index = 0
 

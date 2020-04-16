@@ -57,9 +57,9 @@ def read_file(path):
     for record in gen:
         values = record[1:len(record)]
 
-        for i in range(len(values)):
-            if i == 1 or i == 2 or i == 4:
-                values[i] = float(values[i])
+        for index, __ in enumerate(values):
+            if index in (1, 2, 4):
+                values[index] = float(values[index])
 
         utterances[record[0]].append(values)
 

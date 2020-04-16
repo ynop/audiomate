@@ -10,22 +10,22 @@ from tests import resources
 class TestMatchingUtteranceIdxFilter:
 
     def test_match(self):
-        filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'a', 'b', 'd'})
+        utt_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'a', 'b', 'd'})
 
-        assert filter.match(tracks.Utterance('a', 'x'), None)
-        assert filter.match(tracks.Utterance('b', 'x'), None)
-        assert filter.match(tracks.Utterance('d', 'x'), None)
-        assert not filter.match(tracks.Utterance('c', 'x'), None)
-        assert not filter.match(tracks.Utterance('e', 'x'), None)
+        assert utt_filter.match(tracks.Utterance('a', 'x'), None)
+        assert utt_filter.match(tracks.Utterance('b', 'x'), None)
+        assert utt_filter.match(tracks.Utterance('d', 'x'), None)
+        assert not utt_filter.match(tracks.Utterance('c', 'x'), None)
+        assert not utt_filter.match(tracks.Utterance('e', 'x'), None)
 
     def test_match_inverse(self):
-        filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'a', 'b', 'd'}, inverse=True)
+        utt_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'a', 'b', 'd'}, inverse=True)
 
-        assert not filter.match(tracks.Utterance('a', 'x'), None)
-        assert not filter.match(tracks.Utterance('b', 'x'), None)
-        assert not filter.match(tracks.Utterance('d', 'x'), None)
-        assert filter.match(tracks.Utterance('c', 'x'), None)
-        assert filter.match(tracks.Utterance('e', 'x'), None)
+        assert not utt_filter.match(tracks.Utterance('a', 'x'), None)
+        assert not utt_filter.match(tracks.Utterance('b', 'x'), None)
+        assert not utt_filter.match(tracks.Utterance('d', 'x'), None)
+        assert utt_filter.match(tracks.Utterance('c', 'x'), None)
+        assert utt_filter.match(tracks.Utterance('e', 'x'), None)
 
     def test_serialize(self):
         f = subview.MatchingUtteranceIdxFilter(utterance_idxs={'a', 'b', 'd'})
@@ -87,50 +87,50 @@ def utt_with_noise():
 class TestMatchingLabelFilter:
 
     def test_match_all_label_lists(self, utt_with_noise, utt_without_noise):
-        filter = subview.MatchingLabelFilter(labels={'music', 'speech'})
+        label_filter = subview.MatchingLabelFilter(labels={'music', 'speech'})
 
-        assert filter.match(utt_without_noise, None)
-        assert not filter.match(utt_with_noise, None)
+        assert label_filter.match(utt_without_noise, None)
+        assert not label_filter.match(utt_with_noise, None)
 
     def test_match_single(self, utt_with_noise, utt_without_noise):
-        filter = subview.MatchingLabelFilter(labels={'music', 'speech'}, label_list_ids={'alpha'})
+        label_filter = subview.MatchingLabelFilter(labels={'music', 'speech'}, label_list_ids={'alpha'})
 
-        assert filter.match(utt_without_noise, None)
-        assert not filter.match(utt_with_noise, None)
+        assert label_filter.match(utt_without_noise, None)
+        assert not label_filter.match(utt_with_noise, None)
 
-        filter = subview.MatchingLabelFilter(labels={'music', 'speech'}, label_list_ids={'bravo'})
+        label_filter = subview.MatchingLabelFilter(labels={'music', 'speech'}, label_list_ids={'bravo'})
 
-        assert filter.match(utt_without_noise, None)
-        assert filter.match(utt_with_noise, None)
+        assert label_filter.match(utt_without_noise, None)
+        assert label_filter.match(utt_with_noise, None)
 
     def test_serialize(self):
-        filter = subview.MatchingLabelFilter(labels={'music', 'speech'}, label_list_ids={'alpha'})
+        label_filter = subview.MatchingLabelFilter(labels={'music', 'speech'}, label_list_ids={'alpha'})
 
-        assert filter.serialize() == 'alpha|||music,speech'
+        assert label_filter.serialize() == 'alpha|||music,speech'
 
     def test_serialize_no_label_list_ids(self):
-        filter = subview.MatchingLabelFilter(labels={'music', 'speech'})
+        label_filter = subview.MatchingLabelFilter(labels={'music', 'speech'})
 
-        assert filter.serialize() == '|||music,speech'
+        assert label_filter.serialize() == '|||music,speech'
 
     def test_parse(self):
-        filter = subview.MatchingLabelFilter.parse('alpha|||music,speech')
+        label_filter = subview.MatchingLabelFilter.parse('alpha|||music,speech')
 
-        assert filter.labels == {'music', 'speech'}
-        assert filter.label_list_ids == {'alpha'}
+        assert label_filter.labels == {'music', 'speech'}
+        assert label_filter.label_list_ids == {'alpha'}
 
     def test_parse_no_label_list_ids(self):
-        filter = subview.MatchingLabelFilter.parse('music,speech')
+        label_filter = subview.MatchingLabelFilter.parse('music,speech')
 
-        assert filter.labels == {'music', 'speech'}
-        assert filter.label_list_ids == set()
+        assert label_filter.labels == {'music', 'speech'}
+        assert label_filter.label_list_ids == set()
 
 
 @pytest.fixture
 def sample_subview():
-    filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-1', 'utt-3'})
+    utt_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs={'utt-1', 'utt-3'})
     corpus = resources.create_dataset()
-    return subview.Subview(corpus, filter_criteria=[filter])
+    return subview.Subview(corpus, filter_criteria=[utt_filter])
 
 
 class TestSubview:
@@ -151,9 +151,8 @@ class TestSubview:
         assert 'spk-2' in sample_subview.issuers.keys()
 
     def test_serialize(self, sample_subview):
-        repr = sample_subview.serialize()
-
-        assert repr == 'matching_utterance_ids\ninclude,utt-1,utt-3'
+        serialized = sample_subview.serialize()
+        assert serialized == 'matching_utterance_ids\ninclude,utt-1,utt-3'
 
     def test_parse(self):
         corpus = resources.create_dataset()

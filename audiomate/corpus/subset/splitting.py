@@ -5,7 +5,7 @@ from audiomate.corpus.subset import subview
 from audiomate.corpus.subset import utils
 
 
-class Splitter(object):
+class Splitter:
     """
     A splitter provides methods for splitting a corpus into different subsets.
     It provides different approaches for splitting the corpus.
@@ -25,7 +25,7 @@ class Splitter(object):
         self.rand = random.Random()
         self.rand.seed(a=random_seed)
 
-    def split(self, proportions={}, separate_issuers=False):
+    def split(self, proportions, separate_issuers=False):
         """
         Split the corpus based on the number of utterances.
         The utterances are distributed to `len(proportions)` subsets,
@@ -96,7 +96,7 @@ class Splitter(object):
 
             return self._subviews_from_utterance_splits(splits)
 
-    def split_by_audio_duration(self, proportions={}, separate_issuers=False):
+    def split_by_audio_duration(self, proportions, separate_issuers=False):
         """
         Split the corpus based on the the total duration of audio.
         The utterances are distributed to `len(proportions)` subsets.
@@ -175,7 +175,7 @@ class Splitter(object):
 
             return self._subviews_from_utterance_splits(splits)
 
-    def split_by_label_length(self, proportions={},
+    def split_by_label_length(self, proportions,
                               label_list_idx=None,
                               separate_issuers=False):
         """
@@ -229,7 +229,7 @@ class Splitter(object):
                 lls = utterance.label_lists
 
                 if label_list_idx is None:
-                    num_char = sum([ll.total_length for ll in lls.values()])
+                    num_char = sum(ll.total_length for ll in lls.values())
                 else:
                     num_char = lls[label_list_idx].total_length
 
@@ -257,7 +257,7 @@ class Splitter(object):
                 lls = utterance.label_lists
 
                 if label_list_idx is None:
-                    num_char = sum([ll.total_length for ll in lls.values()])
+                    num_char = sum(ll.total_length for ll in lls.values())
                 else:
                     num_char = lls[label_list_idx].total_length
 
@@ -273,7 +273,7 @@ class Splitter(object):
 
             return self._subviews_from_utterance_splits(splits)
 
-    def split_by_label_occurence(self, proportions={}, separate_issuers=False):
+    def split_by_label_occurence(self, proportions, separate_issuers=False):
         """
         Split the corpus based on the total number of occcurences of labels.
         The utterances are distributed to `len(proportions)` subsets.
@@ -350,7 +350,7 @@ class Splitter(object):
 
             return self._subviews_from_utterance_splits(splits)
 
-    def split_by_label_duration(self, proportions={}, separate_issuers=False):
+    def split_by_label_duration(self, proportions, separate_issuers=False):
         """
         Split the corpus based on the total duration of labels (end - start).
         The utterances are distributed to `len(proportions)` subsets.
@@ -433,8 +433,8 @@ class Splitter(object):
         subviews = {}
 
         for idx, subview_utterances in splits.items():
-            filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=subview_utterances)
-            split = subview.Subview(self.corpus, filter_criteria=filter)
+            utt_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=subview_utterances)
+            split = subview.Subview(self.corpus, filter_criteria=utt_filter)
             subviews[idx] = split
 
         return subviews

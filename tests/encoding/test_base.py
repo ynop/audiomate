@@ -25,5 +25,5 @@ class TestEncoder:
             assert ct.path == target_path
             assert set(ct.keys()) == set(ds.utterances.keys())
 
-            for utterance_idx in ds.utterances.keys():
+            for utterance_idx in ds.utterances:
                 assert np.array_equal(ct.get(utterance_idx, mem_map=False), np.array([1, 2, 3]))

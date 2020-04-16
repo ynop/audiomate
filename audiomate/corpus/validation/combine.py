@@ -42,10 +42,10 @@ class CombinedValidator(base.Validator):
     def __init__(self, validators=None):
         self.validators = validators or []
 
-    def name(cls):
+    def name(self):
         return 'Combined-Validator'
 
-    def validate(self, corpus):
+    def validate(self, corpus_to_validate):
         """
         Perform validation on the given corpus.
 
@@ -57,7 +57,7 @@ class CombinedValidator(base.Validator):
         results = {}
 
         for validator in self.validators:
-            sub_result = validator.validate(corpus)
+            sub_result = validator.validate(corpus_to_validate)
             results[validator.name()] = sub_result
 
             if not sub_result.passed:

@@ -35,7 +35,7 @@ class Speaker(Issuer):
     __slots__ = ['gender', 'age_group', 'native_language']
 
     def __init__(self, idx, gender=Gender.UNKNOWN, age_group=AgeGroup.UNKNOWN,
-                 native_language=None, info={}):
+                 native_language=None, info=None):
         super(Speaker, self).__init__(idx, info=info)
 
         self.gender = gender

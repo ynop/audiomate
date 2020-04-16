@@ -6,16 +6,21 @@ import networkx as nx
 from audiomate import processing
 
 
-class Chunk(object):
+class Chunk:
     """
-    Represents a chunk of data. It is used to pass data between different steps of a pipeline.
+    Represents a chunk of data. It is used to pass data between different
+    steps of a pipeline.
 
     Args:
-        data (np.ndarray or list): A single array of frames or a list of separate chunks of frames of equal size.
-        offset (int): The index of the first frame in the chunk within the sequence.
+        data (np.ndarray or list): A single array of frames or a list of
+                                   separate chunks of frames of equal size.
+        offset (int): The index of the first frame in the chunk within
+                      the sequence.
         is_last (bool): Whether this is the last chunk of the sequence.
-        left_context (int): Number of frames that act as context at the begin of the chunk (left).
-        right_context (int): Number of frames that act as context at the end of the chunk (right).
+        left_context (int): Number of frames that act as context at the begin
+                            of the chunk (left).
+        right_context (int): Number of frames that act as context at the end
+                             of the chunk (right).
     """
 
     def __init__(self, data, offset, is_last, left_context=0, right_context=0):
@@ -33,18 +38,20 @@ class Chunk(object):
                                                                                          self.right_context)
 
 
-class Buffer(object):
+class Buffer:
     """
-    The buffer is a utility to store frames if there are not enough frames as required by some pipeline step.
-    The incoming frames are added to the buffer using the ``update`` method.
-    The buffer then determines if there are enough frames for a new chunk. If so a chunk is returned,
-    otherwise the data is appended to the buffer.
+    The buffer is a utility to store frames if there are not enough frames as
+    required by some pipeline step. The incoming frames are added to the buffer
+    using the ``update`` method.  The buffer then determines if there are enough
+    frames for a new chunk. If so a chunk is returned, otherwise the data is
+    appended to the buffer.
 
-    Context at the beginning or end of the sequence is not padded and is indicated by the chunks context attributes,
-    which for example will be 0 for the left context in the first chunk.
+    Context at the beginning or end of the sequence is not padded and is
+    indicated by the chunks context attributes, which for example will be 0
+    for the left context in the first chunk.
 
-    Using ``num_buffers`` multiple parallel buffers can be used. This means that a chunk is only returned,
-    if all buffers have enough frames.
+    Using ``num_buffers`` multiple parallel buffers can be used. This means
+    that a chunk is only returned, if all buffers have enough frames.
 
     Args:
         min_frames (int): The minimal number of frames needed in one chunk.
@@ -116,9 +123,12 @@ class Buffer(object):
 
         Args:
             data (np.ndarray): The frames.
-            offset (int): The index of the first frame in `data` within the sequence.
-            is_last (bool): Whether this is the last block of frames in the sequence.
-            buffer_index (int): The index of the buffer to update (< self.num_buffers).
+            offset (int): The index of the first frame in ``data`` within
+                          the sequence.
+            is_last (bool): Whether this is the last block of frames in
+                            the sequence.
+            buffer_index (int): The index of the buffer to update
+                                (``< self.num_buffers``).
         """
         if buffer_index >= self.num_buffers:
             raise ValueError('Expected buffer index < {} but got index {}.'.format(self.num_buffers, buffer_index))
@@ -141,8 +151,9 @@ class Buffer(object):
         Get a new chunk if available.
 
         Returns:
-            Chunk or list: If enough frames are available a chunk is returned. Otherwise None.
-                           If ``self.num_buffer >= 1`` a list instead of single chunk is returned.
+            Chunk or list: If enough frames are available a chunk is returned,
+                           ``None`` otherwise.  If ``self.num_buffer >= 1`` a
+                           list instead of single chunk is returned.
         """
         chunk_size = self._smallest_buffer()
         all_full = self._all_full()
@@ -179,10 +190,10 @@ class Buffer(object):
 
             return chunk
 
+        return None
+
     def _smallest_buffer(self):
-        """
-        Get the size of the smallest buffer.
-        """
+        """ Get the size of the smallest buffer. """
 
         smallest = np.inf
 
@@ -195,9 +206,7 @@ class Buffer(object):
         return smallest
 
     def _all_full(self):
-        """
-        Return True if all buffers are full (last frame added).
-        """
+        """ Return True if all buffers are full (last frame added). """
         for is_full in self.buffers_full:
             if not is_full:
                 return False
@@ -209,14 +218,17 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
     """
     This class is the base class for a step in a processing pipeline.
 
-    It handles the procedure of executing the pipeline. It makes sure the steps are computed in the correct order.
-    It also provides the correct inputs to every step.
+    It handles the procedure of executing the pipeline. It makes sure the steps
+    are computed in the correct order.  It also provides the correct inputs to
+    every step.
 
-    Every step has to provide a ``compute`` method which is the actual processing.
+    Every step has to provide a ``compute`` method which is the actual
+    processing.
 
     If the implementation of a step does change the frame or hop-size,
-    it is expected to provide a transform via the ``frame_transform_step`` method.
-    Frame-size and hop-size are measured in samples regarding the original audio signal (or simply its sampling rate).
+    it is expected to provide a transform via the ``frame_transform_step``
+    method.  Frame-size and hop-size are measured in samples regarding the
+    original audio signal (or simply its sampling rate).
 
     Args:
         name (str, optional): A name for identifying the step.
@@ -236,7 +248,8 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
 
     def process_frames(self, data, sampling_rate, offset=0, last=False, utterance=None, corpus=None):
         """
-        Execute the processing of this step and all dependent parent steps.
+        Execute the processing of this step and all dependent
+        parent steps.
         """
 
         if offset == 0:
@@ -263,6 +276,8 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
                 else:
                     self._update_buffers(step, res, chunk.offset + chunk.left_context, chunk.is_last)
 
+        return None
+
     def frame_transform(self, frame_size, hop_size):
         parent_steps = self._parent_steps(self)
 
@@ -287,10 +302,12 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def compute(self, chunk, sampling_rate, corpus=None, utterance=None):
         """
-        Do the computation of the step. If the step uses context, the result has to be returned without context.
+        Do the computation of the step. If the step uses context, the result has
+        to be returned without context.
 
         Args:
-            chunk (Chunk): The chunk containing data and info about context, offset, ...
+            chunk (Chunk): The chunk containing data and info about context,
+                           offset, ...
             sampling_rate (int): The sampling rate of the underlying signal.
             corpus (Corpus): The corpus the data is from, if available.
             utterance (Utterance): The utterance the data is from, if available.
@@ -298,7 +315,7 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
         Returns:
             np.ndarray: The array of processed frames, without context.
         """
-        pass
+        raise NotImplementedError()
 
     def frame_transform_step(self, frame_size, hop_size):
         """
@@ -306,10 +323,12 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
         the number of samples between two consecutive frames (hop-size),
         this function needs transform the original frame- and/or hop-size.
 
-        This is used to store the frame-size and hop-size in a feature-container.
-        In the end one can calculate start and end time of a frame with this information.
+        This is used to store the frame-size and hop-size in a
+        feature-container.  In the end one can calculate start and end time of
+        a frame with this information.
 
-        By default it is assumed that the processor doesn't change the frame-size and the hop-size.
+        By default it is assumed that the processor doesn't change the
+        frame-size and the hop-size.
 
         Note:
             This function is simply for this step, whereas ``frame_transform()``
@@ -341,7 +360,8 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
 
     def _define_output_buffers(self):
         """
-        Prepare a dictionary so we know what buffers have to be update with the the output of every step.
+        Prepare a dictionary so we know what buffers have to be update with
+        the the output of every step.
         """
 
         # First define buffers that need input data
@@ -357,7 +377,8 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
 
     def _get_input_steps(self):
         """
-        Search and return all steps that have no parents. These are the steps that are get the input data.
+        Search and return all steps that have no parents.
+        These are the steps that are get the input data.
         """
         input_steps = []
 
@@ -370,9 +391,7 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
         return input_steps
 
     def _create_buffers(self):
-        """
-        Create a buffer for every step in the pipeline.
-        """
+        """ Create a buffer for every step in the pipeline. """
 
         self.buffers = {}
 
@@ -391,12 +410,13 @@ class Step(processing.Processor, metaclass=abc.ABCMeta):
         return [edge[0] for edge in self.graph.in_edges(step)]
 
 
+# skipcq: PYL-W0223
 class Computation(Step, metaclass=abc.ABCMeta):
     """
-    Base class for a computation step.
-    To implement a computation step for pipeline the ``compute`` method has to be implemented.
-    This method gets the frames from its parent step including context frames if defined.
-    It has to return the same number of frames but without context frames.
+    Base class for a computation step. To implement a computation step for
+    pipeline the ``compute`` method has to be implemented. This method gets
+    the frames from its parent step including context frames if defined. It
+    has to return the same number of frames but without context frames.
 
     Args:
         parent (Step, optional): The parent step this step depends on.
@@ -421,6 +441,7 @@ class Computation(Step, metaclass=abc.ABCMeta):
             return self.name
 
 
+# skipcq: PYL-W0223
 class Reduction(Step, metaclass=abc.ABCMeta):
     """
     Base class for a reduction step.
@@ -439,7 +460,7 @@ class Reduction(Step, metaclass=abc.ABCMeta):
         self.parents = list(parents)
         self.graph.add_node(self)
 
-        for index, parent in enumerate(parents):
+        for parent in parents:
             self.graph.add_nodes_from(parent.graph.nodes())
             self.graph.add_edges_from(parent.graph.edges())
             self.graph.add_edge(parent, self)

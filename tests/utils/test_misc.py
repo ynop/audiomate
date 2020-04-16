@@ -9,7 +9,8 @@ from audiomate.utils import misc
     (1.5, 4.2, 1.7, 2.24, 0.54),
     (1.5, 4.2, 0.3, 7.3, 2.7),
     (1.5, 1.7, 1.7, 2.24, 0.0),
-    (2.8, 2.9, 1.7, 2.24, 0.0)
+    (2.8, 2.9, 1.7, 2.24, 0.0),
+    (1.5, 4.2, 1.5, 7.3, 2.7),
 ])
 def test_length_of_overlap(first_start, first_end, second_start, second_end, overlap):
     actual_overlap = misc.length_of_overlap(first_start, first_end, second_start, second_end)

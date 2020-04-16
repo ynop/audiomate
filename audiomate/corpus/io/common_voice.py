@@ -38,18 +38,18 @@ class CommonVoiceReader(base.CorpusReader):
     @staticmethod
     def get_subset_ids(path):
         """ Return a list with ids of all available subsets (based on existing csv-files). """
-        all = []
+        subset_ids = []
 
-        for path in glob.glob(os.path.join(path, '*.tsv')):
-            file_name = os.path.split(path)[1]
+        for subset_path in glob.glob(os.path.join(path, '*.tsv')):
+            file_name = os.path.split(subset_path)[1]
             basename = os.path.splitext(file_name)[0]
 
             # We don't want to include the invalidated files
             # since there maybe corrupt files
             if basename != 'invalidated':
-                all.append(basename)
+                subset_ids.append(basename)
 
-        return all
+        return subset_ids
 
     def load_subset(self, corpus, path, subset_idx):
         """ Load subset into corpus. """
@@ -74,8 +74,8 @@ class CommonVoiceReader(base.CorpusReader):
             if file_idx is not None:
                 subset_utt_ids.append(file_idx)
 
-        filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utt_ids))
-        subview = subset.Subview(corpus, filter_criteria=[filter])
+        utt_filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utt_ids))
+        subview = subset.Subview(corpus, filter_criteria=[utt_filter])
         corpus.import_subview(subset_idx, subview)
 
     def create_assets_if_needed(self, corpus, path, entry):

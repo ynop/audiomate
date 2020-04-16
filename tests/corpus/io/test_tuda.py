@@ -165,7 +165,7 @@ class TestTudaReader(rt.CorpusReaderTest):
     def test_get_ids_from_folder(self):
         reader = io.TudaReader()
 
-        assert reader.get_ids_from_folder(os.path.join(self.SAMPLE_PATH, 'train'), 'train') == {
+        assert reader.get_ids_from_folder(os.path.join(self.SAMPLE_PATH, 'train')) == {
             '2014-03-17-10-26-07',
             '2014-03-17-13-03-33',
             '2014-03-19-15-01-56',
@@ -174,13 +174,13 @@ class TestTudaReader(rt.CorpusReaderTest):
             '2014-08-14-14-52-00',
             '2015-04-17-11-26-07',
         }
-        assert reader.get_ids_from_folder(os.path.join(self.SAMPLE_PATH, 'dev'), 'dev') == {
+        assert reader.get_ids_from_folder(os.path.join(self.SAMPLE_PATH, 'dev')) == {
             '2015-01-27-11-31-32',
             '2015-01-28-11-35-47',
             '2015-01-28-11-49-53',
             '2015-01-28-12-36-24',
         }
-        assert reader.get_ids_from_folder(os.path.join(self.SAMPLE_PATH, 'test'), 'test') == {
+        assert reader.get_ids_from_folder(os.path.join(self.SAMPLE_PATH, 'test')) == {
             '2015-01-27-12-34-36',
             '2015-02-03-12-08-13',
             '2015-02-10-14-31-52',

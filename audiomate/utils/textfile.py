@@ -1,5 +1,6 @@
 """
-The textfile module contains functions for reading and writing textfiles.
+The textfile module contains functions
+for reading and writing textfiles.
 """
 
 import os
@@ -92,67 +93,69 @@ def write_separated_lines(path, values, separator=' ', sort_by_column=0):
                               dictionary it sorts it by either the key (0) or value (1). By default
                               0, meaning sorted by the first column or the key.
     """
-    f = open(path, 'w', encoding='utf-8')
+    with open(path, 'w', encoding='utf-8') as f:
 
-    if type(values) is dict:
-        if sort_by_column in [0, 1]:
-            items = sorted(values.items(), key=lambda t: t[sort_by_column])
-        else:
-            items = values.items()
+        if type(values) is dict:
+            if sort_by_column in [0, 1]:
+                items = sorted(values.items(), key=lambda t: t[sort_by_column])
+            else:
+                items = values.items()
 
-        for key, value in items:
-            if type(value) in [list, set]:
-                value = separator.join([str(x) for x in value])
+            for key, value in items:
+                if type(value) in [list, set]:
+                    value = separator.join([str(x) for x in value])
 
-            f.write('{}{}{}\n'.format(key, separator, value))
-    elif type(values) is list or type(values) is set:
-        if 0 <= sort_by_column < len(values):
-            items = sorted(values)
-        else:
-            items = values
+                f.write('{}{}{}\n'.format(key, separator, value))
+        elif type(values) is list or type(values) is set:
+            if 0 <= sort_by_column < len(values):
+                items = sorted(values)
+            else:
+                items = values
 
-        for record in items:
-            str_values = [str(value) for value in record]
+            for record in items:
+                str_values = [str(value) for value in record]
 
-            f.write('{}\n'.format(separator.join(str_values)))
-
-    f.close()
+                f.write('{}\n'.format(separator.join(str_values)))
 
 
 def read_separated_lines_generator(path, separator=' ', max_columns=-1,
-                                   ignore_lines_starting_with=[], keep_empty=False):
+                                   ignore_lines_starting_with=None, keep_empty=False):
     """
     Creates a generator through all lines of a file and returns the splitted line.
 
     Parameters:
-        path: Path to the file.
-        separator: Separator that is used to split the columns.
-        max_columns: Number of max columns (if the separator occurs within the last column).
-        ignore_lines_starting_with: Lines starting with a string in this list will be ignored.
+        path (str): Path to the file.
+        separator (str): Separator that is used to split the columns.
+        max_columns (int): Number of max columns (if the separator occurs within the last column).
+        ignore_lines_starting_with (list): Lines starting with a string in this list will be ignored.
         keep_empty (bool): If True empty columns are returned as well.
     """
     if not os.path.isfile(path):
         logger.error('File doesnt exist or is no file: %s', path)
         return
 
-    f = open(path, 'r', errors='ignore', encoding='utf-8')
+    with open(path, 'r', errors='ignore', encoding='utf-8') as f:
 
-    if max_columns > -1:
-        max_splits = max_columns - 1
-    else:
-        max_splits = -1
-
-    for line in f:
-        if keep_empty:
-            stripped_line = line
+        if max_columns > -1:
+            max_splits = max_columns - 1
         else:
-            stripped_line = line.strip()
+            max_splits = -1
 
-        should_ignore = text.starts_with_prefix_in_list(stripped_line, ignore_lines_starting_with)
+        for line in f:
+            if keep_empty:
+                stripped_line = line
+            else:
+                stripped_line = line.strip()
 
-        if not should_ignore and stripped_line != '':
-            record = stripped_line.split(sep=separator, maxsplit=max_splits)
-            record = [field.strip() for field in record]
-            yield record
+            if ignore_lines_starting_with is not None:
+                should_ignore = text.starts_with_prefix_in_list(
+                    stripped_line,
+                    ignore_lines_starting_with
+                )
+            else:
+                should_ignore = False
 
-    f.close()
+            if not should_ignore and stripped_line != '':
+                record = stripped_line.split(sep=separator, maxsplit=max_splits)
+                record = [field.strip() for field in record]
+                yield record

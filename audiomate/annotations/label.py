@@ -3,7 +3,7 @@ from functools import total_ordering
 
 
 @total_ordering
-class Label(object):
+class Label:
     """
     Represents a label that describes some part of an utterance.
 
@@ -90,16 +90,12 @@ class Label(object):
 
     @property
     def duration(self):
-        """
-        Return the duration of the label in seconds.
-        """
+        """ Return the duration of the label in seconds. """
         return self.end_abs - self.start_abs
 
     @property
     def length(self):
-        """
-        Return the length of the label (Number of characters).
-        """
+        """ Return the length of the label (Number of characters). """
         return len(self.value)
 
     def read_samples(self, sr=None):

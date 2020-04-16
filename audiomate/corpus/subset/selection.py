@@ -5,7 +5,7 @@ from . import subview
 from . import utils
 
 
-class SubsetGenerator(object):
+class SubsetGenerator:
     """
     This class is used to generate subsets of a corpus.
 
@@ -56,8 +56,8 @@ class SubsetGenerator(object):
             subset_utterance_ids = self.rand.sample(all_utterance_ids,
                                                     num_utterances_in_subset)
 
-        filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utterance_ids))
-        return subview.Subview(self.corpus, filter_criteria=[filter])
+        utt_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utterance_ids))
+        return subview.Subview(self.corpus, filter_criteria=[utt_filter])
 
     def random_subset_by_duration(self, relative_duration, balance_labels=False, label_list_ids=None):
         """
@@ -101,8 +101,8 @@ class SubsetGenerator(object):
                                                                 select_count_values=utterance_durations,
                                                                 seed=self.rand.random())
 
-        filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utterance_ids))
-        return subview.Subview(self.corpus, filter_criteria=[filter])
+        utt_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utterance_ids))
+        return subview.Subview(self.corpus, filter_criteria=[utt_filter])
 
     def random_subsets(self, relative_sizes, by_duration=False, balance_labels=False, label_list_ids=None):
         """
@@ -186,5 +186,5 @@ class SubsetGenerator(object):
                                                                 list(all_label_values),
                                                                 seed=self.rand.random())
 
-        filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utterance_ids))
-        return subview.Subview(self.corpus, filter_criteria=[filter])
+        utt_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utterance_ids))
+        return subview.Subview(self.corpus, filter_criteria=[utt_filter])
