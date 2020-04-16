@@ -1,6 +1,6 @@
 """
-This module contains classes to read and write corpora from the filesystem in a wide range of formats. They can also be
-used to convert between formats.
+This module contains classes to read and write corpora from the filesystem in a
+wide range of formats. They can also be used to convert between formats.
 """
 
 from .base import CorpusDownloader, CorpusReader, CorpusWriter
@@ -63,7 +63,8 @@ def available_downloaders():
     Get a mapping of all available downloaders.
 
     Returns:
-        dict: A dictionary with downloader classes with the name of these downloaders as key.
+        dict: A dictionary with downloader classes with the name of these
+              downloaders as key.
 
     Example::
 
@@ -80,7 +81,8 @@ def available_readers():
     Get a mapping of all available readers.
 
     Returns:
-        dict: A dictionary with reader classes with the name of these readers as key.
+        dict: A dictionary with reader classes with the name of these
+              readers as key.
 
     Example::
 
@@ -98,7 +100,8 @@ def available_writers():
     Get a mapping of all available writers.
 
     Returns:
-        dict: A dictionary with writer classes with the name of these writers as key.
+        dict: A dictionary with writer classes with the name of these writers
+              as key.
 
     Example::
 
@@ -113,13 +116,13 @@ def available_writers():
 
 def create_downloader_of_type(type_name):
     """
-        Create an instance of the downloader with the given name.
+    Create an instance of the downloader with the given name.
 
-        Args:
-            type_name: The name of a downloader.
+    Args:
+        type_name: The name of a downloader.
 
-        Returns:
-            An instance of the downloader with the given type.
+    Returns:
+        An instance of the downloader with the given type.
     """
     downloaders = available_downloaders()
 
@@ -131,13 +134,13 @@ def create_downloader_of_type(type_name):
 
 def create_reader_of_type(type_name, **kwargs):
     """
-        Create an instance of the reader with the given name.
+    Create an instance of the reader with the given name.
 
-        Args:
-            type_name: The name of a reader.
+    Args:
+        type_name: The name of a reader.
 
-        Returns:
-            An instance of the reader with the given type.
+    Returns:
+        An instance of the reader with the given type.
     """
     readers = available_readers()
 
@@ -149,13 +152,13 @@ def create_reader_of_type(type_name, **kwargs):
 
 def create_writer_of_type(type_name):
     """
-        Create an instance of the writer with the given name.
+    Create an instance of the writer with the given name.
 
-        Args:
-            type_name: The name of a writer.
+    Args:
+        type_name: The name of a writer.
 
-        Returns:
-            An instance of the writer with the given type.
+    Returns:
+        An instance of the writer with the given type.
     """
     writers = available_writers()
 

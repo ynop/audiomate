@@ -11,11 +11,14 @@ import numpy as np
 
 def parse_storage_size(storage_size):
     """
-    Parses an expression that represents an amount of storage/memory and returns the number of bytes it represents.
+    Parses an expression that represents an amount of storage/memory
+    and returns the number of bytes it represents.
 
     Args:
-        storage_size(str): Size in bytes. The units ``k`` (kibibytes), ``m`` (mebibytes) and ``g``
-                           (gibibytes) are supported, i.e. a ``partition_size`` of ``1g`` equates :math:`2^{30}` bytes.
+        storage_size(str): Size in bytes. The units ``k`` (kibibytes),
+                           ``m`` (mebibytes) and ``g`` (gibibytes)
+                           are supported, i.e. a ``partition_size`` of ``1g``
+                           equates :math:`2^{30}` bytes.
 
     Returns:
         int: Number of bytes.
@@ -81,7 +84,7 @@ def sample_to_seconds(sample, sampling_rate=16000):
     return sample / sampling_rate
 
 
-class FrameSettings(object):
+class FrameSettings:
     """
     This class provides functions for handling conversions/calculations between time, samples and frames.
 
@@ -101,13 +104,15 @@ class FrameSettings(object):
 
     def num_frames(self, num_samples):
         """
-        Return the number of frames that will be used for a signal with the length of ``num_samples``.
+        Return the number of frames that will be used
+        for a signal with the length of ``num_samples``.
         """
         return math.ceil(float(max(num_samples - self.frame_size, 0)) / float(self.hop_size)) + 1
 
     def sample_to_frame_range(self, sample_index):
         """
-        Return a tuple containing the indices of the first frame containing the sample with the given index and
+        Return a tuple containing the indices of the first frame
+        containing the sample with the given index and
         the last frame (exclusive, doesn't contain the sample anymore).
         """
         start = max(0, int((sample_index - self.frame_size) / self.hop_size) + 1)
@@ -116,7 +121,8 @@ class FrameSettings(object):
 
     def frame_to_sample(self, frame_index):
         """
-        Return a tuple containing the indices of the sample which are the first sample and the end (exclusive)
+        Return a tuple containing the indices of the sample
+        which are the first sample and the end (exclusive)
         of the frame with the given index.
         """
         start = frame_index * self.hop_size
@@ -125,7 +131,8 @@ class FrameSettings(object):
 
     def frame_to_seconds(self, frame_index, sr):
         """
-        Return a tuple containing the start and end of the frame in seconds.
+        Return a tuple containing the start and end
+        of the frame in seconds.
         """
         start_sample, end_sample = self.frame_to_sample(frame_index)
         return sample_to_seconds(start_sample, sampling_rate=sr), sample_to_seconds(end_sample, sampling_rate=sr)

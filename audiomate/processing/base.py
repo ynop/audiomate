@@ -68,6 +68,7 @@ class Processor(metaclass=abc.ABCMeta):
             FeatureContainer: The feature-container containing the processed features.
         """
 
+        # skipcq: PYL-W0613
         def processing_func(utterance, feat_container, frame_size, hop_size, corpus, sr):
             for chunk in self.process_utterance_online(utterance,
                                                        frame_size=frame_size,
@@ -333,7 +334,7 @@ class Processor(metaclass=abc.ABCMeta):
         Returns:
             np.ndarray: The processed frames.
         """
-        pass
+        raise NotImplementedError()
 
     def frame_transform(self, frame_size, hop_size):
         """

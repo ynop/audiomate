@@ -357,7 +357,7 @@ class TestProcessor:
             in_feats.frame_size = 400
             in_feats.hop_size = 160
 
-            for utt_idx in ds.utterances.keys():
+            for utt_idx in ds.utterances:
                 in_feats.set(utt_idx, utt_feats)
 
         processor.process_features(ds, in_feats, out_feat_path)
@@ -387,7 +387,7 @@ class TestProcessor:
             in_feats.frame_size = 400
             in_feats.hop_size = 160
 
-            for utt_idx in ds.utterances.keys():
+            for utt_idx in ds.utterances:
                 in_feats.set(utt_idx, utt_feats)
 
         processor.process_features_online(ds, in_feats, out_feat_path)
@@ -417,7 +417,7 @@ class TestProcessor:
             in_feats.frame_size = 400
             in_feats.hop_size = 160
 
-            for utt_idx in ds.utterances.keys():
+            for utt_idx in ds.utterances:
                 in_feats.set(utt_idx, utt_feats)
 
         processor.process_features_online(ds, in_feats, out_feat_path, chunk_size=4)
@@ -451,7 +451,7 @@ class TestProcessor:
             in_feats.frame_size = 400
             in_feats.hop_size = 160
 
-            for utt_idx in ds.utterances.keys():
+            for utt_idx in ds.utterances:
                 in_feats.set(utt_idx, utt_feats)
 
         def return_none(*args, **kwargs):
@@ -476,7 +476,7 @@ class TestProcessor:
             in_feats.frame_size = 400
             in_feats.hop_size = 160
 
-            for utt_idx in ds.utterances.keys():
+            for utt_idx in ds.utterances:
                 in_feats.set(utt_idx, utt_feats)
 
         processor.mock_frame_size_scale = 2.0
@@ -503,7 +503,7 @@ class TestProcessor:
             in_feats.frame_size = 400
             in_feats.hop_size = 160
 
-            for utt_idx in ds.utterances.keys():
+            for utt_idx in ds.utterances:
                 in_feats.set(utt_idx, utt_feats)
 
         processor.mock_frame_size_scale = 2.0

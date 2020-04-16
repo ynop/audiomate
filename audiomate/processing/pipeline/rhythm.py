@@ -66,3 +66,5 @@ class Tempogram(base.Computation):
             return tempogram
         else:
             self.rest = all_frames
+
+        return None

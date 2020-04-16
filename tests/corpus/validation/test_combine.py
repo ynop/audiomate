@@ -13,8 +13,8 @@ def create_mock_validator(name, passed):
         def name(self):
             return name
 
-        def validate(self, corpus):
-            self.called = corpus
+        def validate(self, corpus_to_validate):
+            self.called = corpus_to_validate
             return validation.ValidationResult(self.passed, name=self.name())
 
     return MockValidator(passed)

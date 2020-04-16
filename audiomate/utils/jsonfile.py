@@ -1,6 +1,4 @@
-"""
-This module contains functions for reading and writing json files.
-"""
+""" This module contains functions for reading and writing json files. """
 
 import json
 

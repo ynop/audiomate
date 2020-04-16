@@ -20,7 +20,7 @@ class TrackReadValidator(base.Validator):
     def name(self):
         return 'Track-Read'
 
-    def validate(self, corpus):
+    def validate(self, corpus_to_validate):
         """
         Perform the validation on the given corpus.
 
@@ -35,9 +35,9 @@ class TrackReadValidator(base.Validator):
             result = list(logger.progress(
                 p.imap(
                     self.validate_track,
-                    list(corpus.tracks.values())
+                    list(corpus_to_validate.tracks.values())
                 ),
-                total=corpus.num_tracks,
+                total=corpus_to_validate.num_tracks,
                 description='Validate tracks'
             ))
 
@@ -60,6 +60,10 @@ class TrackReadValidator(base.Validator):
             result = 'EOFError'
         except audioread.NoBackendError:
             result = 'NoBackendError'
+
+        # skipcq: PYL-W0703
+        # Basically we want to get all causes of a file not being read.
+        # We should try to figure out all possible ones.
         except Exception as ex:
             result = str(ex)
 

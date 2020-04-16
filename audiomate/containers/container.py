@@ -2,7 +2,7 @@ import contextlib
 import h5py
 
 
-class Container(object):
+class Container:
     """
     A container is a wrapper around a HDF5 file.
     In a container is used to store array-like data.
@@ -51,16 +51,15 @@ class Container(object):
             self._file = h5py.File(self.path, mode=mode)
 
     def close(self):
-        """
-        Close the container file if its open.
-        """
+        """ Close the container file if its open. """
         if self._file is not None:
             self._file.close()
             self._file = None
 
-    def is_open(self, mode=None):
+    def is_open(self):
         """
-        Return ``True``, if container is already open. ``False`` otherwise.
+        Return ``True``, if container is already open.
+        ``False`` otherwise.
         """
         return self._file is not None
 

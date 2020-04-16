@@ -29,33 +29,25 @@ class FileTrack(track.Track):
 
     @property
     def sampling_rate(self):
-        """
-        Return the sampling rate.
-        """
+        """ Return the sampling rate. """
         with audioread.audio_open(self.path) as f:
             return f.samplerate
 
     @property
     def num_channels(self):
-        """
-        Return the number of channels.
-        """
+        """ Return the number of channels. """
         with audioread.audio_open(self.path) as f:
             return f.channels
 
     @property
     def num_samples(self):
-        """
-        Return the total number of samples.
-        """
+        """ Return the total number of samples. """
         with audioread.audio_open(self.path) as f:
             return int(f.duration * f.samplerate)
 
     @property
     def duration(self):
-        """
-        Return the duration in seconds.
-        """
+        """ Return the duration in seconds. """
         with audioread.audio_open(self.path) as f:
             return f.duration
 

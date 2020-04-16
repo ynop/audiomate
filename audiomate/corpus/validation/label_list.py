@@ -10,12 +10,14 @@ logger = logutil.getLogger()
 
 class UtteranceTranscriptionRatioValidator(base.Validator):
     """
-    Checks if the ratio between utterance-duration and transcription-length is below a given ratio.
-    This is used to find utterances where the speech transcription is to long for a given utterance,
-    meaning too much characters per second.
+    Checks if the ratio between utterance-duration and transcription-length
+    is below a given ratio. This is used to find utterances where the speech
+    transcription is to long for a given utterance, meaning too much characters
+    per second.
 
     Args:
-        max_characters_per_second (int): If char/sec of an utterance is higher than this it is returned.
+        max_characters_per_second (int): If char/sec of an utterance is
+                                         higher than this it is returned.
         label_list_idx (str): The label-list to use for validation.
         num_threads (int): Number of threads to use.
     """
@@ -29,12 +31,12 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
     def name(self):
         return 'Utterance-Transcription-Ratio ({})'.format(self.label_list_idx)
 
-    def validate(self, corpus):
+    def validate(self, corpus_to_validate):
         """
         Perform the validation on the given corpus.
 
         Args:
-            corpus (Corpus): The corpus to test/validate.
+            corpus_to_validate (Corpus): The corpus to test/validate.
 
         Returns:
             InvalidItemsResult: Validation result.
@@ -49,16 +51,16 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
             result = list(logger.progress(
                 p.imap(
                     func,
-                    list(corpus.utterances.values())
+                    list(corpus_to_validate.utterances.values())
                 ),
-                total=corpus.num_utterances,
+                total=corpus_to_validate.num_utterances,
                 description='Validate character ratio'
             ))
 
         invalid_utterances = {}
 
         for utt_idx, char_per_sec in result:
-            if type(char_per_sec) == float:
+            if type(char_per_sec) is float:
                 if char_per_sec > self.max_characters_per_second:
                     invalid_utterances[utt_idx] = char_per_sec
             else:
@@ -78,19 +80,24 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
             ll = utterance.label_lists[ll_idx]
 
             # We count the characters of all labels
-            transcription = ' '.join([l.value for l in ll])
+            transcription = ' '.join(l.value for l in ll)
             num_chars = len(transcription.replace(' ', ''))
 
             char_per_sec = num_chars / duration
 
             return utterance.idx, char_per_sec
+
+        # skipcq: PYL-W0703
+        # We want to check all utterances and just skip ones failing for another reason.
+        # We should try to figure out all specific exceptions that could fail this.
         except Exception as e:
             return utterance.idx, str(e)
 
 
 class LabelCountValidator(base.Validator):
     """
-    Checks if every utterance contains a label-list with the given id and has at least `min_number_of_labels`.
+    Checks if every utterance contains a label-list with the given id
+    and has at least `min_number_of_labels`.
 
     Args:
         min_number_of_labels (int): Minimum number of expected labels.
@@ -104,19 +111,19 @@ class LabelCountValidator(base.Validator):
     def name(self):
         return 'Label-Count ({})'.format(self.label_list_idx)
 
-    def validate(self, corpus):
+    def validate(self, corpus_to_validate):
         """
         Perform the validation on the given corpus.
 
         Args:
-            corpus (Corpus): The corpus to test/validate.
+            corpus_to_validate (Corpus): The corpus to test/validate.
 
         Returns:
             InvalidItemsResult: Validation result.
         """
         invalid_utterances = {}
 
-        for utterance in corpus.utterances.values():
+        for utterance in corpus_to_validate.utterances.values():
             if self.label_list_idx in utterance.label_lists.keys():
                 ll = utterance.label_lists[self.label_list_idx]
 
@@ -139,11 +146,14 @@ class LabelCoverageValidationResult(base.ValidationResult):
     Result of a the :class:`LabelCoverageValidator`.
 
     Args:
-        passed (bool): A boolean indicating, if the validation has passed (True) or failed (False).
-        uncovered_segments (dict): A dictionary containing a list of uncovered segments for every utterance.
+        passed (bool): A boolean indicating, if the validation has
+                       passed (``True``) or failed (``False``).
+        uncovered_segments (dict): A dictionary containing a list of uncovered
+                                   segments for every utterance.
         name (str): The name of the validator, that produced the result.
-        info (dict): Dictionary containing key/value string-pairs with detailed information of the validation.
-                     For example id of the label-list that was validated.
+        info (dict): Dictionary containing key/value string-pairs with detailed
+                     information of the validation. For example id of the
+                     label-list that was validated.
     """
 
     def __init__(self, passed, uncovered_segments, name, info=None):
@@ -177,12 +187,13 @@ class LabelCoverageValidationResult(base.ValidationResult):
 class LabelCoverageValidator(base.Validator):
     """
     Check if every portion of the utterance is covered with at least one label.
-    The validator returns segments (start, end) of an utterance, where no label is defined
-    within the given label-list.
+    The validator returns segments (start, end) of an utterance,
+    where no label is defined within the given label-list.
 
     Args:
         label_list_idx (str): The idx of the label-list to check.
-        threshold (float): A threshold for the length of a segment to be considered as uncovered.
+        threshold (float): A threshold for the length of a segment
+                           to be considered as uncovered.
     """
 
     def __init__(self, label_list_idx, threshold=0.01):
@@ -192,12 +203,12 @@ class LabelCoverageValidator(base.Validator):
     def name(self):
         return 'Label-Coverage ({})'.format(self.label_list_idx)
 
-    def validate(self, corpus):
+    def validate(self, corpus_to_validate):
         """
         Perform the validation on the given corpus.
 
         Args:
-            corpus (Corpus): The corpus to test/validate.
+            corpus_to_validate (Corpus): The corpus to test/validate.
 
         Returns:
             LabelCoverageValidationResult: Validation result.
@@ -205,7 +216,7 @@ class LabelCoverageValidator(base.Validator):
 
         uncovered_segments = {}
 
-        for utterance in corpus.utterances.values():
+        for utterance in corpus_to_validate.utterances.values():
             utt_segments = self.validate_utterance(utterance)
 
             if len(utt_segments) > 0:
@@ -221,7 +232,8 @@ class LabelCoverageValidator(base.Validator):
 
     def validate_utterance(self, utterance):
         """
-        Validate the given utterance and return a list of uncovered segments (start, end).
+        Validate the given utterance and
+        return a list of uncovered segments (start, end).
         """
         uncovered_segments = []
 
@@ -236,9 +248,9 @@ class LabelCoverageValidator(base.Validator):
                 uncovered_segments.append((start, ranges[0][0]))
 
             # Check for empty ranges
-            for range in ranges:
-                if len(range[2]) == 0 and range[1] - range[0] > self.threshold:
-                    uncovered_segments.append((range[0], range[1]))
+            for ll_range in ranges:
+                if len(ll_range[2]) == 0 and ll_range[1] - ll_range[0] > self.threshold:
+                    uncovered_segments.append((ll_range[0], ll_range[1]))
 
             # Check coverage at end
             if ranges[-1][1] > 0 and end - ranges[-1][1] > self.threshold:
@@ -255,11 +267,14 @@ class LabelOverflowValidationResult(base.ValidationResult):
     Result of a the :class:`LabelOverflowValidator`.
 
     Args:
-        passed (bool): A boolean indicating, if the validation has passed (True) or failed (False).
-        overflow_segments (dict): A dictionary containing a list of overflowing segments for every utterance.
+        passed (bool): A boolean indicating, if the validation has
+                       passed (``True``) or failed (``False``).
+        overflow_segments (dict): A dictionary containing a list of
+                                  overflowing segments for every utterance.
         name (str): The name of the validator, that produced the result.
-        info (dict): Dictionary containing key/value string-pairs with detailed information of the validation.
-                     For example id of the label-list that was validated.
+        info (dict): Dictionary containing key/value string-pairs with
+                     detailed information of the validation. For example
+                     id of the label-list that was validated.
     """
 
     def __init__(self, passed, overflow_segments, name, info=None):
@@ -297,7 +312,8 @@ class LabelOverflowValidator(base.Validator):
 
     Args:
         label_list_idx (str): The idx of the label-list to check.
-        threshold (float): A threshold for a time distance to be considered for an overflow.
+        threshold (float): A threshold for a time distance to be
+                           considered for an overflow.
     """
 
     def __init__(self, label_list_idx, threshold=0.01):
@@ -307,12 +323,12 @@ class LabelOverflowValidator(base.Validator):
     def name(self):
         return 'Label-Overflow ({})'.format(self.label_list_idx)
 
-    def validate(self, corpus):
+    def validate(self, corpus_to_validate):
         """
         Perform the validation on the given corpus.
 
         Args:
-            corpus (Corpus): The corpus to test/validate.
+            corpus_to_validate (Corpus): The corpus to test/validate.
 
         Returns:
             LabelOverflowValidationResult: Validation result.
@@ -320,7 +336,7 @@ class LabelOverflowValidator(base.Validator):
 
         overflow_segments = {}
 
-        for utterance in corpus.utterances.values():
+        for utterance in corpus_to_validate.utterances.values():
             utt_segments = self.validate_utterance(utterance)
 
             if len(utt_segments) > 0:
@@ -336,8 +352,8 @@ class LabelOverflowValidator(base.Validator):
 
     def validate_utterance(self, utterance):
         """
-        Validate the given utterance and return a list of segments (start, end, label-value),
-        that are outside of the utterance.
+        Validate the given utterance and return a list of
+        segments (start, end, label-value), that are outside of the utterance.
         """
         overflow_segments = []
 

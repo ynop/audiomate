@@ -46,8 +46,8 @@ class TudaDownloader(downloader.ArchiveDownloader):
     Downloader for the TUDA Corpus.
 
     Args:
-        url (str): The url to download the dataset from. If not given the default URL is used.
-                   It is expected to be a tar.gz file.
+        url (str): The url to download the dataset from. If not given the
+                   default URL is used. It is expected to be a tar.gz file.
         num_threads (int): Number of threads to use for download files.
     """
 
@@ -68,7 +68,7 @@ class TudaDownloader(downloader.ArchiveDownloader):
 
 class TudaReader(base.CorpusReader):
     """
-    Reader for the TUDA german distant speech corpus (german-speechdata-package-v2.tar.gz).
+    Reader for the TUDA german distant speech corpus.
 
     Note:
         It only loads files ending in -beamformedSignal.wav
@@ -91,7 +91,7 @@ class TudaReader(base.CorpusReader):
 
         for part in SUBSETS:
             sub_path = os.path.join(path, part)
-            ids = self.get_ids_from_folder(sub_path, part)
+            ids = self.get_ids_from_folder(sub_path)
             utt_ids = []
 
             for idx in ids:
@@ -122,11 +122,12 @@ class TudaReader(base.CorpusReader):
             subview_corpus = subview.Subview(corpus, filter_criteria=[subview_filter])
             corpus.import_subview('{}{}'.format(prefix, sub_name), subview_corpus)
 
-    def get_ids_from_folder(self, path, part_name):
+    def get_ids_from_folder(self, path):
         """
-        Return all ids from the given folder, which have a corresponding beamformedSignal file.
+        Return all ids from the given folder,
+        which have a corresponding beamformedSignal file.
         """
-        ids = set({})
+        ids = set()
 
         for xml_file in glob.glob(os.path.join(path, '*.xml')):
             idx = os.path.splitext(os.path.basename(xml_file))[0]
@@ -136,7 +137,8 @@ class TudaReader(base.CorpusReader):
 
     def load_file(self, folder_path, idx, corpus):
         """
-        Load speaker, file, utterance, labels for the file with the given id.
+        Load speaker, file, utterance, labels
+        for the file with the given id.
         """
         xml_path = os.path.join(folder_path, '{}.xml'.format(idx))
         wav_paths = []

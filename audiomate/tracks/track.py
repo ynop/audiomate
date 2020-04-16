@@ -17,40 +17,33 @@ class Track(abc.ABC):
     def __copy__(self):
         return Track(self.idx)
 
+    # skipcq: PYL-W0613
     def __deepcopy(self, memo):
         return copy.copy(self)
 
     @property
     @abc.abstractmethod
     def sampling_rate(self):
-        """
-        Return the sampling rate.
-        """
-        pass
+        """ Return the sampling rate. """
+        raise NotImplementedError()
 
     @property
     @abc.abstractmethod
     def num_channels(self):
-        """
-        Return the number of channels.
-        """
-        pass
+        """ Return the number of channels. """
+        raise NotImplementedError()
 
     @property
     @abc.abstractmethod
     def num_samples(self):
-        """
-        Return the total number of samples.
-        """
-        pass
+        """ Return the total number of samples. """
+        raise NotImplementedError()
 
     @property
     @abc.abstractmethod
     def duration(self):
-        """
-        Return the duration in seconds.
-        """
-        pass
+        """ Return the duration in seconds. """
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def read_samples(self, sr=None, offset=0, duration=None):
@@ -68,7 +61,7 @@ class Track(abc.ABC):
             np.ndarray: A numpy array containing the samples
             as a floating point (numpy.float32) time series.
         """
-        pass
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def read_frames(self, frame_size, hop_size, offset=0,
@@ -89,4 +82,4 @@ class Track(abc.ABC):
             the second the sampling-rate and
             the third a boolean indicating if it is the last frame.
         """
-        pass
+        raise NotImplementedError()

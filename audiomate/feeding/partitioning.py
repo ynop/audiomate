@@ -1,5 +1,6 @@
 """
-This module module provides functionality to load data from a container into memory in chunks.
+This module module provides functionality to load data
+from a container into memory in chunks.
 """
 
 import gc
@@ -12,36 +13,49 @@ from audiomate import containers
 from audiomate.utils import units
 
 
-class PartitioningContainerLoader(object):
+class PartitioningContainerLoader:
     """
     Load data from one or more containers in partitions.
-    It computes a scheme to load the data of as many utterances as possible in one partition.
+    It computes a scheme to load the data of as many utterances
+    as possible in one partition.
 
-    A scheme is initially computed on creation of the loader. To compute a new one the ``reload()`` method can be used.
+    A scheme is initially computed on creation of the loader.
+    To compute a new one the ``reload()`` method can be used.
     This only has an effect if ``shuffle == True``,
     otherwise the utterances are defined always loaded in the same order.
 
-    With a given scheme, data of a partition can be retrieved via ``load_partition_data()``.
+    With a given scheme, data of a partition can be
+    retrieved via ``load_partition_data()``.
     It loads all data of the partition with the given index into memory.
 
     Args:
-        corpus_or_utt_ids (Corpus, list): Either a corpus or a list of utterances.
-                                          This defines which utterances are considered for loading.
-        containers (container.Container, list): Either a single or a list of Container objects.
-                                             From the given containers data is loaded.
-        partition_size (str): Size of the partitions in bytes. The units ``k`` (kibibytes), ``m`` (mebibytes) and ``g``
-                             (gibibytes) are supported, i.e. a ``partition_size`` of ``1g`` equates :math:`2^{30}`
-                             bytes.
+        corpus_or_utt_ids (Corpus, list): Either a corpus or a list of
+                                          utterances. This defines which
+                                          utterances are considered for loading.
+        containers (container.Container, list): Either a single or a list of
+                                                Container objects. From the
+                                                given containers data is loaded.
+        partition_size (str): Size of the partitions in bytes. The units
+                              ``k`` (kibibytes), ``m`` (mebibytes) and ``g``
+                              (gibibytes) are supported, i.e. a
+                              ``partition_size`` of ``1g``
+                              equates :math:`2^{30}` bytes.
         shuffle (bool): Indicates whether the utterances should be returned in
                         random order (``True``) or not (``False``).
         seed (int): Seed to be used for the random number generator.
 
     Example:
         >>> corpus = audiomate.Corpus.load('/path/to/corpus')
-        >>> container_inputs = containers.FeatureContainer('/path/to/features.hdf5')
+        >>> container_inputs = containers.FeatureContainer('/path/to/feat.hdf5')
         >>> container_outputs = containers.Container('/path/to/targets.hdf5')
         >>>
-        >>> lo = PartitioningContainerLoader(corpus, [container_inputs, container_outputs], '1G', shuffle=True, seed=23)
+        >>> lo = PartitioningContainerLoader(
+        >>>     corpus,
+        >>>     [container_inputs, container_outputs],
+        >>>     '1G',
+        >>>     shuffle=True,
+        >>>     seed=23
+        >>> )
         >>> len(lo.partitions) # Number of parititions
         5
         >>> lo.partitions[0].utt_ids # Utterances in the partition with index 0
@@ -90,11 +104,13 @@ class PartitioningContainerLoader(object):
 
     def reload(self):
         """
-        Create a new partition scheme. A scheme defines which utterances are in which partition.
-        The scheme only changes after every call if ``self.shuffle == True``.
+        Create a new partition scheme. A scheme defines which utterances
+        are in which partition.  The scheme only changes after every call
+        if ``self.shuffle == True``.
 
         Returns:
-            list: List of PartitionInfo objects, defining the new partitions (same as ``self.partitions``)
+            list: List of PartitionInfo objects, defining the new partitions
+                  (same as ``self.partitions``).
         """
 
         # Create the order in which utterances will be loaded
@@ -132,23 +148,28 @@ class PartitioningContainerLoader(object):
         Load and return the partition with the given index.
 
         Args:
-            index (int): The index of partition, that refers to the index in ``self.partitions``.
+            index (int): The index of partition,
+                         that refers to the index in ``self.partitions``.
 
         Returns:
-            PartitionData: A PartitionData object containing the data for the partition with the given index.
+            PartitionData: A PartitionData object containing the data
+                           for the partition with the given index.
         """
 
         info = self.partitions[index]
         data = PartitionData(info)
 
         for utt_id in info.utt_ids:
-            utt_data = [c._file[utt_id][:] for c in self.containers]
+            utt_data = [c._file[utt_id][:] for c in self.containers]  # skipcq: PYL-W0212
             data.utt_data.append(utt_data)
 
         return data
 
     def _raise_error_if_container_is_missing_an_utterance(self):
-        """ Check if there is a dataset for every utterance in every container, otherwise raise an error. """
+        """
+        Check if there is a dataset for every utterance in every container,
+        otherwise raise an error.
+        """
         expected_keys = frozenset(self.utt_ids)
 
         for cnt in self.containers:
@@ -165,7 +186,7 @@ class PartitioningContainerLoader(object):
             per_container = []
 
             for cnt in self.containers:
-                dset = cnt._file[dset_name]
+                dset = cnt._file[dset_name]  # skipcq: PYL-W0212
                 dtype_size = dset.dtype.itemsize
 
                 record_size = dtype_size * dset.size
@@ -181,27 +202,34 @@ class PartitioningContainerLoader(object):
         return utt_sizes
 
     def _get_all_lengths(self):
-        """ For every utterance, get the length of the data in every container. Return a list of tuples. """
+        """
+        For every utterance, get the length of the data in every container.
+        Return a list of tuples.
+        """
         utt_lengths = {}
 
         for utt_idx in self.utt_ids:
-            per_container = [c._file[utt_idx].shape[0] for c in self.containers]
+            per_container = [c._file[utt_idx].shape[0] for c in self.containers]  # skipcq: PYL-W0212
             utt_lengths[utt_idx] = tuple(per_container)
 
         return utt_lengths
 
 
-class PartitionInfo(object):
+class PartitionInfo:
     """
     Class for holding the info of a partition.
 
     Attributes:
         utt_ids (list): A list of utterance-ids in the partition.
-        utt_lengths (list): List with lengths of the utterances. (Outermost dimension in the dataset of the container)
-                            Since there are maybe multiple containers, every item is a tuple of lengths.
-                            They correspond to the length of the utterance in every container,
-                            in the order of the containers passed to the ParitioningContainerLoader.
-        size (int): The number of bytes the partition will allocate, when loaded.
+        utt_lengths (list): List with lengths of the utterances (Outermost
+                            dimension in the dataset of the container). Since
+                            there are maybe multiple containers, every item
+                            is a tuple of lengths. They correspond to the
+                            length of the utterance in every container, in the
+                            order of the containers passed to
+                            the ParitioningContainerLoader.
+        size (int): The number of bytes the partition will allocate,
+                    when loaded.
     """
 
     def __init__(self):
@@ -211,10 +239,10 @@ class PartitionInfo(object):
 
     def total_lengths(self):
         """ Return the total length of all utterances for every container. """
-        return tuple([sum(x) for x in zip(*self.utt_lengths)])
+        return tuple(sum(x) for x in zip(*self.utt_lengths))
 
 
-class PartitionData(object):
+class PartitionData:
     """
     Class for holding the loaded data of a partition.
 
@@ -222,8 +250,10 @@ class PartitionData(object):
         info (PartitionInfo): The info about the partition.
 
     Attributes:
-        utt_data (list): A list holding the data-objects for every utterance in the order of ``info.utt_ids``.
-                         The entries are also lists or tuples containing the array for every container.
+        utt_data (list): A list holding the data-objects for every utterance
+                         in the order of ``info.utt_ids``. The entries are
+                         also lists or tuples containing the array for every
+                         container.
     """
 
     def __init__(self, info):
@@ -231,36 +261,48 @@ class PartitionData(object):
         self.utt_data = []
 
 
-class PartitioningFeatureIterator(object):
+class PartitioningFeatureIterator:
     """
     Iterates over all features in the given HDF5 file.
 
-    Before iterating over the features, the iterator slices the file into one or more partitions and loads the data into
-    memory. This leads to significant speed-ups even with moderate partition sizes, regardless of the type of disk
-    (spinning or flash). Pseudo random access is supported with a negligible impact on performance and randomness: The
-    data is randomly sampled (without replacement) within each partition and the partitions are loaded in random order,
-    too.
+    Before iterating over the features, the iterator slices the file into one
+    or more partitions and loads the data into memory. This leads to
+    significant speed-ups even with moderate partition sizes, regardless
+    of the type of disk (spinning or flash). Pseudo random access is supported
+    with a negligible impact on performance and randomness: The data is
+    randomly sampled (without replacement) within each partition and
+    the partitions are loaded in random order, too.
 
     The features are emitted as triplets in the form of
     ``(utterance name, index of the feature within the utterance, feature)``.
 
-    When calculating the partition sizes only the size of the features itself is factored in, overhead of data storage
-    is ignored. This overhead is usually negligible even with partition sizes of multiple gigabytes because the data is
-    stored as numpy ndarrays in memory (one per utterance). The overhead of a single ndarray is 96 bytes regardless of
-    its size. Nonetheless the partition size should be chosen to be lower than the total available memory.
+    When calculating the partition sizes only the size of the features itself
+    is factored in, overhead of data storage is ignored. This overhead is
+    usually negligible even with partition sizes of multiple gigabytes because
+    the data is stored as numpy ndarrays in memory (one per utterance).
+    The overhead of a single ndarray is 96 bytes regardless of its size.
+    Nonetheless the partition size should be chosen to be lower than the
+    total available memory.
 
     Args:
         hdf5file(h5py.File): HDF5 file containing the features
-        partition_size(str): Size of the partitions in bytes. The units ``k`` (kibibytes), ``m`` (mebibytes) and ``g``
-                             (gibibytes) are supported, i.e. a ``partition_size`` of ``1g`` equates :math:`2^{30}`
-                             bytes.
-        shuffle(bool): Indicates whether the features should be returned in random order (``True``) or not (``False``).
+        partition_size(str): Size of the partitions in bytes. The units
+                             ``k`` (kibibytes), ``m`` (mebibytes) and
+                             ``g`` (gibibytes) are supported,
+                             i.e. a ``partition_size`` of ``1g``
+                             equates :math:`2^{30}` bytes.
+        shuffle(bool): Indicates whether the features should be returned in
+                       random order (``True``) or not (``False``).
         seed(int): Seed to be used for the random number generator.
-        includes(iterable): Iterable of names of data sets that should be included when iterating over the feature
-                            container. Mutually exclusive with ``excludes``. If both are specified, only ``includes``
-                            will be considered.
-        excludes(iterable): Iterable of names of data sets to skip when iterating over the feature container. Mutually
-                            exclusive with ``includes``. If both are specified, only ``includes`` will be considered.
+        includes(iterable): Iterable of names of data sets that should be
+                            included when iterating over the feature
+                            container. Mutually exclusive with ``excludes``.
+                            If both are specified,
+                            only ``includes`` will be considered.
+        excludes(iterable): Iterable of names of data sets to skip
+                            when iterating over the feature container.
+                            Mutually exclusive with ``includes``. If both
+                            are specified, only ``includes`` will be considered.
 
     Example:
         >>> import h5py
@@ -268,14 +310,17 @@ class PartitioningFeatureIterator(object):
         >>> hdf5 = h5py.File('features.h5', 'r')
         >>> iterator = PartitioningFeatureIterator(hdf5, '12g', shuffle=True)
         >>> next(iterator)
-        ('music-fma-0100', 227, array([-0.15004082, -0.30246958, -0.38708138, ..., -0.93471956,
-               -0.94194776, -0.90878332], dtype=float32))
+        ('music-fma-0100', 227, array([
+            -0.15004082, -0.30246958, -0.38708138, ...,
+            -0.93471956, -0.94194776, -0.90878332 ], dtype=float32))
         >>> next(iterator)
-        ('music-fma-0081', 2196, array([-0.00207647, -0.00101351, -0.00058832, ..., -0.00207647,
-               -0.00292684, -0.00292684], dtype=float32))
+        ('music-fma-0081', 2196, array([
+            -0.00207647, -0.00101351, -0.00058832, ...,
+            -0.00207647, -0.00292684, -0.00292684], dtype=float32))
         >>> next(iterator)
-        ('music-hd-0050', 1026, array([-0.57352495, -0.63049972, -0.63049972, ...,  0.82490814,
-                0.84680521,  0.75517786], dtype=float32))
+        ('music-hd-0050', 1026, array([
+            -0.57352495, -0.63049972, -0.63049972, ...,
+            0.82490814, 0.84680521,  0.75517786], dtype=float32))
     """
 
     def __init__(self, hdf5file, partition_size, shuffle=True, seed=None, includes=None, excludes=None):

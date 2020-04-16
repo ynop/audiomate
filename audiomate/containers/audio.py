@@ -45,6 +45,9 @@ class AudioContainer(container.Container):
 
             return data, sampling_rate
 
+        return None
+
+    # skipcq: PYL-W0221
     def set(self, key, samples, sampling_rate):
         """
         Set the samples and sampling-rate for the given key.
@@ -76,6 +79,7 @@ class AudioContainer(container.Container):
         dset = self._file.create_dataset(key, data=samples)
         dset.attrs[SAMPLING_RATE_ATTR] = sampling_rate
 
+    # skipcq: PYL-W0221
     def append(self, key, samples, sampling_rate):
         """
         Append the given samples to the data that already exists

@@ -5,8 +5,9 @@ WILDCARD_COMBINATION = ('**',)
 
 
 class UnmappedLabelsException(Exception):
+
     def __init__(self, message):
-        super(Exception, self).__init__(message)
+        super(UnmappedLabelsException, self).__init__(message)
         self.message = message
 
 

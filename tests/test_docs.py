@@ -3,7 +3,7 @@ import os.path
 from sphinx.application import Sphinx
 
 
-class TestDocs(object):
+class TestDocs:
     base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'docs'))
     source_dir = base_dir
     config_dir = base_dir

@@ -9,7 +9,7 @@ from audiomate import containers
 from . import partitioning
 
 
-class DataIterator(object):
+class DataIterator:
     """
     An abstract class representing a data-iterator. A data-iterator provides sequential access to data.
     An implementation of a concrete data-iterator should override the methods ``__iter__`` and ``__next__``.
@@ -95,9 +95,9 @@ class MultiFrameIterator(DataIterator):
         )
     """
 
-    def __init__(self, corpus_or_utt_ids, containers, partition_size, frames_per_chunk, return_length=False,
+    def __init__(self, corpus_or_utt_ids, container, partition_size, frames_per_chunk, return_length=False,
                  pad=False, shuffle=True, seed=None):
-        super(MultiFrameIterator, self).__init__(corpus_or_utt_ids, containers, shuffle=shuffle, seed=seed)
+        super(MultiFrameIterator, self).__init__(corpus_or_utt_ids, container, shuffle=shuffle, seed=seed)
 
         self.partition_size = partition_size
         self.frames_per_chunk = frames_per_chunk
@@ -182,8 +182,8 @@ class FrameIterator(MultiFrameIterator):
         )
     """
 
-    def __init__(self, corpus_or_utt_ids, containers, partition_size, shuffle=True, seed=None):
-        super(FrameIterator, self).__init__(corpus_or_utt_ids, containers, partition_size, 1,
+    def __init__(self, corpus_or_utt_ids, container, partition_size, shuffle=True, seed=None):
+        super(FrameIterator, self).__init__(corpus_or_utt_ids, container, partition_size, 1,
                                             return_length=False, shuffle=shuffle, seed=seed)
 
     def __next__(self):
@@ -193,7 +193,7 @@ class FrameIterator(MultiFrameIterator):
         return [x[0] for x in data]
 
 
-class MultiFramePartitionData(object):
+class MultiFramePartitionData:
     """
     Wrapper for PartitionData to access chunks of frames via indexes.
 

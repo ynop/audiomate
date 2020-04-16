@@ -46,4 +46,4 @@ class Encoder(metaclass=abc.ABCMeta):
         Returns:
             np.ndarray: Encoded data.
         """
-        pass
+        raise NotImplementedError()

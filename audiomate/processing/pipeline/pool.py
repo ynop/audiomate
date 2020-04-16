@@ -24,22 +24,22 @@ class AvgPool(base.Computation):
             self.rest = None
 
         # Merge incoming plus rest from previous chunk
-        all = chunk.data
+        all_data = chunk.data
 
         if self.rest is not None:
-            all = np.vstack([self.rest, all])
+            all_data = np.vstack([self.rest, all_data])
 
         # Only use a multiple of self.size
-        num_rest = all.shape[0] % self.size
+        num_rest = all_data.shape[0] % self.size
 
         if num_rest > 0:
-            self.rest = all[-num_rest:, :]
-            all = all[:-num_rest, :]
+            self.rest = all_data[-num_rest:, :]
+            all_data = all_data[:-num_rest, :]
         else:
             self.rest = None
 
         # Average
-        all_mean = np.mean(all.reshape(-1, self.size, all.shape[1]), axis=1)
+        all_mean = np.mean(all_data.reshape(-1, self.size, all_data.shape[1]), axis=1)
 
         if chunk.is_last and self.rest is not None:
             rest_mean = np.mean(self.rest, axis=0)
@@ -75,22 +75,22 @@ class VarPool(base.Computation):
             self.rest = None
 
         # Merge incoming plus rest from previous chunk
-        all = chunk.data
+        all_data = chunk.data
 
         if self.rest is not None:
-            all = np.vstack([self.rest, all])
+            all_data = np.vstack([self.rest, all_data])
 
         # Only use a multiple of self.size
-        num_rest = all.shape[0] % self.size
+        num_rest = all_data.shape[0] % self.size
 
         if num_rest > 0:
-            self.rest = all[-num_rest:, :]
-            all = all[:-num_rest, :]
+            self.rest = all_data[-num_rest:, :]
+            all_data = all_data[:-num_rest, :]
         else:
             self.rest = None
 
         # Average
-        all_var = np.var(all.reshape(-1, self.size, all.shape[1]), axis=1)
+        all_var = np.var(all_data.reshape(-1, self.size, all_data.shape[1]), axis=1)
 
         if chunk.is_last and self.rest is not None:
             rest_var = np.var(self.rest, axis=0)

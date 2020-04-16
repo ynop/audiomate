@@ -91,8 +91,8 @@ class TimitReader(base.CorpusReader):
 
                             utt.set_label_list(phone_ll)
 
-            filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=part_utt_ids)
-            subview = subset.Subview(corpus, filter_criteria=[filter])
+            utt_filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=part_utt_ids)
+            subview = subset.Subview(corpus, filter_criteria=[utt_filter])
             corpus.import_subview(part, subview)
 
         return corpus

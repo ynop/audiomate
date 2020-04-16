@@ -53,8 +53,8 @@ class Urbansound8kReader(base.CorpusReader):
                 folds['fold{}'.format(fold)].add(basename)
 
         for fold_idx, fold_utterance_ids in folds.items():
-            filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=fold_utterance_ids)
-            subview = subset.Subview(corpus, filter_criteria=[filter])
+            utt_filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=fold_utterance_ids)
+            subview = subset.Subview(corpus, filter_criteria=[utt_filter])
 
             corpus.import_subview(fold_idx, subview)
 

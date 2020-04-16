@@ -12,9 +12,7 @@ def corpus():
 
 @pytest.fixture()
 def corpus_with_more_labels():
-    """
-    Corpus with an extra label-list.
-    """
+    """ Corpus with an extra label-list.  """
     corpus = resources.create_single_label_corpus()
 
     corpus.utterances['utt-1'].set_label_list(annotations.LabelList(idx='radio', labels=[

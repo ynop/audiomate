@@ -10,14 +10,13 @@ from . import base
 
 
 class ArkType(enum.Enum):
-    """
-    Enum defining different types of archives.
-    """
+    """ Enum defining different types of archives. """
     ZIP = 1
     TAR = 2
     AUTO = 3
 
 
+# skipcq: PYL-W0223
 class ArchiveDownloader(base.CorpusDownloader, abc.ABC):
     """
     Convenience base class for a downloader of a corpus,

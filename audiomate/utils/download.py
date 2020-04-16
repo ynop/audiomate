@@ -1,5 +1,6 @@
 """
-This module contains any functionality for downloading and extracting data from any remotes.
+This module contains any functionality for downloading and
+extracting data from any remotes.
 """
 
 import zipfile
@@ -125,7 +126,8 @@ def download_file_parallel(url, target_path, num_threads=1):
 
 def extract_zip(zip_path, target_folder):
     """
-    Extract the content of the zip-file at `zip_path` into `target_folder`.
+    Extract the content of the zip-file at ``zip_path`` into
+    ``target_folder``.
     """
     with zipfile.ZipFile(zip_path) as archive:
         archive.extractall(target_folder)
@@ -133,7 +135,8 @@ def extract_zip(zip_path, target_folder):
 
 def extract_tar(tar_path, target_folder):
     """
-    Extract the content of the tar-file at `tar_path` into `target_folder`.
+    Extract the content of the tar-file at ``tar_path`` into
+    ``target_folder``.
     """
     with tarfile.open(tar_path, 'r') as archive:
         archive.extractall(target_folder)

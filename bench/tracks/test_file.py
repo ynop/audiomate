@@ -4,7 +4,7 @@ from bench import resources
 
 
 def run(track):
-    for i in range(300):
+    for _ in range(300):
         track.duration
 
 

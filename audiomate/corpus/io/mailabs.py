@@ -87,9 +87,7 @@ class MailabsReader(base.CorpusReader):
 
     @staticmethod
     def get_folders(path):
-        """
-        Return a list of all subfolder-paths in the given path.
-        """
+        """ Return a list of all subfolder-paths in the given path. """
         folder_paths = []
 
         for item in os.listdir(path):
@@ -127,21 +125,19 @@ class MailabsReader(base.CorpusReader):
 
                     tag_utt_ids.extend(utt_ids)
 
-        filter = subset.MatchingUtteranceIdxFilter(
+        utt_filter = subset.MatchingUtteranceIdxFilter(
             utterance_idxs=set(tag_utt_ids)
         )
-        subview = subset.Subview(corpus, filter_criteria=[filter])
+        subview = subset.Subview(corpus, filter_criteria=[utt_filter])
         corpus.import_subview(tag_idx, subview)
 
     @staticmethod
     def load_speaker(corpus, path):
-        """
-        Create a speaker instance for the given path.
-        """
+        """ Create a speaker instance for the given path.  """
         base_path, speaker_name = os.path.split(path)
         base_path, gender_desc = os.path.split(base_path)
-        base_path, __ = os.path.split(base_path)
-        base_path, tag = os.path.split(base_path)
+        base_path, _ = os.path.split(base_path)
+        base_path, _ = os.path.split(base_path)
 
         gender = issuers.Gender.UNKNOWN
 
@@ -156,9 +152,7 @@ class MailabsReader(base.CorpusReader):
         return speaker
 
     def load_books_of_speaker(self, corpus, path, speaker):
-        """
-        Load all utterances for the speaker at the given path.
-        """
+        """ Load all utterances for the speaker at the given path. """
         utt_ids = []
 
         for book_path in MailabsReader.get_folders(path):

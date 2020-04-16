@@ -28,9 +28,7 @@ META_PATTERN = re.compile(LABEL_META_REGEX)
 
 
 class DefaultReader(base.CorpusReader):
-    """
-    Reads corpora in the Default format.
-    """
+    """ Reads corpora in the Default format. """
 
     @classmethod
     def type(cls):
@@ -70,10 +68,11 @@ class DefaultReader(base.CorpusReader):
         return corpus
 
     @staticmethod
-    def read_files(file_path, corpus):
-        path = os.path.dirname(file_path)
-        for file_idx, file_path in textfile.read_key_value_lines(file_path, separator=' ').items():
-            corpus.new_file(os.path.join(path, file_path), track_idx=file_idx, copy_file=False)
+    def read_files(path, corpus):
+        base_path = os.path.dirname(path)
+
+        for file_idx, file_path in textfile.read_key_value_lines(path, separator=' ').items():
+            corpus.new_file(os.path.join(base_path, file_path), track_idx=file_idx, copy_file=False)
 
     @staticmethod
     def read_issuers(file_path, corpus):
@@ -179,8 +178,8 @@ class DefaultReader(base.CorpusReader):
     def read_feature_containers(feat_path, corpus):
         if os.path.isfile(feat_path):
             base_path = os.path.dirname(feat_path)
-            containers = textfile.read_key_value_lines(feat_path, separator=' ')
-            for container_name, container_path in containers.items():
+            container_definitions = textfile.read_key_value_lines(feat_path, separator=' ')
+            for container_name, container_path in container_definitions.items():
                 corpus.new_feature_container(container_name, path=os.path.join(base_path, container_path))
 
     @staticmethod
@@ -221,9 +220,7 @@ class DefaultReader(base.CorpusReader):
 
 
 class DefaultWriter(base.CorpusWriter):
-    """
-    Writes corpora in the Default format.
-    """
+    """ Writes corpora in the Default format. """
 
     @classmethod
     def type(cls):
@@ -261,7 +258,7 @@ class DefaultWriter(base.CorpusWriter):
 
     @staticmethod
     def write_container_tracks(audio_path, corpus, path):
-        container_records = set({})
+        container_records = set()
 
         for track in corpus.tracks.values():
             if isinstance(track, tracks.ContainerTrack):
@@ -289,7 +286,7 @@ class DefaultWriter(base.CorpusWriter):
             if issuer.info is not None and len(issuer.info) > 0:
                 issuer_data['info'] = issuer.info
 
-            if type(issuer) == issuers.Speaker:
+            if type(issuer) is issuers.Speaker:
                 issuer_data['type'] = 'speaker'
 
                 if issuer.gender != issuers.Gender.UNKNOWN:
@@ -301,7 +298,7 @@ class DefaultWriter(base.CorpusWriter):
                 if issuer.native_language not in ['', None]:
                     issuer_data['native_language'] = issuer.native_language
 
-            elif type(issuer) == issuers.Artist:
+            elif type(issuer) is issuers.Artist:
                 if issuer.name not in ['', None]:
                     issuer_data['name'] = issuer.name
 

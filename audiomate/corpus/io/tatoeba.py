@@ -27,12 +27,12 @@ class TatoebaDownloader(base.CorpusDownloader):
           Website
 
     Args:
-        include_languages (list): List of languages codes to download. If None all are downloaded.
+        include_languages (list): List of languages codes to download. If ``None``, all are downloaded.
                                   Languages: https://github.com/Tatoeba/tatoeba2/blob/dev/src/Lib/LanguagesLib.php#L222
-        include_licenses (list): Sentences are downloaded only if their license is in this list.
-                                 If None all licenses are included.
+        include_licenses (list): Sentences are downloaded only if their license
+                                 is in this list. If ``None`` all licenses are included.
         load_empty_license (bool): Sentences with an empty license are not meant to be reused.
-                                   If False these sentences are ignored.
+                                   If ``False`` these sentences are ignored.
     """
 
     def __init__(self, include_languages=None, include_licenses=None, include_empty_licence=False):
@@ -92,9 +92,9 @@ class TatoebaDownloader(base.CorpusDownloader):
         result = {}
 
         for entry in textfile.read_separated_lines_generator(path, separator='\t', max_columns=4):
-            for i in range(len(entry)):
-                if entry[i] == '\\N':
-                    entry[i] = None
+            for index, _ in enumerate(entry):
+                if entry[index] == '\\N':
+                    entry[index] = None
 
             if len(entry) < 4:
                 entry.extend([None] * (4 - len(entry)))
@@ -129,9 +129,7 @@ class TatoebaDownloader(base.CorpusDownloader):
         return result
 
     def _download_audio_files(self, records, target_path):
-        """
-        Download all audio files based on the given records.
-        """
+        """ Download all audio files based on the given records. """
 
         for record in logger.progress(records):
             audio_folder = os.path.join(target_path, 'audio', record[2])
@@ -143,9 +141,7 @@ class TatoebaDownloader(base.CorpusDownloader):
 
 
 class TatoebaReader(base.CorpusReader):
-    """
-    Reader for audio data downloaded with the Tatoeba downloader.
-    """
+    """ Reader for audio data downloaded with the Tatoeba downloader. """
 
     @classmethod
     def type(cls):

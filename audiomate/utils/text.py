@@ -1,11 +1,12 @@
 """
-This module contains any functions for working with text/strings/punctuation.
+This module contains any functions
+for working with text/strings/punctuation.
 """
 
 import re
 
 
-def remove_punctuation(text, exceptions=[]):
+def remove_punctuation(text, exceptions=None):
     """
     Return a string with punctuation removed.
 
@@ -22,7 +23,8 @@ def remove_punctuation(text, exceptions=[]):
         r'\s'
     ]
 
-    all_but.extend(exceptions)
+    if exceptions is not None:
+        all_but.extend(exceptions)
 
     pattern = '[^{}]'.format(''.join(all_but))
 
@@ -31,15 +33,16 @@ def remove_punctuation(text, exceptions=[]):
 
 def starts_with_prefix_in_list(text, prefixes):
     """
-    Return True if the given string starts with one of the prefixes in the given list, otherwise
-    return False.
+    Return `True` if the given string starts with one of the prefixes
+    in the given list, otherwise return `False`.
 
     Arguments:
         text (str): Text to check for prefixes.
         prefixes (list): List of prefixes to check for.
 
     Returns:
-        bool: True if the given text starts with any of the given prefixes, otherwise False.
+        bool: `True` if the given text starts with any of the given prefixes,
+              `False` otherwise.
     """
     for prefix in prefixes:
         if text.startswith(prefix):

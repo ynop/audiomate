@@ -213,7 +213,7 @@ class TestPartitionInfo:
         assert info.total_lengths() == (23, 17)
 
 
-class TestPartitioningFeatureIterator(object):
+class TestPartitioningFeatureIterator:
 
     def test_next_emits_no_features_if_file_is_empty(self, tmpdir):
         file_path = os.path.join(tmpdir.strpath, 'features.h5')

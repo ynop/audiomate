@@ -16,19 +16,8 @@ LABEL_FILE = 'labels.txt'
 FEAT_CONTAINER_FILE_NAME = 'features.txt'
 
 
-def extract_meta_from_label_value(label):
-    meta_match = default.META_PATTERN.match(label.value)
-
-    if meta_match is not None:
-        meta_json = meta_match.group(2)
-        label.meta = json.loads(meta_json)
-        label.value = meta_match.group(1)
-
-
 class BroadcastReader(base.CorpusReader):
-    """
-    Reads corpora in the Broadcast format.
-    """
+    """ Reads corpora in the Broadcast format. """
 
     @classmethod
     def type(cls):
@@ -89,5 +78,14 @@ class BroadcastReader(base.CorpusReader):
 
                 ll.addl(value, start, end)
 
-            ll.apply(extract_meta_from_label_value)
+            ll.apply(BroadcastReader.extract_meta_from_label_value)
             corpus.utterances[utt_idx].set_label_list(ll)
+
+    @staticmethod
+    def extract_meta_from_label_value(label):
+        meta_match = default.META_PATTERN.match(label.value)
+
+        if meta_match is not None:
+            meta_json = meta_match.group(2)
+            label.meta = json.loads(meta_json)
+            label.value = meta_match.group(1)

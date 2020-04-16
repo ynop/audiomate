@@ -12,9 +12,7 @@ LABEL_PATTERN = r'(.*?)(\d+)'
 
 
 class RouenDownloader(downloader.ArchiveDownloader):
-    """
-    Downloader for the LITIS Rouen Audio scene dataset.
-    """
+    """ Downloader for the LITIS Rouen Audio scene dataset. """
 
     def __init__(self):
         super(RouenDownloader, self).__init__(

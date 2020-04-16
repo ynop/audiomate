@@ -16,10 +16,10 @@ DEFAULT_FEAT_SUBDIR = 'features'
 
 class Corpus(base.CorpusView):
     """
-    The Corpus class represents a single corpus.
-    It extends :py:class:`audiomate.corpus.CorpusView` with the functionality for loading and saving.
-    Furthermore it provides the functionality for adding/modifying assets of the corpus like tracks
-    and utterances.
+    The Corpus class represents a single corpus. It extends
+    :py:class:`audiomate.corpus.CorpusView` with the functionality for loading
+    and saving.  Furthermore it provides the functionality for adding/modifying
+    assets of the corpus like tracks and utterances.
 
     Args:
         path (str): Path where the corpus is stored. (Optional)
@@ -68,7 +68,8 @@ class Corpus(base.CorpusView):
 
     def save(self, writer=None):
         """
-        If self.path is defined, it tries to save the corpus at the given path.
+        If self.path is defined,
+        it tries to save the corpus at the given path.
         """
 
         if self.path is None:
@@ -78,18 +79,19 @@ class Corpus(base.CorpusView):
 
     def save_at(self, path, writer=None):
         """
-        Save this corpus at the given path. If the path differs from the current path set, the path
-        gets updated.
+        Save this corpus at the given path. If the path differs from
+        the current path set, the path gets updated.
 
         Parameters:
             path (str): Path to save the data set to.
-            writer (str, CorpusWriter): The writer or the name of the reader to use.
+            writer (str, CorpusWriter): The writer or the name of the
+                                        reader to use.
         """
 
         if writer is None:
             from . import io
             writer = io.DefaultWriter()
-        elif type(writer) == str:
+        elif type(writer) is str:
             # If a loader is given as string, try to create such a loader.
             from . import io
             writer = io.create_writer_of_type(writer)
@@ -101,12 +103,14 @@ class Corpus(base.CorpusView):
     @classmethod
     def load(cls, path, reader=None, **kwargs):
         """
-        Loads the corpus from the given path, using the given reader. If no reader is given the
-        :py:class:`audiomate.corpus.io.DefaultReader` is used.
+        Loads the corpus from the given path, using the given reader. If no
+        reader is given the :py:class:`audiomate.corpus.io.DefaultReader`
+        is used.
 
         Args:
             path (str): Path to load the corpus from.
-            reader (str, CorpusReader): The reader or the name of the reader to use.
+            reader (str, CorpusReader): The reader or the name of the
+                                        reader to use.
 
         Returns:
             Corpus: The loaded corpus.
@@ -116,7 +120,7 @@ class Corpus(base.CorpusView):
             from . import io
             reader = io.DefaultReader(**kwargs)
 
-        elif type(reader) == str:
+        elif type(reader) is str:
             from . import io
             reader = io.create_reader_of_type(reader, **kwargs)
 
@@ -133,8 +137,8 @@ class Corpus(base.CorpusView):
         Parameters:
             path (str): Path of the file to add.
             track_idx (str): The id to associate the file-track with.
-            copy_file (bool): If True the file is copied to the data set folder, otherwise the given
-                              path is used directly.
+            copy_file (bool): If ``True`` the file is copied to the data set
+                              folder, otherwise the given path is used directly.
 
         Returns:
             FileTrack: The newly added file.
@@ -168,14 +172,17 @@ class Corpus(base.CorpusView):
     def import_tracks(self, import_tracks):
         """
         Add the given tracks/track to the corpus.
-        If any of the given track-ids already exists, a suffix is appended so it is unique.
+        If any of the given track-ids already exists,
+        a suffix is appended so it is unique.
 
         Args:
-            import_tracks (list): Either a list of or a single :py:class:`audiomate.tracks.Track`.
+            import_tracks (list): Either a list of or a
+                                  single :py:class:`audiomate.tracks.Track`.
 
         Returns:
-            dict: A dictionary containing track-idx mappings (old-track-idx/track-instance).
-                  If a track is imported, whose idx already exists this mapping can be used to check
+            dict: A dictionary containing track-idx mappings
+                  (old-track-idx/track-instance). If a track is imported,
+                  whose idx already exists this mapping can be used to check
                   the new id.
         """
 
@@ -247,15 +254,17 @@ class Corpus(base.CorpusView):
 
     def import_utterances(self, utterances):
         """
-        Add the given utterances/utterance to the corpus.
-        If any of the given utterance-ids already exists, a suffix is appended so it is unique.
+        Add the given utterances/utterance to the corpus. If any of the given
+        utterance-ids already exists, a suffix is appended so it is unique.
 
         Args:
-            utterances (list): Either a list of or a single :py:class:`audiomate.tracks.Utterance`.
+            utterances (list): Either a list of or a
+                               single :py:class:`audiomate.tracks.Utterance`.
 
         Returns:
-            dict: A dictionary containing idx mappings (old-utterance-idx/utterance-instance).
-                  If a utterance is imported, whose id already exists this mapping can be used to
+            dict: A dictionary containing idx mappings
+                  (old-utterance-idx/utterance-instance). If a utterance is
+                  imported, whose id already exists this mapping can be used to
                   check the new id.
         """
 
@@ -269,7 +278,7 @@ class Corpus(base.CorpusView):
 
             # Check if there is a track with the given idx
             if not self.contains_track(utterance.track):
-                raise ValueError('Track with id {} is not in the corpus.'.format(utterance.track.idx, utterance.idx))
+                raise ValueError('Track with id {} is not in the corpus.'.format(utterance.track.idx))
 
             # Check if there is a issuer with the given idx
             if utterance.issuer is not None and not self.contains_issuer(utterance.issuer):
@@ -293,8 +302,8 @@ class Corpus(base.CorpusView):
         Add a new issuer to the dataset with the given data.
 
         Parameters:
-            issuer_idx (str): The id to associate the issuer with. If None or already exists, one is
-                              generated.
+            issuer_idx (str): The id to associate the issuer with. If ``None``
+                              or already exists, one is generated.
             info (dict, list): Additional info of the issuer.
 
         Returns:
@@ -314,15 +323,17 @@ class Corpus(base.CorpusView):
 
     def import_issuers(self, new_issuers):
         """
-        Add the given issuers/issuer to the corpus.
-        If any of the given issuer-ids already exists, a suffix is appended so it is unique.
+        Add the given issuers/issuer to the corpus.  If any of the given
+        issuer-ids already exists, a suffix is appended so it is unique.
 
         Args:
-            issuers (list): Either a list of or a single :py:class:`audiomate.issuers.Issuer`.
+            issuers (list): Either a list of or a
+                            single :py:class:`audiomate.issuers.Issuer`.
 
         Returns:
-            dict: A dictionary containing idx mappings (old-issuer-idx/issuer-instance).
-                  If a issuer is imported, whose id already exists this mapping can be used to check
+            dict: A dictionary containing idx mappings
+                  (old-issuer-idx/issuer-instance). If a issuer is imported,
+                  whose id already exists this mapping can be used to check
                   the new id.
         """
 
@@ -352,7 +363,8 @@ class Corpus(base.CorpusView):
 
         Parameters:
             idx (str): An unique identifier within the dataset.
-            path (str): The path to store the feature file. If None a default path is used.
+            path (str): The path to store the feature file. If ``None``
+                        a default path is used.
 
         Returns:
             FeatureContainer: The newly added feature-container.
@@ -389,8 +401,9 @@ class Corpus(base.CorpusView):
         Add the given subview to the corpus.
 
         Args:
-            idx (str): An idx that is unique in the corpus for identifying the subview.
-                       If already a subview exists with the given id it will be overridden.
+            idx (str): An idx that is unique in the corpus for identifying
+                       the subview. If already a subview exists with the given
+                       id it will be overridden.
             subview (Subview): The subview to add.
         """
 
@@ -403,9 +416,11 @@ class Corpus(base.CorpusView):
 
     def merge_corpus(self, corpus):
         """
-        Merge the given corpus into this corpus. All assets (tracks, utterances, issuers, ...) are copied into
-        this corpus. If any ids (utt-idx, track-idx, issuer-idx, subview-idx, ...) are occurring in both corpora,
-        the ids from the merging corpus are suffixed by a number (starting from 1 until no other is matching).
+        Merge the given corpus into this corpus. All assets (tracks, utterances,
+        issuers, ...) are copied into this corpus. If any ids (utt-idx,
+        track-idx, issuer-idx, subview-idx, ...) are occurring in both corpora,
+        the ids from the merging corpus are suffixed by a number
+        (starting from 1 until no other is matching).
 
         Args:
             corpus (CorpusView): The corpus to merge.
@@ -419,12 +434,12 @@ class Corpus(base.CorpusView):
         utterance_idx_mapping = self.import_utterances(corpus.utterances.values())
 
         for subview_idx, subview in merging_corpus.subviews.items():
-            for filter in subview.filter_criteria:
-                if isinstance(filter, subset.MatchingUtteranceIdxFilter):
+            for sv_filter in subview.filter_criteria:
+                if type(sv_filter) is subset.MatchingUtteranceIdxFilter:
                     new_filtered_utt_ids = set()
-                    for utt_idx in filter.utterance_idxs:
+                    for utt_idx in sv_filter.utterance_idxs:
                         new_filtered_utt_ids.add(utterance_idx_mapping[utt_idx].idx)
-                    filter.utterance_idxs = new_filtered_utt_ids
+                    sv_filter.utterance_idxs = new_filtered_utt_ids
 
             new_idx = naming.index_name_if_in_list(subview_idx, self.subviews.keys())
             self.import_subview(new_idx, subview)
@@ -505,8 +520,9 @@ class Corpus(base.CorpusView):
     @classmethod
     def from_corpus(cls, corpus):
         """
-        Create a new modifiable corpus from any other CorpusView.
-        This for example can be used to create a independent modifiable corpus from a subview.
+        Create a new modifiable corpus from any other CorpusView. This for
+        example can be used to create a independent modifiable corpus
+        from a subview.
 
         Args:
             corpus (CorpusView): The corpus to create a copy from.
@@ -518,26 +534,26 @@ class Corpus(base.CorpusView):
         ds = Corpus()
 
         # Tracks
-        tracks = copy.deepcopy(list(corpus.tracks.values()))
-        track_mapping = ds.import_tracks(tracks)
+        import_tracks = copy.deepcopy(list(corpus.tracks.values()))
+        track_mapping = ds.import_tracks(import_tracks)
 
         # Issuers
-        issuers = copy.deepcopy(list(corpus.issuers.values()))
-        issuer_mapping = ds.import_issuers(issuers)
+        import_issuers = copy.deepcopy(list(corpus.issuers.values()))
+        issuer_mapping = ds.import_issuers(import_issuers)
 
         # Utterances, with replacing changed track- and issuer-ids
-        utterances = copy.deepcopy(list(corpus.utterances.values()))
-        for utterance in utterances:
+        import_utterances = copy.deepcopy(list(corpus.utterances.values()))
+        for utterance in import_utterances:
             utterance.track = track_mapping[utterance.track.idx]
 
             if utterance.issuer is not None:
                 utterance.issuer = issuer_mapping[utterance.issuer.idx]
 
-        ds.import_utterances(utterances)
+        ds.import_utterances(import_utterances)
 
         # Subviews
-        subviews = copy.deepcopy(corpus.subviews)
-        for subview_idx, subview in subviews.items():
+        import_subviews = copy.deepcopy(corpus.subviews)
+        for subview_idx, subview in import_subviews.items():
             ds.import_subview(subview_idx, subview)
 
         # Feat-Containers
@@ -552,10 +568,12 @@ class Corpus(base.CorpusView):
         Merge a list of corpora into one.
 
         Args:
-            corpora (Iterable): An iterable of :py:class:`audiomate.corpus.CorpusView`.
+            corpora (Iterable): An iterable of
+                                :py:class:`audiomate.corpus.CorpusView`.
 
         Returns:
-            Corpus: A corpus with the data from all given corpora merged into one.
+            Corpus: A corpus with the data from all given corpora
+                    merged into one.
         """
 
         ds = Corpus()

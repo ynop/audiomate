@@ -6,9 +6,7 @@ from . import base
 
 
 class FolderReader(base.CorpusReader):
-    """
-    Loads all wavs from the given folder and creates a corpus from it.
-    """
+    """ Loads all wavs from the given folder and creates a corpus from it. """
 
     @classmethod
     def type(cls):

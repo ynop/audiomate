@@ -1,5 +1,6 @@
 """
-The encoding module provides functionality to encode labels to use for example for training a DNN.
+The encoding module provides functionality to encode labels to use
+for example for training a DNN.
 """
 
 from .base import Encoder  # noqa: F401

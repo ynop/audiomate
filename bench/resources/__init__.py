@@ -8,7 +8,10 @@ from audiomate import annotations
 
 
 def get_test_resource_path(sub_path_components):
-    """ Get the absolute path of a file in the resources folder with its relative path components. """
+    """
+    Get the absolute path of a file in the resources folder with its relative
+    path components.
+    """
     this_folder = os.path.dirname(__file__)
     root_folder = os.path.join(this_folder, '..', '..')
     return os.path.abspath(os.path.join(root_folder, 'tests', 'resources', *sub_path_components))
@@ -25,9 +28,7 @@ def generate_corpus(n_issuers,
                     n_ll_per_utt,
                     n_label_per_ll,
                     rand=None):
-    """
-    Generate a corpus with mock data.
-    """
+    """ Generate a corpus with mock data. """
     corpus = audiomate.Corpus()
 
     for issuer in generate_issuers(n_issuers, rand):

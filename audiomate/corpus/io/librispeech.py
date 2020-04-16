@@ -36,6 +36,7 @@ class LibriSpeechDownloader(base.CorpusDownloader):
     def __init__(self, subsets=None, num_threads=1, keep_archives=False):
         self.subsets = subsets
         self.num_threads = num_threads
+        self.keep_archives = keep_archives
 
     @classmethod
     def type(cls):
@@ -67,7 +68,8 @@ class LibriSpeechDownloader(base.CorpusDownloader):
 
                 shutil.rmtree('extract_sub_path', ignore_errors=True)
 
-                os.remove(tmp_file)
+                if not self.keep_archives:
+                    os.remove(tmp_file)
 
 
 class LibriSpeechReader(base.CorpusReader):
@@ -133,8 +135,8 @@ class LibriSpeechReader(base.CorpusReader):
 
                         subset_utt_ids.add(utt_idx)
 
-            filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utt_ids))
-            subview = subset.Subview(corpus, filter_criteria=[filter])
+            utt_filter = subset.MatchingUtteranceIdxFilter(utterance_idxs=set(subset_utt_ids))
+            subview = subset.Subview(corpus, filter_criteria=[utt_filter])
             corpus.import_subview(subset_idx, subview)
 
         return corpus

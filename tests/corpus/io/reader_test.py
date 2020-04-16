@@ -1,4 +1,5 @@
 import os
+import abc
 from collections import namedtuple
 
 from audiomate import tracks
@@ -53,7 +54,7 @@ ExpSubview = namedtuple(
 )
 
 
-class CorpusReaderTest:
+class CorpusReaderTest(metaclass=abc.ABCMeta):
     """
     Base class for testing a corpus reader.
 
@@ -79,8 +80,9 @@ class CorpusReaderTest:
     EXPECTED_NUMBER_OF_SUBVIEWS = None
     EXPECTED_SUBVIEWS = []
 
+    @abc.abstractmethod
     def load(self):
-        pass
+        raise NotImplementedError('Implmentation has to be done in concrete test class')
 
     # ----------------------------------------------------------------------
     # TRACKS

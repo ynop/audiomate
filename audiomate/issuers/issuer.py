@@ -1,7 +1,7 @@
 import copy
 
 
-class Issuer(object):
+class Issuer:
     """
     The issuer represents a person, object or something that produced an
     utterance. Technically the issuer can be used to group utterances
@@ -17,9 +17,9 @@ class Issuer(object):
 
     __slots__ = ['idx', 'info', 'utterances']
 
-    def __init__(self, idx, info={}):
+    def __init__(self, idx, info=None):
         self.idx = idx
-        self.info = info
+        self.info = info or {}
         self.utterances = set()
 
     def __str__(self):

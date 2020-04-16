@@ -69,8 +69,8 @@ class SpeechCommandsReader(base.CorpusReader):
         test_list = textfile.read_separated_lines(test_list_path, separator='/', max_columns=2)
         dev_list = textfile.read_separated_lines(dev_list_path, separator='/', max_columns=2)
 
-        test_set = set(['{}_{}'.format(os.path.splitext(x[1])[0], x[0]) for x in test_list])
-        dev_set = set(['{}_{}'.format(os.path.splitext(x[1])[0], x[0]) for x in dev_list])
+        test_set = {'{}_{}'.format(os.path.splitext(x[1])[0], x[0]) for x in test_list}
+        dev_set = {'{}_{}'.format(os.path.splitext(x[1])[0], x[0]) for x in dev_list}
         inv_train_set = test_set.union(dev_set)
 
         train_filter = subview.MatchingUtteranceIdxFilter(utterance_idxs=inv_train_set, inverse=True)

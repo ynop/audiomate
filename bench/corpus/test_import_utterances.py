@@ -35,5 +35,5 @@ def test_import_utterances(benchmark):
 
 
 if __name__ == '__main__':
-    target_corpus, utterances = prepare()
-    run(target_corpus, utterances)
+    corpus, utterances = prepare()
+    run(corpus, utterances)

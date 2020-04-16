@@ -285,7 +285,7 @@ class KaldiWriter(base.CorpusWriter):
         for issuer in corpus.issuers.values():
             gender = self.default_gender
 
-            if type(issuer) == issuers.Speaker:
+            if type(issuer) is issuers.Speaker:
                 if issuer.gender == issuers.Gender.MALE:
                     gender = 'm'
                 elif issuer.gender == issuers.Gender.FEMALE:
@@ -309,7 +309,7 @@ class KaldiWriter(base.CorpusWriter):
 
             if self.main_label_list_idx in utterance.label_lists.keys():
                 label_list = utterance.label_lists[self.main_label_list_idx]
-                transcriptions[utt_idx] = ' '.join([l.value for l in label_list])
+                transcriptions[utt_idx] = ' '.join(l.value for l in label_list)
 
         textfile.write_separated_lines(
             text_path,
@@ -376,13 +376,18 @@ class KaldiWriter(base.CorpusWriter):
             # move to offset
             f.seek(offset)
 
-            # assert binary ark
+            # check if  it is a binary ark
             binary = f.read(2)
-            assert (binary == b'\x00B')
 
-            # assert type float 32
-            format = f.read(3)
-            assert (format == b'FM ')
+            if binary != b'\x00B':
+                msg = 'The ark "{}" is not in binary format!'
+                raise ValueError(msg.format(rx_specifier))
+
+            # check if data type is float 32
+            archive_format = f.read(3)
+            if archive_format != b'FM ':
+                msg = 'The ark "{}" has not float 32 type!'
+                raise ValueError(msg.format(rx_specifier))
 
             # get number of mfcc features
             f.read(1)
@@ -424,7 +429,9 @@ class KaldiWriter(base.CorpusWriter):
             for utterance_id in sorted(list(matrices.keys())):
                 matrix = matrices[utterance_id]
 
-                assert (matrix.dtype == np.float32)
+                if matrix.dtype != np.float32:
+                    msg = 'Features of utterance "{}" are have not type float 32!'
+                    raise ValueError(msg.format(utterance_id))
 
                 f.write(('{} '.format(utterance_id)).encode('utf-8'))
 
