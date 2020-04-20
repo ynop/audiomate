@@ -1,18 +1,17 @@
 language: python
 python:
-    - "3.5"
-    - "3.6"
-    - "3.7"
-    - "3.8"
+  - "3.6"
+  - "3.7"
+  - "3.8"
 
 install:
-    - sudo apt-get update
-    - sudo apt-get install -y libav-tools sox
-    - "pip install -e .[dev,ci]"
+  - sudo apt-get update
+  - sudo apt-get install -y libav-tools sox
+  - "pip install -e .[dev,ci]"
 
 script:
-    - flake8
-    - pytest --cov=./ --cov-report xml
-    - curl https://deepsource.io/cli | sh
-    - export DEEPSOURCE_DSN=https://4548d0a091ca452ba4f84f0771f8a91a@deepsource.io
-    - ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
+  - flake8
+  - pytest --cov=./ --cov-report xml
+  - curl https://deepsource.io/cli | sh
+  - export DEEPSOURCE_DSN=https://4548d0a091ca452ba4f84f0771f8a91a@deepsource.io
+  - ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
