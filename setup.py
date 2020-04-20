@@ -79,7 +79,9 @@ setup(name='audiomate',
       classifiers=[
           'Intended Audience :: Science/Research',
           'License :: OSI Approved :: MIT License',
-          'Programming Language :: Python :: 3 :: Only',
+          'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.7',
+          'Programming Language :: Python :: 3.8',
           'Topic :: Scientific/Engineering :: Human Machine Interfaces'
       ],
       keywords='audio music sound corpus dataset',

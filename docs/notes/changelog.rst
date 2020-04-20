@@ -6,6 +6,8 @@ Next Version
 
 **Breaking Changes**
 
+* Drop support of Python 3.5 because a required dependency (llvmlite) does not support it anymore.
+
 **New Features**
 
 * Setup consistent way for logging. (:ref:`logging`):

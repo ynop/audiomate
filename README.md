@@ -93,7 +93,7 @@ apt-get install sox
 
 ### Prerequisites
 
-* [A supported version of Python 3](https://docs.python.org/devguide/index.html#status-of-python-branches)
+* [A supported version of Python > 3.5](https://docs.python.org/devguide/index.html#status-of-python-branches)
 
 It's recommended to use a virtual environment when developing audiomate.
 To create one, execute the following command in the project's root directory:
