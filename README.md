@@ -23,7 +23,10 @@ esc50 = audiomate.Corpus.load('/local/path', reader='esc-50')
 # e.g. Read the audio signal and the label of specific sample/utterance
 utterance = esc50.utterances['1-100032-A-0']
 samples = utterance.read_samples()
-label = utterance.label_lists[audiomate.corpus.LL_SOUND_CLASS][0].value
+label_list = utterance.label_lists[audiomate.corpus.LL_SOUND_CLASS]
+
+for label in label_list:
+  print(label.start, label.value)
 ```
 
 Furthermore it provides tools for interacting with datasets
