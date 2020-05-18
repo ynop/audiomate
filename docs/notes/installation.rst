@@ -26,3 +26,6 @@ For parts of the functionality (e.g. audio format conversion) `sox <http://sox.s
 
    # linux
    apt-get install sox
+
+   # anaconda for macOS/windows/linux:
+   conda install -c conda-forge sox
