@@ -87,6 +87,9 @@ brew install sox --with-lame --with-flac --with-libvorbis
 
 # linux
 apt-get install sox
+
+# anaconda for macOS/windows/linux:
+conda install -c conda-forge sox
 ```
 
 ## Development
