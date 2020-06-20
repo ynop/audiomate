@@ -21,6 +21,7 @@ REQUIRED = [
     'intervaltree == 3.0.2',
     'sox == 1.3.7',
     'PGet == 0.5.0',
+    'tqdm'
 ]
 
 # Packages required for dev/ci enrionment
@@ -67,32 +68,33 @@ except FileNotFoundError:
 # SETUP
 ##################################################
 
-setup(name='audiomate',
-      version='5.2.0',
-      description=DESCRIPTION,
-      long_description=long_description,
-      long_description_content_type='text/markdown',
-      url='https://github.com/ynop/audiomate',
-      download_url='https://github.com/ynop/audiomate/releases',
-      author='Matthias Buechi, Andreas Ahlenstorf',
-      author_email='buec@zhaw.ch',
-      classifiers=[
-          'Intended Audience :: Science/Research',
-          'License :: OSI Approved :: MIT License',
-          'Programming Language :: Python :: 3.6',
-          'Programming Language :: Python :: 3.7',
-          'Programming Language :: Python :: 3.8',
-          'Topic :: Scientific/Engineering :: Human Machine Interfaces'
-      ],
-      keywords='audio music sound corpus dataset',
-      license='MIT',
-      packages=find_packages(exclude=['tests']),
-      install_requires=REQUIRED,
-      include_package_data=True,
-      zip_safe=False,
-      test_suite='tests',
-      extras_require=EXTRAS,
-      setup_requires=['pytest-runner'],
-      tests_require=TESTS,
-      entry_points={}
-      )
+setup(
+    name='audiomate',
+    version='5.2.0',
+    description=DESCRIPTION,
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    url='https://github.com/ynop/audiomate',
+    download_url='https://github.com/ynop/audiomate/releases',
+    author='Matthias Buechi, Andreas Ahlenstorf',
+    author_email='buec@zhaw.ch',
+    classifiers=[
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Topic :: Scientific/Engineering :: Human Machine Interfaces'
+    ],
+    keywords='audio music sound corpus dataset',
+    license='LGPLv3',
+    packages=find_packages(exclude=['tests']),
+    install_requires=REQUIRED,
+    include_package_data=True,
+    zip_safe=False,
+    test_suite='tests',
+    extras_require=EXTRAS,
+    setup_requires=['pytest-runner'],
+    tests_require=TESTS,
+    entry_points={}
+)
