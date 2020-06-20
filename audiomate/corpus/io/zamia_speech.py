@@ -174,7 +174,10 @@ class ZamiaSpeechReader(base.CorpusReader):
                     and ext == ".wav"
                     and idx not in self.invalid_utterance_ids
                 )
-                has_transcription = basename in prompts.keys()
+
+                has_transcription = (
+                    basename in prompts.keys() or basename in prompts_orig.keys()
+                )
 
                 if is_valid_wav and has_transcription:
                     if issuer.idx not in corpus.issuers.keys():
@@ -182,9 +185,16 @@ class ZamiaSpeechReader(base.CorpusReader):
 
                     corpus.new_file(wav_path, idx)
                     utt = corpus.new_utterance(idx, idx, issuer.idx)
+
+                    if basename in prompts.keys():
+                        transcription = prompts[basename]
+                    else:
+                        # Not everywhere a prompts file exists
+                        transcription = prompts_orig[basename]
+
                     utt.set_label_list(
                         annotations.LabelList.create_single(
-                            prompts[basename], idx=audiomate.corpus.LL_WORD_TRANSCRIPT
+                            transcription, idx=audiomate.corpus.LL_WORD_TRANSCRIPT
                         )
                     )
 
@@ -194,6 +204,9 @@ class ZamiaSpeechReader(base.CorpusReader):
                             idx=audiomate.corpus.LL_WORD_TRANSCRIPT_RAW,
                         )
                         utt.set_label_list(raw)
+                else:
+                    msg = "File {} has no transcription or is invalid"
+                    logger.warn(msg.format(file_name))
 
         return corpus
 
@@ -208,58 +221,59 @@ class ZamiaSpeechReader(base.CorpusReader):
         age_group = issuers.AgeGroup.UNKNOWN
         native_lang = None
 
-        with open(readme_path, "r", errors="ignore") as f:
-            for raw_line in f:
-                line = raw_line.strip()
+        if os.path.exists(readme_path):
+            with open(readme_path, "r", encoding="utf-8") as f:
+                for raw_line in f:
+                    line = raw_line.strip()
 
-                if line is not None and line != "":
-                    line = line.rstrip(";.")
-                    parts = line.split(":", maxsplit=1)
+                    if line is not None and line != "":
+                        line = line.rstrip(";.")
+                        parts = line.split(":", maxsplit=1)
 
-                    if len(parts) > 1:
-                        key = parts[0].strip().lower()
-                        value = parts[1].strip()
+                        if len(parts) > 1:
+                            key = parts[0].strip().lower()
+                            value = parts[1].strip()
 
-                        if key == "user name":
-                            idx = value
+                            if key == "user name":
+                                idx = value
 
-                        value = value.lower()
+                            value = value.lower()
 
-                        if key == "gender":
-                            if value in ["männlich", "male", "mnnlich"]:
-                                gender = issuers.Gender.MALE
-                            elif value in ["weiblich", "female", "[female]"]:
-                                gender = issuers.Gender.FEMALE
+                            if key == "gender":
+                                if value in ["männlich", "male", "mnnlich"]:
+                                    gender = issuers.Gender.MALE
+                                elif value in ["weiblich", "female", "[female]"]:
+                                    gender = issuers.Gender.FEMALE
 
-                        if key == "age range":
-                            if value in [
-                                "erwachsener",
-                                "adult",
-                                "[adult]",
-                                "[erwachsener]",
-                            ]:
-                                age_group = issuers.AgeGroup.ADULT
+                            if key == "age range":
+                                if value in [
+                                    "erwachsener",
+                                    "adult",
+                                    "[adult]",
+                                    "[erwachsener]",
+                                ]:
+                                    age_group = issuers.AgeGroup.ADULT
 
-                            elif value in ["senior", "[senior"]:
-                                age_group = issuers.AgeGroup.SENIOR
+                                elif value in ["senior", "[senior"]:
+                                    age_group = issuers.AgeGroup.SENIOR
 
-                            elif value in [
-                                "youth",
-                                "jugendlicher",
-                                "[youth]",
-                                "[jugendlicher]",
-                            ]:
-                                age_group = issuers.AgeGroup.YOUTH
+                                elif value in [
+                                    "youth",
+                                    "jugendlicher",
+                                    "[youth]",
+                                    "[jugendlicher]",
+                                ]:
+                                    age_group = issuers.AgeGroup.YOUTH
 
-                            elif value in ["kind", "child"]:
-                                age_group = issuers.AgeGroup.CHILD
+                                elif value in ["kind", "child"]:
+                                    age_group = issuers.AgeGroup.CHILD
 
-                        if key == "language":
-                            if value in ["de", "ger", "deu", "[de]"]:
-                                native_lang = "deu"
+                            if key == "language":
+                                if value in ["de", "ger", "deu", "[de]"]:
+                                    native_lang = "deu"
 
-                            elif value in ["en", "eng", "[en]"]:
-                                native_lang = "eng"
+                                elif value in ["en", "eng", "[en]"]:
+                                    native_lang = "eng"
 
         return issuers.Speaker(
             idx, gender=gender, age_group=age_group, native_language=native_lang
@@ -285,23 +299,28 @@ class ZamiaSpeechReader(base.CorpusReader):
     def parse_prompts(etc_folder):
         """ Read prompts and prompts-orignal and return as dictionary (id as key). """
 
-        prompts_path = os.path.join(etc_folder, "PROMPTS")
         prompts_orig_path = os.path.join(etc_folder, "prompts-original")
+        if os.path.exists(prompts_orig_path):
+            prompts_orig = textfile.read_key_value_lines(
+                prompts_orig_path, separator=" "
+            )
+        else:
+            prompts_orig = {}
 
-        prompts = textfile.read_key_value_lines(prompts_path, separator=" ")
-        prompts_orig = textfile.read_key_value_lines(prompts_orig_path, separator=" ")
+        prompts_path = os.path.join(etc_folder, "PROMPTS")
+        if os.path.exists(prompts_path):
+            prompts = textfile.read_key_value_lines(prompts_path, separator=" ")
+            prompts_key_fixed = {}
+            for k, v in prompts.items():
+                parts = k.split("/")
+                key = k
 
-        prompts_key_fixed = {}
+                if len(parts) > 1:
+                    key = parts[-1]
 
-        for k, v in prompts.items():
-            parts = k.split("/")
-            key = k
-
-            if len(parts) > 1:
-                key = parts[-1]
-
-            prompts_key_fixed[key] = v
-
-        prompts = prompts_key_fixed
+                prompts_key_fixed[key] = v
+            prompts = prompts_key_fixed
+        else:
+            prompts = {}
 
         return prompts, prompts_orig
