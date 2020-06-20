@@ -32,6 +32,7 @@ from .wav2letter import Wav2LetterWriter  # noqa: F401
 from .nvidia_jasper import NvidiaJasperWriter  # noqa: F401
 from .librispeech import LibriSpeechDownloader, LibriSpeechReader  # noqa: F401
 from .css_ten import CssTenReader  # noqa: F401
+from .zamia_speech import ZamiaSpeechDownloader, ZamiaSpeechReader  # noqa: F401
 
 
 __downloaders = {}
