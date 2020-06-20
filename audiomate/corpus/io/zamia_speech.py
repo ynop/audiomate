@@ -174,23 +174,28 @@ class ZamiaSpeechReader(base.CorpusReader):
                     and ext == ".wav"
                     and idx not in self.invalid_utterance_ids
                 )
+                if not is_valid_wav:
+                    if idx not in self.invalid_utterance_ids:
+                        continue
+                    else:
+                        msg = "File {} is invalid"
+                        logger.warn(msg.format(wav_path))
+                        continue
 
-                has_transcription = (
-                    basename in prompts.keys() or basename in prompts_orig.keys()
-                )
+                if basename in prompts.keys():
+                    transcription = prompts[basename]
+                elif basename in prompts_orig.keys():
+                    # Not everywhere a prompts file exists
+                    transcription = prompts_orig[basename]
+                else:
+                    transcription = ""
 
-                if is_valid_wav and has_transcription:
+                if transcription != "":
                     if issuer.idx not in corpus.issuers.keys():
                         corpus.import_issuers([issuer])
 
                     corpus.new_file(wav_path, idx)
                     utt = corpus.new_utterance(idx, idx, issuer.idx)
-
-                    if basename in prompts.keys():
-                        transcription = prompts[basename]
-                    else:
-                        # Not everywhere a prompts file exists
-                        transcription = prompts_orig[basename]
 
                     utt.set_label_list(
                         annotations.LabelList.create_single(
@@ -205,8 +210,8 @@ class ZamiaSpeechReader(base.CorpusReader):
                         )
                         utt.set_label_list(raw)
                 else:
-                    msg = "File {} has no transcription or is invalid"
-                    logger.warn(msg.format(file_name))
+                    msg = "File {} has no transcription"
+                    logger.warn(msg.format(wav_path))
 
         return corpus
 
