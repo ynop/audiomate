@@ -41,7 +41,7 @@ class CssTenReader(base.CorpusReader):
         for t in logger.progress(transcripts):
             # Create files ...
             file_path = os.path.join(path, t[0])
-            file_idx = os.path.splitext(file_path)[0]
+            file_idx = os.path.splitext(os.path.basename(file_path))[0]
             corpus.new_file(file_path, file_idx)
 
             # Issuers, use folder name
