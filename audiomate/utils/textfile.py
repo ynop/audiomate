@@ -5,8 +5,9 @@ for reading and writing textfiles.
 
 import os
 
-from audiomate.utils import text
 from audiomate import logutil
+from audiomate.utils import text
+from chardet import detect
 
 logger = logutil.getLogger()
 
@@ -118,6 +119,14 @@ def write_separated_lines(path, values, separator=' ', sort_by_column=0):
                 f.write('{}\n'.format(separator.join(str_values)))
 
 
+def get_encoding_type(filepath):
+    """ Get file encoding type """
+
+    with open(filepath, 'rb') as f:
+        rawdata = f.read()
+    return detect(rawdata)['encoding']
+
+
 def read_separated_lines_generator(path, separator=' ', max_columns=-1,
                                    ignore_lines_starting_with=None, keep_empty=False):
     """
@@ -134,7 +143,8 @@ def read_separated_lines_generator(path, separator=' ', max_columns=-1,
         logger.error('File doesnt exist or is no file: %s', path)
         return
 
-    with open(path, 'r', errors='ignore', encoding='utf-8') as f:
+    file_codec = get_encoding_type(path)
+    with open(path, 'r', errors='ignore', encoding=file_codec) as f:
 
         if max_columns > -1:
             max_splits = max_columns - 1
