@@ -17,7 +17,10 @@ logger = logutil.getLogger()
 
 DOWNLOAD_URL = {
     'de': 'http://www.repository.voxforge1.org/downloads/de/Trunk/Audio/Main/16kHz_16bit/',
-    'en': 'http://www.repository.voxforge1.org/downloads/SpeechCorpus/Trunk/Audio/Main/16kHz_16bit/'
+    'en': 'http://www.repository.voxforge1.org/downloads/en/Trunk/Audio/Main/16kHz_16bit/',
+    'es': 'http://www.repository.voxforge1.org/downloads/es/Trunk/Audio/Main/16kHz_16bit/',
+    'fr': 'http://www.repository.voxforge1.org/downloads/fr/Trunk/Audio/Main/16kHz_16bit/',
+    'it': 'http://www.repository.voxforge1.org/downloads/it/Trunk/Audio/Main/16kHz_16bit/'
 }
 
 
