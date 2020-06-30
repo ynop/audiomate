@@ -3,8 +3,11 @@ import collections
 
 import audiomate
 from . import base
+from audiomate import logutil
 from audiomate.utils import textfile
 from audiomate.corpus import conversion
+
+logger = logutil.getLogger()
 
 
 class MozillaDeepSpeechWriter(base.CorpusWriter):
@@ -63,8 +66,13 @@ class MozillaDeepSpeechWriter(base.CorpusWriter):
             utterance = corpus.utterances[utterance_idx]
             transcript = utterance.label_lists[self.transcription_label_list_idx].join()
             audio_path = utterance.track.path
-            size = os.stat(audio_path).st_size
 
+            if not os.path.exists(audio_path):
+                msg = "Skipping file because it doesn't exist: {}"
+                logger.warn(msg.format(audio_path))
+                continue
+
+            size = os.stat(audio_path).st_size
             record = [audio_path, size, transcript]
             records.append(record)
 
