@@ -80,6 +80,8 @@ In the example below, we first download MUSAN and GTZAN to the local disk before
 Afterwards, we use a `Splitter` to partition the merged dataset into a train and test set.
 By merely creating views, Audiomate avoids creating unnecessary disk I/O and is therefore ideally suited to work with large datasets in the range of tens or hundreds of gigabytes.
 Ultimately, we load the samples and labels by iterating over all utterances.
+Audio samples are numpy arrays. They allow for fast access, high processing speed and ensure interoperability with
+third-party programs that can operate on numpy arrays, for example TensorFlow or PyTorch.
 Alternatively, it is possible to load the samples in batches, which is ideal for feeding them to a deep learning toolkit like PyTorch.
 
 ```python
