@@ -1,5 +1,6 @@
 import abc
 import os
+import shutil
 
 from audiomate.utils import jsonfile
 
@@ -17,14 +18,25 @@ class CorpusDownloader(metaclass=abc.ABCMeta):
     implementation.
     """
 
-    def download(self, target_path):
+    def download(self, target_path, force_redownload=False):
         """
         Downloads the data of the corpus and saves it to the given path.
         The data has to be saved in a way, so that the corresponding ``CorpusReader`` can load the corpus.
 
         Args:
             target_path (str): The path to save the data to.
+            force_redownload (bool, optional): If ``True``, overwrite the target path and redownload the corpus.
+
+        Raises:
+            IOError: When the corpus has already been downloaded to the target path.
+                     Overridden if `force_redownload` is set to ``True``.
         """
+        if os.path.exists(target_path) and len(os.listdir(target_path)) > 0:
+
+            if not force_redownload:
+                raise IOError('Corpus already downloaded at {}.'.format(target_path))
+            shutil.rmtree(target_path)
+
         return self._download(target_path)
 
     @classmethod
