@@ -22,7 +22,7 @@ REQUIRED = [
     'sox == 1.3.7',
     'PGet == 0.5.0',
     'tqdm',
-    'chardet'
+    'chardet',
     'numba == 0.49.1'
 ]
 
