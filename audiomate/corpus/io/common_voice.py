@@ -4,10 +4,13 @@ import glob
 import audiomate
 from audiomate import annotations
 from audiomate import issuers
+from audiomate import logutil
 from audiomate.corpus import subset
 from audiomate.utils import textfile
 from . import base
 from . import downloader
+
+logger = logutil.getLogger()
 
 # DOWNLOAD_URLS taken from https://voice.mozilla.org/de/datasets
 DOWNLOAD_URLS = {
@@ -186,6 +189,16 @@ class CommonVoiceReader(base.CorpusReader):
                 gender = issuers.Gender.UNKNOWN
 
             file_path = os.path.join(path, 'clips', file_name)
+            if not os.path.exists(file_path):
+                # In some languages (like german) the audio files are in a 'clips' subfolder,
+                #  in others (like french or spanish) they are saved in the main directory,
+                #  so try both possibilities
+                file_path = os.path.join(path, file_name)
+                if not os.path.exists(file_path):
+                    msg = "Skipping file because it doesn't exist: {}"
+                    logger.warn(msg.format(file_path))
+                    return None
+
             corpus.new_file(file_path, file_idx)
 
             if speaker_idx in corpus.issuers.keys():
