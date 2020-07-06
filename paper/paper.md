@@ -78,8 +78,10 @@ Assume that the task is to train a neural network to detect segments in audio st
 MUSAN [@musan2015] and GTZAN [@GTZAN] are two suitable datasets for this task because they provide a wide selection of music, speech, and noise samples.
 In the example below, we first download MUSAN and GTZAN to the local disk before creating `Loader` instances for each format that allow Audiomate to access both datasets using a unified interface. Then, we instruct Audiomate to merge both datasets.
 Afterwards, we use a `Splitter` to partition the merged dataset into a train and test set.
-By merely creating views, Audiomate avoids creating unnecessary disk I/O and is therefore ideally suited to work with large datasets in the range of tens or hundreds of gigabytes. 
+By merely creating views, Audiomate avoids creating unnecessary disk I/O and is therefore ideally suited to work with large datasets in the range of tens or hundreds of gigabytes.
 Ultimately, we load the samples and labels by iterating over all utterances.
+Audio samples are numpy arrays. They allow for fast access, high processing speed and ensure interoperability with
+third-party programs that can operate on numpy arrays, for example TensorFlow or PyTorch.
 Alternatively, it is possible to load the samples in batches, which is ideal for feeding them to a deep learning toolkit like PyTorch.
 
 ```python
@@ -128,5 +130,19 @@ Rarely all interfaces are implemented for a particular format.
 Usually, `Reader` and `Downloader` are implemented for datasets, while `Writer` is implemented for machine learning toolkits.
 
 Audiomate supports more than a dozen datasets and half as many toolkits.
+
+# Related Work
+
+A variety of frameworks and tools offer functionality similar to Audiomate.
+
+**Data loaders** Data loaders are libraries that focus on downloading and preprocessing data sets to make them easily accessible without requiring a specific tool or framework.
+In contrast to Audiomate, they cannot convert between formats, split or merge data sets.
+Examples of libraries in that category are [@mirdata], [@speechcorpusdownloader], and [@audiodatasets].
+Furthermore, some of these libraries focus on a particular kind of data, such as music, and do not assist with speech data sets.
+
+**Tools for specific frameworks** Various machine learning tools and deep learning frameworks include the necessary infrastructure to make various datasets readily available to their users.
+One notable example is TensorFlow [@tensorflow], which includes data loaders for different kinds of data, including image, speech, and music data sets, such as [@ardila2019common].
+Another one is torchaudio [@torchaudio] for PyTorch, which not only offers data loaders but is also capable of converting between various formats.
+In contrast to Audiomate, those tools or libraries support a specific machine learning or deep learning framework (TensorFlow or PyTorch, respectively), whereas Audiomate is framework agnostic.
 
 # References

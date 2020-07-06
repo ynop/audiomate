@@ -23,6 +23,7 @@ REQUIRED = [
     'PGet == 0.5.0',
     'tqdm',
     'chardet'
+    'numba == 0.49.1'
 ]
 
 # Packages required for dev/ci enrionment
