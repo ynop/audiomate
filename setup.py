@@ -23,6 +23,7 @@ REQUIRED = [
     'PGet == 0.5.0',
     'tqdm',
     'chardet',
+    'pandas',
     'numba == 0.49.1'
 ]
 
