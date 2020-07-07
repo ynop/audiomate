@@ -148,7 +148,7 @@ class CommonVoiceReader(base.CorpusReader):
             csv_file,
             separator='\t',
             max_columns=8,
-            ignore_lines_starting_with=['client_id'],
+            ignore_lines_starting_with=['accent'],
             keep_empty=True
         )
 
@@ -168,25 +168,18 @@ class CommonVoiceReader(base.CorpusReader):
 
     def create_assets_if_needed(self, corpus, path, entry):
         """ Create File/Utterance/Issuer, if they not already exist and return utt-idx. """
-        file_name = entry[1]
+        file_name = entry[6]
         file_idx, _ = os.path.splitext(file_name)
 
         if file_idx in self.invalid_utterance_ids:
             return None
 
         if file_idx not in corpus.utterances.keys():
-            speaker_idx = entry[0]
-            transcription = entry[2]
+            speaker_idx = entry[2]
+            transcription = entry[7]
 
-            if len(entry) >= 6:
-                age = CommonVoiceReader.map_age(entry[5])
-            else:
-                age = issuers.AgeGroup.UNKNOWN
-
-            if len(entry) >= 7:
-                gender = CommonVoiceReader.map_gender(entry[6])
-            else:
-                gender = issuers.Gender.UNKNOWN
+            age = CommonVoiceReader.map_age(entry[1])
+            gender = CommonVoiceReader.map_gender(entry[4])
 
             file_path = os.path.join(path, 'clips', file_name)
             if not os.path.exists(file_path):
