@@ -23,8 +23,8 @@ urls_speech_dir = {
 }
 
 urls_transcripts = {
-    "de": "https://raw.githubusercontent.com/gooofy/zamia-speech/master/data/src/speech/zamia_de/transcripts_00.csv",
-    "en": "https://raw.githubusercontent.com/gooofy/zamia-speech/master/data/src/speech/zamia_en/transcripts_00.csv",
+    "de": "https://raw.githubusercontent.com/gooofy/zamia-speech/master/data/src/speech/zamia_de/transcripts_00.csv",  # noqa
+    "en": "https://raw.githubusercontent.com/gooofy/zamia-speech/master/data/src/speech/zamia_en/transcripts_00.csv",  # noqa
 }
 
 
