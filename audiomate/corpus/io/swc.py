@@ -2,43 +2,44 @@ import os
 import re
 import xml.etree.ElementTree as ET
 
-from . import base
-
 import audiomate
-from audiomate.utils import jsonfile
-from audiomate import issuers
 from audiomate import annotations
+from audiomate import issuers
 from audiomate import tracks
+from audiomate.utils import jsonfile
+
+from . import base
 from . import downloader
 
-
-URLS = {
-    'de': 'https://www2.informatik.uni-hamburg.de/nats/pub/SWC/SWC_German.tar',
-    'en': 'https://www2.informatik.uni-hamburg.de/nats/pub/SWC/SWC_English.tar',
-    'nl': 'https://www2.informatik.uni-hamburg.de/nats/pub/SWC/SWC_Dutch.tar'
+BASE_URL = 'https://www2.informatik.uni-hamburg.de/nats/pub/SWC/{}.tar'
+LANGUAGES = {
+    'de': 'SWC_German',
+    'en': 'SWC_English',
+    'nl': 'SWC_Dutch',
 }
 
 READER_NAME_PATTERN = re.compile(r'user_name\s+=\s+(.*?)\n')
 READER_GENDER_PATTERN = re.compile(r'(gender|geschlecht)\s+=\s+(.*?)\n')
-
 MIN_SEGMENT_DURATION = 1.0
 
 
 class SWCDownloader(downloader.ArchiveDownloader):
     """
-    Downloader for the MUSAN Corpus.
+    Downloader for the SWC Corpus.
 
     Args:
         lang (str): The language to download.
     """
 
     def __init__(self, lang='de'):
-        url = URLS[lang]
-
-        super(SWCDownloader, self).__init__(
-            url,
-            move_files_up=True
-        )
+        if lang in LANGUAGES:
+            link = BASE_URL.format(LANGUAGES[lang])
+            super(SWCDownloader, self).__init__(
+                link, move_files_up=True, num_threads=1
+            )
+        else:
+            msg = "There is no swc URL present for language {}!"
+            raise ValueError(msg.format(lang))
 
     @classmethod
     def type(cls):
@@ -159,7 +160,7 @@ class SWCReader(base.CorpusReader):
 
         else:
             for i, af in enumerate(info['audio_files']):
-                path = os.path.join(article_path, 'audio{}.ogg'.format(i+1))
+                path = os.path.join(article_path, 'audio{}.ogg'.format(i + 1))
                 offset = af['offset']
                 audio_files[path] = offset
 
@@ -203,7 +204,7 @@ class SWCReader(base.CorpusReader):
         items = sorted(audio_files.items(), key=lambda x: x[1])
 
         for i in range(len(items) - 1):
-            if end <= items[i+1][1]:
+            if end <= items[i + 1][1]:
                 # Segment belongs to audiofile i
                 if start >= items[i][1]:
                     return items[i][0]

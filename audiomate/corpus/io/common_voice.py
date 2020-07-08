@@ -15,62 +15,63 @@ logger = logutil.getLogger()
 
 # ==================================================================================================
 
-DOWNLOAD_URLS = {
-    "ab": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/ab.tar.gz",  # noqa
-    "ar": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/ar.tar.gz",  # noqa
-    "as": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/as.tar.gz",  # noqa
-    "br": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/br.tar.gz",  # noqa
-    "ca": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/ca.tar.gz",  # noqa
-    "cnh": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/cnh.tar.gz",  # noqa
-    "cs": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/cs.tar.gz",  # noqa
-    "cv": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/cv.tar.gz",  # noqa
-    "cy": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/cy.tar.gz",  # noqa
-    "de": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/de.tar.gz",  # noqa
-    "dv": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/dv.tar.gz",  # noqa
-    "el": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/el.tar.gz",  # noqa
-    "en": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/en.tar.gz",  # noqa
-    "eo": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/eo.tar.gz",  # noqa
-    "es": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/es.tar.gz",  # noqa
-    "et": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/et.tar.gz",  # noqa
-    "eu": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/eu.tar.gz",  # noqa
-    "fa": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/fa.tar.gz",  # noqa
-    "fr": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/fr.tar.gz",  # noqa
-    "fy-NL": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/fy-NL.tar.gz",  # noqa
-    "ga-IE": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/ga-IE.tar.gz",  # noqa
-    "hsb": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/hsb.tar.gz",  # noqa
-    "ia": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/ia.tar.gz",  # noqa
-    "id": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/id.tar.gz",  # noqa
-    "it": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/it.tar.gz",  # noqa
-    "ja": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/ja.tar.gz",  # noqa
-    "ka": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/ka.tar.gz",  # noqa
-    "kab": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/kab.tar.gz",  # noqa
-    "ky": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/ky.tar.gz",  # noqa
-    "lv": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/lv.tar.gz",  # noqa
-    "mn": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/mn.tar.gz",  # noqa
-    "mt": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/mt.tar.gz",  # noqa
-    "nl": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/nl.tar.gz",  # noqa
-    "or": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/or.tar.gz",  # noqa
-    "pa-IN": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/pa-IN.tar.gz",  # noqa
-    "pl": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/pl.tar.gz",  # noqa
-    "pt": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/pt.tar.gz",  # noqa
-    "rm-sursilv": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/rm-sursilv.tar.gz",  # noqa
-    "rm-vallader": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/rm-vallader.tar.gz",  # noqa
-    "ro": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/ro.tar.gz",  # noqa
-    "ru": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/ru.tar.gz",  # noqa
-    "rw": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/rw.tar.gz",  # noqa
-    "sah": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/sah.tar.gz",  # noqa
-    "sl": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/sl.tar.gz",  # noqa
-    "sv-SE": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/sv-SE.tar.gz",  # noqa
-    "ta": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/ta.tar.gz",  # noqa
-    "tr": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/tr.tar.gz",  # noqa
-    "tt": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/tt.tar.gz",  # noqa
-    "uk": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/uk.tar.gz",  # noqa
-    "vi": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/vi.tar.gz",  # noqa
-    "vot": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/vot.tar.gz",  # noqa
-    "zh-CN": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/zh-CN.tar.gz",  # noqa
-    "zh-HK": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/zh-TW.tar.gz",  # noqa
-    "zh-TW": "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/zh-TW.tar.gz",  # noqa
-}  # noqa
+BASE_URL = "https://voice-prod-bundler-ee1969a6ce8178826482b88e843c335139bd3fb4.s3.amazonaws.com/cv-corpus-5-2020-06-22/{}.tar.gz"  # noqa
+LANGUAGES = {
+    "ab",
+    "ar",
+    "as",
+    "br",
+    "ca",
+    "cnh",
+    "cs",
+    "cv",
+    "cy",
+    "de",
+    "dv",
+    "el",
+    "en",
+    "eo",
+    "es",
+    "et",
+    "eu",
+    "fa",
+    "fr",
+    "fy-NL",
+    "ga-IE",
+    "hsb",
+    "ia",
+    "id",
+    "it",
+    "ja",
+    "ka",
+    "kab",
+    "ky",
+    "lv",
+    "mn",
+    "mt",
+    "nl",
+    "or",
+    "pa-IN",
+    "pl",
+    "pt",
+    "rm-sursilv",
+    "rm-vallader",
+    "ro",
+    "ru",
+    "rw",
+    "sah",
+    "sl",
+    "sv-SE",
+    "ta",
+    "tr",
+    "tt",
+    "uk",
+    "vi",
+    "vot",
+    "zh-CN",
+    "zh-HK",
+    "zh-TW",
+}
 
 
 # ==================================================================================================
@@ -87,10 +88,10 @@ class CommonVoiceDownloader(downloader.ArchiveDownloader):
     """
 
     def __init__(self, lang="de"):
-        if lang in DOWNLOAD_URLS.keys():
-            self.url = DOWNLOAD_URLS[lang]
+        if lang in LANGUAGES:
+            link = BASE_URL.format(lang)
             super(CommonVoiceDownloader, self).__init__(
-                self.url, move_files_up=True, num_threads=1
+                link, move_files_up=True, num_threads=1
             )
         else:
             msg = "There is no common-voice URL present for language {}!"

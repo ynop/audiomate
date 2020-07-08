@@ -1,26 +1,40 @@
 import os
 import re
-import tarfile
 import shutil
-
-import requests
+import tarfile
 
 import audiomate
-from . import base
+import requests
 from audiomate import annotations
 from audiomate import issuers
-from audiomate.utils import textfile
-from audiomate.utils import download
 from audiomate import logutil
+from audiomate.utils import download
+from audiomate.utils import textfile
+
+from . import base
 
 logger = logutil.getLogger()
 
-DOWNLOAD_URL = {
-    'de': 'http://www.repository.voxforge1.org/downloads/de/Trunk/Audio/Main/16kHz_16bit/',
-    'en': 'http://www.repository.voxforge1.org/downloads/en/Trunk/Audio/Main/16kHz_16bit/',
-    'es': 'http://www.repository.voxforge1.org/downloads/es/Trunk/Audio/Main/16kHz_16bit/',
-    'fr': 'http://www.repository.voxforge1.org/downloads/fr/Trunk/Audio/Main/16kHz_16bit/',
-    'it': 'http://www.repository.voxforge1.org/downloads/it/Trunk/Audio/Main/16kHz_16bit/'
+BASE_URL = "http://www.repository.voxforge1.org/downloads/{}/Trunk/Audio/Main/16kHz_16bit/"
+LANGUAGES = {
+    "bg",
+    "ca",
+    "de",
+    "el",
+    "en",
+    "es",
+    "fa",
+    "fr",
+    "he",
+    "hr",
+    "it",
+    "nl",
+    "pt",
+    "ru",
+    "sq",
+    "tr",
+    "uk",
+    "zh",
 }
 
 
@@ -40,8 +54,8 @@ class VoxforgeDownloader(base.CorpusDownloader):
         self.num_workers = num_workers
 
         if url is None:
-            if lang in DOWNLOAD_URL.keys():
-                self.url = DOWNLOAD_URL[lang]
+            if lang in LANGUAGES:
+                self.url = BASE_URL.format(lang)
             else:
                 raise ValueError('There is no voxforge URL present for language {}!'.format(lang))
 

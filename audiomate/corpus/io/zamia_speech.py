@@ -17,15 +17,9 @@ logger = logutil.getLogger()
 
 # ==================================================================================================
 
-urls_speech_dir = {
-    "de": "https://goofy.zamia.org/zamia-speech/corpora/zamia_de/",
-    "en": "https://goofy.zamia.org/zamia-speech/corpora/zamia_en/",
-}
 
-urls_transcripts = {
-    "de": "https://raw.githubusercontent.com/gooofy/zamia-speech/master/data/src/speech/zamia_de/transcripts_00.csv",  # noqa
-    "en": "https://raw.githubusercontent.com/gooofy/zamia-speech/master/data/src/speech/zamia_en/transcripts_00.csv",  # noqa
-}
+BASE_URL = "https://goofy.zamia.org/zamia-speech/corpora/zamia_{}/"
+LANGUAGES = {"de", "en"}
 
 
 # ==================================================================================================
@@ -35,8 +29,8 @@ class ZamiaSpeechDownloader(base.CorpusDownloader):
     """ Most of the code is take from the Voxforge downloader as the structure is similar """
 
     def __init__(self, lang="de"):
-        if lang in urls_speech_dir.keys():
-            self.url = urls_speech_dir[lang]
+        if lang in LANGUAGES:
+            self.url = BASE_URL.format(lang)
         else:
             msg = "There is no zamia-speech URL present for language {}!"
             raise ValueError(msg.format(lang))

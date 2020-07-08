@@ -5,97 +5,101 @@ import audiomate
 from audiomate import annotations
 from audiomate import issuers
 from audiomate import logutil
-from audiomate.utils import download
 
 from . import base
+from . import downloader
 
 logger = logutil.getLogger()
 
 # ==================================================================================================
 
-urls = {
-    "afr": "https://lingualibre.org/datasets/Q150-afr-Afrikaans.zip",
-    "amh": "https://lingualibre.org/datasets/Q154-amh-Amharic.zip",
-    "ara": "https://lingualibre.org/datasets/Q219-ara-Arabic.zip",
-    "arq": "https://lingualibre.org/datasets/Q6714-arq-AlgerianArabic.zip",
-    "ary": "https://lingualibre.org/datasets/Q264201-ary-MoroccanArabic.zip",
-    "atj": "https://lingualibre.org/datasets/Q52295-atj-Atikamekw.zip",
-    "bam": "https://lingualibre.org/datasets/Q318-bam-Bambara.zip",
-    "bas": "https://lingualibre.org/datasets/Q405-bas-Basaalanguage.zip",
-    "bbj": "https://lingualibre.org/datasets/Q52067-bbj-Ghomala%27%20language.zip",
-    "bci": "https://lingualibre.org/datasets/Q19858-bci-Baoul%C3%A9.zip",
-    "bcl": "https://lingualibre.org/datasets/Q115107-bcl-CentralBikol.zip",
-    "bdu": "https://lingualibre.org/datasets/Q52073-bdu-Oroko.zip",
-    "ben": "https://lingualibre.org/datasets/Q307-ben-Bengali.zip",
-    "bum": "https://lingualibre.org/datasets/Q52068-bum-Bululanguage.zip",
-    "bzm": "https://lingualibre.org/datasets/Q52074-bzm-Londo.zip",
-    "cat": "https://lingualibre.org/datasets/Q203-cat-Catalan.zip",
-    "ces": "https://lingualibre.org/datasets/Q392-ces-Czech.zip",
-    "cmn": "https://lingualibre.org/datasets/Q113-cmn-MandarinChinese.zip",
-    "cym": "https://lingualibre.org/datasets/Q141-cym-Welsh.zip",
-    "deu": "https://lingualibre.org/datasets/Q24-deu-German.zip",
-    "dua": "https://lingualibre.org/datasets/Q52071-dua-Duala.zip",
-    "dyu": "https://lingualibre.org/datasets/Q159-dyu-Dioulalanguage.zip",
-    "eng": "https://lingualibre.org/datasets/Q22-eng-English.zip",
-    "epo": "https://lingualibre.org/datasets/Q25-epo-Esperanto.zip",
-    "eus": "https://lingualibre.org/datasets/Q299-eus-Basque.zip",
-    "fin": "https://lingualibre.org/datasets/Q33-fin-Finnish.zip",
-    "fon": "https://lingualibre.org/datasets/Q242-fon-Fon.zip",
-    "fra": "https://lingualibre.org/datasets/Q21-fra-French.zip",
-    "gaa": "https://lingualibre.org/datasets/Q321-gaa-Ga.zip",
-    "gcf": "https://lingualibre.org/datasets/Q83641-gcf-GuadeloupeanCreoleFrench.zip",
-    "gre": "https://lingualibre.org/datasets/Q205-gre-Greek.zip",
-    "hat": "https://lingualibre.org/datasets/Q165-hat-HaitianCreole.zip",
-    "hav": "https://lingualibre.org/datasets/Q51299-hav-Havu.zip",
-    "heb": "https://lingualibre.org/datasets/Q397-heb-Hebrew.zip",
-    "hin": "https://lingualibre.org/datasets/Q123-hin-Hindi.zip",
-    "hye": "https://lingualibre.org/datasets/Q131-hye-Armenian.zip",
-    "ita": "https://lingualibre.org/datasets/Q385-ita-Italian.zip",
-    "jpn": "https://lingualibre.org/datasets/Q389-jpn-Japanese.zip",
-    "kab": "https://lingualibre.org/datasets/Q273-kab-Kabyle.zip",
-    "kan": "https://lingualibre.org/datasets/Q80-kan-Kannada.zip",
-    "ken": "https://lingualibre.org/datasets/Q204940-ken-Nyanglanguage.zip",
-    "ltz": "https://lingualibre.org/datasets/Q46-ltz-Luxembourgish.zip",
-    "mal": "https://lingualibre.org/datasets/Q437-mal-Malayalam.zip",
-    "mar": "https://lingualibre.org/datasets/Q34-mar-Marathi.zip",
-    "mis-can": "https://lingualibre.org/datasets/Q221062-mis-Cantonese.zip",
-    "mis-teo": "https://lingualibre.org/datasets/Q4465-mis-Teochewdialect.zip",
-    "mis-sur": "https://lingualibre.org/datasets/Q74905-mis-Sursilvan.zip",
-    "mis-gas": "https://lingualibre.org/datasets/Q930-mis-Gascondialect.zip",
-    "mis-lan": "https://lingualibre.org/datasets/Q931-mis-Languedociendialect.zip",
-    "mos": "https://lingualibre.org/datasets/Q170137-mos-Mossi.zip",
-    "myv": "https://lingualibre.org/datasets/Q231-myv-Erzya.zip",
-    "nld": "https://lingualibre.org/datasets/Q35-nld-Dutch.zip",
-    "nor": "https://lingualibre.org/datasets/Q45-nor-Norwegian.zip",
-    "nso": "https://lingualibre.org/datasets/Q258-nso-NorthernSotho.zip",
-    "oci": "https://lingualibre.org/datasets/Q311-oci-Occitan.zip",
-    "ori": "https://lingualibre.org/datasets/Q336-ori-Odia.zip",
-    "pan": "https://lingualibre.org/datasets/Q446-pan-Punjabi.zip",
-    "pol": "https://lingualibre.org/datasets/Q298-pol-Polish.zip",
-    "por": "https://lingualibre.org/datasets/Q126-por-Portuguese.zip",
-    "que": "https://lingualibre.org/datasets/Q388-que-Quechua.zip",
-    "rus": "https://lingualibre.org/datasets/Q129-rus-Russian.zip",
-    "sat": "https://lingualibre.org/datasets/Q339-sat-Santali.zip",
-    "shy": "https://lingualibre.org/datasets/Q4901-shy-Shawiyalanguage.zip",
-    "spa": "https://lingualibre.org/datasets/Q386-spa-Spanish.zip",
-    "srr": "https://lingualibre.org/datasets/Q101-srr-Serer.zip",
-    "swe": "https://lingualibre.org/datasets/Q44-swe-Swedish.zip",
-    "tam": "https://lingualibre.org/datasets/Q127-tam-Tamil.zip",
-    "tay": "https://lingualibre.org/datasets/Q51302-tay-Atayal.zip",
-    "tel": "https://lingualibre.org/datasets/Q39-tel-Telugu.zip",
-    "tgl": "https://lingualibre.org/datasets/Q169-tgl-Tagalog.zip",
-    "vie": "https://lingualibre.org/datasets/Q208-vie-Vietnamese.zip",
-    "zho": "https://lingualibre.org/datasets/Q130-zho-Chinese.zip",
+BASE_URL = "https://lingualibre.org/datasets/{}.zip"
+LANGUAGES = {
+    "afr": "Q150-afr-Afrikaans",
+    "amh": "Q154-amh-Amharic",
+    "ara": "Q219-ara-Arabic",
+    "arq": "Q6714-arq-AlgerianArabic",
+    "ary": "Q264201-ary-MoroccanArabic",
+    "atj": "Q52295-atj-Atikamekw",
+    "bam": "Q318-bam-Bambara",
+    "bas": "Q405-bas-Basaalanguage",
+    "bbj": "Q52067-bbj-Ghomala%27%20language",
+    "bci": "Q19858-bci-Baoul%C3%A9",
+    "bcl": "Q115107-bcl-CentralBikol",
+    "bdu": "Q52073-bdu-Oroko",
+    "ben": "Q307-ben-Bengali",
+    "bum": "Q52068-bum-Bululanguage",
+    "bzm": "Q52074-bzm-Londo",
+    "cat": "Q203-cat-Catalan",
+    "ces": "Q392-ces-Czech",
+    "cmn": "Q113-cmn-MandarinChinese",
+    "cym": "Q141-cym-Welsh",
+    "deu": "Q24-deu-German",
+    "dua": "Q52071-dua-Duala",
+    "dyu": "Q159-dyu-Dioulalanguage",
+    "eng": "Q22-eng-English",
+    "epo": "Q25-epo-Esperanto",
+    "eus": "Q299-eus-Basque",
+    "fin": "Q33-fin-Finnish",
+    "fon": "Q242-fon-Fon",
+    "fra": "Q21-fra-French",
+    "gaa": "Q321-gaa-Ga",
+    "gcf": "Q83641-gcf-GuadeloupeanCreoleFrench",
+    "gre": "Q205-gre-Greek",
+    "hat": "Q165-hat-HaitianCreole",
+    "hav": "Q51299-hav-Havu",
+    "heb": "Q397-heb-Hebrew",
+    "hin": "Q123-hin-Hindi",
+    "hye": "Q131-hye-Armenian",
+    "ita": "Q385-ita-Italian",
+    "jpn": "Q389-jpn-Japanese",
+    "kab": "Q273-kab-Kabyle",
+    "kan": "Q80-kan-Kannada",
+    "ken": "Q204940-ken-Nyanglanguage",
+    "ltz": "Q46-ltz-Luxembourgish",
+    "mal": "Q437-mal-Malayalam",
+    "mar": "Q34-mar-Marathi",
+    "mis-can": "Q221062-mis-Cantonese",
+    "mis-teo": "Q4465-mis-Teochewdialect",
+    "mis-sur": "Q74905-mis-Sursilvan",
+    "mis-gas": "Q930-mis-Gascondialect",
+    "mis-lan": "Q931-mis-Languedociendialect",
+    "mos": "Q170137-mos-Mossi",
+    "myv": "Q231-myv-Erzya",
+    "nld": "Q35-nld-Dutch",
+    "nor": "Q45-nor-Norwegian",
+    "nso": "Q258-nso-NorthernSotho",
+    "oci": "Q311-oci-Occitan",
+    "ori": "Q336-ori-Odia",
+    "pan": "Q446-pan-Punjabi",
+    "pol": "Q298-pol-Polish",
+    "por": "Q126-por-Portuguese",
+    "que": "Q388-que-Quechua",
+    "rus": "Q129-rus-Russian",
+    "sat": "Q339-sat-Santali",
+    "shy": "Q4901-shy-Shawiyalanguage",
+    "spa": "Q386-spa-Spanish",
+    "srr": "Q101-srr-Serer",
+    "swe": "Q44-swe-Swedish",
+    "tam": "Q127-tam-Tamil",
+    "tay": "Q51302-tay-Atayal",
+    "tel": "Q39-tel-Telugu",
+    "tgl": "Q169-tgl-Tagalog",
+    "vie": "Q208-vie-Vietnamese",
+    "zho": "Q130-zho-Chinese",
 }
 
 
 # ==================================================================================================
 
 
-class LinguaLibreDownloader(base.CorpusDownloader):
+class LinguaLibreDownloader(downloader.ArchiveDownloader):
     def __init__(self, lang="deu"):
-        if lang in urls.keys():
-            self.url = urls[lang]
+        if lang in LANGUAGES:
+            link = BASE_URL.format(LANGUAGES[lang])
+            super(LinguaLibreDownloader, self).__init__(
+                link, move_files_up=True, num_threads=1
+            )
         else:
             msg = "There is no lingualibre URL present for language {}!"
             raise ValueError(msg.format(lang))
@@ -104,25 +108,13 @@ class LinguaLibreDownloader(base.CorpusDownloader):
     def type(cls):
         return "lingualibre"
 
-    # ==============================================================================================
-
-    def _download(self, target_path):
-        """ Download the data to target_path """
-
-        os.makedirs(target_path, exist_ok=True)
-        tmp_file = os.path.join(target_path, "tmp_lingualibre.zip")
-
-        download.download_file(self.url, tmp_file, num_threads=1)
-        download.extract_zip(tmp_file, target_path)
-        os.remove(tmp_file)
-
 
 # ==================================================================================================
 
 
 class LinguaLibreReader(base.CorpusReader):
     """ Reader for collections of lingualibre audio data.
-    The reader expects extracted .zip files in the given folder """
+    The reader expects extracted  files in the given folder """
 
     @classmethod
     def type(cls):
