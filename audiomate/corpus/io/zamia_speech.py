@@ -26,7 +26,10 @@ LANGUAGES = {"de", "en"}
 
 
 class ZamiaSpeechDownloader(base.CorpusDownloader):
-    """ Most of the code is take from the Voxforge downloader as the structure is similar """
+    """
+    See: https://goofy.zamia.org/zamia-speech/corpora/
+    Most of the code is taken from the Voxforge downloader as the structure is similar
+    """
 
     def __init__(self, lang="de"):
         if lang in LANGUAGES:
@@ -99,7 +102,7 @@ class ZamiaSpeechDownloader(base.CorpusDownloader):
             if status:
                 downloaded_files.append(path_or_msg)
             else:
-                logger.info("Download failed for url %s", url)
+                logger.warn("Download failed for url %s", url)
 
         return downloaded_files
 
@@ -126,9 +129,11 @@ class ZamiaSpeechDownloader(base.CorpusDownloader):
 
 
 class ZamiaSpeechReader(base.CorpusReader):
-    """ Reader for collections of zamia speech audio data.
+    """
+    Reader for collections of zamia speech audio data.
     The reader expects extracted .tgz files in the given folder.
-    Most of the code is take from the Voxforge reader as the structure is similar """
+    Most of the code is take from the Voxforge reader as the structure is similar
+    """
 
     @classmethod
     def type(cls):
