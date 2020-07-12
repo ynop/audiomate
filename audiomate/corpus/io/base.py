@@ -97,8 +97,12 @@ class CorpusReader(metaclass=abc.ABCMeta):
             Corpus: The loaded corpus
 
         Raises:
+            IOError: When the provided path does not exist.
             IOError: When the data set is invalid, for example because required files (annotations, …) are missing.
         """
+        if not os.path.exists(path):
+            raise IOError('Invalid path provided: {} not found'.format(path))
+
         # Check for missing files
         missing_files = self._check_for_missing_files(path)
 
