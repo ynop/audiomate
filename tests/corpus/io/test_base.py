@@ -40,3 +40,31 @@ class TestCorpusDownloader:
 
         with pytest.raises(IOError):
             corpus_dl.download(target_folder, force_redownload=False)
+
+
+def create_mock_corpus_reader():
+
+    class MockCorpusReader(base.CorpusReader):
+
+        @classmethod
+        def type(cls):
+            return 'mock'
+
+        def _load(self, path):
+            return
+
+        def _check_for_missing_files(self, path):
+            return []
+
+    return MockCorpusReader()
+
+
+class TestCorpusReader:
+
+    def test_invalid_path_forces_io_error(self, tmpdir):
+        target_folder = tmpdir.strpath
+        corpus_reader = create_mock_corpus_reader()
+
+        with pytest.raises(IOError):
+            path = os.path.join(target_folder, 'tmp')
+            corpus_reader.load(path)
