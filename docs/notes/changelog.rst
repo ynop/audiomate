@@ -4,15 +4,22 @@ Changelog
 Next Version
 ------------
 
+v6.0.0
+------
+
 **Breaking Changes**
 
 * Drop support of Python 3.5 because a required dependency (llvmlite) does not support it anymore.
 
 **New Features**
 
-* Setup consistent way for logging. (:ref:`logging`):
+* Setup consistent way for logging. (:ref:`logging`)
 
-* Added downloader (:class:`audiomate.corpus.io.CommonVoiceDownloader`) for the `Common Voice Corpora <https://voice.mozilla.org/de/datasets>`
+* Added downloader (:class:`audiomate.corpus.io.CommonVoiceDownloader`) for the `Common Voice Corpora <https://voice.mozilla.org/de/datasets>`_.
+
+* Add existence checks for reader (:class:`audiomate.corpus.io.CorpusReader`) to see if folder exists.
+
+* Add existence checks and a option for forcing redownload for downloader (:class:`audiomate.corpus.io.CorpusDownloader`).
 
 v5.2.0
 ------
