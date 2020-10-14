@@ -95,7 +95,7 @@ class VoxforgeDownloader(base.CorpusDownloader):
             try:
                 dl_result = download.download_files(url_to_target, num_threads=self.num_workers)
             except ConnectionError as e:
-                logger.info('Remote end closed connection without response. Trying again in 5 seconds...', e)
+                logger.info('Remote end closed connection without response. Trying again in 5 seconds... %s', e)
                 time.sleep(5)
                 continue
             break
