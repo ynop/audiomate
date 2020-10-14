@@ -90,7 +90,14 @@ class VoxforgeDownloader(base.CorpusDownloader):
             target_file_path = os.path.join(target_path, file_name)
             url_to_target[file_url] = target_file_path
 
-        dl_result = download.download_files(url_to_target, num_threads=self.num_workers)
+        while True:
+            try:
+                dl_result = download.download_files(url_to_target, num_threads=self.num_workers)
+            except:
+                logger.info('Failed to download file. Remote end closed connection without response. Trying again in 5 seconds...')
+                time.sleep(5)
+                continue
+            break
 
         downloaded_files = []
         for url, status, path_or_msg in dl_result:
