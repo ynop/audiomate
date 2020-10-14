@@ -2,6 +2,7 @@ import os
 import re
 import tarfile
 import shutil
+import time
 
 import requests
 
@@ -93,8 +94,8 @@ class VoxforgeDownloader(base.CorpusDownloader):
         while True:
             try:
                 dl_result = download.download_files(url_to_target, num_threads=self.num_workers)
-            except:
-                logger.info('Failed to download file. Remote end closed connection without response. Trying again in 5 seconds...')
+            except ConnectionError as e:
+                logger.info('Remote end closed connection without response. Trying again in 5 seconds...', e)
                 time.sleep(5)
                 continue
             break
