@@ -8,6 +8,7 @@ from audiomate import logutil
 from audiomate.utils import download
 from audiomate.utils import textfile
 from . import base
+import time
 
 logger = logutil.getLogger()
 
@@ -137,6 +138,15 @@ class TatoebaDownloader(base.CorpusDownloader):
             os.makedirs(audio_folder, exist_ok=True)
 
             download_url = 'https://audio.tatoeba.org/sentences/{}/{}.mp3'.format(record[2], record[0])
+            while True:
+                try:
+                    download.download_file(download_url, audio_file)
+                except ConnectionError as e:
+                    logger.info('Remote end closed connection without response. Trying again in 5 seconds... %s', e)
+                    time.sleep(5)
+                    continue
+                break
+
             download.download_file(download_url, audio_file)
 
 
