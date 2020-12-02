@@ -137,16 +137,16 @@ class TatoebaDownloader(base.CorpusDownloader):
             audio_file = os.path.join(audio_folder, '{}.mp3'.format(record[0]))
             os.makedirs(audio_folder, exist_ok=True)
 
-	    download_url = 'https://audio.tatoeba.org/sentences/{}/{}.mp3'.format(record[2], record[0])
-	    while True:
-	        try:
-	            download.download_file(download_url, audio_file)
-	        except ConnectionError as e:
-	            logger.info('Remote end closed connection without response. Trying again in 5 seconds...', e)
-	            logger.info('Remote end closed connection without response. Trying again in 5 seconds... %s', e)
-	            time.sleep(5)
-	            continue
-	        break
+            download_url = 'https://audio.tatoeba.org/sentences/{}/{}.mp3'.format(record[2], record[0])
+            while True:
+                try:
+                    download.download_file(download_url, audio_file)
+                except ConnectionError as e:
+                    logger.info('Remote end closed connection without response. Trying again in 5 seconds...', e)
+                    logger.info('Remote end closed connection without response. Trying again in 5 seconds... %s', e)
+                    time.sleep(5)
+                    continue
+                break
 
             download.download_file(download_url, audio_file)
 
