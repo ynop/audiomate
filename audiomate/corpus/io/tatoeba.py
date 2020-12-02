@@ -142,7 +142,6 @@ class TatoebaDownloader(base.CorpusDownloader):
                 try:
                     download.download_file(download_url, audio_file)
                 except ConnectionError as e:
-                    logger.info('Remote end closed connection without response. Trying again in 5 seconds...', e)
                     logger.info('Remote end closed connection without response. Trying again in 5 seconds... %s', e)
                     time.sleep(5)
                     continue
