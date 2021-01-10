@@ -98,7 +98,7 @@ class CommonVoiceReader(base.CorpusReader):
             # We don't want to include the invalidated files
             # since there maybe corrupt files
             # reported utterances are also causing issue, e.g. empty entries
-            if basename != 'invalidated' and basename != 'reported':
+            if basename not in ('invalidated', 'reported'):
                 subset_ids.append(basename)
 
         return subset_ids
