@@ -67,7 +67,10 @@ def download_file(url, target_path, num_threads=1):
             url
         ))
 
-    file_size = int(requests.head(url).headers['Content-Length'])
+    if r.headers['Content-Length']:
+        file_size = int(r.headers['Content-Length'])
+    else:
+        file_size = int(requests.head(url).headers['Content-Length'])
     bytes_loaded = 0
     bytes_since_last_log = 0
     logger.info('Download file from "%s" with size: %d B', url, file_size)
