@@ -13,9 +13,12 @@ from . import downloader
 
 
 URLS = {
-    'de': 'https://corpora.uni-hamburg.de/hzsk/de/islandora/object/file:swc-2.0_de-with-audio/datastream/TAR/de-with-audio.tar',
-    'en': 'https://corpora.uni-hamburg.de/hzsk/de/islandora/object/file:swc-2.0_en-with-audio/datastream/TAR/en-with-audio.tar',
-    'nl': 'https://corpora.uni-hamburg.de/hzsk/de/islandora/object/file:swc-2.0_nl-with-audio/datastream/TAR/nl-with-audio.tar'
+    'de': 'https://corpora.uni-hamburg.de/hzsk/de/islandora/object/file:swc-2.0_de-with-audio/datastream/'
+          'TAR/de-with-audio.tar',
+    'en': 'https://corpora.uni-hamburg.de/hzsk/de/islandora/object/file:swc-2.0_en-with-audio/datastream/'
+          'TAR/en-with-audio.tar',
+    'nl': 'https://corpora.uni-hamburg.de/hzsk/de/islandora/object/file:swc-2.0_nl-with-audio/datastream/'
+          'TAR/nl-with-audio.tar'
 }
 
 READER_NAME_PATTERN = re.compile(r'user_name\s+=\s+(.*?)\n')
