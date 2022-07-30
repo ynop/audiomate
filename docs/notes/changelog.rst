@@ -4,6 +4,17 @@ Changelog
 Next Version
 ------------
 
+v7.0.0
+------
+
+**Breaking Changes**
+
+* Drop support of Python 3.6 since EOL was `reached <https://peps.python.org/pep-0494/#lifespan>`_ in december 2021
+
+**Fixes**
+
+* Added a **name** column to the implementations table in the docs (:ref:`io_implementations`)
+
 v6.0.0
 ------
 

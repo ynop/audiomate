@@ -98,9 +98,9 @@ class ContainerTrack(track.Track):
 
             if sr is not None and sr != native_sr:
                 samples = librosa.core.resample(
-                    samples,
-                    native_sr,
-                    sr,
+                    y=samples,
+                    orig_sr=native_sr,
+                    target_sr=sr,
                     res_type='kaiser_best'
                 )
 

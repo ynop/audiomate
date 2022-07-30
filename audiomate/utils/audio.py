@@ -1,7 +1,7 @@
 import librosa
 from audiomate.utils import audioread
 import numpy as np
-import scipy
+from scipy.io import wavfile
 
 
 def process_buffer(buffer, n_channels):
@@ -150,4 +150,4 @@ def write_wav(path, samples, sr=16000):
     """
     max_value = np.abs(np.iinfo(np.int16).min)
     data = (samples * max_value).astype(np.int16)
-    scipy.io.wavfile.write(path, sr, data)
+    wavfile.write(path, sr, data)

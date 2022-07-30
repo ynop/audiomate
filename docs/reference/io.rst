@@ -38,34 +38,35 @@ Implementations
 .. table:: Support for Reading and Writing by Format
 
 
-  ================================  ========  =====  =======
-  Format                            Download  Read   Write
-  ================================  ========  =====  =======
-  Acoustic Event Dataset            x         x
-  AudioMNIST                        x         x
-  Broadcast                                   x
-  Common Voice                      x         x
-  Default                                     x      x
-  ESC-50                            x         x
-  Free-Spoken-Digit-Dataset         x         x
-  Folder                                      x
-  Fluent Speech Commands Dataset              x
-  Google Speech Commands                      x
-  GTZAN                             x         x
-  Kaldi                                       x      x
-  LibriSpeech                       x         x
-  Mozilla DeepSpeech                                 x
-  MUSAN                             x         x
-  M-AILABS Speech Dataset           x         x
-  LITIS Rouen Audio scene dataset   x         x
-  Spoken Wikipedia Corpora          x         x
-  Tatoeba                           x         x
-  TIMIT                                       x
-  TUDA German Distant Speech        x         x
-  Urbansound8k                                x
-  VoxForge                          x         x
-  Wav2Letter                                         x
-  ================================  ========  =====  =======
+  ================================  ========  =====  ======= ==================
+  Format                            Download  Read   Write   Key (for reading and writing)
+  ================================  ========  =====  ======= ==================
+  Acoustic Event Dataset            x         x              aed
+  AudioMNIST                        x         x              audio-mnist
+  Broadcast                                   x              broadcast
+  Common Voice                      x         x              common-voice
+  Default                                     x      x       default
+  ESC-50                            x         x              esc-50
+  Free-Spoken-Digit-Dataset         x         x              free-spoken-digits
+  Folder                                      x              folder
+  Fluent Speech Commands Dataset              x              fluent-speech
+  Google Speech Commands                      x              speech-commands
+  GTZAN                             x         x              gtzan
+  Kaldi                                       x      x       kaldi
+  LibriSpeech                       x         x              librispeech
+  Mozilla DeepSpeech                                 x       mozilla-deepspeech
+  MUSAN                             x         x              musan
+  M-AILABS Speech Dataset           x         x              mailabs
+  NVIDIA Jasper                                      x       nvidia-jasper
+  LITIS Rouen Audio scene dataset   x         x              rouen
+  Spoken Wikipedia Corpora          x         x              swc
+  Tatoeba                           x         x              tatoeba
+  TIMIT                                       x              timit
+  TUDA German Distant Speech        x         x              tuda
+  Urbansound8k                                x              urbansound8k
+  VoxForge                          x         x              voxforge
+  Wav2Letter                                         x       wav2letter
+  ================================  ========  =====  ======= ==================
 
 Acoustic Event Dataset
 ^^^^^^^^^^^^^^^^^^^^^^
