@@ -27,3 +27,4 @@ Relabeling
 Exceptions
 ----------
 .. autoexception:: audiomate.annotations.relabeling.UnmappedLabelsException
+		:noindex:

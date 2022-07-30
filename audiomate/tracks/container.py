@@ -17,6 +17,7 @@ class ContainerTrack(track.Track):
                    If ``None``, it is assumed it's the same
                    as ``idx``.
     """
+
     __slots__ = ['container', 'key']
 
     def __init__(self, idx, container, key=None):
@@ -45,24 +46,24 @@ class ContainerTrack(track.Track):
 
     @property
     def sampling_rate(self):
-        """ Return the sampling rate. """
+        """Return the sampling rate."""
         with self.container.open_if_needed(mode='r') as cnt:
             return cnt.get(self.key)[1]
 
     @property
     def num_channels(self):
-        """ Return the number of channels. """
+        """Return the number of channels."""
         return 1
 
     @property
     def num_samples(self):
-        """ Return the total number of samples. """
+        """Return the total number of samples."""
         with self.container.open_if_needed(mode='r') as cnt:
             return cnt.get(self.key)[0].shape[0]
 
     @property
     def duration(self):
-        """ Return the duration in seconds. """
+        """Return the duration in seconds."""
         with self.container.open_if_needed(mode='r') as cnt:
             samples, sr = cnt.get(self.key)
 
@@ -98,9 +99,9 @@ class ContainerTrack(track.Track):
 
             if sr is not None and sr != native_sr:
                 samples = librosa.core.resample(
-                    samples,
-                    native_sr,
-                    sr,
+                    y=samples,
+                    orig_sr=native_sr,
+                    target_sr=sr,
                     res_type='kaiser_best'
                 )
 

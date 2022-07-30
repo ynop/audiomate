@@ -219,7 +219,7 @@ class KaldiWriter(base.CorpusWriter):
 
                 target_path = os.path.join(
                     export_path,
-                    '{}.wav'.format(track.idx)
+                    f'{track.idx}.wav'
                 )
 
                 max_value = np.iinfo(np.int16).max
@@ -252,7 +252,7 @@ class KaldiWriter(base.CorpusWriter):
         if ext == '.wav':
             return abs_path
         else:
-            return 'sox {} -t wav - |'.format(abs_path)
+            return f'sox {abs_path} -t wav - |'
 
     def _write_segments(self, utterance_path, corpus):
         utterances = corpus.utterances.values()
@@ -309,7 +309,7 @@ class KaldiWriter(base.CorpusWriter):
 
             if self.main_label_list_idx in utterance.label_lists.keys():
                 label_list = utterance.label_lists[self.main_label_list_idx]
-                transcriptions[utt_idx] = ' '.join(l.value for l in label_list)
+                transcriptions[utt_idx] = ' '.join(label.value for label in label_list)
 
         textfile.write_separated_lines(
             text_path,
@@ -349,16 +349,15 @@ class KaldiWriter(base.CorpusWriter):
 
             fc.close()
 
-            ark_path = os.path.join(path, '{}.ark'.format(FEATS_FILE_NAME))
+            ark_path = os.path.join(path, f'{FEATS_FILE_NAME}.ark')
             ark_path = os.path.abspath(ark_path)
-            scp_path = os.path.join(path, '{}.scp'.format(FEATS_FILE_NAME))
+            scp_path = os.path.join(path, f'{FEATS_FILE_NAME}.scp')
 
             self.write_float_matrices(scp_path, ark_path, matrices)
 
     @staticmethod
     def feature_scp_generator(path):
-        """ Return a generator over all feature matrices defined in a scp. """
-
+        """Return a generator over all feature matrices defined in a scp."""
         scp_entries = textfile.read_key_value_lines(path, separator=' ')
 
         for utterance_id, rx_specifier in scp_entries.items():
@@ -366,8 +365,7 @@ class KaldiWriter(base.CorpusWriter):
 
     @staticmethod
     def read_float_matrix(rx_specifier):
-        """ Return float matrix as np array for the given rx specifier. """
-
+        """Return float matrix as np array for the given rx specifier."""
         path, offset = rx_specifier.strip().split(':', maxsplit=1)
         offset = int(offset)
         sample_format = 4
@@ -412,7 +410,7 @@ class KaldiWriter(base.CorpusWriter):
         if (self.prefix_utterances_with_speaker and
                 utt.issuer is not None and
                 not utt.idx.startswith(utt.issuer.idx)):
-            return '{}-{}'.format(utt.issuer.idx, utt.idx)
+            return f'{utt.issuer.idx}-{utt.idx}'
         else:
             return utt.idx
 
@@ -422,7 +420,6 @@ class KaldiWriter(base.CorpusWriter):
         Write the given dict matrices (utt-id/float ndarray)
         to the given scp and ark files.
         """
-
         scp_entries = []
 
         with open(ark_path, 'wb') as f:
@@ -433,7 +430,7 @@ class KaldiWriter(base.CorpusWriter):
                     msg = 'Features of utterance "{}" are have not type float 32!'
                     raise ValueError(msg.format(utterance_id))
 
-                f.write(('{} '.format(utterance_id)).encode('utf-8'))
+                f.write(f'{utterance_id} '.encode('utf-8'))
 
                 offset = f.tell()
 
@@ -449,11 +446,7 @@ class KaldiWriter(base.CorpusWriter):
                 )
                 flattened.tofile(f, sep='')
 
-                scp_entries.append('{} {}:{}'.format(
-                    utterance_id,
-                    ark_path,
-                    offset
-                ))
+                scp_entries.append(f'{utterance_id} {ark_path}:{offset}')
 
         with open(scp_path, 'w') as f:
             f.write('\n'.join(scp_entries))

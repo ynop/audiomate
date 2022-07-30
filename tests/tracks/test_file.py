@@ -3,6 +3,7 @@ import os
 import pytest
 import numpy as np
 import librosa
+from audiomate.utils import audio
 
 from audiomate import tracks
 
@@ -131,7 +132,7 @@ class TestFile:
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(10044)
 
-        librosa.output.write_wav(wav_path, wav_content, 16000)
+        audio.write_wav(wav_path, wav_content, 16000)
         file_obj = tracks.FileTrack('some_idx', wav_path)
 
         data = list(file_obj.read_frames(frame_size=400, hop_size=160))
