@@ -1,7 +1,7 @@
 import os
 
 import numpy as np
-import librosa
+from audiomate.utils import audio
 import h5py
 
 import pytest
@@ -65,7 +65,7 @@ class TestProcessor:
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(22)
 
-        librosa.output.write_wav(wav_path, wav_content, 4)
+        audio.write_wav(wav_path, wav_content, 4)
         file_track = tracks.FileTrack('idx', wav_path)
 
         processed = processor.process_track(file_track, frame_size=4, hop_size=2)
@@ -85,7 +85,7 @@ class TestProcessor:
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(22)
 
-        librosa.output.write_wav(wav_path, wav_content, 16000)
+        audio.write_wav(wav_path, wav_content, 16000)
         file_track = tracks.FileTrack('idx', wav_path)
 
         processed = processor.process_track(file_track, frame_size=4096, hop_size=2048, sr=16000)
@@ -103,7 +103,7 @@ class TestProcessor:
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(0)
 
-        librosa.output.write_wav(wav_path, wav_content, 16000)
+        audio.write_wav(wav_path, wav_content, 16000)
         file_track = tracks.FileTrack('idx', wav_path)
 
         with pytest.raises(ValueError):
@@ -113,7 +113,7 @@ class TestProcessor:
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(22)
 
-        librosa.output.write_wav(wav_path, wav_content, 4)
+        audio.write_wav(wav_path, wav_content, 4)
         file_track = tracks.FileTrack('idx', wav_path)
 
         processed = processor.process_track(file_track, frame_size=4, hop_size=2, sr=2)
@@ -134,7 +134,7 @@ class TestProcessor:
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(174)
 
-        librosa.output.write_wav(wav_path, wav_content, 16000)
+        audio.write_wav(wav_path, wav_content, 16000)
         track = tracks.FileTrack('idx', wav_path)
 
         chunks = list(processor.process_track_online(track, frame_size=20, hop_size=10, chunk_size=8))
@@ -154,7 +154,7 @@ class TestProcessor:
         wav_path = os.path.join(tmpdir.strpath, 'file.wav')
         wav_content = np.random.random(170)
 
-        librosa.output.write_wav(wav_path, wav_content, 16000)
+        audio.write_wav(wav_path, wav_content, 16000)
         track = tracks.FileTrack('idx', wav_path)
 
         chunks = list(processor.process_track_online(track, frame_size=20, hop_size=10, chunk_size=8))

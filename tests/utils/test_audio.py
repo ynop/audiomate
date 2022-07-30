@@ -1,7 +1,6 @@
 import os
 
 import numpy as np
-import librosa
 
 from audiomate import tracks
 from audiomate.utils import audio
@@ -10,7 +9,8 @@ from audiomate.utils import audio
 def test_read_blocks(tmpdir):
     wav_path = os.path.join(tmpdir.strpath, 'file.wav')
     wav_content = np.random.random(10000)
-    librosa.output.write_wav(wav_path, wav_content, 16000)
+
+    audio.write_wav(wav_path, wav_content, 16000)
 
     blocks = list(audio.read_blocks(wav_path, buffer_size=1000))
 
@@ -21,7 +21,7 @@ def test_read_blocks(tmpdir):
 def test_read_blocks_with_start_end(tmpdir):
     wav_path = os.path.join(tmpdir.strpath, 'file.wav')
     wav_content = np.random.random(10000)
-    librosa.output.write_wav(wav_path, wav_content, 16000)
+    audio.write_wav(wav_path, wav_content, 16000)
 
     blocks = list(audio.read_blocks(wav_path, start=0.1, end=0.3, buffer_size=1000))
 
@@ -32,7 +32,7 @@ def test_read_blocks_with_start_end(tmpdir):
 def test_read_frames(tmpdir):
     wav_path = os.path.join(tmpdir.strpath, 'file.wav')
     wav_content = np.random.random(10044)
-    librosa.output.write_wav(wav_path, wav_content, 16000)
+    audio.write_wav(wav_path, wav_content, 16000)
 
     data = list(audio.read_frames(wav_path, frame_size=400, hop_size=160))
     frames = np.array([x[0] for x in data])
@@ -50,7 +50,7 @@ def test_read_frames(tmpdir):
 def test_read_frames_matches_length(tmpdir):
     wav_path = os.path.join(tmpdir.strpath, 'file.wav')
     wav_content = np.random.random(10000)
-    librosa.output.write_wav(wav_path, wav_content, 16000)
+    audio.write_wav(wav_path, wav_content, 16000)
 
     data = list(audio.read_frames(wav_path, frame_size=400, hop_size=160))
     frames = np.array([x[0] for x in data])
