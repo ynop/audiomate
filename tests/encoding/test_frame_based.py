@@ -115,7 +115,7 @@ class TestFrameOrdinalEncoder:
                                            sr=16000)
 
         actual = enc.encode_utterance(ds.utterances['utt-6'])
-        expected = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0]).astype(np.int)
+        expected = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0]).astype(int)
 
         assert np.array_equal(expected, actual)
 
@@ -134,7 +134,7 @@ class TestFrameOrdinalEncoder:
                                            sr=16000)
 
         actual = enc.encode_utterance(utt)
-        expected = np.array([0, 0, 0, 0, 1, 1, 1]).astype(np.int)
+        expected = np.array([0, 0, 0, 0, 1, 1, 1]).astype(int)
 
         assert np.array_equal(expected, actual)
 
@@ -153,6 +153,6 @@ class TestFrameOrdinalEncoder:
                                            sr=16000)
 
         actual = enc.encode_utterance(utt)
-        expected = np.array([1, 1, 0, 0]).astype(np.int)
+        expected = np.array([1, 1, 0, 0]).astype(int)
 
         assert np.array_equal(expected, actual)

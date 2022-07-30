@@ -28,7 +28,7 @@ META_PATTERN = re.compile(LABEL_META_REGEX)
 
 
 class DefaultReader(base.CorpusReader):
-    """ Reads corpora in the Default format. """
+    """Reads corpora in the Default format."""
 
     @classmethod
     def type(cls):
@@ -145,9 +145,9 @@ class DefaultReader(base.CorpusReader):
     @staticmethod
     def read_labels(path, corpus):
 
-        for label_file in glob.glob(os.path.join(path, '{}_*.txt'.format(LABEL_FILE_PREFIX))):
+        for label_file in glob.glob(os.path.join(path, f'{LABEL_FILE_PREFIX}_*.txt')):
             file_name = os.path.basename(label_file)
-            key = file_name[len('{}_'.format(LABEL_FILE_PREFIX)):len(file_name) - len('.txt')]
+            key = file_name[len(f'{LABEL_FILE_PREFIX}_'):len(file_name) - len('.txt')]
 
             utterance_labels = collections.defaultdict(list)
 
@@ -197,7 +197,7 @@ class DefaultReader(base.CorpusReader):
                 container_path = entry[1]
                 key = entry[2]
 
-                if container_path in audio_containers.keys():
+                if container_path in audio_containers:
                     container = audio_containers[key]
                 else:
                     abs_path = os.path.abspath(os.path.join(base_path, container_path))
@@ -208,9 +208,9 @@ class DefaultReader(base.CorpusReader):
 
     @staticmethod
     def read_subviews(path, corpus):
-        for sv_file in glob.glob(os.path.join(path, '{}_*.txt'.format(SUBVIEW_FILE_PREFIX))):
+        for sv_file in glob.glob(os.path.join(path, f'{SUBVIEW_FILE_PREFIX}_*.txt')):
             file_name = os.path.basename(sv_file)
-            key = file_name[len('{}_'.format(SUBVIEW_FILE_PREFIX)):len(file_name) - len('.txt')]
+            key = file_name[len(f'{SUBVIEW_FILE_PREFIX}_'):len(file_name) - len('.txt')]
 
             with open(sv_file, 'r') as f:
                 content = f.read().strip()
@@ -220,7 +220,7 @@ class DefaultReader(base.CorpusReader):
 
 
 class DefaultWriter(base.CorpusWriter):
-    """ Writes corpora in the Default format. """
+    """Writes corpora in the Default format."""
 
     @classmethod
     def type(cls):
@@ -298,9 +298,8 @@ class DefaultWriter(base.CorpusWriter):
                 if issuer.native_language not in ['', None]:
                     issuer_data['native_language'] = issuer.native_language
 
-            elif type(issuer) is issuers.Artist:
-                if issuer.name not in ['', None]:
-                    issuer_data['name'] = issuer.name
+            elif type(issuer) is issuers.Artist and issuer.name not in ['', None]:
+                issuer_data['name'] = issuer.name
 
             data[issuer.idx] = issuer_data
 
@@ -340,23 +339,23 @@ class DefaultWriter(base.CorpusWriter):
         for utterance in corpus.utterances.values():
             for label_list_idx, label_list in utterance.label_lists.items():
                 utt_records = []
-                for l in label_list:
-                    start = l.start
-                    end = l.end
+                for label in label_list:
+                    start = label.start
+                    end = label.end
 
                     if end == float('inf'):
                         end = -1
 
-                    if len(l.meta) > 0:
-                        value = '{} [{}]'.format(l.value, json.dumps(l.meta, sort_keys=True))
+                    if len(label.meta) > 0:
+                        value = f'{label.value} [{json.dumps(label.meta, sort_keys=True)}]'
                         utt_records.append((utterance.idx, start, end, value))
                     else:
-                        utt_records.append((utterance.idx, start, end, l.value))
+                        utt_records.append((utterance.idx, start, end, label.value))
 
                 records[label_list_idx].extend(utt_records)
 
         for label_list_idx, label_list_records in records.items():
-            file_path = os.path.join(path, '{}_{}.txt'.format(LABEL_FILE_PREFIX, label_list_idx))
+            file_path = os.path.join(path, f'{LABEL_FILE_PREFIX}_{label_list_idx}.txt')
             textfile.write_separated_lines(file_path, label_list_records, separator=' ')
 
     @staticmethod
@@ -367,6 +366,6 @@ class DefaultWriter(base.CorpusWriter):
     @staticmethod
     def write_subviews(path, corpus):
         for name, sv in corpus.subviews.items():
-            sv_path = os.path.join(path, '{}_{}.txt'.format(SUBVIEW_FILE_PREFIX, name))
+            sv_path = os.path.join(path, f'{SUBVIEW_FILE_PREFIX}_{name}.txt')
             with open(sv_path, 'w') as f:
                 f.write(sv.serialize())

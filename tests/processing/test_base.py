@@ -1,14 +1,12 @@
 import os
 
 import numpy as np
-from audiomate.utils import audio
 import h5py
 
 import pytest
 
-from audiomate import tracks
-from audiomate import containers
-from audiomate import processing
+from audiomate import tracks, containers, processing
+from audiomate.utils import audio
 
 from tests import resources
 

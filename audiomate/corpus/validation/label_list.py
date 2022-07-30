@@ -29,7 +29,7 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
         self.num_threads = num_threads
 
     def name(self):
-        return 'Utterance-Transcription-Ratio ({})'.format(self.label_list_idx)
+        return f'Utterance-Transcription-Ratio ({self.label_list_idx})'
 
     def validate(self, corpus_to_validate):
         """
@@ -41,7 +41,6 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
         Returns:
             InvalidItemsResult: Validation result.
         """
-
         with multiprocessing.pool.ThreadPool(self.num_threads) as p:
             func = functools.partial(
                 self.ratio_of_utterance,
@@ -77,10 +76,10 @@ class UtteranceTranscriptionRatioValidator(base.Validator):
     def ratio_of_utterance(self, utterance,  ll_idx):
         try:
             duration = utterance.duration
-            ll = utterance.label_lists[ll_idx]
+            labels = utterance.label_lists[ll_idx]
 
             # We count the characters of all labels
-            transcription = ' '.join(l.value for l in ll)
+            transcription = ' '.join(label.value for label in labels)
             num_chars = len(transcription.replace(' ', ''))
 
             char_per_sec = num_chars / duration
@@ -109,7 +108,7 @@ class LabelCountValidator(base.Validator):
         self.label_list_idx = label_list_idx
 
     def name(self):
-        return 'Label-Count ({})'.format(self.label_list_idx)
+        return f'Label-Count ({self.label_list_idx})'
 
     def validate(self, corpus_to_validate):
         """
@@ -128,9 +127,9 @@ class LabelCountValidator(base.Validator):
                 ll = utterance.label_lists[self.label_list_idx]
 
                 if len(ll) < self.min_number_of_labels:
-                    invalid_utterances[utterance.idx] = 'Only {} labels'.format(len(ll))
+                    invalid_utterances[utterance.idx] = f'Only {len(ll)} labels'
             else:
-                invalid_utterances[utterance.idx] = 'No label-list {}'.format(self.label_list_idx)
+                invalid_utterances[utterance.idx] = f'No label-list {self.label_list_idx}'
 
         passed = len(invalid_utterances) <= 0
         info = {
@@ -169,7 +168,6 @@ class LabelCoverageValidationResult(base.ValidationResult):
         Returns:
             str: String containing infos about the result
         """
-
         lines = [super(LabelCoverageValidationResult, self).get_report()]
 
         if len(self.uncovered_segments) > 0:
@@ -177,9 +175,9 @@ class LabelCoverageValidationResult(base.ValidationResult):
 
             for utt_idx, utt_segments in self.uncovered_segments.items():
                 if len(utt_segments) > 0:
-                    lines.append('\n{}'.format(utt_idx))
+                    lines.append(f'\n{utt_idx}')
                     sorted_items = sorted(utt_segments, key=lambda x: x[0])
-                    lines.extend(['    * {:10.2f}  -  {:10.2f}'.format(x[0], x[1]) for x in sorted_items])
+                    lines.extend([f'    * {x[0]:10.2f}  -  {x[1]:10.2f}' for x in sorted_items])
 
         return '\n'.join(lines)
 
@@ -201,7 +199,7 @@ class LabelCoverageValidator(base.Validator):
         self.threshold = threshold
 
     def name(self):
-        return 'Label-Coverage ({})'.format(self.label_list_idx)
+        return f'Label-Coverage ({self.label_list_idx})'
 
     def validate(self, corpus_to_validate):
         """
@@ -213,7 +211,6 @@ class LabelCoverageValidator(base.Validator):
         Returns:
             LabelCoverageValidationResult: Validation result.
         """
-
         uncovered_segments = {}
 
         for utterance in corpus_to_validate.utterances.values():
@@ -290,7 +287,6 @@ class LabelOverflowValidationResult(base.ValidationResult):
         Returns:
             str: String containing infos about the result
         """
-
         lines = [super(LabelOverflowValidationResult, self).get_report()]
 
         if len(self.overflow_segments) > 0:
@@ -298,9 +294,9 @@ class LabelOverflowValidationResult(base.ValidationResult):
 
             for utt_idx, utt_segments in self.overflow_segments.items():
                 if len(utt_segments) > 0:
-                    lines.append('\n{}'.format(utt_idx))
+                    lines.append(f'\n{utt_idx}')
                     sorted_items = sorted(utt_segments, key=lambda x: x[0])
-                    lines.extend(['    * {:10.2f}  -  {:10.2f} :  {}'.format(x[0], x[1], x[2]) for x in sorted_items])
+                    lines.extend([f'    * {x[0]:10.2f}  -  {x[1]:10.2f} :  {x[2]}' for x in sorted_items])
 
         return '\n'.join(lines)
 
@@ -321,7 +317,7 @@ class LabelOverflowValidator(base.Validator):
         self.threshold = threshold
 
     def name(self):
-        return 'Label-Overflow ({})'.format(self.label_list_idx)
+        return f'Label-Overflow ({self.label_list_idx})'
 
     def validate(self, corpus_to_validate):
         """
@@ -333,7 +329,6 @@ class LabelOverflowValidator(base.Validator):
         Returns:
             LabelOverflowValidationResult: Validation result.
         """
-
         overflow_segments = {}
 
         for utterance in corpus_to_validate.utterances.values():

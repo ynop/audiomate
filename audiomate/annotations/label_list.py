@@ -70,17 +70,17 @@ class LabelList:
 
     @property
     def labels(self):
-        """ Return list of labels. """
+        """Return list of labels."""
         return list(self)
 
     @property
     def start(self):
-        """ Return start of the earliest starting label (lower bound). """
+        """Return start of the earliest starting label (lower bound)."""
         return self.label_tree.begin()
 
     @property
     def end(self):
-        """ Return end of the lastly ending label (upper bound). """
+        """Return end of the lastly ending label (upper bound)."""
         return self.label_tree.end()
 
     @property
@@ -106,7 +106,7 @@ class LabelList:
         self.label_tree.addi(label.start, label.end, label)
 
     def addl(self, value, start=0.0, end=float('inf')):
-        """ Shortcut for ``add(Label(value, start, end))``. """
+        """Shortcut for ``add(Label(value, start, end))``."""
         self.add(Label(value, start=start, end=end))
 
     def update(self, labels):
@@ -173,7 +173,6 @@ class LabelList:
                 Label('b_label', 1.0, 2.0),
             ]
         """
-
         updated_labels = []
         all_intervals = self.label_tree.copy()
 
@@ -243,7 +242,6 @@ class LabelList:
             >>> ll.label_total_duration()
             {'a': 7.5 'b': 7.0}
         """
-
         durations = collections.defaultdict(float)
 
         for label in self:
@@ -269,8 +267,7 @@ class LabelList:
             >>> ll.label_values()
             ['a', 'b', 'c', 'd']
         """
-
-        all_labels = {l.value for l in self}
+        all_labels = {label.value for label in self}
         return sorted(all_labels)
 
     def label_count(self):
@@ -292,7 +289,6 @@ class LabelList:
             >>> ll.label_count()
             {'a': 3 'b': 2}
         """
-
         occurrences = collections.defaultdict(int)
 
         for label in self:
@@ -347,7 +343,6 @@ class LabelList:
             >>> ll.join(' - ')
             'a - b - c - d'
         """
-
         sorted_by_start = sorted(self.labels)
         concat_values = []
         last_label_end = None
@@ -388,7 +383,6 @@ class LabelList:
             >>> ll.tokenized(delimiter=' ', overlap_threshold=0.1)
             ['a', 'd', 'q', 'b', 'c', 'a', 'f', 'g']
         """
-
         sorted_by_start = sorted(self.labels)
         tokens = []
         last_label_end = None
@@ -463,7 +457,6 @@ class LabelList:
             >>> ll.labels_in_range(6.2, 10.1)
             [Label('b', 5.1, 8.9), Label('c', 7.2, 10.5)]
         """
-
         if fully_included:
             intervals = self.label_tree.envelop(start, end)
         else:
@@ -501,7 +494,6 @@ class LabelList:
             >>> next(ranges)
             (5.1, 7.2, [ < audiomate.annotations.label.Label at 0x1090484c8 > ])
         """
-
         tree_copy = self.label_tree.copy()
 
         # Remove labels not included
@@ -602,7 +594,6 @@ class LabelList:
                 Label('b', 0.4, 5.4)
             ]
         """
-
         if len(cutting_points) == 0:
             raise ValueError('At least one cutting-point is needed!')
 
@@ -654,7 +645,6 @@ class LabelList:
         Create a label-list with a single label
         containing the given value.
         """
-
         return LabelList(idx=idx, labels=[
             Label(value=value)
         ])
@@ -684,7 +674,6 @@ class LabelList:
                 Label('z', 0, inf),
             ]
         """
-
         ll = LabelList(idx=idx)
 
         for label_value in values:

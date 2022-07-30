@@ -28,7 +28,7 @@ REQUIRED = [
 EXTRAS = {
     'dev': [
         'click == 8.1.3',
-        'pytest == %s' % (PYTEST_VERSION_,),
+        f"pytest == {PYTEST_VERSION_}",
         'pytest-runner == 6.0',
         'pytest-cov == 3.0.0',
         'requests_mock == 1.9.3',
@@ -44,7 +44,7 @@ EXTRAS = {
 
 # Packages required for testing
 TESTS = [
-    'pytest == %s' % (PYTEST_VERSION_,),
+    f"pytest == {PYTEST_VERSION_}",
     'requests_mock == 1.9.3'
 ]
 
